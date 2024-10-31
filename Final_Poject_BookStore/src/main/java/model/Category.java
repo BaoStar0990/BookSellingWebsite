@@ -24,7 +24,7 @@ public class Category implements Serializable {
     public Category(int id, String name, String description) {
         this.id = id;
         this.name = name;
-        this.description = description;
+        this.description = description; //hello
     }
 
     public Category(String name, String description) {

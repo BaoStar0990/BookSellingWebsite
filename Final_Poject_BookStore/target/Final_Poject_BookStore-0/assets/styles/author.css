@@ -1,0 +1,23 @@
+/*.author-section{*/
+/*    background: #f3f3f3;*/
+/*    border-radius: 8px;*/
+/*}*/
+
+/*.author-card {*/
+/*    display: flex;*/
+/*    flex-direction: column;*/
+/*    align-items: center;*/
+/*}*/
+
+.author-image {
+    width: 150px; /* Set width */
+    height: 150px; /* Set height to make it square */
+    border-radius: 50%; /* Makes the image circular */
+    object-fit: cover; /* Ensures the image covers the area without distortion */
+    overflow: hidden; /* Ensures any overflow is hidden */
+}
+
+/*!* Optional: If you want to keep images as squares *!*/
+/*.author-card {*/
+/*    position: relative;*/
+/*}*/

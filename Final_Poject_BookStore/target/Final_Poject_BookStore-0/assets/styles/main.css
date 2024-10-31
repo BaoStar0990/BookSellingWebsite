@@ -1,0 +1,244 @@
+@font-face {
+    font-family: 'Quicksand';
+    src: url('../fonts/Quicksand/Quicksand-VariableFont_wght.ttf') format('truetype');
+    font-weight: 100 900; /* For variable font, define weight range */
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Quicksand';
+    src: url('../fonts/Quicksand/Quicksand-Light.ttf') format('truetype');
+    font-weight: 400; /* Light */
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Quicksand';
+    src: url('../fonts/Quicksand/Quicksand-Regular.ttf') format('truetype');
+    font-weight: 500; /* Regular */
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Quicksand';
+    src: url('../fonts/Quicksand/Quicksand-Medium.ttf') format('truetype');
+    font-weight: 600; /* Medium */
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Quicksand';
+    src: url('../fonts/Quicksand/Quicksand-SemiBold.ttf') format('truetype');
+    font-weight: 700; /* SemiBold */
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Quicksand';
+    src: url('../fonts/Quicksand/Quicksand-Bold.ttf') format('truetype');
+    font-weight: 800; /* Bold */
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Quicksand';
+    src: url('../fonts/Quicksand/Quicksand Bold Oblique.otf') format('opentype');
+    font-weight: 800; /* Bold Oblique */
+    font-style: oblique;
+}
+
+:root {
+    --primary-font: 'Quicksand', sans-serif;
+    --primary-color: #E41936;
+    --secondary-color: #000;
+    --text-color: #333;
+}
+
+body{
+    font-family: var(--primary-font), sans-serif;
+    color: var(--text-color);
+    box-sizing: border-box;
+}
+
+/*Common classes */
+.font-bold{
+    font-weight: 700;
+}
+.font-semibold{
+    font-weight: 600;
+}
+.font-medium{
+    font-weight: 500;
+}
+.font-regular{
+    font-weight: 400;
+}
+.font-light{
+    font-weight: 300;
+}
+
+.text-primary {
+    color: var(--primary-color) !important;
+}
+
+.text-secondary {
+    color: var(--secondary-color) !important;
+}
+
+.background-primary {
+    background-color: var(--primary-color);
+}
+
+.background-secondary {
+    background-color: var(--secondary-color);
+}
+
+.primary-btn {
+    font-weight: 500;
+    background-color: var(--primary-color);
+    color: #fff;
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    text-decoration: none;
+    display: block;
+    text-align: center;
+}
+
+.primary-btn:hover {
+    background-color: #cc172f;
+    color: #fff;
+}
+
+.primary-btn:disabled {
+    background-color: #ccc;
+    color: #fff;
+    cursor: not-allowed;
+}
+
+.secondary-btn {
+    font-weight: 600;
+    background-color: #fff;
+    color: var(--primary-color);
+    border: 1px solid var(--primary-color) !important;
+    padding: 0.5rem 1rem;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    text-decoration: none;
+    display: block;
+    text-align: center;
+}
+
+.secondary-btn:hover {
+    background-color: var(--primary-color);
+    color: #fff;
+
+}
+
+.secondary-btn:disabled {
+    background-color: #fff;
+    color: var(--primary-color);
+    cursor: not-allowed;
+}
+
+.no-bg, .no-bg:disabled {
+    background: transparent;
+}
+
+.no-bg:hover {
+    color: #fff !important;
+}
+
+.full-width-hr {
+    position: absolute;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background-color: var(--secondary-color);
+    margin: 0;
+    top: 140px;
+    z-index: 1;
+}
+
+/* Panel */
+.panel {
+    background-color: #EBEBEB;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    padding: 1rem;
+    margin-bottom: 1rem;
+}
+
+/* Input field */
+.input-field {
+    padding: 0.5rem 0.8rem;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    margin-bottom: 1rem;
+}
+
+/* Link hover */
+.link-hover:hover {
+    display: inline-block;
+    color: #0066cc;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+/* Custom pagination colors */
+.pagination-cus {
+    --bs-pagination-active-bg: transparent;
+    --bs-pagination-active-color: #E41936;
+    --bs-pagination-active-border-color: #E41936;
+    --bs-pagination-hover-bg: transparent;
+    --bs-pagination-hover-color: #E41936;
+    --bs-pagination-hover-border-color: #E41936;
+}
+
+/* Override default Bootstrap pagination link styles */
+.pagination-cus .page-link {
+    background-color: white;
+    color: #000;  /* Set the default color for non-active items */
+    border: 2px solid #ddd;
+    border-radius: 4px;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Change background and text color on hover */
+.pagination-cus .page-link:hover,
+.pagination-cus .page-link:hover i{
+    background-color: var(--bs-pagination-hover-bg);
+    color: var(--bs-pagination-hover-color)!important;
+    border-color: var(--bs-pagination-hover-border-color);
+}
+
+/* Active page style */
+.pagination-cus .active .page-link {
+    background-color: var(--bs-pagination-active-bg);
+    color: var(--bs-pagination-active-color) !important;
+    border-color: var(--bs-pagination-active-border-color);
+}
+
+/* Custom styles for the chevron buttons */
+.pagination-cus .page-item:first-child .page-link,
+.pagination-cus .page-item:last-child .page-link {
+    background-color: white;
+    border-color: #ddd;
+    padding: 8px 0;
+}
+
+.pagination-cus .page-item:first-child .page-link:hover,
+.pagination-cus .page-item:last-child .page-link:hover {
+    background-color: var(--bs-pagination-hover-bg);
+    color: var(--bs-pagination-hover-color);
+    border-color: var(--bs-pagination-hover-border-color);
+}
+
+/* Input*/
+.form-check-input:checked{
+    background-color: var(--primary-color)!important;
+    border-color: var(--primary-color) !important;
+}

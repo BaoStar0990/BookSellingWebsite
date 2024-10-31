@@ -1,0 +1,40 @@
+.book-list{
+    margin:0 -8px;
+}
+
+.book-list .card-img-top{
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+}
+
+.book-list .card-body{
+    padding: 0.6rem;
+}
+
+.book-list .card-title{
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-weight: 600;
+    height: 2.4rem;
+}
+
+.book-list .card-text{
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-weight: 400;
+}
+
+.card-shadow {
+    transition: box-shadow 0.3s ease; /* Smooth transition for the shadow */
+}
+
+.card-shadow:hover {
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2) !important; /* Adjust shadow on hover */
+}

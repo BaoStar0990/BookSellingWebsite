@@ -1,0 +1,8 @@
+.signin-container{
+    width: 400px;
+    background-color: #EBEBEB;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    border-radius: 8px;
+    padding: 1rem;
+    margin-bottom: 1rem;
+}

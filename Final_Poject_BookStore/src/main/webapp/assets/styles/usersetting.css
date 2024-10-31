@@ -1,0 +1,21 @@
+:root {
+    --primary-font: 'Quicksand', sans-serif;
+    --primary-color: #E41936;
+    --secondary-color: #000;
+    --text-color: #333;
+}
+
+.list-group .active{
+    background: none;
+    color: var(--primary-color);
+}
+
+.list-group .list-group-item:hover{
+    background: none;
+    color: var(--primary-color) !important;
+}
+
+.custom-table th{
+    background-color: var(--primary-color)!important;
+    color: #fff;
+}

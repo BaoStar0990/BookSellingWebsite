@@ -12,8 +12,6 @@ public class Author implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int authorID;
-    private String description;
-    private String imageURL;
     private String name;
 
     @ManyToMany(cascade = CascadeType.ALL)
@@ -22,16 +20,14 @@ public class Author implements Serializable {
             joinColumns = @JoinColumn(name = "authorID"),
             inverseJoinColumns = @JoinColumn(name = "bookID")
     )
-    private Set<Book>  books   = new HashSet<Book>();
+    private Set<Book> books = new HashSet<Book>();
 
 
     public Author() {
 
     }
-    public Author(String name,String description,String imageURL) {
-        this.name = name;
-        this.description = description;
-        this.imageURL = imageURL;
+    public Author(int id, String name) {
+        this.authorID = id;
     }
 
     public Author(String name) {

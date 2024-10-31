@@ -7,5 +7,5 @@ public interface DBInterface<T> {
 //    public boolean update(T t);
 //    public boolean delete(T t);
     public List<T> selectAll();
-    public T selectByID(int id);
+    public T selectByID(Object id);
 }

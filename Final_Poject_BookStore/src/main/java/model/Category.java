@@ -1,5 +1,6 @@
 package model;
 
+import dbmodel.CategoryDB;
 import jakarta.persistence.*;
 
 import java.io.Serializable;
@@ -15,7 +16,7 @@ public class Category implements Serializable {
     private String name;
     private String description;
 
-    @OneToMany(mappedBy = "category",fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "category", cascade = CascadeType.ALL)
     private Set<Book> books = new HashSet<Book>();
 
     public Category() {
@@ -24,7 +25,7 @@ public class Category implements Serializable {
     public Category(int id, String name, String description) {
         this.id = id;
         this.name = name;
-        this.description = description; //hello
+        this.description = description;
     }
 
     public Category(String name, String description) {
@@ -53,7 +54,7 @@ public class Category implements Serializable {
     }
 
     public Set<Book> getBooks() {
-        return books;
+        return CategoryDB.getInstance().getBooks(this);
     }
     public void setBooks(Set<Book> books) {
         this.books = books;

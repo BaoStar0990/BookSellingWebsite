@@ -3,7 +3,7 @@ package model;
 import jakarta.persistence.*;
 
 import java.io.Serializable;
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -14,45 +14,43 @@ public class Bill implements Serializable {
     private int billID;
     private String paymentMethod;
     private String statusPayment;
-    private Double totalDiscountCost;
-    private Double totalCost;
     private Double VAT;
-    private Date orderDate;
-    private Date deliveryDate;
+    private LocalDate orderDate;
+    private LocalDate deliveryDate;
 
 
     //hibernate, xóa bill không xóa customer; cập nhật, chèn bill thì tự thay đổi bên customer 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    @ManyToOne()
     @JoinColumn(name="customerID")
     private Customer customer;
 
     //many orderdetails, tất cả các thay đổi ở Order sẽ ảnh hưởng đến OrderDetail
-    @OneToMany(mappedBy = "bill", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "bill", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Set<OrderDetail> orderDetails = new HashSet<OrderDetail>();
 
 
     public Bill() {
     }
-    public Bill(int billID,Customer customer,String paymentMethod,Double totalDiscountCost,Double totalCost,Double VAT,Date orderDate,Date deliveryDate) {
+    public Bill(int billID,Customer customer,String paymentMethod, Double VAT
+            ,LocalDate orderDate,LocalDate deliveryDate ) {
         this.billID = billID;
         this.customer = customer;
         this.paymentMethod = paymentMethod;
-        this.totalDiscountCost = totalDiscountCost;
-        this.totalCost = totalCost;
         this.VAT = VAT;
         this.orderDate = orderDate;
         this.deliveryDate = deliveryDate;
+        orderDetails = new HashSet<>();
     }
 
-    public Bill(String paymentMethod, String statusPayment, Double totalDiscountCost, Double totalCost, Double VAT, Date orderDate, Date deliveryDate, Customer customer) {
+    public Bill(String paymentMethod, String statusPayment, Double VAT,
+            LocalDate orderDate, LocalDate deliveryDate, Customer customer) {
         this.paymentMethod = paymentMethod;
         this.statusPayment = statusPayment;
-        this.totalDiscountCost = totalDiscountCost;
-        this.totalCost = totalCost;
         this.VAT = VAT;
         this.orderDate = orderDate;
         this.deliveryDate = deliveryDate;
         this.customer = customer;
+        orderDetails = new HashSet<>();
     }
     
     public int getId() {
@@ -75,23 +73,15 @@ public class Bill implements Serializable {
         return statusPayment;
     }
 
-    public Double getTotalDiscountCost() {
-        return totalDiscountCost;
-    }
-
-    public Double getTotalCost() {
-        return totalCost;
-    }
-
     public Double getVAT() {
         return VAT;
     }
 
-    public Date getDeliveryDate() {
+    public LocalDate getDeliveryDate() {
         return deliveryDate;
     }
 
-    public Date getOrderDate() {
+    public LocalDate getOrderDate() {
         return orderDate;
     }
 
@@ -104,9 +94,14 @@ public class Bill implements Serializable {
     }
 
     public void setOrderDetails(HashSet<OrderDetail> orderDetails) {
-        this.orderDetails = orderDetails;
+        for(OrderDetail order : orderDetails){
+            this.addOrderDetail(order);
+        }
     }
-
+    public void addOrderDetail(OrderDetail orderDetail) {
+        orderDetails.add(orderDetail);
+        orderDetail.setBill(this);
+    }
     public void setPaymentMethod(String paymentMethod) {
         this.paymentMethod = paymentMethod;
     }
@@ -115,23 +110,15 @@ public class Bill implements Serializable {
         this.statusPayment = statusPayment;
     }
 
-    public void setTotalDiscountCost(Double totalDiscountCost) {
-        this.totalDiscountCost = totalDiscountCost;
-    }
-
-    public void setTotalCost(Double totalCost) {
-        this.totalCost = totalCost;
-    }
-
     public void setVAT(Double VAT) {
         this.VAT = VAT;
     }
 
-    public void setOrderDate(Date orderDate) {
+    public void setOrderDate(LocalDate orderDate) {
         this.orderDate = orderDate;
     }
 
-    public void setDeliveryDate(Date deliveryDate) {
+    public void setDeliveryDate(LocalDate deliveryDate) {
         this.deliveryDate = deliveryDate;
     }
 }

@@ -1,5 +1,7 @@
 package model;
 
+import dbmodel.AuthorDB;
+import dbmodel.BookDB;
 import jakarta.persistence.*;
 
 import java.io.Serializable;
@@ -26,31 +28,32 @@ public class Book implements Serializable {
 
     //hibernate, xóa sách thì xóa reviews
     @OneToMany(mappedBy = "book", cascade = CascadeType.REMOVE)
-    private List<Review> reviews = new ArrayList<Review>();
+    private List<Review> reviews; // = new ArrayList<Review>();
 
     //hibernate, xóa sách không xóa tác giả, chèn và cập nhật sách thì cập nhật bên tác giả
-    @ManyToMany(mappedBy = "books", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-    private List<Author> authors = new ArrayList<Author>();
+    @ManyToMany(mappedBy = "books", fetch = FetchType.EAGER, 
+            cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    private List<Author> authors; // = new ArrayList<Author>();
 
 
     //one Category, xóa sách không xóa thể loại
-    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY)
+    @ManyToOne()
     @JoinColumn(name="categoryID")
     private Category category;
 
     //one Publisher, xóa sách không xóa nhà xuất bản
-    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY)
+    @ManyToOne()
     @JoinColumn(name="publisherID")
     private Publisher publisher;
 
     //many orderdetail
     @OneToMany(mappedBy = "book")
-    private Set<OrderDetail> orderDetails = new HashSet<OrderDetail>();
+    private Set<OrderDetail> orderDetails; // = new HashSet<OrderDetail>();
 
     //many discount detail
-    @OneToMany(mappedBy = "book")
-    private Set<DiscountDetail> discountDetails = new HashSet<DiscountDetail>();
-
+    @ManyToOne()
+    @JoinColumn(name = "campaignID")
+    private DiscountCampaign discountCampaign;
     public Book() {
 
     }
@@ -183,7 +186,22 @@ public class Book implements Serializable {
     public void setLanguage(String language) {
         this.language = language;
     }
-    public void addAuthor(Author a){
-        this.authors.add(a);
+
+    public DiscountCampaign getDiscountCampaign() {
+        return discountCampaign;
     }
+
+    public void setDiscountCampaign(DiscountCampaign discountCampaign) {
+        this.discountCampaign = discountCampaign;
+    }
+    
+    public List<Review> getReviews() {
+        return BookDB.getInstance().getReviews(this);
+    }
+    
+    public List<Author> getAuthors() {
+        return authors;
+    }
+        
+    // bussiness    
 }

@@ -13,12 +13,12 @@ public class Review implements Serializable {
     private String description;
     
     // xóa review không xóa customer
-    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @ManyToOne()
     @JoinColumn(name="customerID")
     private Customer customer;
     
     // xóa review không xóa book
-    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @ManyToOne()
     @JoinColumn(name="bookID")
     private Book book;
 
@@ -27,13 +27,15 @@ public class Review implements Serializable {
     public Review() {
 
     }
-    public Review(int reviewID, String description, Customer customer, Book book) {
+    public Review(int reviewID,  int rate, String description, Customer customer, Book book) {
         this.reviewID = reviewID;
+        this.rate = rate;
         this.description = description;
         this.customer = customer;
         this.book = book;
     }
-    public Review(String description, Customer customer, Book book) {
+    public Review(int rate, String description, Customer customer, Book book) {
+        this.rate = rate;
         this.description = description;
         this.customer = customer;
         this.book = book;

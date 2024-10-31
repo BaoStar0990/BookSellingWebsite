@@ -1,7 +1,6 @@
 package model;
 
 import jakarta.persistence.*;
-import model.Customer;
 import java.io.Serializable;
 
 @Entity
@@ -16,7 +15,7 @@ public class Address implements Serializable {
     private String district;
 
     //Với bảng customer
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne()
     @JoinColumn(name = "customerID")
     private Customer customer;
 
@@ -29,14 +28,6 @@ public class Address implements Serializable {
     }
     public Address() {
 
-    }
-
-    public Address(String street, String province, String ward, String district, Customer customer) {
-        this.street = street;
-        this.province = province;
-        this.ward = ward;
-        this.district = district;
-        this.customer = customer;
     }
     
     public int getId() {
@@ -70,4 +61,12 @@ public class Address implements Serializable {
         this.district = district;
     }
 
+    public Customer getCustomer() {
+        return customer;
+    }
+
+    public void setCustomer(Customer customer) {
+        this.customer = customer;
+    }
+    
 }

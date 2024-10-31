@@ -11,15 +11,16 @@ public class OrderDetail implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+    // true: đặt hàng, false: giỏ hàng
     private boolean statusOrder;
     private int quantity;
 
     //hibernate
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne()
     @JoinColumn(name="bookID")
     private Book book;
     
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne()
     @JoinColumn(name="billID")
     private Bill bill;
 
@@ -66,4 +67,16 @@ public class OrderDetail implements Serializable {
         this.quantity = quantity;
     }
 
+    public boolean isStatusOrder() {
+        return statusOrder;
+    }
+
+    public Bill getBill() {
+        return bill;
+    }
+
+    public void setBill(Bill bill) {
+        this.bill = bill;
+    }
+    
 }

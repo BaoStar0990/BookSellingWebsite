@@ -1,16 +1,16 @@
 package model;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
-import jakarta.persistence.Temporal;
-import jakarta.persistence.TemporalType;
-
 import java.io.Serializable;
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.HashSet;
+import java.util.Set;
 @Entity
 public class DiscountCampaign implements Serializable {
     @Id
@@ -18,62 +18,89 @@ public class DiscountCampaign implements Serializable {
     private int campaignId;
     private String campaignName;
     
-    @Temporal(TemporalType.DATE)
-    private Date startDate;
+    private LocalDate startDate;
     
-    @Temporal(TemporalType.DATE)
-    private Date endDate;
+    private LocalDate endDate;
     
-    @OneToMany(mappedBy = "discoundCampaign")
-    private HashSet<DiscountDetail> discountDetails;
+    private Double percentDiscount;
     
-    public DiscountCampaign()
-    {
-
+    @OneToMany(mappedBy = "discountCampaign", cascade = CascadeType.MERGE,
+            fetch = FetchType.EAGER)
+    private Set<Book> books = new HashSet<>();
+    
+    public DiscountCampaign(){
+        
     }
-    public DiscountCampaign(int campaignId, String campaignName, Date startDate, Date endDate) {
+    public DiscountCampaign(int campaignId, String campaignName, LocalDate startDate, LocalDate endDate, Double percentDiscount) {
         this.campaignId = campaignId;
         this.campaignName = campaignName;
         this.startDate = startDate;
         this.endDate = endDate;
-        this.discountDetails = new HashSet<>();
+        this.percentDiscount = percentDiscount;
+        books = new HashSet<>();
     }
 
-    public DiscountCampaign(String campaignName, Date startDate, Date endDate, HashSet<DiscountDetail> discountDetails) {
+    public DiscountCampaign(String campaignName, LocalDate startDate, LocalDate endDate, Double percentDiscount) {
         this.campaignName = campaignName;
         this.startDate = startDate;
         this.endDate = endDate;
-        this.discountDetails = discountDetails;
+        this.percentDiscount = percentDiscount;
+        books = new HashSet<>();
     }
-    
+
     public int getCampaignId() {
         return campaignId;
     }
-    public void setCampaignId(int campaignId) {
-        this.campaignId = campaignId;
-    }
+
     public String getCampaignName() {
         return campaignName;
     }
+
+    public LocalDate getStartDate() {
+        return startDate;
+    }
+
+    public LocalDate getEndDate() {
+        return endDate;
+    }
+
+    public Double getPercentDiscount() {
+        return percentDiscount;
+    }
+
+    public Set<Book> getBooks() {
+        return books;
+    }
+
+    public void setCampaignId(int campaignId) {
+        this.campaignId = campaignId;
+    }
+
     public void setCampaignName(String campaignName) {
         this.campaignName = campaignName;
     }
-    public Date getStartDate() {
-        return startDate;
-    }
-    public void setStartDate(Date startDate) {
+
+    public void setStartDate(LocalDate startDate) {
         this.startDate = startDate;
     }
-    public Date getEndDate() {
-        return endDate;
-    }
-    public void setEndDate(Date endDate) {
+
+    public void setEndDate(LocalDate endDate) {
         this.endDate = endDate;
     }
-    public HashSet<DiscountDetail> getDiscountDetails() {
-        return discountDetails;
+
+    public void setPercentDiscount(Double percentDiscount) {
+        this.percentDiscount = percentDiscount;
     }
-    public void setDiscountDetails(HashSet<DiscountDetail> discountDetails) {
-        this.discountDetails = discountDetails;
+
+    public void setBooks(Set<Book> books) {
+        for(Book b : books){
+            this.addBook(b);
+        }
     }
+    
+    public void addBook(Book b){
+        books.add(b);
+        b.setDiscountCampaign(this);
+    }
+    
 }

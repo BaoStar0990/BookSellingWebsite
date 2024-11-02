@@ -8,13 +8,6 @@ import java.io.Serializable;
 @Table(name="Staff")
 public class Staff extends User implements Serializable {
     private Double salary;
-//    public Staff() {
-//        super();
-//    }
-//    public Staff(int id, String username, String password,String fullName, int age, String numberPhone, String email,Double salary) {
-//        super(id,username,password,  fullName,  age,  numberPhone,  email);
-//        this.salary = salary;
-//    }
     
     public Staff() {
     }

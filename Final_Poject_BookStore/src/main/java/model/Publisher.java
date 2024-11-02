@@ -1,5 +1,6 @@
 package model;
 
+import dbmodel.PublisherDB;
 import jakarta.persistence.*;
 
 import java.io.Serializable;
@@ -13,7 +14,7 @@ public class Publisher implements Serializable {
     private int id;
     private String name;
 
-    @OneToMany(mappedBy = "publisher",fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "publisher",  cascade = CascadeType.ALL)
     private Set<Book> books = new HashSet<Book>();
 
     public Publisher(){
@@ -40,4 +41,9 @@ public class Publisher implements Serializable {
     public void setName(String name) {
         this.name = name;
     }
+
+    public Set<Book> getBooks() {
+        return PublisherDB.getInstance().getBooks(this);
+    }
+    
 }

@@ -5,6 +5,8 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.NoResultException;
 import java.util.List;
 import model.Book;
+import model.Review;
+import org.hibernate.TransientObjectException;
 
 public class BookDB extends ModifyDB<Book> implements DBInterface<Book> {
     public static BookDB getInstance(){
@@ -25,7 +27,7 @@ public class BookDB extends ModifyDB<Book> implements DBInterface<Book> {
     }
 
     @Override
-    public Book selectByID(int id) {
+    public Book selectByID(Object id) {
         try(EntityManager em = DBUtil.getEmFactory().createEntityManager()) {
             return em.createQuery("from Book b where b.id =: id ", Book.class)
                     .setParameter("id", id).getSingleResult();    
@@ -37,40 +39,20 @@ public class BookDB extends ModifyDB<Book> implements DBInterface<Book> {
             return null;
         }
     }
-
-//    @Override
-//    public boolean insert(Book t){
-//        EntityManager em = null;
-//        EntityTransaction tr = null;
-//        try{
-//            em = DBUtil.getEmFactory().createEntityManager();
-//            tr = em.getTransaction();
-//            tr.begin();
-//            // find Category
-//            Category c = em.find(Category.class, t.getCategory().getId());
-//            // find Publisher
-//            Publisher p = em.find(Publisher.class, t.getPublisher().getId());
-//            
-//            if(c != null && p != null){
-//                t.setCategory(c);
-//                t.setPublisher(p);
-//                em.persist(t);
-//            }
-//            else
-//                return false;
-//            tr.commit();
-//            return true;
-//        }
-//        catch(Exception ex){
-//            if(tr != null && tr.isActive())
-//                tr.rollback();
-//            ex.printStackTrace();
-//            return false;
-//        }
-//        finally{
-//            if(em != null)
-//                em.close();
-//        }
-//    }
     
+    public List<Review> getReviews(Book b){
+        try(EntityManager em = DBUtil.getEmFactory().createEntityManager()){
+            return em.createQuery("from Review r where r.book = :book", 
+                        Review.class).setParameter("book", b).getResultList();
+        }
+        catch (TransientObjectException ex) {
+            return null;
+        }
+        catch(NoResultException ex){
+            return null;
+        }
+        catch(Exception ex){
+            return null;
+        } 
+    }
 }

@@ -6,26 +6,33 @@ import jakarta.persistence.EntityTransaction;
 
 public abstract class ModifyDB<T> {
     public boolean insert(T t){
-        EntityManager em = DBUtil.getEmFactory().createEntityManager();
-        EntityTransaction tr = em.getTransaction();
+        EntityManager em = null;
+        EntityTransaction tr = null;
         try{
+            em = DBUtil.getEmFactory().createEntityManager();
+            tr = em.getTransaction();
             tr.begin();
             em.persist(t);
             tr.commit();
             return true;
         }
         catch(Exception ex){
-            tr.rollback();
+            if(tr != null && tr.isActive())
+                tr.rollback();
+            ex.printStackTrace();
             return false;
         }
         finally{
-            em.close();
+            if(em != null)
+                em.close();
         }
     }
     public boolean update(T t){
-        EntityManager em = DBUtil.getEmFactory().createEntityManager();
-        EntityTransaction tr = em.getTransaction();
+        EntityManager em = null;
+        EntityTransaction tr = null;
         try{
+            em = DBUtil.getEmFactory().createEntityManager();
+            tr = em.getTransaction();
             tr.begin();
             
             em.merge(t); // Cập nhật hoặc merge thực thể detached vào persistence context
@@ -33,31 +40,38 @@ public abstract class ModifyDB<T> {
             return true;
         }
         catch(Exception ex){
-            tr.rollback();
+            if(tr != null && tr.isActive())
+                tr.rollback();
             return false;
         }
         finally{
-            em.close();
+            if(em != null)
+                em.close();
         }
     }
 
     public boolean delete(Object id, Class<T> entityClass){
-        EntityManager em = DBUtil.getEmFactory().createEntityManager();
-        EntityTransaction tr = em.getTransaction();
+        EntityManager em = null;
+        EntityTransaction tr = null;
         try{
+            em = DBUtil.getEmFactory().createEntityManager();
+            tr = em.getTransaction();
             tr.begin();
             // chuyển thực thể sang trạng thái persistent
             T entity = em.find(entityClass, id);
+            // xóa thực thể
             em.remove(entity);
             tr.commit();
             return true;
         }
-        catch(Exception ex){
-            tr.rollback();
+         catch(Exception ex){
+            if(tr != null && tr.isActive())
+                tr.rollback();
             return false;
         }
         finally{
-            em.close();
+            if(em != null)
+                em.close();
         }
     }
 }

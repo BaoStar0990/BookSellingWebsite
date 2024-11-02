@@ -27,7 +27,7 @@ public class AuthorDB extends ModifyDB<Author> implements DBInterface<Author> {
     }
 
     @Override
-    public Author selectByID(int id) {
+    public Author selectByID(Object id) {
         try(EntityManager em = DBUtil.getEmFactory().createEntityManager()) {
             return em.createQuery("from Author a where a.id =: id ", Author.class)
                     .setParameter("id", id).getSingleResult();    

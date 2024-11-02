@@ -9,16 +9,19 @@ import com.google.cloud.storage.Bucket;
 
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 public class FirebaseInitializer {
 
     public static void initializeFirebase() throws IOException {
-        FileInputStream serviceAccount
-                = new FileInputStream(".\\serviceAccountKey.json");
+        InputStream serviceAccount
+                = FirebaseInitializer.class.getResourceAsStream("/key.json");
 
         FirebaseOptions options = new FirebaseOptions.Builder()
                 .setCredentials(GoogleCredentials.fromStream(serviceAccount))
-                .setStorageBucket("imageofbookandauthor.appspot.com") // Thay thế bằng tên bucket của bạn
+                .setStorageBucket("imageofbookandauthor.appspot.com")
                 .build();
 
         //

@@ -29,7 +29,7 @@ import model.Book;
  *
  * @author hadan
  */
-@WebServlet("/")
+@WebServlet("/test")
 public class HomeControllerServlet extends HttpServlet {
 
     /**

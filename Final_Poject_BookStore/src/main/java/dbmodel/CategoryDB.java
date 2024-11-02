@@ -1,12 +1,14 @@
 package dbmodel;
 
 import database.DBUtil;
-import dbmodel.DBInterface;
-import dbmodel.ModifyDB;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.NoResultException;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import model.Book;
 import model.Category;
+import org.hibernate.TransientObjectException;
 
 public class CategoryDB extends ModifyDB<Category> implements DBInterface<Category> {
     public static CategoryDB getInstance(){
@@ -23,11 +25,11 @@ public class CategoryDB extends ModifyDB<Category> implements DBInterface<Catego
         }
         catch(Exception ex){
             return null;
-        }      
+        }     
     }
 
     @Override
-    public Category selectByID(int id) {
+    public Category selectByID(Object id) {
         try(EntityManager em = DBUtil.getEmFactory().createEntityManager()) {
             return em.createQuery("from Category c where c.id =: id ", Category.class)
                     .setParameter("id", id).getSingleResult();    
@@ -40,4 +42,21 @@ public class CategoryDB extends ModifyDB<Category> implements DBInterface<Catego
         }
     }
     
+    public Set<Book> getBooks(Category c){
+        try(EntityManager em = DBUtil.getEmFactory().createEntityManager()){
+               List<Book> listBooks = em.createQuery("from Book b where b.category = :category", 
+                        Book.class).setParameter("category", c).getResultList();
+               Set<Book> rs = new HashSet<>(listBooks);
+               return rs;
+        }
+        catch (TransientObjectException ex) {
+            return null;
+        }
+        catch(NoResultException ex){
+            return null;
+        }
+        catch(Exception ex){
+            return null;
+        }     
+    }
 }

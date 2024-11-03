@@ -12,7 +12,7 @@
     <div class="d-flex border-bottom mb-2">
         <h2 class="font-semibold">${param.bookListName}</h2>
         <c:if test="${not empty param.seeMoreLink}">
-            <a href="${param.seeMoreLink}" class="ms-auto font-medium align-self-end mb-1 text-decoration-none">
+            <a href="${pageContext.request.contextPath}/bookdisplay.jsp" class="ms-auto font-medium align-self-end mb-1 text-decoration-none">
                 Xem thêm <i class="fas fa-chevron-right"></i>
             </a>
         </c:if>
@@ -53,4 +53,5 @@
             </div>
         </c:forEach>
     </div>
+
 </div>

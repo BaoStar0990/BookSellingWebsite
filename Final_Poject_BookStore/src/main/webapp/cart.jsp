@@ -116,7 +116,7 @@
     </div>
     <!-- Checkout Button -->
     <div class="mt-4 d-flex justify-content-end">
-        <a href="orderdetail.jsp" class="primary-btn d-inline-block">Thanh toán</a>
+        <a href="deliveryinfo.jsp" class="primary-btn d-inline-block">Thanh toán</a>
     </div>
 </div>
 

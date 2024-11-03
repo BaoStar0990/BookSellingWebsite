@@ -47,6 +47,12 @@
             <div class="container-fluid">
                 <form action="signup" method="post">
                     <div class="mb-3">
+                        <input type="text" class="form-control input-field" id="fullname" name="fullname" placeholder="Họ và tên" required>
+                    </div>
+                    <div class="mb-3">
+                        <input type="date" class="form-control input-field" id="dob" name="dob" required>
+                    </div>
+                    <div class="mb-3">
                         <input type="email" class="form-control input-field" id="emailOrPhone" name="emailOrPhone" placeholder="Nhập SĐT hoặc Email" required>
                     </div>
                     <div class="mb-3">

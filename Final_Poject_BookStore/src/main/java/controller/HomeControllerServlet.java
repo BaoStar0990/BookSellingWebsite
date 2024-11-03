@@ -29,7 +29,7 @@ import model.Book;
  *
  * @author hadan
  */
-@WebServlet("/test")
+@WebServlet("/")
 public class HomeControllerServlet extends HttpServlet {
 
     /**
@@ -48,19 +48,19 @@ public class HomeControllerServlet extends HttpServlet {
         response.setContentType("text/html; charset=UTF-8");
         response.setCharacterEncoding("UTF-8");
 
-        //Take data
-            //Category
-        List<Category> categories = CategoryDB.getInstance().selectAll();
-        request.setAttribute("categories", categories);
-        
-            //Book
-        List<Book> books = BookDB.getInstance().selectAll();
-        request.setAttribute("books", books);
-            //Author
-//        List<Author> authors = AuthorDB.getInstance().selectAll();
-//        request.setAttribute("authors",authors);
+//        //Take data
+//            //Category
+//        List<Category> categories = CategoryDB.getInstance().selectAll();
+//        request.setAttribute("categories", categories);
+//
+//            //Book
+//        List<Book> books = BookDB.getInstance().selectAll();
+//        request.setAttribute("books", books);
+//            //Author
+////        List<Author> authors = AuthorDB.getInstance().selectAll();
+////        request.setAttribute("authors",authors);
 
-        String url = "/signin.jsp";
+        String url = "/test_forgotpassword.jsp";
         request.getRequestDispatcher(url).forward(request, response);
     }
 

@@ -77,4 +77,24 @@ public class CustomerDB  extends ModifyDB<Customer> implements DBInterface<Custo
             return null;
         }
     }
+    public Customer checkExistEmail(String email){
+        List<Customer> customers = selectAll();
+        for(Customer c : customers){
+            if(c.getEmail().equals(email)){
+                return c;
+            }
+        }
+        return null;
+    }
+    public boolean updateCustomer(Customer c){
+        try(EntityManager em = DBUtil.getEmFactory().createEntityManager()){
+            em.getTransaction().begin();
+            em.merge(c);
+            em.getTransaction().commit();
+            return true;
+        }catch(Exception ex){
+            ex.printStackTrace();
+            return false;
+        }
+    }
 }

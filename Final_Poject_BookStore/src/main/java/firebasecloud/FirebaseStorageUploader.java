@@ -12,7 +12,7 @@ import java.nio.file.Paths;
 
 public class FirebaseStorageUploader {
    // StorageClient.getInstance().bucket().create(fileName, inputStream, filePart.getContentType());
-    public static void uploadImage(InputStream inputStreamm, String contentType , String nameOfFileOnCloud) {
+    public static String uploadImage(InputStream inputStreamm, String contentType , String nameOfFileOnCloud) {
         try {
             FirebaseInitializer.initializeFirebase();
             Bucket bucket = StorageClient.getInstance().bucket();
@@ -23,8 +23,11 @@ public class FirebaseStorageUploader {
 
             String url = "https://firebasestorage.googleapis.com/v0/b/imageofbookandauthor.appspot.com/o/"+nameOfFileOnCloud+"?alt=media";
             System.out.println(url);
+            return url;
         } catch (IOException e) {
             System.err.println("Lỗi khi upload file: " + e.getMessage());
+            return "";
         }
+
     }
 }

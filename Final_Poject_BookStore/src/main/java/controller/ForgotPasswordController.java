@@ -31,6 +31,8 @@ public class ForgotPasswordController extends HttpServlet {
                 Customer customer = CustomerDB.getInstance().checkExistEmail(email);
                 if (customer != null) { // neu ton tai email
                     HttpSession session = request.getSession();
+                    //session timeout 30s
+                    session.setMaxInactiveInterval(30);
                     session.setAttribute("customer", customer);
 
                     code = Mail.generatedCode();
@@ -50,16 +52,25 @@ public class ForgotPasswordController extends HttpServlet {
 
                  //Lay code luu trong session
                  HttpSession session = request.getSession();
-                 String codeInSession = String.valueOf(session.getAttribute("code"));
-                 //So sanh code
-
-                 if(codeEntered.equals(codeInSession)) {
-                     // chuyen den trang nhap mat khau moi
-                     url = "/enteringnewpassword.jsp";
-                     request.getRequestDispatcher(url).forward(request, response);
-                 }else{
-                     out.println("Code not match");
+                 //neu session time out
+                 if(session.getAttribute("code") != null) {
+                     String codeInSession = String.valueOf(session.getAttribute("code"));
+                     //So sanh code
+                     if(codeEntered.equals(codeInSession)) {
+                         // chuyen den trang nhap mat khau moi
+                         url = "/enteringnewpassword.jsp";
+                         request.getRequestDispatcher(url).forward(request, response);
+                     }else{
+                         out.println("Code not match");
+                     }
                  }
+                 //neu session timeout tra ve trang dang nhap
+                 else{
+                     //chuyển lại trang login
+                     response.sendRedirect("/");
+                 }
+
+
             } else if(action.equalsIgnoreCase("EnteredCodeNewPassword")){ // khi da nhap mat khau moi
                 String newPassword = request.getParameter("password");
                 /*
@@ -67,12 +78,14 @@ public class ForgotPasswordController extends HttpServlet {
                 **/
                 HttpSession session = request.getSession();
                 Customer customer = (Customer) session.getAttribute("customer");
-                try{
-                    customer.setPassword(newPassword);
-                    CustomerDB.getInstance().updateCustomer(customer);
-                    out.println("Cập nhật thành công");
-                }catch (Exception e){
-                    e.printStackTrace();
+                if(customer != null) {
+                    try{
+                        customer.setPassword(newPassword);
+                        CustomerDB.getInstance().updateCustomer(customer);
+                        out.println("Cập nhật thành công");
+                    }catch (Exception e){
+                        e.printStackTrace();
+                    }
                 }
 
             }

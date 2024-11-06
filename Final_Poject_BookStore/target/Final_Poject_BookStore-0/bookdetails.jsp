@@ -139,9 +139,9 @@
                 <div class="mt-3">
                     <label for="quantity" class="me-2">Số lượng</label>
                     <div class="input-group mt-1" style="width: 120px;">
-                        <button class="btn btn-outline-secondary" onclick="setQuantity(Math.max(1, ${book.stock}))">-</button>
-                        <input type="text" class="form-control text-center" id="quantity" value="1" readonly>
-                        <button class="btn btn-outline-secondary" onclick="setQuantity(Math.min(100, ${book.stock}))">+</button>
+                        <button class="btn btn-outline-secondary" onclick="decreaseQuantity()">-</button>
+                        <input type="text" class="form-control text-center" id="quantity" value="1">
+                        <button class="btn btn-outline-secondary" onclick="increaseQuantity()">+</button>
                     </div>
                 </div>
 
@@ -348,5 +348,7 @@
         new Splide( '#image-carousel' ).mount();
     </script>
     <!-- end Pagination -->
+
+    <script src="./assets/javascript/quantity.js"></script>
 </body>
 </html>

@@ -82,7 +82,7 @@
     <div class="row book-list">
       <div class="d-flex border-bottom mb-2">
         <h2 class="font-semibold">Sách Liên Quan</h2>
-        <a href="#" class="ms-auto font-medium align-self-end mb-1 text-decoration-none">
+        <a href="${pageContext.request.contextPath}/bookdisplay.jsp" class="ms-auto font-medium align-self-end mb-1 text-decoration-none">
           Xem thêm <i class="fas fa-chevron-right"></i>
         </a>
       </div>

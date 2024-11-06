@@ -102,10 +102,10 @@
                     </li>
 
                     <li class="nav-item">
-                        <a href="${pageContext.request.contextPath}/bookdisplay.jsp" class="nav-link ${param.currentTab eq 'newbooks' ? 'active' : ''}">Sách mới</a>
+                        <a href="${pageContext.request.contextPath}/BookListController" class="nav-link ${param.currentTab eq 'newbooks' ? 'active' : ''}">Sách mới</a>
                     </li>
                     <li class="nav-item">
-                        <a href="${pageContext.request.contextPath}/bookdisplay.jsp" class="nav-link ${param.currentTab eq 'bestsellers' ? 'active' : ''}">Sách bán chạy</a>
+                        <a href="${pageContext.request.contextPath}/BookListController" class="nav-link ${param.currentTab eq 'bestsellers' ? 'active' : ''}">Sách bán chạy</a>
                     </li>
                     <li class="nav-item">
                         <a href="${pageContext.request.contextPath}/authors" class="nav-link ${param.currentTab eq 'authors' ? 'active' : ''}">Tác giả</a>

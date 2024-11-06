@@ -35,9 +35,9 @@
     <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/styles/signin.css" />
 </head>
 <body>
-<!-- Header -->
-<jsp:include page="WEB-INF/views/header.jsp"/>
-<!-- end Header -->
+<%--<!-- Header -->--%>
+<%--<jsp:include page="WEB-INF/views/header.jsp"/>--%>
+<%--<!-- end Header -->--%>
 
 <!-- Sign In -->
 <div class="container d-flex justify-content-center align-items-center mt-5">
@@ -55,10 +55,11 @@
                     </div>
 
                     <!-- Forgot password -->
+                    <form action="forgotpasword" id="formforgotpassword">
+                    </form>
                     <div class="mb-4">
-                        <a href="#" class="text-primary fw-semibold text-decoration-none link-hover">Quên mật khẩu?</a>
+                        <a class="text-primary fw-semibold text-decoration-none link-hover">Quên mật khẩu?</a>
                     </div>
-
                     <!-- Login button -->
                     <button type="submit" class="primary-btn w-100 mb-4">Đăng nhập</button>
                 </form>
@@ -72,8 +73,8 @@
 </div>
 <!-- end Sign In -->
 
-<%--    Footer--%>
-<jsp:include page="WEB-INF/views/footer.jsp"/>
-<%-- end    Footer--%>
+<%--&lt;%&ndash;    Footer&ndash;%&gt;--%>
+<%--<jsp:include page="WEB-INF/views/footer.jsp"/>--%>
+<%--&lt;%&ndash; end    Footer&ndash;%&gt;--%>
 </body>
 </html>

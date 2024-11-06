@@ -21,6 +21,7 @@ test\TestCategory.class
 controller\BookListController.class
 mail\Mail.class
 model\Customer.class
+controller\BookDetailController.class
 model\User.class
 controller\UploadImageController.class
 controller\HomeControllerServlet.class

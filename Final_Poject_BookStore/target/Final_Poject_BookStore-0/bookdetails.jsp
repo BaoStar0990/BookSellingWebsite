@@ -68,39 +68,68 @@
         <!-- Short Intro -->
         <div class="row ">
             <div class="col-md-5 text-center" style="padding: 32px 78px; border: 1px solid #f1f1f1;">
-                <img src="${pageContext.request.contextPath}${book.imageURL}" class="img-fluid rounded shadow-sm" alt="${book.title}">
+                <img src="${pageContext.request.contextPath}${book.getUrlImage()}" class="img-fluid rounded shadow-sm" alt="${book.getTitle()}">
             </div>
 
             <div class="col-md-7 mt-4 ps-4 ps-2">
-                <h2 class="fw-bold">${book.title}</h2>
+                <h2 class="fw-bold">${book.getTitle()}</h2>
 
                 <!-- Authors (multiple) -->
                 <p class="text-muted mt-3">Tác giả:
-                    <c:forEach var="author" items="${book.authors}" varStatus="status">
-                        <span class="fw-semibold">${author.name}</span><c:if test="${!status.last}">, </c:if>
+                    <c:forEach var="author" items="${book.getAuthors()}" varStatus="status">
+                        <span class="fw-semibold">${author.getName()}</span><c:if test="${!status.last}">, </c:if>
                     </c:forEach>
                 </p>
 
                 <!-- Publishers (multiple) -->
+                <!--<p class="text-muted">Nhà xuất bản:-->
+                    <%--<c:forEach var="publisher" items="${book.getPublisher()}" varStatus="status">--%>
+                        <!--<span class="fw-semibold">
+                        <%-- ${publisher.getName()} --%>
+                        </span>-->
+                        <%--<c:if test="${!status.last}">, </c:if>--%>
+                    <%--</c:forEach>--%>
+                <!--</p>-->
+                
                 <p class="text-muted">Nhà xuất bản:
-                    <c:forEach var="publisher" items="${book.publishers}" varStatus="status">
-                        <span class="fw-semibold">${publisher.name}</span><c:if test="${!status.last}">, </c:if>
-                    </c:forEach>
+                   <span class="fw-semibold">${book.getPublisher().getName()}</span>
                 </p>
-
+                
                 <!-- Rating -->
                 <div class="d-flex align-items-center">
                     <%-- Calculate Average Rating --%>
                     <c:set var="totalRating" value="0" />
-                    <c:forEach var="review" items="${book.reviews}">
-                        <c:set var="totalRating" value="${totalRating + review.rating}" />
-                    </c:forEach>
-
-                    <c:set var="averageRating" value="${totalRating / fn:length(book.reviews)}" />
+                    <!<!-- Kiểm tra reviews có null không -->
+                    <c:choose>
+                        <c:when test = "${not empty book.getReviews()}">
+                            <c:forEach var="review" items="${book.getReviews()}">
+                                <c:set var="totalRating" value="${totalRating + review.getRate()}" />
+                            </c:forEach>
+                        </c:when>
+                    </c:choose>
+        
+                    <c:choose>
+                        <c:when test = "${not empty book.getReviews()}">
+                            <c:set var="averageRating" value="${totalRating / fn:length(book.getReviews())}" />
+                        </c:when>
+                        <c:otherwise>
+                            <c:set var="averageRating" value="${totalRating}" />
+                        </c:otherwise>
+                    </c:choose>
+                
+                    
                     <div class="text-warning fs-5 me-2">
                         <div class="text-warning fs-5 me-2 d-flex">
                             <%-- Render filled stars for the rounded average rating --%>
-                            <c:set var="roundedRating" value="${(totalRating / fn:length(book.reviews))}" />
+                            <c:choose>
+                            <c:when test = "${not empty book.getReviews()}">
+                                <c:set var="roundedRating" value="${(totalRating / fn:length(book.getReviews()))}" />
+                            </c:when>
+                            <c:otherwise>
+                                <c:set var="roundedRating" value="${totalRating}" />
+                            </c:otherwise>
+                        </c:choose>
+                            
                             <c:forEach var="i" begin="1" end="5">
                                 <c:choose>
                                     <%-- Check if current star should be filled based on roundedRating --%>
@@ -118,20 +147,20 @@
                     <%-- Round the rating to 1 decimal place and display --%>
                     <span class="text-muted fs-6">
                         <fmt:formatNumber value="${roundedRating}" type="number" maxFractionDigits="1" />
-                        (${fn:length(book.reviews)} Đánh giá)
+                        (${fn:length(book.getReviews())} Đánh giá)
                     </span>
                 </div>
 
                 <!-- Price and Discount -->
                 <div class="mt-3 d-flex align-items-center">
                     <span class="text-primary fw-semibold fs-3">
-                        <fmt:formatNumber value="${book.sellingPrice}" type="number" pattern="#,##0" />đ
+                        <fmt:formatNumber value="${book.getSellingPrice()}" type="number" pattern="#,##0" />đ
                     </span>
                         <span class="text-muted ms-3 text-decoration-line-through mt-1">
-                        <fmt:formatNumber value="${book.sellingPrice + (book.sellingPrice * book.discountPercent / 100)}" type="number" pattern="#,##0" />đ
+                        <fmt:formatNumber value="${book.getSellingPrice() + (book.getSellingPrice() * book.getDiscountPercent() / 100)}" type="number" pattern="#,##0" />đ
                     </span>
                         <span class="badge background-primary ms-2 mt-1">
-                        -<fmt:formatNumber value="${book.discountPercent}" type="number" pattern="#,##0" />%
+                        -<fmt:formatNumber value="${book.getDiscountPercent()}" type="number" pattern="#,##0" />%
                     </span>
                 </div>
 
@@ -163,7 +192,7 @@
             <!-- Book Description -->
             <div class="col-8 pe-5 px-0">
                 <h4 class="fw-semibold">Giới thiệu sách</h4>
-                <p class="fw-medium">${book.description}</p>
+                <p class="fw-medium">${book.getDescription()}</p>
             </div>
 
             <!-- Product Details -->
@@ -172,33 +201,35 @@
 
                 <!-- Authors (multiple) -->
                 <p class="text-muted mt-3">Tác giả:
-                    <c:forEach var="author" items="${book.authors}" varStatus="status">
-                        <span class="fw-semibold">${author.name}</span><c:if test="${!status.last}">, </c:if>
+                    <c:forEach var="author" items="${book.getAuthors()}" varStatus="status">
+                        <span class="fw-semibold">${author.getName()}</span><c:if test="${!status.last}">, </c:if>
                     </c:forEach>
                 </p>
 
                 <!-- Publishers (multiple) -->
                 <p class="text-muted">Nhà xuất bản:
-                    <c:forEach var="publisher" items="${book.publishers}" varStatus="status">
-                        <span class="fw-semibold">${publisher.name}</span><c:if test="${!status.last}">, </c:if>
-                    </c:forEach>
+                    <%--<c:forEach var="publisher" items="${book.getPublisher()}" varStatus="status">--%>
+                        <span class="fw-semibold">${book.getPublisher().getName()}</span>
+                        <%--<c:if test="${!status.last}">, </c:if>--%>
+                    <%--</c:forEach>--%>
                 </p>
 
                 <!-- Year of Publication -->
-                <p class="text-muted">Năm xuất bản:<span class="fw-semibold"> ${book.publishYear}</span></p>
+                <p class="text-muted">Năm xuất bản:<span class="fw-semibold"> ${book.getPublishYear()}</span></p>
 
                 <!-- Categories (multiple) -->
                 <p class="text-muted">Danh mục:
-                    <c:forEach var="category" items="${book.categories}" varStatus="status">
-                        <span class="fw-semibold">${category.name}</span><c:if test="${!status.last}">, </c:if>
-                    </c:forEach>
+                    <%--<c:forEach var="category" items="${book.getCategory()}" varStatus="status">--%>
+                        <span class="fw-semibold">${book.getCategory().getName()}</span>
+                        <%--<c:if test="${!status.last}">, </c:if>--%>
+                    <%--</c:forEach>--%>
                 </p>
 
                 <!-- Language -->
-                <p class="text-muted">Ngôn ngữ: <span class="fw-semibold">${book.language}</span> </p>
+                <p class="text-muted">Ngôn ngữ: <span class="fw-semibold">${book.getLanguage()}</span> </p>
 
                 <!-- Stock Quantity -->
-                <p class="text-muted">Số lượng còn: <span class="fw-semibold">${book.stock}</span> </p>
+                <p class="text-muted">Số lượng còn: <span class="fw-semibold">${book.getStock()}</span> </p>
             </div>
         </div>
         <!-- end Detailed Intro -->

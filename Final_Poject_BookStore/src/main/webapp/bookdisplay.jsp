@@ -94,43 +94,12 @@
     </div>
   </div>
   <!-- End Filter -->
-
-  <!-- Book List -->
-  <%--    Thay bằng book-list.jsp trên trang động--%>
-<!--    <div class="row book-list">
-        <%-- <c:forEach var="i" begin="1" end="24"> --%>
-          <div class="col-6 col-md-4 col-lg-2 p-2">
-            <a href="bookdetails" class="d-block text-decoration-none card-shadow" style="color: inherit;">
-              <div class="card">
-                 book image 
-                <img src="https://www.netabooks.vn/Data/Sites/1/Product/70144/loi-chua-noi.jpg" class="card-img-top" alt="Sample Book Title">
-                <div class="card-body">
-                   book title 
-                  <h6 class="card-title mb-1">Trên đường băng</h6>
-                   author name 
-                  <p class="text-muted mb-0 card-text">
-                    <span class="fw-semibold">Tony Buổi Sáng</span>
-                  </p>
-                  <div class="mt-2">
-                      price 
-                    <span class="text-danger font-semibold">
-                          <%-- <fmt:formatNumber value="100000" type="number" pattern="#,##0" />đ --%>
-                      </span>
-                      discount 
-                    <span class="badge bg-danger ms-2">-10%</span>
-                  </div>
-                </div>
-              </div>
-            </a>
-          </div>
-       <%-- </c:forEach> --%>
-      </div>  -->
-      
-       
+  
        <div class="row book-list">
         <c:forEach var="book" items = "${books}">
           <div class="col-6 col-md-4 col-lg-2 p-2">
-            <a href="bookdetails" class="d-block text-decoration-none card-shadow" style="color: inherit;">
+              
+            <a href="${pageContext.request.contextPath}/bookdetails?bookId=${book.getId()}" class="d-block text-decoration-none card-shadow" style="color: inherit;">
               <div class="card">
                  <!--book image--> 
                 <img src=${book.getUrlImage()} class="card-img-top" alt="Sample Book Title">
@@ -157,7 +126,7 @@
                   <div class="mt-2">
                       <!--price--> 
                     <span class="text-danger font-semibold">
-                          <fmt:formatNumber value= "${book.sellingPrice}" type="number" pattern="#,##0" />đ
+                          <fmt:formatNumber value= "${book.getSellingPrice()}" type="number" pattern="#,##0" />đ
                       </span>
                       <!--discount--> 
                     <span class="badge bg-danger ms-2">-10%</span>

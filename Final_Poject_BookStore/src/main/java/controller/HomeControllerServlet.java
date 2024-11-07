@@ -61,7 +61,7 @@ public class HomeControllerServlet extends HttpServlet {
 //        request.setAttribute("authors",authors);
 
         String url = "/home.jsp";
-        request.getRequestDispatcher(url).forward(request, response);
+        request.getServletContext().getRequestDispatcher(url).forward(request, response);
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

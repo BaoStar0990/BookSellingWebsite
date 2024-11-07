@@ -13,11 +13,14 @@ public class Bill implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int billID;
     private String paymentMethod;
-    private String statusPayment;
+    
+    @Enumerated(EnumType.STRING)
+    private StatusPayment statusPayment;
+    @Enumerated(EnumType.STRING)   
+    private StatusOrder statusOrder;
     private Double VAT;
     private LocalDate orderDate;
     private LocalDate deliveryDate;
-
 
     //hibernate, xóa bill không xóa customer; cập nhật, chèn bill thì tự thay đổi bên customer 
     @ManyToOne()
@@ -31,21 +34,24 @@ public class Bill implements Serializable {
 
     public Bill() {
     }
-    public Bill(int billID,Customer customer,String paymentMethod, Double VAT
-            ,LocalDate orderDate,LocalDate deliveryDate ) {
+    public Bill(int billID,Customer customer,String paymentMethod, StatusPayment statusPayment, 
+            StatusOrder statusOrder, Double VAT, LocalDate orderDate,LocalDate deliveryDate ) {
         this.billID = billID;
         this.customer = customer;
         this.paymentMethod = paymentMethod;
+        this.statusPayment = statusPayment;
+        this.statusOrder = statusOrder;
         this.VAT = VAT;
         this.orderDate = orderDate;
         this.deliveryDate = deliveryDate;
         orderDetails = new HashSet<>();
     }
 
-    public Bill(String paymentMethod, String statusPayment, Double VAT,
+    public Bill(String paymentMethod, StatusPayment statusPayment, StatusOrder statusOrder, Double VAT,
             LocalDate orderDate, LocalDate deliveryDate, Customer customer) {
         this.paymentMethod = paymentMethod;
         this.statusPayment = statusPayment;
+        this.statusOrder = statusOrder;
         this.VAT = VAT;
         this.orderDate = orderDate;
         this.deliveryDate = deliveryDate;
@@ -69,7 +75,7 @@ public class Bill implements Serializable {
         return paymentMethod;
     }
 
-    public String getStatusPayment() {
+    public StatusPayment getStatusPayment() {
         return statusPayment;
     }
 
@@ -106,7 +112,7 @@ public class Bill implements Serializable {
         this.paymentMethod = paymentMethod;
     }
 
-    public void setStatusPayment(String statusPayment) {
+    public void setStatusPayment(StatusPayment statusPayment) {
         this.statusPayment = statusPayment;
     }
 
@@ -121,4 +127,13 @@ public class Bill implements Serializable {
     public void setDeliveryDate(LocalDate deliveryDate) {
         this.deliveryDate = deliveryDate;
     }
+
+    public StatusOrder getStatusOrder() {
+        return statusOrder;
+    }
+
+    public void setStatusOrder(StatusOrder statusOrder) {
+        this.statusOrder = statusOrder;
+    }
+    
 }

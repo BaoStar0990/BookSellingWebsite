@@ -5,7 +5,6 @@ import dbmodel.BookDB;
 import jakarta.persistence.*;
 
 import java.io.Serializable;
-import java.time.LocalDate;
 import java.util.*;
 
 @Entity
@@ -15,7 +14,7 @@ public class Book implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int bookID;
     private String title;
-    
+    @Lob
     private String description;
     private String Isbn;
     private Double costPrice; // ?
@@ -23,7 +22,7 @@ public class Book implements Serializable {
     private int stocks;
     private String urlImage;
     
-    private LocalDate publishDate;
+    private int publishYear;
     private String language;
 
     //hibernate, xóa sách thì xóa reviews
@@ -60,7 +59,7 @@ public class Book implements Serializable {
     public Book(String title, Publisher publisher, 
             int bookID, String description, String isbn, Double costPrice, 
             Double sellingPrice, int stocks, String urlImage, Category category, 
-            LocalDate publishDate, String language) {
+            int publishYear, String language) {
         this.title = title;
         this.publisher = publisher;
         this.bookID = bookID;
@@ -71,13 +70,13 @@ public class Book implements Serializable {
         this.stocks = stocks;
         this.urlImage = urlImage;
         this.category = category;
-        this.publishDate = publishDate;
+        this.publishYear = publishYear;
         this.language = language;
     }
 
     public Book(String title, String description, String Isbn, 
             Double costPrice, Double sellingPrice, int stocks, String urlImage, 
-            LocalDate publishDate, String language, Category category, Publisher publisher) {
+            int publishYear, String language, Category category, Publisher publisher) {
         this.title = title;
         this.description = description;
         this.Isbn = Isbn;
@@ -85,7 +84,7 @@ public class Book implements Serializable {
         this.sellingPrice = sellingPrice;
         this.stocks = stocks;
         this.urlImage = urlImage;
-        this.publishDate = publishDate;
+        this.publishYear = publishYear;
         this.language = language;
         this.category = category;
         this.publisher = publisher;
@@ -131,8 +130,8 @@ public class Book implements Serializable {
         return urlImage;
     }
 
-    public LocalDate getPublishDate() {
-        return publishDate;
+    public int getPublishYear() {
+        return publishYear;
     }
 
     public String getLanguage() {
@@ -179,8 +178,8 @@ public class Book implements Serializable {
         this.category = category;
     }
 
-    public void setPublishDate(LocalDate publishDate) {
-        this.publishDate = publishDate;
+    public void setPublishDate(int publishYear) {
+        this.publishYear = publishYear;
     }
 
     public void setLanguage(String language) {

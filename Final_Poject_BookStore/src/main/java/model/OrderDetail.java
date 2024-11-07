@@ -11,8 +11,6 @@ public class OrderDetail implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    // true: đặt hàng, false: giỏ hàng
-    private boolean statusOrder;
     private int quantity;
 
     //hibernate
@@ -28,16 +26,14 @@ public class OrderDetail implements Serializable {
 
     }
 
-    public OrderDetail(int id, boolean statusOrder, int quantity, Book book) {
+    public OrderDetail(int id, int quantity, Book book) {
         this.id = id;
-        this.statusOrder = statusOrder;
         this.quantity = quantity;
         this.book = book;
     }
     
 
-    public OrderDetail(boolean statusOrder, int quantity, Book book) {
-        this.statusOrder = statusOrder;
+    public OrderDetail(int quantity, Book book) {
         this.quantity = quantity;
         this.book = book;
     }
@@ -54,21 +50,12 @@ public class OrderDetail implements Serializable {
     public void setBook(Book book) {
         this.book = book;
     }
-    public boolean getStatusOrder() {
-        return statusOrder;
-    }
-    public void setStatusOrder(boolean statusOrder) {
-        this.statusOrder = statusOrder;
-    }
+    
     public int getQuantity() {
         return quantity;
     }
     public void setQuantity(int quantity) {
         this.quantity = quantity;
-    }
-
-    public boolean isStatusOrder() {
-        return statusOrder;
     }
 
     public Bill getBill() {

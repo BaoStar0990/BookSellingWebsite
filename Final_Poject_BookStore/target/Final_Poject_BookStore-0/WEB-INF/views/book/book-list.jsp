@@ -28,22 +28,22 @@
             <div class="col-6 col-md-4 col-lg-2 p-2">
                 <a href="bookdetails" class="d-block text-decoration-none card-shadow" style="color: inherit;">
                     <div class="card">
-                        <img src="${pageContext.request.contextPath}${book.imageURL}" class="card-img-top" alt="${book.title}">
+                        <img src="${pageContext.request.contextPath}${book.getUrlImage()}" class="card-img-top" alt="${book.getTitle()}">
                         <div class="card-body">
-                            <h6 class="card-title mb-1">${book.title}</h6>
+                            <h6 class="card-title mb-1">${book.getTitle()}</h6>
                             <p class="text-muted mb-0 card-text">
-                                <c:forEach var="author" items="${book.authors}" varStatus="status">
-                                    <span class="fw-semibold">${author.name}</span><c:if test="${!status.last}">, </c:if>
+                                <c:forEach var="author" items="${book.getAuthors()}" varStatus="status">
+                                    <span class="fw-semibold">${author.getName()}</span><c:if test="${!status.last}">, </c:if>
                                 </c:forEach>
                             </p>
 
                             <div class="mt-2">
                                 <span class="text-danger font-semibold">
-                                    <fmt:formatNumber value="${book.sellingPrice}" type="number" pattern="#,##0" />đ
+                                    <fmt:formatNumber value="${book.getSellingPrice()}" type="number" pattern="#,##0" />đ
                                 </span>
-                                <c:if test="${not empty book.discountPercent}">
+                                <c:if test="${not empty book.getDiscountCampaign()}">
                                     <span class="badge bg-danger ms-2">
-                                        -<fmt:formatNumber value="${book.discountPercent}" type="number" pattern="#,##0" />%
+                                        -<fmt:formatNumber value="${book.getDiscountCampaign().getPercentDiscount()}" type="number" pattern="#,##0" />%
                                     </span>
                                 </c:if>
                             </div>

@@ -33,11 +33,13 @@ dbmodel\ReviewDB.class
 model\DiscountCampaign.class
 dbmodel\StaffDB.class
 model\Author.class
+model\StatusPayment.class
 firebasecloud\FirebaseInitializer.class
 test\TestCustomer.class
 model\Category.class
 dbmodel\AuthorDB.class
 model\Book.class
+model\StatusOrder.class
 test\TestPublisher.class
 test\TestDiscountCampaign.class
 model\Bill.class

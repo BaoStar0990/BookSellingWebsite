@@ -18,12 +18,12 @@ public class UploadImageController extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         // Lấy file từ request
         Part filePart = request.getPart("imageFile"); // Tên của field trong form
-        String nameOfFileOnCloud = request.getParameter("nameOfFileOnCloud");
+       // String nameOfFileOnCloud = request.getParameter("nameOfFileOnCloud");
         try (InputStream inputStream = filePart.getInputStream()){
             String fileName = filePart.getSubmittedFileName();
             String contentType = filePart.getContentType();
           //  StorageClient.getInstance().bucket().create(fileName, inputStream, filePart.getContentType());
-            FirebaseStorageUploader.uploadImage(inputStream,contentType,nameOfFileOnCloud);
+            FirebaseStorageUploader.uploadImage(inputStream,contentType,fileName);
         }catch (Exception e){
             e.printStackTrace();
         }

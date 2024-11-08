@@ -14,21 +14,20 @@ public class TestBook {
         for(Book b : allBooks){
             System.out.println("--------");
             System.out.println(b.getId() + " " + b.getTitle() + " " +
-                    b.getLanguage() + " " + b.getCategory().getName() + 
-                    " " + b.getPublisher().getName());
+                    b.getLanguage() + " "+b.getDescription());
             // lấy thông tin tác giả của sách
             List<Author> authors = b.getAuthors();        
             for(Author a : authors){
                 System.out.println(a.getName());
             }
         }
-        System.out.println("--------Lấy các lượt review của 1 cuốn sách-------");
-        Book book1 = BookDB.getInstance().selectByID(1);
-        List<Review> rv = book1.getReviews();
-        for(Review r : rv){
-            System.out.println(r.getRate() + " " + r.getDescription() +
-                    " " + r.getCustomer().getFullName());
-        }
+//        System.out.println("--------Lấy các lượt review của 1 cuốn sách-------");
+//        Book book1 = BookDB.getInstance().selectByID(1);
+//        List<Review> rv = book1.getReviews();
+//        for(Review r : rv){
+//            System.out.println(r.getRate() + " " + r.getDescription() +
+//                    " " + r.getCustomer().getFullName());
+//        }
         
     }
 }

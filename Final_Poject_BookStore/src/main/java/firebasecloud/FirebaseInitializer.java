@@ -16,16 +16,18 @@ import java.nio.file.Paths;
 public class FirebaseInitializer {
 
     public static void initializeFirebase() throws IOException {
-        InputStream serviceAccount
-                = FirebaseInitializer.class.getResourceAsStream("/key.json");
+        if (FirebaseApp.getApps().isEmpty()) {
+            InputStream serviceAccount
+                    = FirebaseInitializer.class.getResourceAsStream("/key.json");
 
-        FirebaseOptions options = new FirebaseOptions.Builder()
-                .setCredentials(GoogleCredentials.fromStream(serviceAccount))
-                .setStorageBucket("imageofbookandauthor.appspot.com")
-                .build();
+            FirebaseOptions options = new FirebaseOptions.Builder()
+                    .setCredentials(GoogleCredentials.fromStream(serviceAccount))
+                    .setStorageBucket("imageofbookandauthor.appspot.com")
+                    .build();
 
-        //
-        FirebaseApp.initializeApp(options);
+            //
+            FirebaseApp.initializeApp(options);
+        }
 
     }
 }

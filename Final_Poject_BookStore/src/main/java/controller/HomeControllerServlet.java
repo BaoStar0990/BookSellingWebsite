@@ -54,8 +54,8 @@ public class HomeControllerServlet extends HttpServlet {
 //        request.setAttribute("categories", categories);
 
             //Book
-//        List<Book> books = BookDB.getInstance().selectAll();
-//        request.setAttribute("books", books);
+        List<Book> books = BookDB.getInstance().selectAll();
+        request.setAttribute("bestsellerBooks", books);
             //Author
 //        List<Author> authors = AuthorDB.getInstance().selectAll();
 //        request.setAttribute("authors",authors);

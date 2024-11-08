@@ -242,3 +242,41 @@ body{
     background-color: var(--primary-color)!important;
     border-color: var(--primary-color) !important;
 }
+
+
+/* Sidebar*/
+.sidebar .nav-link:hover {
+    background-color: var(--primary-color);
+    color: #fff!important;
+    border-radius: 5px;
+}
+
+.sidebar .nav-link{
+    padding: 8px 24px;
+}
+
+.sidebar {
+    background-color: #100E17;
+    padding: 16px 0!important;
+}
+
+.sidebar .active{
+    color: var(--primary-color)!important;
+    position: relative;
+}
+
+.sidebar .active:before{
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 5px;
+    background-color: var(--primary-color);
+}
+
+/*Top bar*/
+.topbar {
+    z-index: 1050;
+}
+

@@ -50,15 +50,15 @@ public class HomeControllerServlet extends HttpServlet {
 
         //Take data
             //Category
-//        List<Category> categories = CategoryDB.getInstance().selectAll();
-//        request.setAttribute("categories", categories);
+        List<Category> categories = CategoryDB.getInstance().selectAll();
+        req.setAttribute("categories", categories);
 
             //Book
         List<Book> books = BookDB.getInstance().selectAll();
         req.setAttribute("bestsellerBooks", books);
             //Author
-//        List<Author> authors = AuthorDB.getInstance().selectAll();
-//        request.setAttribute("authors",authors);
+        List<Author> authors = AuthorDB.getInstance().selectAll();
+        req.setAttribute("authors",authors);
 
         String url = "/home.jsp";
         req.getServletContext().getRequestDispatcher(url).forward(req, res);

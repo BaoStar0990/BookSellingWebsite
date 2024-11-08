@@ -10,19 +10,12 @@
 
         <c:forEach items="${authors}" var="author">
             <div class="col-6 col-md-4 col-lg-2 text-center mb-4">
-<%--                <a href="${pageContext.request.contextPath}/authordetail.jsp" class="text-decoration-none text-dark">--%>
-<%--                    <div class="author-card">--%>
-<%--                        <img src=${pageContext.request.contextPath}${author.imageURL}"   alt="${author.name}" class="author-image img-fluid rounded-circle" />--%>
-<%--                        <p class="fw-bold mt-2">${author.name}</p>--%>
-<%--                    </div>--%>
-<%--                </a>--%>
-<%-- <a href="" class="text-decoration-none text-dark">&ndash;%&gt;--%>
-<%--                    <div class="author-card">--%>
-<%--                        <img src=""   alt="${author.name}" class="author-image img-fluid rounded-circle" />--%>
-<%--                        <p class="fw-bold mt-2">${author.name}</p>--%>
-<%--                    </div>--%>
-<%--                </a>--%>
-
+                <a href="${pageContext.request.contextPath}/authordetail.jsp" class="text-decoration-none text-dark">
+                    <div class="author-card">
+                        <img src="${author.imageURL}"   alt="${author.name}" class="author-image img-fluid rounded-circle" />
+                        <p class="fw-bold mt-2">${author.name}</p>
+                    </div>
+                </a>
             </div>
         </c:forEach>
     </div>

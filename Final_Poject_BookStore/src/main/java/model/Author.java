@@ -13,6 +13,7 @@ public class Author implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int authorID;
     private String name;
+    private String imageURL;
 
     @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(
@@ -49,4 +50,11 @@ public class Author implements Serializable {
     public void addBook(Book b){
         this.books.add(b);
     }
+    public void setImageURL(String imageURL) {
+        this.imageURL = imageURL;
+    }
+    public String getImageURL() {
+        return imageURL;
+    }
+
 }

@@ -29,7 +29,7 @@ import model.Book;
  *
  * @author hadan
  */
-@WebServlet("/")
+@WebServlet("/home")
 public class HomeControllerServlet extends HttpServlet {
 
     /**
@@ -45,7 +45,7 @@ public class HomeControllerServlet extends HttpServlet {
             throws ServletException, IOException {
         //set UTF8 - Tiếng việt
         req.setCharacterEncoding("UTF-8");
-        res.setContentType("text/html; charset=UTF-8");
+//        res.setContentType("text/html; charset=UTF-8");
         res.setCharacterEncoding("UTF-8");
 
         //Take data
@@ -55,7 +55,7 @@ public class HomeControllerServlet extends HttpServlet {
 
             //Book
         List<Book> books = BookDB.getInstance().selectAll();
-        request.setAttribute("bestsellerBooks", books);
+        req.setAttribute("bestsellerBooks", books);
             //Author
 //        List<Author> authors = AuthorDB.getInstance().selectAll();
 //        request.setAttribute("authors",authors);

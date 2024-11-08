@@ -28,7 +28,7 @@
             <div class="col-6 col-md-4 col-lg-2 p-2">
                 <a href="bookdetails" class="d-block text-decoration-none card-shadow" style="color: inherit;">
                     <div class="card">
-                        <img src="${pageContext.request.contextPath}${book.getUrlImage()}" class="card-img-top" alt="${book.getTitle()}">
+                        <img src="${book.getUrlImage()}" class="card-img-top" alt="${book.getTitle()}">
                         <div class="card-body">
                             <h6 class="card-title mb-1">${book.getTitle()}</h6>
                             <p class="text-muted mb-0 card-text">

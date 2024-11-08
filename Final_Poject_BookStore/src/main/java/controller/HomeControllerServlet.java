@@ -36,17 +36,17 @@ public class HomeControllerServlet extends HttpServlet {
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
      *
-     * @param request servlet request
-     * @param response servlet response
+     * @param req servlet request
+     * @param req servlet response
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
-    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
+    protected void processRequest(HttpServletRequest req, HttpServletResponse res)
             throws ServletException, IOException {
         //set UTF8 - Tiếng việt
-        request.setCharacterEncoding("UTF-8");
-        response.setContentType("text/html; charset=UTF-8");
-        response.setCharacterEncoding("UTF-8");
+        req.setCharacterEncoding("UTF-8");
+        res.setContentType("text/html; charset=UTF-8");
+        res.setCharacterEncoding("UTF-8");
 
         //Take data
             //Category
@@ -61,7 +61,7 @@ public class HomeControllerServlet extends HttpServlet {
 //        request.setAttribute("authors",authors);
 
         String url = "/home.jsp";
-        request.getServletContext().getRequestDispatcher(url).forward(request, response);
+        req.getServletContext().getRequestDispatcher(url).forward(req, res);
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

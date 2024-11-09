@@ -72,6 +72,7 @@ public class Book implements Serializable {
         this.category = category;
         this.publishYear = publishYear;
         this.language = language;
+
     }
 
     public Book(String title, String description, String Isbn, 
@@ -196,6 +197,16 @@ public class Book implements Serializable {
     
     public List<Review> getReviews() {
         return BookDB.getInstance().getReviews(this);
+    }
+    public int getAverageRatingStart(){
+        int numberOfReview = this.getReviews().size();
+        if(numberOfReview == 0)
+            return 0;
+        int totalRating = 0;
+        for(Review review : this.getReviews()){
+            totalRating += review.getRate();
+        }
+        return (totalRating/numberOfReview);
     }
     
     public List<Author> getAuthors() {

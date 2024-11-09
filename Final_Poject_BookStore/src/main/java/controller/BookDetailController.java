@@ -7,12 +7,16 @@ package controller;
 import dbmodel.BookDB;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.List;
+
+import dbmodel.CategoryDB;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import model.Book;
+import model.Category;
 
 /**
  *
@@ -37,19 +41,25 @@ public class BookDetailController extends HttpServlet {
         response.setContentType("text/html; charset=UTF-8");
         response.setCharacterEncoding("UTF-8");
 
+        //Category
+        List<Category> categories = CategoryDB.getInstance().selectAll();
+        request.setAttribute("categories", categories);
+
         // lấy id của book
-        String idBookStr = request.getParameter("bookId");
-        int id = Integer.parseInt(idBookStr);
 
         // Lấy cuốn sách
-        Book book = BookDB.getInstance().selectByID(id);
-        // set attribute
-        request.setAttribute("book", book);
-
-        String url = "/bookdetails.jsp";
-        request.getRequestDispatcher(url).forward(request, response);
+        try{
+            String idBookStr = request.getParameter("id"); //bookid
+            int id = Integer.parseInt(idBookStr);
+            Book book = BookDB.getInstance().selectByID(id);
+            request.setAttribute("book", book);
+            String url = "/bookdetails.jsp";
+            System.out.println("Called Bookdetail");
+            request.getRequestDispatcher(url).forward(request, response);
+        }catch(NumberFormatException ex){
+            System.out.println("Vui lòng nhập đúng dữ liệu");
+        }
     }
-
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.

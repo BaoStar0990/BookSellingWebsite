@@ -20,6 +20,9 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.transaction.TransactionManager;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
+
 import model.Author;
 import model.Category;
 import org.hibernate.Session;
@@ -49,16 +52,26 @@ public class HomeControllerServlet extends HttpServlet {
         res.setCharacterEncoding("UTF-8");
 
         //Take data
-            //Category
+//            //Category
         List<Category> categories = CategoryDB.getInstance().selectAll();
         req.setAttribute("categories", categories);
-
             //Book
         List<Book> books = BookDB.getInstance().selectAll();
+        if(books.size() > 6)
+        {
+            books = books.stream().limit(6).collect(Collectors.toList());
+        }
         req.setAttribute("bestsellerBooks", books);
             //Author
         List<Author> authors = AuthorDB.getInstance().selectAll();
+        if(authors.size() > 6)
+        {
+            authors = authors.stream().limit(6).collect(Collectors.toList());
+        }
         req.setAttribute("authors",authors);
+
+
+
 
         String url = "/home.jsp";
         req.getServletContext().getRequestDispatcher(url).forward(req, res);

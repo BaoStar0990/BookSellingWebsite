@@ -37,5 +37,19 @@ public class ReviewDB extends ModifyDB<Review> implements DBInterface<Review> {
             return null;
         }
     }
+
+//    public Review getPercentR(Book b) {
+//        try(EntityManager em = DBUtil.getEmFactory().createEntityManager()) {
+//            return em.createQuery("from Review r where r.id =: id ", Review.class)
+//                    .setParameter("id", id).getSingleResult();
+//        }
+//        catch(NoResultException ex){
+//            return null;
+//        }
+//        catch(Exception ex){
+//            return null;
+//        }
+//    }
+
     
 }

@@ -5,6 +5,7 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.NoResultException;
 import java.util.List;
 import model.Book;
+import model.Category;
 import model.Review;
 import org.hibernate.TransientObjectException;
 

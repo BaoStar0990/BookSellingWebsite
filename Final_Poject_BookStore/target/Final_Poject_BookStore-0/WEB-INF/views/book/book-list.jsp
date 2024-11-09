@@ -26,11 +26,12 @@
         <c:forEach var="book" items="${books}" varStatus="status">
             <!-- Each book occupies 2, 4, or 6 columns depending on the screen size -->
             <div class="col-6 col-md-4 col-lg-2 p-2">
-                <a href="bookdetails" class="d-block text-decoration-none card-shadow" style="color: inherit;">
+                <%String url = "${pageContext.request.contextPath}/bookdetails?id="+"${book.getId()}";%>
+                <a href="${pageContext.request.contextPath}/bookdetails?id=${book.getId()}" class="d-block text-decoration-none card-shadow" style="color: inherit;">
                     <div class="card">
-                        <img src="${book.getUrlImage()}" class="card-img-top" alt="${book.getTitle()}">
+                        <img src="${book.urlImage}" class="card-img-top" alt="${book.title}">
                         <div class="card-body">
-                            <h6 class="card-title mb-1">${book.getTitle()}</h6>
+                            <h6 class="card-title mb-1">${book.title}</h6>
                             <p class="text-muted mb-0 card-text">
                                 <c:forEach var="author" items="${book.getAuthors()}" varStatus="status">
                                     <span class="fw-semibold">${author.getName()}</span><c:if test="${!status.last}">, </c:if>
@@ -43,7 +44,7 @@
                                 </span>
                                 <c:if test="${not empty book.getDiscountCampaign()}">
                                     <span class="badge bg-danger ms-2">
-                                        -<fmt:formatNumber value="${book.getDiscountCampaign().getPercentDiscount()}" type="number" pattern="#,##0" />%
+                                        -<fmt:formatNumber value="${book.getDiscountCampaign().getPercentDiscount()*100}" type="number" pattern="#,##0" />%
                                     </span>
                                 </c:if>
                             </div>

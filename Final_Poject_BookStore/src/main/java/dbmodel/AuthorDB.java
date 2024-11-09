@@ -4,9 +4,12 @@ import database.DBUtil;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;
 import jakarta.persistence.NoResultException;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import model.Author;
 import model.Book;
+import org.hibernate.TransientObjectException;
 
 public class AuthorDB extends ModifyDB<Author> implements DBInterface<Author> {
     public static AuthorDB getInstance(){
@@ -71,5 +74,31 @@ public class AuthorDB extends ModifyDB<Author> implements DBInterface<Author> {
             if(em != null)
                 em.close();
         }
+    }
+    
+    public Set<Book> getBooks(Author a){
+        try(EntityManager em = DBUtil.getEmFactory().createEntityManager()){
+            // find Author
+            Author authorFind = em.find(Author.class, a.getId());
+            // find Books
+            List<Book> books = em.createQuery("SELECT b FROM Author c JOIN c.books b "
+                    + "WHERE c.id = :authorId", Book.class)
+                     .setParameter("authorId", authorFind.getId())
+                     .getResultList();
+            if(books == null)
+                return null;
+            else
+                return new HashSet<>(books);
+        }
+        catch (NullPointerException e) {
+            return null;
+        }
+        // lỗi truy vấn đối tượng transient
+        catch (TransientObjectException | NoResultException ex) {
+            return null;
+        }
+        catch(Exception ex){
+            return null;
+        } 
     }
 }

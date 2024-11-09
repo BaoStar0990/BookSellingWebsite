@@ -1,5 +1,6 @@
 package model;
 
+import dbmodel.AuthorDB;
 import jakarta.persistence.*;
 
 import java.io.Serializable;
@@ -44,6 +45,15 @@ public class Author implements Serializable {
     public String getName() {
         return name;
     }
+
+    public Set<Book> getBooks() {
+        return AuthorDB.getInstance().getBooks(this);
+    }
+
+    public void setBooks(Set<Book> books) {
+        this.books = books;
+    }
+    
     public void setName(String name) {
         this.name = name;
     }

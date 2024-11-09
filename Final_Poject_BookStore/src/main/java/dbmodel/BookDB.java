@@ -3,7 +3,9 @@ package dbmodel;
 import database.DBUtil;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.NoResultException;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import model.Book;
 import model.Category;
 import model.Review;
@@ -41,15 +43,20 @@ public class BookDB extends ModifyDB<Book> implements DBInterface<Book> {
         }
     }
     
-    public List<Review> getReviews(Book b){
+    public Set<Review> getReviews(Book b){
         try(EntityManager em = DBUtil.getEmFactory().createEntityManager()){
-            return em.createQuery("from Review r where r.book = :book", 
+            List<Review> reviewList =  em.createQuery("from Review r where r.book = :book", 
                         Review.class).setParameter("book", b).getResultList();
+            if(reviewList == null)
+                return null;
+            else
+                return new HashSet<>(reviewList);
         }
-        catch (TransientObjectException ex) {
+        catch (NullPointerException e) {
             return null;
         }
-        catch(NoResultException ex){
+        // lỗi truy vấn đối tượng transient
+        catch (TransientObjectException | NoResultException ex) {
             return null;
         }
         catch(Exception ex){

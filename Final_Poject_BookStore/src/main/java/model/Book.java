@@ -27,18 +27,17 @@ public class Book implements Serializable {
 
     //hibernate, xóa sách thì xóa reviews
     @OneToMany(mappedBy = "book", cascade = CascadeType.REMOVE)
-    private List<Review> reviews; // = new ArrayList<Review>();
+    private Set<Review> reviews; 
 
     //hibernate, xóa sách không xóa tác giả, chèn và cập nhật sách thì cập nhật bên tác giả
     @ManyToMany(mappedBy = "books", fetch = FetchType.EAGER, 
             cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-    private List<Author> authors; // = new ArrayList<Author>();
+    private Set<Author> authors;
 
-
-    //one Category, xóa sách không xóa thể loại
-    @ManyToOne()
-    @JoinColumn(name="categoryID")
-    private Category category;
+    //Many Category, xóa sách không xóa thể loại
+    @ManyToMany(mappedBy = "books", fetch = FetchType.EAGER,
+            cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    private Set<Category> categories;
 
     //one Publisher, xóa sách không xóa nhà xuất bản
     @ManyToOne()
@@ -47,7 +46,7 @@ public class Book implements Serializable {
 
     //many orderdetail
     @OneToMany(mappedBy = "book")
-    private Set<OrderDetail> orderDetails; // = new HashSet<OrderDetail>();
+    private Set<OrderDetail> orderDetails;
 
     //many discount detail
     @ManyToOne()
@@ -58,7 +57,7 @@ public class Book implements Serializable {
     }
     public Book(String title, Publisher publisher, 
             int bookID, String description, String isbn, Double costPrice, 
-            Double sellingPrice, int stocks, String urlImage, Category category, 
+            Double sellingPrice, int stocks, String urlImage, 
             int publishYear, String language) {
         this.title = title;
         this.publisher = publisher;
@@ -69,7 +68,6 @@ public class Book implements Serializable {
         this.sellingPrice = sellingPrice;
         this.stocks = stocks;
         this.urlImage = urlImage;
-        this.category = category;
         this.publishYear = publishYear;
         this.language = language;
 
@@ -77,7 +75,7 @@ public class Book implements Serializable {
 
     public Book(String title, String description, String Isbn, 
             Double costPrice, Double sellingPrice, int stocks, String urlImage, 
-            int publishYear, String language, Category category, Publisher publisher) {
+            int publishYear, String language, Publisher publisher) {
         this.title = title;
         this.description = description;
         this.Isbn = Isbn;
@@ -87,7 +85,6 @@ public class Book implements Serializable {
         this.urlImage = urlImage;
         this.publishYear = publishYear;
         this.language = language;
-        this.category = category;
         this.publisher = publisher;
     }
     
@@ -119,10 +116,10 @@ public class Book implements Serializable {
         return sellingPrice;
     }
 
-    public Category getCategory() {
-        return category;
+    public Set<Category> getCategories() {
+        return categories;
     }
-
+    
     public int getStocks() {
         return stocks;
     }
@@ -175,10 +172,6 @@ public class Book implements Serializable {
         this.urlImage = urlImage;
     }
 
-    public void setCategory(Category category) {
-        this.category = category;
-    }
-
     public void setPublishDate(int publishYear) {
         this.publishYear = publishYear;
     }
@@ -195,7 +188,7 @@ public class Book implements Serializable {
         this.discountCampaign = discountCampaign;
     }
     
-    public List<Review> getReviews() {
+    public Set<Review> getReviews() {
         return BookDB.getInstance().getReviews(this);
     }
     public int getAverageRatingStart(){
@@ -209,9 +202,9 @@ public class Book implements Serializable {
         return (totalRating/numberOfReview);
     }
     
-    public List<Author> getAuthors() {
+    public Set<Author> getAuthors() {
         return authors;
     }
-        
+    
     // bussiness    
 }

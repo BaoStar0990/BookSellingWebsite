@@ -2,6 +2,7 @@ package dbmodel;
 
 import database.DBUtil;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityTransaction;
 import jakarta.persistence.NoResultException;
 import java.util.HashSet;
 import java.util.List;
@@ -42,21 +43,67 @@ public class CategoryDB extends ModifyDB<Category> implements DBInterface<Catego
         }
     }
     
+    public boolean addBook(Category c, Book b){
+        EntityManager em = null;
+        EntityTransaction tr = null;
+        try{
+            em = DBUtil.getEmFactory().createEntityManager();
+            tr = em.getTransaction();
+            tr.begin();
+            // find Category
+            Category categoryFind = em.find(Category.class, c.getId());
+            // find Book
+            Book bookFind = em.find(Book.class, b.getId());
+            if(categoryFind != null && bookFind != null){
+                // set Book
+                categoryFind.addBook(bookFind);
+                // save Author
+                em.merge(categoryFind);
+            }
+            else
+                return false;
+            tr.commit();
+            return true;
+        }
+        catch(Exception ex){
+            if(tr != null && tr.isActive())
+                tr.rollback();
+            ex.printStackTrace();
+            return false;
+        }
+        finally{
+            if(em != null)
+                em.close();
+        }
+    }
+    
+    
+    
     public Set<Book> getBooks(Category c){
         try(EntityManager em = DBUtil.getEmFactory().createEntityManager()){
-               List<Book> listBooks = em.createQuery("from Book b where b.category = :category", 
-                        Book.class).setParameter("category", c).getResultList();
-               Set<Book> rs = new HashSet<>(listBooks);
-               return rs;
+            // find Author
+            Category categoryFind = em.find(Category.class, c.getId());
+            // find Books
+            List<Book> books = em.createQuery("SELECT b FROM Category c JOIN c.books b "
+                    + "WHERE c.id = :categoryId", Book.class)
+                     .setParameter("categoryId", categoryFind.getId())
+                     .getResultList();
+            if(books == null)
+                return null;
+            else
+                return new HashSet<>(books);
         }
-        catch (TransientObjectException ex) {
+        catch (NullPointerException e) {
             return null;
         }
-        catch(NoResultException ex){
+        // lỗi truy vấn đối tượng transient
+        catch (TransientObjectException | NoResultException ex) {
             return null;
         }
         catch(Exception ex){
             return null;
-        }     
+        } 
     }
+    
+     
 }

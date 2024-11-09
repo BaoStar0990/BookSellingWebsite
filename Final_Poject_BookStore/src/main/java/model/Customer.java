@@ -4,7 +4,6 @@ import dbmodel.CustomerDB;
 import jakarta.persistence.*;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -14,33 +13,33 @@ import java.util.Set;
 public class Customer extends User implements Serializable {
     //many address, cập nhật tại customer thì address cx cập nhật
     @OneToMany(mappedBy = "customer",cascade = CascadeType.ALL)
-    private List<Address> addresses = new ArrayList<>();
+    private Set<Address> addresses;
 
     //many reviews, xóa khách hàng thì xóa reviews
     @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL)
-    private List<Review> reviews = new ArrayList<Review>();
+    private Set<Review> reviews;
 
 
     //many bill, xóa khách hàng thì xóa bill
     @OneToMany(mappedBy = "customer", cascade = CascadeType.REMOVE)
-    private Set<Bill> bills = new HashSet<Bill>();
+    private Set<Bill> bills;
     
     public Customer() {
     }
 
     public Customer(int id, String username, String password, String fullName, int age, String numberPhone, String email) {
         super(id, username, password, fullName, age, numberPhone, email);
-        addresses = new ArrayList<>();
+        addresses = new HashSet<>();
     }
 
     public Customer(String username, String password, String fullName, int age, String numberPhone, String email) {
         super(username, password, fullName, age, numberPhone, email);
-        addresses = new ArrayList<>();
+        addresses = new HashSet<>();
     }
 
     public Customer(String username, String password) {    
         super(username, password);
-        addresses = new ArrayList<>();
+        addresses = new HashSet<>();
     }
 
     public List<Address> getAddresses() {
@@ -52,16 +51,12 @@ public class Customer extends User implements Serializable {
         }
     }
 
-    public List<Review> getReviews() {
+    public Set<Review> getReviews() {
         return reviews;
     }
 
     public Set<Bill> getBills() {
         return CustomerDB.getInstance().getBillsCustomer(this);
-    }
-
-    public void setReviews(List<Review> reviews) {
-        this.reviews = reviews;
     }
 
     public void setBills(Set<Bill> bills) {

@@ -63,10 +63,10 @@ public class AddBookController extends HttpServlet {
             System.out.println("Name of file: "+fileName);
             System.out.println("Publish year: "+publishYear);
 
-            Category category = null;
+//            Category category = null;
             Publisher publisher = null;
 
-            Book book = new Book(title,description,isbn,costPrice,sellingPrice,stock,urlOfBook,publishYear,language,category,publisher);
+            Book book = new Book(title,description,isbn,costPrice,sellingPrice,stock,urlOfBook,publishYear,language,publisher);
             BookDB.getInstance().insert(book);
 
         } catch (Exception e) {

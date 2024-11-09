@@ -2,6 +2,7 @@ package test;
 
 import dbmodel.BookDB;
 import java.util.List;
+import java.util.Set;
 import model.Author;
 import model.Book;
 import model.Review;
@@ -16,7 +17,7 @@ public class TestBook {
             System.out.println(b.getId() + " " + b.getTitle() + " " +
                     b.getLanguage() + " "+b.getDescription());
             // lấy thông tin tác giả của sách
-            List<Author> authors = b.getAuthors();        
+            Set<Author> authors = b.getAuthors();        
             for(Author a : authors){
                 System.out.println(a.getName());
             }

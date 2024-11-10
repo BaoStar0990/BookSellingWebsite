@@ -52,7 +52,6 @@ public class HomeControllerServlet extends HttpServlet {
         //Lay session
         HttpSession session = req.getSession();
         //Ba tham so truyen ve cho UI
-        List<Category> categories = null;
         List<Book> books = null;
         List<Author> authors = null;
 
@@ -72,14 +71,7 @@ public class HomeControllerServlet extends HttpServlet {
                 books = books.stream().limit(6).collect(Collectors.toList());
             }
         }
-            //Category
-        if(session.getAttribute("categories") == null) {
-            categories = CategoryDB.getInstance().selectAll();
-            session.setAttribute("categories", categories);
-        }
-        else{
-            categories = (List<Category>)session.getAttribute("categories");
-        }
+
             //Author
         if(session.getAttribute("authors") == null) {
             authors = AuthorDB.getInstance().selectAll();
@@ -121,7 +113,7 @@ public class HomeControllerServlet extends HttpServlet {
             }
         }
 
-        req.setAttribute("categories", categories);
+        //req.setAttribute("categories", categories);
         req.setAttribute("bestsellerBooks", books);
         req.setAttribute("authors", authors);
 

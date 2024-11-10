@@ -3,7 +3,7 @@
   User: vuxua
   Date: 07/11/2024
   Time: 9:57 CH
-  To change this template use File | Settings | File Templates.
+  To change this template use File | Settings | File Templates.git pull origin main
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>

@@ -1,3 +1,6 @@
+<%@ page import="dbmodel.CategoryDB" %>
+<%@ page import="model.Category" %>
+<%@ page import="java.util.List" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%--
   Created by IntelliJ IDEA.
@@ -7,7 +10,17 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-
+<%
+    //Category
+    List<Category> categories = null;
+    if(session.getAttribute("categories") == null) {
+        categories = CategoryDB.getInstance().selectAll();
+        session.setAttribute("categories", categories);
+    }
+    else{
+        categories = (List<Category>)session.getAttribute("categories");
+    }
+%>
 <header class="container p-0 border-bottom">
     <nav class="navbar navbar-expand-md pt-3">
 

@@ -58,7 +58,7 @@
                     </div>
                     <!-- Forgot password -->
                     <div class="mb-4">
-                        <a class="text-primary fw-semibold text-decoration-none link-hover">Quên mật khẩu?</a>
+                        <a href="${pageContext.request.contextPath}/forgotpassword.jsp" class="text-primary fw-semibold text-decoration-none link-hover">Quên mật khẩu?</a>
                     </div>
                     <div class="mb-3 form-check d-flex align-items-center">
                         <input type="checkbox" class="form-check-input" name="rememberMe" id="rememberMe">

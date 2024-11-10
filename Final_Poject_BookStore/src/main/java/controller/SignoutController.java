@@ -52,7 +52,7 @@ public class SignoutController extends HttpServlet {
         }
 
 
-        response.sendRedirect("/home");
+        response.sendRedirect(String.format("%s/", getServletContext().getContextPath()));
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

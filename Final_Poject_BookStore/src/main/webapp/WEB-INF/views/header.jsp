@@ -52,14 +52,14 @@
                                 <c:choose>
                                     <c:when test="${sessionScope.user == null}">
                                         <div class="px-3 py-2">
-                                            <a href="/signin" class="primary-btn w-100 mb-2">Đăng nhập</a>
-                                            <a href="/signup" class="secondary-btn w-100">Đăng ký</a>
+                                            <a href="${pageContext.request.contextPath}/signin" class="primary-btn w-100 mb-2">Đăng nhập</a>
+                                            <a href="${pageContext.request.contextPath}/signup" class="secondary-btn w-100">Đăng ký</a>
                                         </div>
                                     </c:when>
                                     <c:otherwise>
                                         <li class="dropdown-header fs-6 fw-bold">Xin chào, ${sessionScope.user.username}</li>
                                         <div class="dropdown-divider"></div>
-                                        <li><a href="/usersetting" class="dropdown-item"><i class="fa-solid fa-user me-2"></i>Tài khoản của tôi</a></li>
+                                        <li><a href="${pageContext.request.contextPath}/usersetting" class="dropdown-item"><i class="fa-solid fa-user me-2"></i>Tài khoản của tôi</a></li>
                                         <li><a href="#" class="dropdown-item"><i class="fa-solid fa-cart-shopping me-2"></i>Đơn hàng của tôi</a></li>
                                         <li><a href="#" class="dropdown-item"><i class="fa-solid fa-gear me-2"></i>Cài đặt</a></li>
                                         <div class="dropdown-divider"></div>

@@ -85,14 +85,16 @@ public class SigninController extends HttpServlet {
                 }
 
                 //chuyeen trang
-                response.sendRedirect("/home");
+//                response.sendRedirect("/home");
+                response.sendRedirect(String.format("%s/", getServletContext().getContextPath()));
             }
             else{
 
                 System.out.println("Customer not found");
             }
         }else{
-            response.sendRedirect("/home");
+//            response.sendRedirect("/home");
+            response.sendRedirect(String.format("%s/", getServletContext().getContextPath()));
         }
 
     }

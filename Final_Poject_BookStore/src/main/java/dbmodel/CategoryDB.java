@@ -105,5 +105,34 @@ public class CategoryDB extends ModifyDB<Category> implements DBInterface<Catego
         } 
     }
     
+    public boolean insert(Category category) {
+        return super.insert(category);
+    }
+
+    public boolean update(Category category) {
+        return super.update(category);
+    }
+
+    public boolean delete(int id) {
+        try (EntityManager em = DBUtil.getEmFactory().createEntityManager()) {
+            EntityTransaction tr = em.getTransaction();
+            try {
+                tr.begin();
+                Category category = em.find(Category.class, id);
+                if (category != null) {
+                    em.remove(category);
+                    tr.commit();
+                    return true;
+                }
+                return false;
+            } catch (Exception ex) {
+                if (tr.isActive()) {
+                    tr.rollback();
+                }
+                ex.printStackTrace();
+                return false;
+            }
+        }
+    }
      
 }

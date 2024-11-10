@@ -36,22 +36,8 @@
 
     <%--    --%>
     <main class="content" style="margin-left: 250px; margin-top: 70px; padding: 20px;">
-        <div class="container">
-            <h1 class="text-secondary">Welcome to Naoki Management System</h1>
-        </div>
+
     </main>
 
-    <%--On select nav-link--%>
-    <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            const navLinks = document.querySelectorAll(".nav-link");
-            navLinks.forEach(link => {
-                link.addEventListener("click", function (e) {
-                    navLinks.forEach(nav => nav.classList.remove("active"));
-                    this.classList.add("active");
-                });
-            });
-        });
-    </script>
 </body>
 </html>

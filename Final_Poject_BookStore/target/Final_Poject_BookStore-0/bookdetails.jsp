@@ -56,10 +56,7 @@
             <p class="fw-semibold">
                 <a href="${pageContext.request.contextPath}" class="text-decoration-none text-dark">Trang chủ</a>
                 <i class="fa-solid fa-chevron-right"></i>
-                <c:if test="${not empty book.getCategories()}">
-                    
-                </c:if>
-
+<%--                <a href="" class="text-decoration-none text-dark">${book.getCategories().get(0).name}</a>--%>
                 <i class="fa-solid fa-chevron-right"></i>
                 ${book.title}
             </p>

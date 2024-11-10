@@ -1,3 +1,6 @@
+<%@ page import="dbmodel.CategoryDB" %>
+<%@ page import="model.Category" %>
+<%@ page import="java.util.List" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%--
   Created by IntelliJ IDEA.
@@ -7,7 +10,17 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-
+<%
+    //Category
+    List<Category> categories = null;
+    if(session.getAttribute("categories") == null) {
+        categories = CategoryDB.getInstance().selectAll();
+        session.setAttribute("categories", categories);
+    }
+    else{
+        categories = (List<Category>)session.getAttribute("categories");
+    }
+%>
 <header class="container p-0 border-bottom">
     <nav class="navbar navbar-expand-md pt-3">
 
@@ -39,19 +52,19 @@
                                 <c:choose>
                                     <c:when test="${sessionScope.user == null}">
                                         <div class="px-3 py-2">
-                                            <a href="signin" class="primary-btn w-100 mb-2">Đăng nhập</a>
-                                            <a href="signup" class="secondary-btn w-100">Đăng ký</a>
+                                            <a href="/signin" class="primary-btn w-100 mb-2">Đăng nhập</a>
+                                            <a href="/signup" class="secondary-btn w-100">Đăng ký</a>
                                         </div>
                                     </c:when>
                                     <c:otherwise>
-                                        <li class="dropdown-header fs-6 fw-bold">Xin chào, ${sessionScope.user.name}</li>
+                                        <li class="dropdown-header fs-6 fw-bold">Xin chào, ${sessionScope.user.username}</li>
                                         <div class="dropdown-divider"></div>
-                                        <li><a href="${pageContext.request.contextPath}/usersetting.jsp?setting=profile" class="dropdown-item"><i class="fa-solid fa-user me-2"></i>Tài khoản của tôi</a></li>
+                                        <li><a href="/usersetting" class="dropdown-item"><i class="fa-solid fa-user me-2"></i>Tài khoản của tôi</a></li>
                                         <li><a href="#" class="dropdown-item"><i class="fa-solid fa-cart-shopping me-2"></i>Đơn hàng của tôi</a></li>
                                         <li><a href="#" class="dropdown-item"><i class="fa-solid fa-gear me-2"></i>Cài đặt</a></li>
                                         <div class="dropdown-divider"></div>
                                         <li>
-                                            <form class="m-0" action="signin" method="post">
+                                            <form class="m-0" action="signout" method="post">
                                                 <input type="hidden" name="action" value="logout">
                                                 <a href="javascript:" class="dropdown-item" onclick="parentNode.submit()"><i class="fa-solid fa-right-from-bracket"></i>Đăng xuất</a>
                                             </form>
@@ -74,7 +87,7 @@
                 </div>
                 <ul class="navbar-nav d-flex justify-content-center fw-semibold mt-3 mb-0">
                     <li class="nav-item">
-                        <a href="${pageContext.request.contextPath}" class="nav-link ${param.currentTab eq 'home' ? 'active' : ''}">Trang chủ</a>
+                        <a href="/home" class="nav-link ${param.currentTab eq 'home' ? 'active' : ''}">Trang chủ</a>
                     </li>
 
                     <li id="danhmuc" class="nav-item dropdown">

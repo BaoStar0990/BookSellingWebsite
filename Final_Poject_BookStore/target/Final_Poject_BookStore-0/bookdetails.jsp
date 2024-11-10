@@ -56,12 +56,15 @@
             <p class="fw-semibold">
                 <a href="${pageContext.request.contextPath}" class="text-decoration-none text-dark">Trang chủ</a>
                 <i class="fa-solid fa-chevron-right"></i>
-                <a href="${pageContext.request.contextPath}" class="text-decoration-none text-dark">${book.getCategory().getName()}</a>
+                <c:if test="${not empty book.getCategories()}">
+                    
+                </c:if>
+
                 <i class="fa-solid fa-chevron-right"></i>
                 ${book.title}
             </p>
         </div>
-        <!--     end Link -->
+        <!--end Link -->
 
         <div class="container my-4">
             <div class="row ">
@@ -208,10 +211,12 @@
 
                     <%--                 Categories (multiple) --%>
                     <p class="text-muted">Danh mục:
-                        <%--<c:forEach var="category" items="${book.getCategory()}" varStatus="status">--%>
-                        <span class="fw-semibold">${book.getCategory().getName()}</span>
-                        <%--<c:if test="${!status.last}">, </c:if>--%>
-                        <%--</c:forEach>--%>
+                        <c:if test="${not empty book.getCategories()}">
+                            <c:forEach var="category" items="${book.getCategories()}" varStatus="status">
+                                <span class="fw-semibold">${category.getName()}</span>
+                                <c:if test="${!status.last}">, </c:if>
+                            </c:forEach>
+                        </c:if>
                     </p>
 
                     <%--                 Language --%>

@@ -26,8 +26,7 @@
         <c:forEach var="book" items="${books}" varStatus="status">
             <!-- Each book occupies 2, 4, or 6 columns depending on the screen size -->
             <div class="col-6 col-md-4 col-lg-2 p-2">
-                <%String url = "${pageContext.request.contextPath}/bookdetails?id="+"${book.getId()}";%>
-                <a href="${pageContext.request.contextPath}/bookdetails?id=${book.getId()}" class="d-block text-decoration-none card-shadow" style="color: inherit;">
+                <a href="/bookdetails/${book.getId()}" class="d-block text-decoration-none card-shadow" style="color: inherit;">
                     <div class="card">
                         <img src="${book.urlImage}" class="card-img-top" alt="${book.title}">
                         <div class="card-body">

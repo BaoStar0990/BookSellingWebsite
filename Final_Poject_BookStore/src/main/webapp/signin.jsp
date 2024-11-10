@@ -48,20 +48,24 @@
                 <form action="signin" method="post">
                     <input type="hidden" name="action" value="signin">
                     <div class="mb-3">
-                        <input type="text" class="form-control input-field" name="account" id="account" placeholder="SĐT/Email" required>
+                        <input type="email" class="form-control input-field" name="email" id="email" placeholder="Email" required>
                     </div>
+<!--                    <div class="mb-3">
+                        <input type="text" class="form-control input-field" name="username" id="username" placeholder="Tài khoản" required>
+                    </div>-->
                     <div class="mb-3">
                         <input type="password" class="form-control input-field" id="password" name="password" placeholder="Mật khẩu" required>
                     </div>
-
                     <!-- Forgot password -->
-                    <form action="forgotpasword" id="formforgotpassword">
-                    </form>
                     <div class="mb-4">
                         <a class="text-primary fw-semibold text-decoration-none link-hover">Quên mật khẩu?</a>
                     </div>
+                    <div class="mb-3 form-check d-flex align-items-center">
+                        <input type="checkbox" class="form-check-input" name="rememberMe" id="rememberMe">
+                        <label class="form-check-label ms-2" for="rememberMe">Remember Me</label>
+                    </div>
                     <!-- Login button -->
-                    <button type="submit" class="primary-btn w-100 mb-4">Đăng nhập</button>
+                    <input type="submit" class="primary-btn w-100 mb-4" value="Đăng nhập"/>
                 </form>
 
                 <p class="text-center mb-0">

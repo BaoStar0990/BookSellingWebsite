@@ -48,7 +48,7 @@
                 <!-- Greeting Section -->
                 <div class="col-12 mb-3">
                     <h5 class="greeting fw-semibold">
-                        Xin chào <span class="text-primary">${user.name}</span>!
+                        Xin chào <span class="text-primary">${user.username}</span>!
                     </h5>
                 </div>
                 <ul class="list-group fw-semibold">

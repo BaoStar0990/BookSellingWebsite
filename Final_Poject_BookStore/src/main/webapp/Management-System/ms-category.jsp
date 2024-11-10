@@ -42,49 +42,51 @@
       <div class="row mb-3">
         <div class="col-md-4 d-flex flex-colum">
           <input type="text" class="form-control fw-medium" id="searchBox" placeholder="Search categories...">
-          <button class="primary-btn  ms-2 ">Search</button>
         </div>
         <div class="col-md-8 d-flex justify-content-end">
           <button class="primary-btn" data-bs-toggle="modal" data-bs-target="#addCategoryModal">Add Category</button>
         </div>
       </div>
-      <table class="table table-bordered">
-        <thead>
-        <tr>
-          <th>Actions</th>
-          <th>ID</th>
-          <th>Name</th>
-          <th>Description</th>
-        </tr>
-        </thead>
-        <tbody>
-        <c:forEach var="category" items="${categories}">
-          <tr class="fw-medium">
-            <td>
-              <button class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#editCategoryModal" onclick="editCategory(${category.id}, '${category.name}', '${category.description}')">
-                <i class="fas fa-edit"></i>
-              </button>
-              <button class="btn btn-danger btn-sm" onclick="deleteCategory(${category.id})">
-                <i class="fas fa-trash"></i>
-              </button>
-            </td>
-            <td>${category.id}</td>
-            <td>${category.name}</td>
-            <td>${category.description}</td>
+      <div class="table-responsive border border-2 p-2" style="max-height: 75%; overflow: auto;">
+        <table class="table table-bordered" style="min-width: 1000px;">
+          <thead>
+          <tr>
+            <th></th>
+            <th>ID</th>
+            <th>Tên</th>
+            <th>Mô tả</th>
           </tr>
-        </c:forEach>
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+          <c:forEach var="category" items="${categories}">
+            <tr class="fw-medium">
+              <td class="d-flex">
+                <button class="btn btn-warning btn-sm me-2" data-bs-toggle="modal" data-bs-target="#editCategoryModal" onclick="editCategory(${category.getId()}, '${category.getName()}', '${category.getDescription()}')">
+                  <i class="fas fa-edit"></i>
+                </button>
+                <button class="btn btn-danger btn-sm" onclick="deleteCategory(${category.getId()})">
+                  <i class="fas fa-trash"></i>
+                </button>
+              </td>
+              <td>${fn:escapeXml(category.getId())}</td>
+              <td>${fn:escapeXml(category.getName())}</td>
+              <td>${fn:escapeXml(category.getDescription())}</td>
+            </tr>
+          </c:forEach>
+          </tbody>
+        </table>
+      </div>
     </div>
   </main>
 
   <!-- Add Category Modal -->
-  <div class="modal fade" id="addCategoryModal" tabindex="-1" aria-labelledby="addCategoryModalLabel" aria-hidden="true">
+  <div class="modal fade fw-medium" id="addCategoryModal" tabindex="-1" aria-labelledby="addCategoryModalLabel" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
         <form action="MSCategoryController?action=add" method="post">
+          <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
           <div class="modal-header">
-            <h5 class="modal-title" id="addCategoryModalLabel">Add Category</h5>
+            <h5 class="modal-title fw-semibold" id="addCategoryModalLabel">Add Category</h5>
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
           <div class="modal-body">
@@ -94,12 +96,12 @@
             </div>
             <div class="mb-3">
               <label for="categoryDescription" class="form-label">Description</label>
-              <textarea class="form-control" id="categoryDescription" name="description" required></textarea>
+              <textarea class="form-control" id="categoryDescription" name="description" required rows="5"></textarea>
             </div>
           </div>
           <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-            <button type="submit" class="btn btn-primary">Save</button>
+            <button type="button" class="secondary-btn" data-bs-dismiss="modal">Close</button>
+            <button type="submit" class="primary-btn">Save</button>
           </div>
         </form>
       </div>
@@ -111,8 +113,10 @@
     <div class="modal-dialog">
       <div class="modal-content">
         <form action="MSCategoryController?action=edit" method="post">
+          <%-- Validate CSRF token --%>
+          <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
           <div class="modal-header">
-            <h5 class="modal-title" id="editCategoryModalLabel">Edit Category</h5>
+            <h5 class="modal-title fw-semibold" id="editCategoryModalLabel">Edit Category</h5>
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
           <div class="modal-body">
@@ -123,12 +127,12 @@
             </div>
             <div class="mb-3">
               <label for="editCategoryDescription" class="form-label">Description</label>
-              <textarea class="form-control" id="editCategoryDescription" name="description" required></textarea>
+              <textarea class="form-control" id="editCategoryDescription" name="description" required rows="5"></textarea>
             </div>
           </div>
           <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-            <button type="submit" class="btn btn-primary">Save</button>
+            <button type="button" class="secondary-btn" data-bs-dismiss="modal">Close</button>
+            <button type="submit" class="primary-btn">Save</button>
           </div>
         </form>
       </div>

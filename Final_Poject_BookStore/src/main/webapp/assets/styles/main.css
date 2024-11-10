@@ -58,23 +58,24 @@ body{
     font-family: var(--primary-font), sans-serif;
     color: var(--text-color);
     box-sizing: border-box;
+    font-weight: 500;
 }
 
 /*Common classes */
 .font-bold{
-    font-weight: 700;
+    font-weight: 800;
 }
 .font-semibold{
-    font-weight: 600;
+    font-weight: 700;
 }
 .font-medium{
-    font-weight: 500;
+    font-weight: 600;
 }
 .font-regular{
-    font-weight: 400;
+    font-weight: 500;
 }
 .font-light{
-    font-weight: 300;
+    font-weight: 400;
 }
 
 .text-primary {

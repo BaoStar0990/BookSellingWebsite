@@ -35,9 +35,9 @@
     <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/styles/signin.css" />
 </head>
 <body>
-<%--<!-- Header -->--%>
-<%--<jsp:include page="WEB-INF/views/header.jsp"/>--%>
-<%--<!-- end Header -->--%>
+<!-- Header -->
+<jsp:include page="WEB-INF/views/header.jsp"/>
+<!-- end Header -->
 
 <!-- Sign In -->
 <div class="container d-flex justify-content-center align-items-center mt-5">
@@ -77,8 +77,8 @@
 </div>
 <!-- end Sign In -->
 
-<%--&lt;%&ndash;    Footer&ndash;%&gt;--%>
-<%--<jsp:include page="WEB-INF/views/footer.jsp"/>--%>
-<%--&lt;%&ndash; end    Footer&ndash;%&gt;--%>
+<%--    Footer--%>
+<jsp:include page="WEB-INF/views/footer.jsp"/>
+<%-- end    Footer--%>
 </body>
 </html>

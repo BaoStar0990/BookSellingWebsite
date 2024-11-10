@@ -44,16 +44,16 @@ public class BookDetailController extends HttpServlet {
         response.setCharacterEncoding("UTF-8");
 
         //Category
-        List<Category> categories = null;
+       // List<Category> categories = null;
         List<Book> books = null;
         HttpSession session = request.getSession();
-        if(session.getAttribute("categories") == null) {
-            categories = CategoryDB.getInstance().selectAll();
-            session.setAttribute("categories", categories);
-        }
-        else{
-            categories = (List<Category>)session.getAttribute("categories");
-        }
+//        if(session.getAttribute("categories") == null) {
+//            categories = CategoryDB.getInstance().selectAll();
+//            session.setAttribute("categories", categories);
+//        }
+//        else{
+//            categories = (List<Category>)session.getAttribute("categories");
+//        }
         //Book
         if(session.getAttribute("books") == null) {
             books = BookDB.getInstance().selectAll();

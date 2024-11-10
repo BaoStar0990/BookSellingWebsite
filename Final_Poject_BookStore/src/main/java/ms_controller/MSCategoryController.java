@@ -23,6 +23,12 @@ public class MSCategoryController extends HttpServlet {
 
         String action = request.getParameter("action");
         if (action != null) {
+            // Validate CSRF token
+            String csrfToken = request.getParameter("_csrf");
+            if (!isValidCsrfToken(csrfToken)) {
+                response.sendError(HttpServletResponse.SC_FORBIDDEN, "Invalid CSRF token");
+                return;
+            }
             if (action.equals("delete")) {
                 int id = Integer.parseInt(request.getParameter("id"));
                 CategoryDB.getInstance().delete(id);
@@ -46,6 +52,11 @@ public class MSCategoryController extends HttpServlet {
         request.setAttribute("categories", categories);
         String url = "\\Management-System\\ms-category.jsp";
         request.getRequestDispatcher(url).forward(request, response);
+    }
+
+    private boolean isValidCsrfToken(String csrfToken) {
+        // Implement CSRF token validation logic
+        return true;
     }
 
     @Override

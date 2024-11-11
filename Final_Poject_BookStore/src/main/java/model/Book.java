@@ -86,6 +86,8 @@ public class Book implements Serializable {
         this.publishYear = publishYear;
         this.language = language;
         this.publisher = publisher;
+        this.authors = new HashSet<>();
+        this.categories = new HashSet<>();
     }
     
     public String getTitle() {
@@ -206,5 +208,12 @@ public class Book implements Serializable {
         return authors;
     }
     
+    public void setAuthors(Set<Author> authors) {
+        this.authors = authors;
+    }
+
+    public void setCategories(Set<Category> categories) {
+        this.categories = categories;
+    }
 
 }

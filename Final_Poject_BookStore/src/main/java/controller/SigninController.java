@@ -107,7 +107,7 @@ public class SigninController extends HttpServlet {
             if(admin != null) {
                 session.setAttribute("admin", admin);
             }
-            response.sendRedirect(String.format("%s/MSBookController", getServletContext().getContextPath()));
+            response.sendRedirect(String.format("%s/msbook", getServletContext().getContextPath()));
         }
 
     }

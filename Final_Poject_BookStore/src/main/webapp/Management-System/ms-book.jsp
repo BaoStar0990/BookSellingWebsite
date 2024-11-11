@@ -21,7 +21,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
     <%--Custom CSS--%>
-    <link rel="stylesheet" href="../assets/styles/main.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/styles/main.css">
 </head>
 <body>
   <!-- Header -->
@@ -106,110 +106,115 @@
   </main>
 
   <!-- Add/Edit Book Modal -->
-  <div class="modal fade" id="addEditBookModal" tabindex="-1" aria-labelledby="addEditBookModalLabel" aria-hidden="true">
+  <div class="modal fade fw-medium" id="addEditBookModal" tabindex="-1" aria-labelledby="addEditBookModalLabel" aria-hidden="true">
       <div class="modal-dialog modal-lg">
           <div class="modal-content">
               <div class="modal-header">
-                  <h5 class="modal-title" id="addEditBookModalLabel">Thêm Sách</h5>
+                  <h5 class="modal-title fw-semibold" id="addEditBookModalLabel">Thêm Sách</h5>
                   <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
               </div>
               <div class="modal-body">
-                  <form id="addEditBookForm">
-                      <div class="mb-3">
-                          <label for="bookTitle" class="form-label">Tên Sách</label>
-                          <input type="text" class="form-control" id="bookTitle" name="bookTitle" required>
-                      </div>
-                      <div class="mb-3">
-                          <label for="bookAuthors" class="form-label">Tác giả</label>
-                          <input type="text" class="form-control mb-2" id="authorSearch" placeholder="Search authors...">
-                          <div id="selectedAuthors" class="mb-2"></div>
-                          <div id="bookAuthors" style="max-height: 150px; overflow-y: auto;">
-                              <!-- Example checkboxes -->
-                              <div class="form-check">
-                                  <input class="form-check-input author-checkbox" type="checkbox" value="1" id="author1">
-                                  <label class="form-check-label" for="author1">Author 1</label>
+                  <form id="addEditBookForm" method="post" action="msbook?action=add" enctype="multipart/form-data">
+                      <input type="hidden" id="bookId" name="bookId">
+                      <input type="hidden" id="selectedAuthorsInput" name="selectedAuthors">
+                      <input type="hidden" id="selectedCategoriesInput" name="selectedCategories">
+                      <div class="row">
+                          <div class="col-md-6 border-end">
+                              <div class="mb-3">
+                                  <label for="bookTitle" class="form-label">Tên Sách</label>
+                                  <input type="text" class="form-control" id="bookTitle" name="bookTitle" required>
                               </div>
-                              <div class="form-check">
-                                  <input class="form-check-input author-checkbox" type="checkbox" value="2" id="author2">
-                                  <label class="form-check-label" for="author2">Author 2</label>
+                              <div class="mb-3">
+                                  <label for="bookAuthors" class="form-label">Tác giả</label>
+                                  <input type="text" class="form-control mb-2" id="authorSearch" placeholder="Search authors...">
+                                  <div id="selectedAuthors"></div>
+                                  <div class="border border-2 p-2 rounded-2" id="bookAuthors" style="max-height: 150px; overflow-y: auto;">
+                                      <!-- Dynamically load authors -->
+                                      <c:forEach var="author" items="${authors}">
+                                          <div class="form-check">
+                                              <input class="form-check-input author-checkbox" type="checkbox" value="${author.getId()}" id="author${author.getId()}">
+                                              <label class="form-check-label" for="author${author.getId()}">${fn:escapeXml(author.getName())}</label>
+                                          </div>
+                                      </c:forEach>
+                                  </div>
                               </div>
-                              <div class="form-check">
-                                <input class="form-check-input author-checkbox" type="checkbox" value="3" id="author3">
-                                <label class="form-check-label" for="author3">Author 3</label>
-                            </div>
-                            <div class="form-check">
-                                <input class="form-check-input author-checkbox" type="checkbox" value="4" id="author4">
-                                <label class="form-check-label" for="author4">Author 4</label>
-                            </div>
+                              <div class="mb-3">
+                                  <label for="bookCategories" class="form-label">Loại sách</label>
+                                  <input type="text" class="form-control mb-2" id="categorySearch" placeholder="Search categories...">
+                                  <div id="selectedCategories"></div>
+                                  <div class="border border-2 p-2 rounded-2" id="bookCategories" style="max-height: 150px; overflow-y: auto;">
+                                        <!-- Dynamically load categories -->
+                                        <c:forEach var="category" items="${categories}">
+                                            <div class="form-check">
+                                                <input class="form-check-input category-checkbox" type="checkbox" value="${category.getId()}" id="category${category.getId()}">
+                                                <label class="form-check-label" for="category${category.getId()}">${fn:escapeXml(category.getName())}</label>
+                                            </div>
+                                        </c:forEach>
+                                  </div>
+                              </div>
+                              <div class="mb-3">
+                                  <label for="costPrice" class="form-label">Giá vốn (VND)</label>
+                                  <input type="number" class="form-control" id="costPrice" name="costPrice" required min="0"
+                                         oninvalid="this.setCustomValidity('Giá vốn không được âm')" oninput="this.setCustomValidity('')">
+                              </div>
+                              <div class="mb-3">
+                                  <label for="sellingPrice" class="form-label">Giá bán (VND)</label>
+                                  <input type="number" class="form-control" id="sellingPrice" name="sellingPrice" required min="0"
+                                         oninvalid="this.setCustomValidity('Giá bán không được âm')" oninput="this.setCustomValidity('')">
+                              </div>
                           </div>
-                      </div>
-                      <div class="mb-3">
-                          <label for="bookCategories" class="form-label">Loại sách</label>
-                          <input type="text" class="form-control mb-2" id="categorySearch" placeholder="Search categories...">
-                          <div id="selectedCategories" class="mb-2"></div>
-                          <div id="bookCategories" style="max-height: 150px; overflow-y: auto;">
-                              <!-- Example checkboxes -->
-                              <div class="form-check">
-                                  <input class="form-check-input category-checkbox" type="checkbox" value="1" id="category1">
-                                  <label class="form-check-label" for="category1">Category 1</label>
+                          <div class="col-md-6">
+                              <div class="mb-3">
+                                  <label for="stocks" class="form-label">Tồn kho</label>
+                                  <input type="number" class="form-control" id="stocks" name="stocks" required min="0"
+                                         oninvalid="this.setCustomValidity('Tồn kho không được âm')" oninput="this.setCustomValidity('')">
                               </div>
-                              <div class="form-check">
-                                  <input class="form-check-input category-checkbox" type="checkbox" value="2" id="category2">
-                                  <label class="form-check-label" for="category2">Category 2</label>
+                              <div class="mb-3">
+                                  <label for="isbn" class="form-label">ISBN</label>
+                                  <input type="text" class="form-control" id="isbn" name="isbn" required pattern="\d{13}" title="ISBN Phải có 13 kí tự">
                               </div>
-                              <div class="form-check">
-                                <input class="form-check-input category-checkbox" type="checkbox" value="1" id="category3">
-                                <label class="form-check-label" for="category3">Category 3</label>
-                            </div>
-                            <div class="form-check">
-                                <input class="form-check-input category-checkbox" type="checkbox" value="2" id="category4">
-                                <label class="form-check-label" for="category4">Category 4</label>
-                            </div>
+                              <div class="mb-3 d-flex align-items-center">
+                                  <div class="me-3">
+                                      <img id="imagePreview" src="#" alt="Image Preview" style="display: none; width: 100px; height: 100px; object-fit: cover;">
+                                  </div>
+                                  <div>
+                                      <label for="urlImage" class="form-label">Hình ảnh</label>
+                                      <input type="file" class="form-control" id="urlImage" name="urlImage" required accept="image/png, image/jpeg, image/jpg" onchange="previewImage(event)">
+                                  </div>
+                              </div>
+                              <div class="mb-3">
+                                  <label for="description" class="form-label">Mô tả</label>
+                                  <textarea class="form-control" id="description" name="description" rows="3" required></textarea>
+                              </div>
+                              <div class="mb-3">
+                                  <label for="publisher" class="form-label">Nhà xuất bản</label>
+                                  <select class="form-select" id="publisher" name="publisher" required
+                                          oninvalid="this.setCustomValidity('Vui lòng chọn nhà xuất bản')" oninput="this.setCustomValidity('')">
+                                        <!-- Dynamically load publishers-->
+                                        <c:forEach var="publisher" items="${publishers}">
+                                            <option value="${publisher.getId()}">${fn:escapeXml(publisher.getName())}</option>
+                                        </c:forEach>
+                                  </select>
+                              </div>
+                              <div class="mb-3">
+                                  <label for="publishYear" class="form-label">Năm xuất bản</label>
+                                  <input type="number" class="form-control" id="publishYear" name="publishYear" required min="1000" max="9999"
+                                         oninvalid="this.setCustomValidity('Năm xuất bản không hợp lệ')" oninput="this.setCustomValidity('')">
+                              </div>
+                              <div class="mb-3">
+                                  <label for="discountCampaign" class="form-label">Campaign</label>
+                                  <select class="form-select" id="discountCampaign" name="discountCampaign" required>
+                                        <!-- Dynamically load campaigns -->
+                                        <c:forEach var="campaign" items="${discountCampaigns}">
+                                            <option value="${campaign.getCampaignId()}">${fn:escapeXml(campaign.getCampaignName())}</option>
+                                        </c:forEach>
+                                  </select>
+                              </div>
                           </div>
-                      </div>
-                      <div class="mb-3">
-                          <label for="costPrice" class="form-label">Giá vốn</label>
-                          <input type="number" class="form-control" id="costPrice" name="costPrice" required>
-                      </div>
-                      <div class="mb-3">
-                          <label for="sellingPrice" class="form-label">Giá bán</label>
-                          <input type="number" class="form-control" id="sellingPrice" name="sellingPrice" required>
-                      </div>
-                      <div class="mb-3">
-                          <label for="stocks" class="form-label">Tồn kho</label>
-                          <input type="number" class="form-control" id="stocks" name="stocks" required>
-                      </div>
-                      <div class="mb-3">
-                          <label for="isbn" class="form-label">ISBN</label>
-                          <input type="text" class="form-control" id="isbn" name="isbn" required>
-                      </div>
-                      <div class="mb-3">
-                          <label for="urlImage" class="form-label">Hình ảnh</label>
-                          <input type="file" class="form-control" id="urlImage" name="urlImage" required>
-                      </div>
-                      <div class="mb-3">
-                          <label for="description" class="form-label">Mô tả</label>
-                          <textarea class="form-control" id="description" name="description" rows="3" required></textarea>
-                      </div>
-                      <div class="mb-3">
-                          <label for="publisher" class="form-label">Nhà xuất bản</label>
-                          <select class="form-select" id="publisher" name="publisher" required>
-                              <!-- Options will be populated dynamically -->
-                          </select>
-                      </div>
-                      <div class="mb-3">
-                          <label for="publishYear" class="form-label">Năm xuất bản</label>
-                          <input type="number" class="form-control" id="publishYear" name="publishYear" required>
-                      </div>
-                      <div class="mb-3">
-                          <label for="discountCampaign" class="form-label">Campaign</label>
-                          <select class="form-select" id="discountCampaign" name="discountCampaign" required>
-                              <!-- Options will be populated dynamically -->
-                          </select>
                       </div>
                       <div class="modal-footer">
-                          <button type="submit" class="btn btn-primary">Lưu</button>
-                          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                          <button type="button" class="btn secondary-btn" data-bs-dismiss="modal">Hủy</button>
+                          <button type="submit" class="btn primary-btn">Lưu</button>
                       </div>
                   </form>
               </div>
@@ -218,90 +223,7 @@
   </div>
   <!-- End Add/Edit Book Modal -->
 
-  <script>
-    document.getElementById('searchBox').addEventListener('input', function() {
-      let filter = this.value.toUpperCase();
-      let rows = document.querySelector("tbody").rows;
-      for (let i = 0; i < rows.length; i++) {
-        let firstCol = rows[i].cells[1].textContent.toUpperCase();
-        let secondCol = rows[i].cells[2].textContent.toUpperCase();
-        if (firstCol.indexOf(filter) > -1 || secondCol.indexOf(filter) > -1) {
-          rows[i].style.display = "";
-        } else {
-          rows[i].style.display = "none";
-        }
-      }
-    });
-
-    function createTag(value, text, containerId) {
-        const container = document.getElementById(containerId);
-        const tag = document.createElement('span');
-        tag.className = 'badge bg-primary me-2';
-        tag.textContent = text;
-        tag.dataset.id = value;
-        const closeButton = document.createElement('button');
-        closeButton.type = 'button';
-        closeButton.className = 'btn-close btn-close-white ms-2';
-        closeButton.ariaLabel = 'Close';
-        closeButton.addEventListener('click', function() {
-            document.getElementById(value).checked = false;
-            container.removeChild(tag);
-        });
-        tag.appendChild(closeButton);
-        container.appendChild(tag);
-    }
-
-    document.querySelectorAll('.author-checkbox').forEach(function(checkbox) {
-        checkbox.addEventListener('change', function() {
-            if (this.checked) {
-                createTag(this.id, this.nextElementSibling.textContent, 'selectedAuthors');
-            } else {
-                const tag = document.querySelector(`#selectedAuthors span[data-id="\${this.id}"]`);
-                if (tag) {
-                    tag.remove();
-                }
-            }
-        });
-    });
-
-    document.querySelectorAll('.category-checkbox').forEach(function(checkbox) {
-        checkbox.addEventListener('change', function() {
-            if (this.checked) {
-                createTag(this.id, this.nextElementSibling.textContent, 'selectedCategories');
-            } else {
-                const tag = document.querySelector(`#selectedCategories span[data-id="\${this.id}"]`);
-                if (tag) {
-                    tag.remove();
-                }
-            }
-        });
-    });
-
-    document.getElementById('authorSearch').addEventListener('input', function() {
-        let filter = this.value.toUpperCase();
-        let checkboxes = document.querySelectorAll('#bookAuthors .form-check');
-        checkboxes.forEach(function(checkbox) {
-            let label = checkbox.querySelector('label').textContent.toUpperCase();
-            if (label.indexOf(filter) > -1) {
-                checkbox.style.display = '';
-            } else {
-                checkbox.style.display = 'none';
-            }
-        });
-    });
-
-    document.getElementById('categorySearch').addEventListener('input', function() {
-        let filter = this.value.toUpperCase();
-        let checkboxes = document.querySelectorAll('#bookCategories .form-check');
-        checkboxes.forEach(function(checkbox) {
-            let label = checkbox.querySelector('label').textContent.toUpperCase();
-            if (label.indexOf(filter) > -1) {
-                checkbox.style.display = '';
-            } else {
-                checkbox.style.display = 'none';
-            }
-        });
-    });
-  </script>
+  <!-- ms-book.js -->
+    <script src="${pageContext.request.contextPath}/assets/javascript/management-system/ms-book.js"></script>
 </body>
 </html>

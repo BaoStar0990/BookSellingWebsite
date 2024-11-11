@@ -83,7 +83,7 @@
   <div class="modal fade fw-medium" id="addCategoryModal" tabindex="-1" aria-labelledby="addCategoryModalLabel" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
-        <form action="mscategorycontroller?action=add" method="post">
+        <form action="mscategory?action=add" method="post">
           <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
           <div class="modal-header">
             <h5 class="modal-title fw-semibold" id="addCategoryModalLabel">Add Category</h5>
@@ -112,7 +112,7 @@
   <div class="modal fade fw-medium" id="editCategoryModal" tabindex="-1" aria-labelledby="editCategoryModalLabel" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
-        <form action="mscategorycontroller?action=edit" method="post">
+        <form action="mscategory?action=edit" method="post">
           <%-- Validate CSRF token --%>
           <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
           <div class="modal-header">
@@ -150,7 +150,7 @@
       if (confirm('Bạn muốn xóa danh mục này?')) {
         const form = document.createElement('form');
         form.method = 'post';
-        form.action = 'mscategorycontroller?action=delete';
+        form.action = 'mscategory?action=delete';
         
         const inputId = document.createElement('input');
         inputId.type = 'hidden';
@@ -162,7 +162,7 @@
         form.submit();
       }
     }
-
+    
     document.getElementById('searchBox').addEventListener('input', function() {
       let filter = this.value.toUpperCase();
       let rows = document.querySelector("tbody").rows;

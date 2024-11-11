@@ -5,17 +5,17 @@
   // Map tabs to their titles, icons, and URLs
   Map<String, String[]> tabs = new LinkedHashMap<>();
   tabs.put("dashboard", new String[]{"Tổng quan", "fa-gauge", "#"});
-  tabs.put("book", new String[]{"Sách", "fa-book", "/msbookcontroller"});
-  tabs.put("category", new String[]{"Danh mục sách", "fa-layer-group", "/mscategorycontroller"});
-  tabs.put("order", new String[]{"Đơn hàng", "fa-box", "/MSOrderController"});
-  tabs.put("bill", new String[]{"Hóa đơn", "fa-receipt", "/MSBillController"});
-  tabs.put("customer", new String[]{"Khách hàng", "fa-user", "/MSCustomerController"});
-  tabs.put("campaign", new String[]{"Chiến dịch", "fa-tags", "/MSCampaignController"});
-  tabs.put("review", new String[]{"Đánh giá", "fa-message", "/MSReviewController"});
-  tabs.put("author", new String[]{"Tác giả", "fa-square-pen", "/MSAuthorController"});
-  tabs.put("publisher", new String[]{"Nhà xuất bản", "fa-print", "/MSPublisherController"});
-  tabs.put("staff", new String[]{"Nhân viên", "fa-clipboard-user", "/MSStaffController"});
-  tabs.put("signout", new String[]{"Đăng xuất", "fa-right-from-bracket", "/MSSignoutController"});
+  tabs.put("book", new String[]{"Sách", "fa-book", "/msbook"});
+  tabs.put("category", new String[]{"Danh mục sách", "fa-layer-group", "/mscategory"});
+  tabs.put("order", new String[]{"Đơn hàng", "fa-box", "#"});
+  tabs.put("bill", new String[]{"Hóa đơn", "fa-receipt", "#"});
+  tabs.put("customer", new String[]{"Khách hàng", "fa-user", "#"});
+  tabs.put("campaign", new String[]{"Chiến dịch", "fa-tags", "#"});
+  tabs.put("review", new String[]{"Đánh giá", "fa-message", "#"});
+  tabs.put("author", new String[]{"Tác giả", "fa-square-pen", "#"});
+  tabs.put("publisher", new String[]{"Nhà xuất bản", "fa-print", "#"});
+  tabs.put("staff", new String[]{"Nhân viên", "fa-clipboard-user", "#"});
+  tabs.put("signout", new String[]{"Đăng xuất", "fa-right-from-bracket", "#"});
 
   String currentTab = request.getParameter("currentTab") != null ? request.getParameter("currentTab") : "dashboard";
   String tabTitle = tabs.containsKey(currentTab) ? tabs.get(currentTab)[0] : "Tổng quan";

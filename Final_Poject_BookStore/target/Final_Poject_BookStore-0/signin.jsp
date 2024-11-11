@@ -45,28 +45,51 @@
         <div class="d-flex flex-column align-items-center">
             <h2 class="text-center fw-bold mb-4">Đăng Nhập</h2>
             <div class="container-fluid">
-                <form action="signin" method="post">
+                <form action="signin" method="post" onsubmit="return validateEmail()">
                     <input type="hidden" name="action" value="signin">
                     <div class="mb-3">
-                        <input type="email" class="form-control input-field" name="email" id="email" placeholder="Email" required>
+                        <input type="text" class="form-control input-field" name="email" id="email" placeholder="Email" required>
                     </div>
-<!--                    <div class="mb-3">
-                        <input type="text" class="form-control input-field" name="username" id="username" placeholder="Tài khoản" required>
-                    </div>-->
                     <div class="mb-3">
                         <input type="password" class="form-control input-field" id="password" name="password" placeholder="Mật khẩu" required>
                     </div>
+
                     <!-- Forgot password -->
                     <div class="mb-4">
                         <a href="${pageContext.request.contextPath}/forgotpassword.jsp" class="text-primary fw-semibold text-decoration-none link-hover">Quên mật khẩu?</a>
                     </div>
+
                     <div class="mb-3 form-check d-flex align-items-center">
                         <input type="checkbox" class="form-check-input" name="rememberMe" id="rememberMe">
                         <label class="form-check-label ms-2" for="rememberMe">Remember Me</label>
                     </div>
+
+                    <!-- Toggle button for customer/admin -->
+                    <div class="mb-3">
+                        <label for="userType" class="form-label">Loại tài khoản:</label>
+                        <select name="userType" id="userType" class="form-control">
+                            <option value="customer">Customer</option>
+                            <option value="admin">Admin</option>
+                            <option value="staff">Staff</option>
+                        </select>
+                    </div>
+
                     <!-- Login button -->
                     <input type="submit" class="primary-btn w-100 mb-4" value="Đăng nhập"/>
                 </form>
+                <script>
+                    function validateEmail() {
+                        const emailField = document.getElementById("email");
+                        const userType = document.getElementById("userType");
+                        const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; // Biểu thức chính quy kiểm tra email
+
+                        if (userType.value === 'customer' && !emailPattern.test(emailField.value)) {
+                            alert("Vui lòng nhập địa chỉ email hợp lệ.");
+                            return false;
+                        }
+                        return true;
+                    }
+                </script>
 
                 <p class="text-center mb-0">
                     Hoặc, <a href="signup" class="text-danger fw-bold text-decoration-none">Đăng ký</a>

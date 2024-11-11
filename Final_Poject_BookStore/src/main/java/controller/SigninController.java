@@ -9,10 +9,12 @@ import java.io.PrintWriter;
 import java.net.HttpCookie;
 import java.util.Currency;
 
+import dbmodel.AdminDB;
 import dbmodel.CustomerDB;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.*;
+import model.Admin;
 import model.Customer;
 
 /**
@@ -54,47 +56,58 @@ public class SigninController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        String userType = request.getParameter("userType");
         HttpSession session = request.getSession();
-        if (session.getAttribute("user") == null) { // Neu chua ton tai user trong cookie, noi dung hon la truoc do user chua truy cap hoac da truy cap roi dang xuat, khong luu tai khoang mat khau
-            String email = request.getParameter("email");
-            String password = request.getParameter("password");
-            String username = request.getParameter("username");
-            String rememberMe = request.getParameter("rememberMe");
+        if(userType.equals("customer")) {
+            if (session.getAttribute("user") == null) { // Neu chua ton tai user trong cookie, noi dung hon la truoc do user chua truy cap hoac da truy cap roi dang xuat, khong luu tai khoang mat khau
+                String email = request.getParameter("email");
+                String password = request.getParameter("password");
+                String username = request.getParameter("username");
+                String rememberMe = request.getParameter("rememberMe");
 
-            Customer customer = CustomerDB.getInstance().selectCustomerByEmailPassWord(email,password);
-            if(customer != null) { // Neu email, tai khoang, mat khau dung
-                //store information of user in session
-                session.setAttribute("user", customer);
+                Customer customer = CustomerDB.getInstance().selectCustomerByEmailPassWord(email, password);
+                if (customer != null) { // Neu email, tai khoang, mat khau dung
+                    //store information of user in session
+                    session.setAttribute("user", customer);
 
-                //If customer want to remember password
-                if(rememberMe != null) {
-                    if(rememberMe.equalsIgnoreCase("on")){
-                        Cookie cookieEmail = new Cookie("email",email);
-                        Cookie cookiePassword = new Cookie("password",password);
-                        //Cookie cookieUsername = new Cookie("username",username);
+                    //If customer want to remember password
+                    if (rememberMe != null) {
+                        if (rememberMe.equalsIgnoreCase("on")) {
+                            Cookie cookieEmail = new Cookie("email", email);
+                            Cookie cookiePassword = new Cookie("password", password);
+                            //Cookie cookieUsername = new Cookie("username",username);
 
-                        // Cookie tồn tại trong 30 ngày
-                        cookieEmail.setMaxAge(30 * 24 * 60 * 60);
-                        cookiePassword.setMaxAge(30 * 24 * 60 * 60);
-                        //cookieUsername.setMaxAge(30*24*60*60);
+                            // Cookie tồn tại trong 30 ngày
+                            cookieEmail.setMaxAge(30 * 24 * 60 * 60);
+                            cookiePassword.setMaxAge(30 * 24 * 60 * 60);
+                            //cookieUsername.setMaxAge(30*24*60*60);
 
-                        response.addCookie(cookieEmail);
-                        response.addCookie(cookiePassword);
-                       // response.addCookie(cookieUsername);
+                            response.addCookie(cookieEmail);
+                            response.addCookie(cookiePassword);
+                            // response.addCookie(cookieUsername);
+                        }
                     }
-                }
 
-                //chuyeen trang
+                    //chuyeen trang
 //                response.sendRedirect("/home");
+                    response.sendRedirect(String.format("%s/", getServletContext().getContextPath()));
+                } else {
+
+                    System.out.println("Customer not found");
+                }
+            } else {
+//            response.sendRedirect("/home");
                 response.sendRedirect(String.format("%s/", getServletContext().getContextPath()));
             }
-            else{
+        }else if(userType.equals("admin")){
+            String email = request.getParameter("email");
+            String password = request.getParameter("password");
 
-                System.out.println("Customer not found");
+            Admin admin = AdminDB.selectAdmin();
+            if(admin != null) {
+                session.setAttribute("admin", admin);
             }
-        }else{
-//            response.sendRedirect("/home");
-            response.sendRedirect(String.format("%s/", getServletContext().getContextPath()));
+            response.sendRedirect(String.format("%s/MSBookController", getServletContext().getContextPath()));
         }
 
     }

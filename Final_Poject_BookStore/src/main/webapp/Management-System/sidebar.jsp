@@ -12,7 +12,7 @@
   tabs.put("customer", new String[]{"Khách hàng", "fa-user", String.format("%s/ms_customer", pageContext.getServletContext().getContextPath())});
   tabs.put("campaign", new String[]{"Chiến dịch", "fa-tags", String.format("%s/ms_campaign", pageContext.getServletContext().getContextPath())});
   tabs.put("review", new String[]{"Đánh giá", "fa-message", String.format("%s/ms_review", pageContext.getServletContext().getContextPath())});
-  tabs.put("author", new String[]{"Tác giả", "fa-square-pen", "/MSAuthorController"});
+  tabs.put("author", new String[]{"Tác giả", "fa-square-pen", String.format("%s/ms_author", pageContext.getServletContext().getContextPath())});
   tabs.put("publisher", new String[]{"Nhà xuất bản", "fa-print", "/MSPublisherController"});
   tabs.put("staff", new String[]{"Nhân viên", "fa-clipboard-user", "/MSStaffController"});
   tabs.put("signout", new String[]{"Đăng xuất", "fa-right-from-bracket", "/signoutadmin"});

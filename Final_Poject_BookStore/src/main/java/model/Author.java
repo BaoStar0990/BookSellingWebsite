@@ -30,6 +30,12 @@ public class Author implements Serializable {
     }
     public Author(int id, String name) {
         this.authorID = id;
+        this.name = name;
+    }
+    public Author(int id, String name, String imageURL) {
+        this.authorID = id;
+        this.name = name;
+        this.imageURL = imageURL;
     }
 
     public Author(String name) {

@@ -17,9 +17,9 @@
         categories = CategoryDB.getInstance().selectAll();
         session.setAttribute("categories", categories);
     }
-    else{
-        categories = (List<Category>)session.getAttribute("categories");
-    }
+//    else{
+//        categories = (List<Category>)session.getAttribute("categories");
+//    }
 %>
 <header class="container p-0 border-bottom">
     <nav class="navbar navbar-expand-md pt-3">

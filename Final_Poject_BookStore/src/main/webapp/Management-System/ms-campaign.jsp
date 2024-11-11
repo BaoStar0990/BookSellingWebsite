@@ -33,7 +33,7 @@
 <body>
 <!-- Header -->
 <jsp:include page="sidebar.jsp">
-  <jsp:param name="currentTab" value="customer" />
+  <jsp:param name="currentTab" value="campaign" />
 </jsp:include>
 <!-- end Header -->
 
@@ -41,10 +41,10 @@
   <div class="container fw-medium">
     <div class="row mb-3">
       <div class="col-md-4 d-flex flex-colum">
-        <input type="text" class="form-control fw-medium" id="searchBox" placeholder="Search customer...">
+        <input type="text" class="form-control fw-medium" id="searchBox" placeholder="Search campaign...">
       </div>
       <div class="col-md-8 d-flex justify-content-end">
-        <button class="primary-btn" data-bs-toggle="modal" data-bs-target="#addCategoryModal">Add Customer</button>
+        <button class="primary-btn" data-bs-toggle="modal" data-bs-target="#addCategoryModal">Add Campaign</button>
       </div>
     </div>
     <div class="table-responsive border border-2 p-2" style="max-height: 75%; overflow: auto;">
@@ -53,37 +53,32 @@
         <tr>
           <th></th>
           <th>ID</th>
-          <th>Tài khoản</th>
-          <th>Họ tên</th>
-          <th>Tuổi</th>
-          <th>SĐT</th>
-          <th>Email</th>
+          <th>Chiến dịch</th>
+          <th>Ngày bắt đầu</th>
+          <th>Ngày kết thúc</th>
+          <th>Giảm giá</th>
         </tr>
         </thead>
         <tbody>
-        <c:forEach var="customer" items="${sessionScope.customers}">
+        <c:forEach var="campaign" items="${sessionScope.campaigns}">
           <tr class="fw-medium">
             <td class="d-flex">
-              <button class="btn btn-warning btn-sm me-2" data-bs-toggle="modal" data-bs-target="#editCategoryModal" onclick="editCategory(${customer.getId()}, '${customer.getUsername()}', '${customer.getPassword()}', '${customer.getFullName()}', '${customer.getAge()}', '${customer.getNumberPhone()}', '${customer.getEmail()}')">
+              <button class="btn btn-warning btn-sm me-2" data-bs-toggle="modal" data-bs-target="#editCategoryModal" onclick="editCategory(${campaign.getCampaignId()}, '${campaign.getCampaignName()}', '${campaign.getStartDate()}', '${campaign.getEndDate()}', '${campaign.getPercentDiscount()}')">
                 <i class="fas fa-edit"></i>
               </button>
-<%--              <button class="btn btn-danger btn-sm" onclick="deleteCategory(${customer.getId()})">--%>
-<%--                <i class="fas fa-trash"></i>--%>
-<%--              </button>--%>
-              <form id="deleteForm" method="post" action="ms_customer" class="mb-0">
+              <form id="deleteForm" method="post" action="ms_campaign" class="mb-0">
                 <input type="hidden" name="action" value="delete"/>
-                <input type="hidden" name="id" value="${customer.getId()}"/>
+                <input type="hidden" name="id" value="${campaign.getCampaignId()}"/>
                 <button type="submit" class="btn btn-danger btn-sm">
                   <i class="fas fa-trash"></i>
                 </button>
               </form>
             </td>
-            <td>${fn:escapeXml(customer.getId())}</td>
-            <td>${fn:escapeXml(customer.getUsername())}</td>
-            <td>${customer.getFullName()}</td>
-            <td>${customer.getAge()}</td>
-            <td>${customer.getNumberPhone()}</td>
-            <td>${customer.getEmail()}</td>
+            <td>${fn:escapeXml(campaign.getCampaignId())}</td>
+            <td>${fn:escapeXml(campaign.getCampaignName())}</td>
+            <td>${campaign.getStartDate()}</td>
+            <td>${campaign.getEndDate()}</td>
+            <td>${campaign.getPercentDiscount()}</td>
           </tr>
         </c:forEach>
         </tbody>
@@ -96,39 +91,30 @@
 <div class="modal fade fw-medium" id="addCategoryModal" tabindex="-1" aria-labelledby="addCategoryModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
-      <form action="ms_customer" method="post">
+      <form action="ms_campaign" method="post">
         <input type="hidden" name="csrf" value="${_csrf.token}"/>
         <input type="hidden" name="action" value="add"/>
         <div class="modal-header">
-          <h5 class="modal-title fw-semibold" id="addCategoryModalLabel">Add Customer</h5>
+          <h5 class="modal-title fw-semibold" id="addCategoryModalLabel">Add Campaign</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
           <div class="mb-3">
-            <label for="customerAccount" class="form-label">Tài khoản</label>
-            <input type="text" class="form-control" id="customerAccount" name="account" required>
+            <label for="customerAccount" class="form-label">Chiến dịch</label>
+            <input type="text" class="form-control" id="customerAccount" name="campaign" required>
           </div>
           <div class="mb-3">
-            <label for="customerPassword" class="form-label">Mật khẩu</label>
-            <input type="text" class="form-control" id="customerPassword" name="password" required>
+            <label for="customerPassword" class="form-label">Ngày bắt đầu</label>
+            <input type="date" class="form-control" id="customerPassword" name="start" required>
           </div>
           <div class="mb-3">
-            <label for="customerFullName" class="form-label">Họ tên</label>
-            <input type="text" class="form-control" id="customerFullName" name="fullname" required>
+            <label for="customerFullName" class="form-label">Ngày kết thúc</label>
+            <input type="date" class="form-control" id="customerFullName" name="end" required>
           </div>
           <div class="mb-3">
-            <label for="customerAge" class="form-label">Tuổi</label>
-            <input type="text" class="form-control" id="customerAge" name="age" required>
+            <label for="customerAge" class="form-label">Giảm giá</label>
+            <input type="number" class="form-control" id="customerAge" name="discount" required>
           </div>
-          <div class="mb-3">
-            <label for="customerPhone" class="form-label">SĐT</label>
-            <input type="tel" class="form-control" id="customerPhone" name="phone" required>
-          </div>
-          <div class="mb-3">
-            <label for="customerEmail" class="form-label">Email</label>
-            <input type="email" class="form-control" id="customerEmail" name="email" required>
-          </div>
-
         </div>
         <div class="modal-footer">
           <button type="button" class="secondary-btn" data-bs-dismiss="modal">Close</button>
@@ -143,39 +129,31 @@
 <div class="modal fade fw-medium" id="editCategoryModal" tabindex="-1" aria-labelledby="editCategoryModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
-      <form action="ms_customer" method="post">
+      <form action="ms_campaign" method="post">
         <%-- Validate CSRF token --%>
         <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
         <input type="hidden" name="action" value="edit"/>
         <div class="modal-header">
-          <h5 class="modal-title fw-semibold" id="editCategoryModalLabel">Edit Customer</h5>
+          <h5 class="modal-title fw-semibold" id="editCategoryModalLabel">Edit Campaign</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
-          <input type="hidden" id="editCustomerId" name="id"/>
+          <input type="hidden" id="editCampaignId" name="id"/>
           <div class="mb-3">
-            <label for="editCustomerUsername" class="form-label">Tài khoản</label>
-            <input type="text" class="form-control" id="editCustomerUsername" name="username" required>
+            <label for="editCampaignName" class="form-label">Chiến dịch</label>
+            <input type="text" class="form-control" id="editCampaignName" name="campaign" required>
           </div>
           <div class="mb-3">
-            <label for="editCustomerPassword" class="form-label">Mật khẩu</label>
-            <input type="text" class="form-control" id="editCustomerPassword" name="password" required rows="5"/>
+            <label for="editCampaignStart" class="form-label">Ngày bắt đầu</label>
+            <input type="date" class="form-control" id="editCampaignStart" name="start" required rows="5"/>
           </div>
           <div class="mb-3">
-            <label for="editCustomerFullName" class="form-label">Họ tên</label>
-            <input type="text" class="form-control" id="editCustomerFullName" name="fullname" required rows="5"/>
+            <label for="editCampaignEnd" class="form-label">Ngày kết thúc</label>
+            <input type="date" class="form-control" id="editCampaignEnd" name="end" required rows="5"/>
           </div>
           <div class="mb-3">
-            <label for="editCustomerAge" class="form-label">Tuổi</label>
-            <input type="text" class="form-control" id="editCustomerAge" name="age" required rows="5"/>
-          </div>
-          <div class="mb-3">
-            <label for="editCustomerPhoneNumber" class="form-label">SĐT</label>
-            <input type="tel" class="form-control" id="editCustomerPhoneNumber" name="phone" required rows="5"/>
-          </div>
-          <div class="mb-3">
-            <label for="editCustomerEmail" class="form-label">Email</label>
-            <input type="email" class="form-control" id="editCustomerEmail" name="email" required rows="5"/>
+            <label for="editCampaignDiscount" class="form-label">Giảm giá</label>
+            <input type="number" class="form-control" id="editCampaignDiscount" name="discount" required rows="5"/>
           </div>
 
         </div>
@@ -189,14 +167,12 @@
 </div>
 
 <script>
-  function editCategory(id, account, password, fullname, age, phone, email) {
-    document.getElementById('editCustomerId').value = id;
-    document.getElementById('editCustomerUsername').value = account;
-    document.getElementById('editCustomerPassword').value = password;
-    document.getElementById('editCustomerFullName').value = fullname;
-    document.getElementById('editCustomerAge').value = age;
-    document.getElementById('editCustomerPhoneNumber').value = phone;
-    document.getElementById('editCustomerEmail').value = email;
+  function editCategory(id, name, start_date, end_date, discount) {
+    document.getElementById('editCampaignId').value = id;
+    document.getElementById('editCampaignName').value = name;
+    document.getElementById('editCampaignStart').value = start_date;
+    document.getElementById('editCampaignEnd').value = end_date;
+    document.getElementById('editCampaignDiscount').value = discount;
   }
 
   function deleteCategory() {

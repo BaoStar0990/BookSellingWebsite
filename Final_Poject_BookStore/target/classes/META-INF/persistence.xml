@@ -12,12 +12,12 @@
             <property name="jakarta.persistence.jdbc.url" value="jdbc:mysql://naokidatabase-naoki8386maidinh-a5cc.j.aivencloud.com:20595/defaultdb"/>
             <!-- Tên người dùng và mật khẩu -->
             <property name="jakarta.persistence.jdbc.user" value="avnadmin"/>
-            <property name="jakarta.persistence.jdbc.password" value="AVNS_vTBBwdpZvpqjypRBu-r"/>
+                <property name="jakarta.persistence.jdbc.password" value="AVNS_vTBBwdpZvpqjypRBu-r"/>
 
             <!-- Cấu hình Hibernate -->
             <property name="hibernate.dialect" value="org.hibernate.dialect.MySQLDialect"/>
             <property name="hibernate.hbm2ddl.auto" value="update"/>
-            <property name="hibernate.show_sql" value="true"/>
+            <property name="hibernate.show_sql" value="false"/>
             <property name="hibernate.format_sql" value="true"/>
 
             <!-- Cấu hình HikariCP -->

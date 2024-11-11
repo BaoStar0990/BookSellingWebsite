@@ -11,7 +11,7 @@ import model.Book;
 import java.io.IOException;
 import java.util.List;
 
-@WebServlet(name = "MSBookController", urlPatterns = {"/MSBookController"})
+@WebServlet(name = "MSBookController", urlPatterns = {"/msbookcontroller"})
 public class MSBookController extends HttpServlet {
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
@@ -36,6 +36,27 @@ public class MSBookController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        String action = request.getParameter("action");
+        if ("add".equals(action)) {
+            addBook(request, response);
+        } else if ("edit".equals(action)) {
+            editBook(request, response);
+        } else {
+            processRequest(request, response);
+        }
+    }
+
+    private void addBook(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        // Logic to add a new book
+        // ...code to add book...
+        processRequest(request, response);
+    }
+
+    private void editBook(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        // Logic to edit an existing book
+        // ...code to edit book...
         processRequest(request, response);
     }
 

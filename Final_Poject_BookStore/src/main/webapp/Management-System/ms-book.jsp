@@ -37,12 +37,12 @@
           <input type="text" class="form-control fw-medium" id="searchBox" placeholder="Search books...">
         </div>
         <div class="col-md-8 d-flex justify-content-end">
-            <button class="primary-btn" data-bs-toggle="modal" data-bs-target="#addCategoryModal">Thêm Sách</button>
+            <button class="primary-btn" data-bs-toggle="modal" data-bs-target="#addEditBookModal">Thêm Sách</button>
         </div>
       </div>
       <div class="table-responsive border border-2 p-2" style="max-height: 75%; overflow: auto;">
         <table class="table table-bordered" style="min-width: 1500px;">
-          <thead class="table-danger">
+          <thead>
           <tr>
             <th>Action</th>
             <th>ID</th>
@@ -67,7 +67,7 @@
           <c:forEach var="book" items="${books}">
             <tr class="fw-medium">
                 <td class="d-flex">
-                    <button class="btn btn-warning btn-sm me-2" data-bs-toggle="modal" >
+                    <button class="btn btn-warning btn-sm me-2" data-bs-toggle="modal" data-bs-target="#addEditBookModal">
                         <i class="fas fa-edit"></i>
                     </button>
                     <button class="btn btn-danger btn-sm">
@@ -105,6 +105,119 @@
     </div>
   </main>
 
+  <!-- Add/Edit Book Modal -->
+  <div class="modal fade" id="addEditBookModal" tabindex="-1" aria-labelledby="addEditBookModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-lg">
+          <div class="modal-content">
+              <div class="modal-header">
+                  <h5 class="modal-title" id="addEditBookModalLabel">Thêm Sách</h5>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body">
+                  <form id="addEditBookForm">
+                      <div class="mb-3">
+                          <label for="bookTitle" class="form-label">Tên Sách</label>
+                          <input type="text" class="form-control" id="bookTitle" name="bookTitle" required>
+                      </div>
+                      <div class="mb-3">
+                          <label for="bookAuthors" class="form-label">Tác giả</label>
+                          <input type="text" class="form-control mb-2" id="authorSearch" placeholder="Search authors...">
+                          <div id="selectedAuthors" class="mb-2"></div>
+                          <div id="bookAuthors" style="max-height: 150px; overflow-y: auto;">
+                              <!-- Example checkboxes -->
+                              <div class="form-check">
+                                  <input class="form-check-input author-checkbox" type="checkbox" value="1" id="author1">
+                                  <label class="form-check-label" for="author1">Author 1</label>
+                              </div>
+                              <div class="form-check">
+                                  <input class="form-check-input author-checkbox" type="checkbox" value="2" id="author2">
+                                  <label class="form-check-label" for="author2">Author 2</label>
+                              </div>
+                              <div class="form-check">
+                                <input class="form-check-input author-checkbox" type="checkbox" value="3" id="author3">
+                                <label class="form-check-label" for="author3">Author 3</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input author-checkbox" type="checkbox" value="4" id="author4">
+                                <label class="form-check-label" for="author4">Author 4</label>
+                            </div>
+                          </div>
+                      </div>
+                      <div class="mb-3">
+                          <label for="bookCategories" class="form-label">Loại sách</label>
+                          <input type="text" class="form-control mb-2" id="categorySearch" placeholder="Search categories...">
+                          <div id="selectedCategories" class="mb-2"></div>
+                          <div id="bookCategories" style="max-height: 150px; overflow-y: auto;">
+                              <!-- Example checkboxes -->
+                              <div class="form-check">
+                                  <input class="form-check-input category-checkbox" type="checkbox" value="1" id="category1">
+                                  <label class="form-check-label" for="category1">Category 1</label>
+                              </div>
+                              <div class="form-check">
+                                  <input class="form-check-input category-checkbox" type="checkbox" value="2" id="category2">
+                                  <label class="form-check-label" for="category2">Category 2</label>
+                              </div>
+                              <div class="form-check">
+                                <input class="form-check-input category-checkbox" type="checkbox" value="1" id="category3">
+                                <label class="form-check-label" for="category3">Category 3</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input category-checkbox" type="checkbox" value="2" id="category4">
+                                <label class="form-check-label" for="category4">Category 4</label>
+                            </div>
+                          </div>
+                      </div>
+                      <div class="mb-3">
+                          <label for="costPrice" class="form-label">Giá vốn</label>
+                          <input type="number" class="form-control" id="costPrice" name="costPrice" required>
+                      </div>
+                      <div class="mb-3">
+                          <label for="sellingPrice" class="form-label">Giá bán</label>
+                          <input type="number" class="form-control" id="sellingPrice" name="sellingPrice" required>
+                      </div>
+                      <div class="mb-3">
+                          <label for="stocks" class="form-label">Tồn kho</label>
+                          <input type="number" class="form-control" id="stocks" name="stocks" required>
+                      </div>
+                      <div class="mb-3">
+                          <label for="isbn" class="form-label">ISBN</label>
+                          <input type="text" class="form-control" id="isbn" name="isbn" required>
+                      </div>
+                      <div class="mb-3">
+                          <label for="urlImage" class="form-label">Hình ảnh</label>
+                          <input type="file" class="form-control" id="urlImage" name="urlImage" required>
+                      </div>
+                      <div class="mb-3">
+                          <label for="description" class="form-label">Mô tả</label>
+                          <textarea class="form-control" id="description" name="description" rows="3" required></textarea>
+                      </div>
+                      <div class="mb-3">
+                          <label for="publisher" class="form-label">Nhà xuất bản</label>
+                          <select class="form-select" id="publisher" name="publisher" required>
+                              <!-- Options will be populated dynamically -->
+                          </select>
+                      </div>
+                      <div class="mb-3">
+                          <label for="publishYear" class="form-label">Năm xuất bản</label>
+                          <input type="number" class="form-control" id="publishYear" name="publishYear" required>
+                      </div>
+                      <div class="mb-3">
+                          <label for="discountCampaign" class="form-label">Campaign</label>
+                          <select class="form-select" id="discountCampaign" name="discountCampaign" required>
+                              <!-- Options will be populated dynamically -->
+                          </select>
+                      </div>
+                      <div class="modal-footer">
+                          <button type="submit" class="btn btn-primary">Lưu</button>
+                          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                      </div>
+                  </form>
+              </div>
+          </div>
+      </div>
+  </div>
+  <!-- End Add/Edit Book Modal -->
+
   <script>
     document.getElementById('searchBox').addEventListener('input', function() {
       let filter = this.value.toUpperCase();
@@ -118,6 +231,76 @@
           rows[i].style.display = "none";
         }
       }
+    });
+
+    function createTag(value, text, containerId) {
+        const container = document.getElementById(containerId);
+        const tag = document.createElement('span');
+        tag.className = 'badge bg-primary me-2';
+        tag.textContent = text;
+        tag.dataset.id = value;
+        const closeButton = document.createElement('button');
+        closeButton.type = 'button';
+        closeButton.className = 'btn-close btn-close-white ms-2';
+        closeButton.ariaLabel = 'Close';
+        closeButton.addEventListener('click', function() {
+            document.getElementById(value).checked = false;
+            container.removeChild(tag);
+        });
+        tag.appendChild(closeButton);
+        container.appendChild(tag);
+    }
+
+    document.querySelectorAll('.author-checkbox').forEach(function(checkbox) {
+        checkbox.addEventListener('change', function() {
+            if (this.checked) {
+                createTag(this.id, this.nextElementSibling.textContent, 'selectedAuthors');
+            } else {
+                const tag = document.querySelector(`#selectedAuthors span[data-id="\${this.id}"]`);
+                if (tag) {
+                    tag.remove();
+                }
+            }
+        });
+    });
+
+    document.querySelectorAll('.category-checkbox').forEach(function(checkbox) {
+        checkbox.addEventListener('change', function() {
+            if (this.checked) {
+                createTag(this.id, this.nextElementSibling.textContent, 'selectedCategories');
+            } else {
+                const tag = document.querySelector(`#selectedCategories span[data-id="\${this.id}"]`);
+                if (tag) {
+                    tag.remove();
+                }
+            }
+        });
+    });
+
+    document.getElementById('authorSearch').addEventListener('input', function() {
+        let filter = this.value.toUpperCase();
+        let checkboxes = document.querySelectorAll('#bookAuthors .form-check');
+        checkboxes.forEach(function(checkbox) {
+            let label = checkbox.querySelector('label').textContent.toUpperCase();
+            if (label.indexOf(filter) > -1) {
+                checkbox.style.display = '';
+            } else {
+                checkbox.style.display = 'none';
+            }
+        });
+    });
+
+    document.getElementById('categorySearch').addEventListener('input', function() {
+        let filter = this.value.toUpperCase();
+        let checkboxes = document.querySelectorAll('#bookCategories .form-check');
+        checkboxes.forEach(function(checkbox) {
+            let label = checkbox.querySelector('label').textContent.toUpperCase();
+            if (label.indexOf(filter) > -1) {
+                checkbox.style.display = '';
+            } else {
+                checkbox.style.display = 'none';
+            }
+        });
     });
   </script>
 </body>

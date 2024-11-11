@@ -28,12 +28,12 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
   <%--Custom CSS--%>
-  <link rel="stylesheet" href="../assets/styles/main.css">
+  <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/styles/main.css">
 </head>
 <body>
   <!-- Header -->
   <jsp:include page="sidebar.jsp">
-    <jsp:param name="currentTab" value="category" />
+    <jsp:param name="currentTab" value="category"/>
   </jsp:include>
   <!-- end Header -->
 
@@ -83,7 +83,7 @@
   <div class="modal fade fw-medium" id="addCategoryModal" tabindex="-1" aria-labelledby="addCategoryModalLabel" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
-        <form action="MSCategoryController?action=add" method="post">
+        <form action="mscategorycontroller?action=add" method="post">
           <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
           <div class="modal-header">
             <h5 class="modal-title fw-semibold" id="addCategoryModalLabel">Add Category</h5>
@@ -112,7 +112,7 @@
   <div class="modal fade fw-medium" id="editCategoryModal" tabindex="-1" aria-labelledby="editCategoryModalLabel" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
-        <form action="MSCategoryController?action=edit" method="post">
+        <form action="mscategorycontroller?action=edit" method="post">
           <%-- Validate CSRF token --%>
           <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
           <div class="modal-header">
@@ -147,8 +147,19 @@
     }
 
     function deleteCategory(id) {
-      if (confirm('Are you sure you want to delete this category?')) {
-        window.location.href = 'MSCategoryController?action=delete&id=' + id;
+      if (confirm('Bạn muốn xóa danh mục này?')) {
+        const form = document.createElement('form');
+        form.method = 'post';
+        form.action = 'mscategorycontroller?action=delete';
+        
+        const inputId = document.createElement('input');
+        inputId.type = 'hidden';
+        inputId.name = 'id';
+        inputId.value = id;
+        form.appendChild(inputId);
+
+        document.body.appendChild(form);
+        form.submit();
       }
     }
 

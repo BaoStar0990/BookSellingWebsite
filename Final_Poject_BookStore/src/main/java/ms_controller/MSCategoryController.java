@@ -11,7 +11,7 @@ import model.Category;
 import java.io.IOException;
 import java.util.List;
 
-@WebServlet(name = "MSCategoryController", urlPatterns = {"/MSCategoryController"})
+@WebServlet(name = "MSCategoryController", urlPatterns = {"/mscategorycontroller"})
 public class MSCategoryController extends HttpServlet {
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
@@ -44,7 +44,7 @@ public class MSCategoryController extends HttpServlet {
                 Category category = new Category(id, name, description);
                 CategoryDB.getInstance().update(category);
             }
-            response.sendRedirect("MSCategoryController");
+            response.sendRedirect("mscategorycontroller");
             return;
         }
 

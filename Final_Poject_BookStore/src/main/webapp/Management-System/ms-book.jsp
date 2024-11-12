@@ -70,7 +70,7 @@
                     <button class="btn btn-warning btn-sm me-2" data-bs-toggle="modal" data-bs-target="#addEditBookModal">
                         <i class="fas fa-edit"></i>
                     </button>
-                    <button class="btn btn-danger btn-sm">
+                    <button class="btn btn-danger btn-sm" data-book-id="${book.getId()}" onclick="confirmDelete(this)">
                         <i class="fas fa-trash"></i>
                     </button>
                 </td>
@@ -223,7 +223,21 @@
   </div>
   <!-- End Add/Edit Book Modal -->
 
+  <!-- Hidden form for delete action -->
+  <form id="deleteBookForm" method="post" action="msbook?action=delete" style="display: none;">
+      <input type="hidden" name="bookId" id="deleteBookId">
+  </form>
+
   <!-- ms-book.js -->
     <script src="${pageContext.request.contextPath}/assets/javascript/management-system/ms-book.js"></script>
+    <script>
+        function confirmDelete(button) {
+            const bookId = button.getAttribute('data-book-id');
+            if (confirm('Are you sure you want to delete this book?')) {
+                document.getElementById('deleteBookId').value = bookId;
+                document.getElementById('deleteBookForm').submit();
+            }
+        }
+    </script>
 </body>
 </html>

@@ -91,7 +91,7 @@
                     </li>
 
                     <li id="danhmuc" class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">Danh mục</a>
+                        <a class="nav-link dropdown-toggle" href="${pageContext.request.contextPath}/category/all" role="button" data-bs-toggle="dropdown" aria-expanded="false">Danh mục</a>
                         <ul id="dropdowns" class="dropdown-menu mx-auto multi-column columns-3 dropdown-menu-center">
 
                             <%--attribute : categories List<Category>--%>

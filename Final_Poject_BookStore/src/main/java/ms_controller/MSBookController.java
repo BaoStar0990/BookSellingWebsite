@@ -66,6 +66,8 @@ public class MSBookController extends HttpServlet {
             addBook(request, response);
         } else if ("edit".equals(action)) {
             editBook(request, response);
+        } else if ("delete".equals(action)) {
+            deleteBook(request, response);
         } else {
             processRequest(request, response);
         }
@@ -123,6 +125,19 @@ public class MSBookController extends HttpServlet {
         // Logic to edit an existing book
         // ...code to edit book...
         processRequest(request, response);
+    }
+
+    private void deleteBook(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        int bookId = Integer.parseInt(request.getParameter("bookId"));
+        boolean isDeleted = BookDB.getInstance().delete(bookId, Book.class);
+
+        if (isDeleted) {
+            response.sendRedirect(request.getContextPath() + "/msbook");
+        } else {
+            request.setAttribute("errorMessage", "Failed to delete book.");
+            processRequest(request, response);
+        }
     }
 
     @Override

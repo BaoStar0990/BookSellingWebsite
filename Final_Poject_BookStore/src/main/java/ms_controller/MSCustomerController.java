@@ -27,8 +27,9 @@ public class MSCustomerController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         req.setCharacterEncoding("UTF-8");
+
         String action = req.getParameter("action");
-        HttpSession session = req.getSession();
+
         if(action != null) {
             switch (action) {
                 case "add": {
@@ -47,6 +48,7 @@ public class MSCustomerController extends HttpServlet {
                 }
                     
             }
+            HttpSession session = req.getSession();
             List<Customer> allCustomers = CustomerDB.getInstance().selectAll();
             session.removeAttribute("customers");
             session.setAttribute("customers", allCustomers);

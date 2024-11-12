@@ -23,16 +23,20 @@ import java.util.List;
 public class MSReviewController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        List<Review> reviews = ReviewDB.getInstance().selectAll();
-
         HttpSession session = req.getSession();
-        session.setAttribute("reviews", reviews);
+
+        if(session.getAttribute("reviews") == null){
+            List<Review> reviews = ReviewDB.getInstance().selectAll();
+            session.setAttribute("reviews", reviews);
+        }
 
         req.getServletContext().getRequestDispatcher("/Management-System/ms-review.jsp").forward(req,resp);
     }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        req.setCharacterEncoding("UTF-8");
+
         String action = req.getParameter("action");
         if(action != null) {
             switch (action) {
@@ -50,6 +54,10 @@ public class MSReviewController extends HttpServlet {
                     break;
                 }
             }
+            HttpSession session = req.getSession();
+            List<Review> reviews = ReviewDB.getInstance().selectAll();
+            session.removeAttribute("reviews");
+            session.setAttribute("reviews", reviews);
         }
 
         resp.sendRedirect(getServletContext().getContextPath() + "/ms_review");

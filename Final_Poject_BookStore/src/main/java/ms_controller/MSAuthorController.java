@@ -22,16 +22,20 @@ import java.util.List;
 public class MSAuthorController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        List<Author> authors = AuthorDB.getInstance().selectAll();
-
         HttpSession session = req.getSession();
-        session.setAttribute("authors", authors);
+
+        if(session.getAttribute("authors") == null){
+            List<Author> authors = AuthorDB.getInstance().selectAll();
+            session.setAttribute("authors", authors);
+        }
 
         req.getServletContext().getRequestDispatcher("/Management-System/ms-author.jsp").forward(req,resp);
     }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        req.setCharacterEncoding("UTF-8");
+
         String action = req.getParameter("action");
         if(action != null) {
             switch (action) {
@@ -51,6 +55,10 @@ public class MSAuthorController extends HttpServlet {
                     break;
                 }
             }
+            HttpSession session = req.getSession();
+            List<Author> authors = AuthorDB.getInstance().selectAll();
+            session.removeAttribute("authors");
+            session.setAttribute("authors", authors);
         }
 
         resp.sendRedirect(getServletContext().getContextPath() + "/ms_author");

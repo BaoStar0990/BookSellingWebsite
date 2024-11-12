@@ -33,7 +33,7 @@
 <body>
 <!-- Header -->
 <jsp:include page="sidebar.jsp">
-  <jsp:param name="currentTab" value="author" />
+  <jsp:param name="currentTab" value="staff" />
 </jsp:include>
 <!-- end Header -->
 
@@ -41,10 +41,10 @@
   <div class="container fw-medium">
     <div class="row mb-3">
       <div class="col-md-4 d-flex flex-colum">
-        <input type="text" class="form-control fw-medium" id="searchBox" placeholder="Search author...">
+        <input type="text" class="form-control fw-medium" id="searchBox" placeholder="Search staff..."/>
       </div>
       <div class="col-md-8 d-flex justify-content-end">
-        <button class="primary-btn" data-bs-toggle="modal" data-bs-target="#addCategoryModal">Add Author</button>
+        <button class="primary-btn" data-bs-toggle="modal" data-bs-target="#addCategoryModal">Add Staff</button>
       </div>
     </div>
     <div class="table-responsive border border-2 p-2" style="max-height: 75%; overflow: auto;">
@@ -53,29 +53,37 @@
         <tr>
           <th></th>
           <th>ID</th>
-          <th>Tác giả</th>
-          <th>Ảnh đại diện</th>
+          <th>Tuổi</th>
+          <th>Email</th>
+          <th>Họ tên</th>
+          <th>SĐT</th>
+          <th>Tài khoản</th>
+          <th>Lương</th>
         </tr>
         </thead>
         <tbody>
-        <c:forEach var="author" items="${sessionScope.authors}">
+        <c:forEach var="staff" items="${sessionScope.staffs}">
           <tr class="fw-medium">
             <td class="d-flex">
               <button class="btn btn-warning btn-sm me-2" data-bs-toggle="modal" data-bs-target="#editCategoryModal"
-                      onclick="editCategory(${author.getId()}, '${author.getName()}', '${author.getImageURL()}')">
+                      onclick="editCategory('${staff.getId()}','${staff.getAge()}','${staff.getEmail()}','${staff.getFullName()}','${staff.getNumberPhone()}','${staff.getUsername()}','${staff.getPassword()}','${staff.getSalary()}')">
                 <i class="fas fa-edit"></i>
               </button>
-              <form id="deleteForm" method="post" action="ms_author" class="mb-0">
+              <form id="deleteForm" method="post" action="ms_staff" class="mb-0">
                 <input type="hidden" name="action" value="delete"/>
-                <input type="hidden" name="deleteId" value="${author.getId()}"/>
+                <input type="hidden" name="deleteId" value="${staff.getId()}"/>
                 <button type="submit" class="btn btn-danger btn-sm">
                   <i class="fas fa-trash"></i>
                 </button>
               </form>
             </td>
-            <td>${fn:escapeXml(author.getId())}</td>
-            <td>${fn:escapeXml(author.getName())}</td>
-            <td><img style="object-fit: cover" width="200px" height="200px" src="${author.getImageURL()}" alt="author_img"></td>
+            <td>${fn:escapeXml(staff.getId())}</td>
+            <td>${fn:escapeXml(staff.getAge())}</td>
+            <td>${fn:escapeXml(staff.getEmail())}</td>
+            <td>${fn:escapeXml(staff.getFullName())}</td>
+            <td>${fn:escapeXml(staff.getNumberPhone())}</td>
+            <td>${fn:escapeXml(staff.getUsername())}</td>
+            <td>${fn:escapeXml(staff.getSalary())}</td>
           </tr>
         </c:forEach>
         </tbody>
@@ -88,22 +96,44 @@
 <div class="modal fade fw-medium" id="addCategoryModal" tabindex="-1" aria-labelledby="addCategoryModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
-      <form action="ms_author" method="post">
+      <form action="ms_staff" method="post">
         <input type="hidden" name="csrf" value="${_csrf.token}"/>
         <input type="hidden" name="action" value="add"/>
         <div class="modal-header">
-          <h5 class="modal-title fw-semibold" id="addCategoryModalLabel">Add Author</h5>
+          <h5 class="modal-title fw-semibold" id="addCategoryModalLabel">Add Staff</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
+
         <div class="modal-body">
           <div class="mb-3">
-            <label for="authorName" class="form-label">Tác giả</label>
-            <input type="text" class="form-control" id="authorName" name="author" required>
+            <label for="staffAge" class="form-label">Tuổi</label>
+            <input type="text" class="form-control" id="staffAge" name="age" required>
           </div>
           <div class="mb-3">
-            <label for="authorAvatar" class="form-label">Ảnh đại diện</label>
-            <input type="text" class="form-control" id="authorAvatar" name="avatar" required>
+            <label for="staffEmail" class="form-label">Email</label>
+            <input type="email" class="form-control" id="staffEmail" name="email" required>
           </div>
+          <div class="mb-3">
+            <label for="staffName" class="form-label">Họ tên</label>
+            <input type="text" class="form-control" id="staffName" name="name" required>
+          </div>
+          <div class="mb-3">
+            <label for="staffPhone" class="form-label">SĐT</label>
+            <input type="tel" class="form-control" id="staffPhone" name="phone" required>
+          </div>
+          <div class="mb-3">
+            <label for="staffAccount" class="form-label">Tài khoản</label>
+            <input type="text" class="form-control" id="staffAccount" name="account" required>
+          </div>
+          <div class="mb-3">
+            <label for="staffPassword" class="form-label">Mật khẩu</label>
+            <input type="text" class="form-control" id="staffPassword" name="password" required>
+          </div>
+          <div class="mb-3">
+            <label for="staffSalary" class="form-label">Lương</label>
+            <input type="number" class="form-control" id="staffSalary" name="salary" required>
+          </div>
+
         </div>
         <div class="modal-footer">
           <button type="button" class="secondary-btn" data-bs-dismiss="modal">Close</button>
@@ -118,25 +148,44 @@
 <div class="modal fade fw-medium" id="editCategoryModal" tabindex="-1" aria-labelledby="editCategoryModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
-      <form action="ms_author" method="post">
+      <form action="ms_staff" method="post">
         <%-- Validate CSRF token --%>
         <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
         <input type="hidden" name="action" value="edit"/>
         <div class="modal-header">
-          <h5 class="modal-title fw-semibold" id="editCategoryModalLabel">Edit Review</h5>
+          <h5 class="modal-title fw-semibold" id="editCategoryModalLabel">Edit Publisher</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
-          <input type="hidden" id="editAuthorId" name="author_id"/>
+          <input type="hidden" id="editStaffId" name="staffId"/>
           <div class="mb-3">
-            <label for="editAuthorName" class="form-label">Author</label>
-            <input type="text" class="form-control" id="editAuthorName" name="author" required>
+            <label for="editStaffAge" class="form-label">Tuổi</label>
+            <input type="text" class="form-control" id="editStaffAge" name="age" required>
           </div>
           <div class="mb-3">
-            <label for="editAuthorAvatar" class="form-label">Ảnh đại diện</label>
-            <input type="text" class="form-control" id="editAuthorAvatar" name="avatar" required>
+            <label for="editStaffEmail" class="form-label">Email</label>
+            <input type="text" class="form-control" id="editStaffEmail" name="email" required>
           </div>
-
+          <div class="mb-3">
+            <label for="editStaffName" class="form-label">Họ tên</label>
+            <input type="text" class="form-control" id="editStaffName" name="name" required>
+          </div>
+          <div class="mb-3">
+            <label for="editStaffPhone" class="form-label">SĐT</label>
+            <input type="text" class="form-control" id="editStaffPhone" name="phone" required>
+          </div>
+          <div class="mb-3">
+            <label for="editStaffAccount" class="form-label">Tài khoản</label>
+            <input type="text" class="form-control" id="editStaffAccount" name="account" required>
+          </div>
+          <div class="mb-3">
+            <label for="editStaffPassword" class="form-label">Mật khẩu</label>
+            <input type="text" class="form-control" id="editStaffPassword" name="password" required>
+          </div>
+          <div class="mb-3">
+            <label for="editStaffSalary" class="form-label">Lương</label>
+            <input type="text" class="form-control" id="editStaffSalary" name="salary" required>
+          </div>
         </div>
         <div class="modal-footer">
           <button type="button" class="secondary-btn" data-bs-dismiss="modal">Close</button>
@@ -148,10 +197,15 @@
 </div>
 
 <script>
-  function editCategory(id, name, avatar) {
-    document.getElementById('editAuthorId').value = id;
-    document.getElementById('editAuthorName').value = name;
-    document.getElementById('editAuthorAvatar').value = avatar;
+  function editCategory(id, age, email, name, phone, account, password, salary) {
+    document.getElementById('editStaffId').value = id;
+    document.getElementById('editStaffAge').value = age;
+    document.getElementById('editStaffEmail').value = email;
+    document.getElementById('editStaffName').value = name;
+    document.getElementById('editStaffPhone').value = phone;
+    document.getElementById('editStaffAccount').value = account;
+    document.getElementById('editStaffPassword').value = password;
+    document.getElementById('editStaffSalary').value = salary;
   }
 
   function deleteCategory() {

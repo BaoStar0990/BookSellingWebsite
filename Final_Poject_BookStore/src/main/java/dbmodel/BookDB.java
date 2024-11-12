@@ -3,6 +3,7 @@ package dbmodel;
 import database.DBUtil;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.NoResultException;
+
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -75,11 +76,8 @@ public class BookDB extends ModifyDB<Book> implements DBInterface<Book> {
             em = DBUtil.getEmFactory().createEntityManager();
             tr = em.getTransaction();
             tr.begin();
-            
-            // Persist the book
-            em.persist(book);
-            
-            // Merge authors
+
+            // Manage authors
             Set<Author> managedAuthors = new HashSet<>();
             for (Author author : book.getAuthors()) {
                 Author managedAuthor = em.find(Author.class, author.getId());
@@ -87,14 +85,13 @@ public class BookDB extends ModifyDB<Book> implements DBInterface<Book> {
                     managedAuthor.getBooks().add(book);
                     managedAuthors.add(managedAuthor);
                 } else {
-                    author = em.merge(author);
-                    author.getBooks().add(book);
-                    managedAuthors.add(author);
+                    managedAuthor = em.merge(author);
+                    managedAuthors.add(managedAuthor);
                 }
             }
             book.setAuthors(managedAuthors);
-            
-            // Merge categories
+
+            // Manage categories
             Set<Category> managedCategories = new HashSet<>();
             for (Category category : book.getCategories()) {
                 Category managedCategory = em.find(Category.class, category.getId());
@@ -102,13 +99,15 @@ public class BookDB extends ModifyDB<Book> implements DBInterface<Book> {
                     managedCategory.getBooks().add(book);
                     managedCategories.add(managedCategory);
                 } else {
-                    category = em.merge(category);
-                    category.getBooks().add(book);
-                    managedCategories.add(category);
+                    managedCategory = em.merge(category);
+                    managedCategories.add(managedCategory);
                 }
             }
             book.setCategories(managedCategories);
-            
+
+            // Persist the book itself
+            em.persist(book);
+
             tr.commit();
             return true;
         } catch (Exception ex) {
@@ -119,6 +118,30 @@ public class BookDB extends ModifyDB<Book> implements DBInterface<Book> {
         } finally {
             if (em != null)
                 em.close();
+        }
+    }
+
+    public boolean delete(int bookId) {
+        EntityManager em = null;
+        EntityTransaction tr = null;
+        try {
+            em = DBUtil.getEmFactory().createEntityManager();
+            tr = em.getTransaction();
+            tr.begin();
+
+            Book book = em.find(Book.class, bookId);
+            if (book != null) {
+                em.remove(book);
+            }
+
+            tr.commit();
+            return true;
+        } catch (Exception ex) {
+            if (tr != null && tr.isActive()) tr.rollback();
+            ex.printStackTrace();
+            return false;
+        } finally {
+            if (em != null) em.close();
         }
     }
 }

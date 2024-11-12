@@ -179,13 +179,24 @@
                                   </div>
                                   <div>
                                       <label for="urlImage" class="form-label">Hình ảnh</label>
-                                      <input type="file" class="form-control" id="urlImage" name="urlImage" required accept="image/png, image/jpeg, image/jpg" onchange="previewImage(event)">
+                                      <input type="file" class="form-control" id="urlImage" name="urlImage" required accept="image/png, image/jpeg, image/jpg, image/webp" onchange="previewImage(event)">
                                   </div>
                               </div>
                               <div class="mb-3">
                                   <label for="description" class="form-label">Mô tả</label>
                                   <textarea class="form-control" id="description" name="description" rows="3" required></textarea>
                               </div>
+                                <div class="mb-3">
+                                    <label for="language" class="form-label">Ngôn ngữ</label>
+                                    <select class="form-select" id="language" name="language" required>
+                                        <option value="Tiếng Anh">Tiếng Anh</option>
+                                        <option value="Tiếng Việt">Tiếng Việt</option>
+                                        <option value="Tiếng Pháp">Tiếng Pháp</option>
+                                        <option value="Tiếng Đức">Tiếng Đức</option>
+                                        <option value="Tiếng Trung Giản Thể">Tiếng Trung Giản Thể</option>
+                                        <option value="Tiếng Nhật">Tiếng Nhật</option>
+                                    </select>
+                                </div>
                               <div class="mb-3">
                                   <label for="publisher" class="form-label">Nhà xuất bản</label>
                                   <select class="form-select" id="publisher" name="publisher" required
@@ -210,6 +221,7 @@
                                         </c:forEach>
                                   </select>
                               </div>
+                              
                           </div>
                       </div>
                       <div class="modal-footer">

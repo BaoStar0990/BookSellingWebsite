@@ -6,6 +6,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import model.Category;
 
 import java.io.IOException;
@@ -14,82 +15,44 @@ import java.util.List;
 @WebServlet(name = "MSCategoryController", urlPatterns = {"/mscategory"})
 public class MSCategoryController extends HttpServlet {
 
-    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-//        if(request.getSession().getAttribute("admin") == null) {
-//            return;
-//        }
-        //set UTF8 - Tiếng việt
-        request.setCharacterEncoding("UTF-8");
-        response.setContentType("text/html; charset=UTF-8");
-        response.setCharacterEncoding("UTF-8");
+    @Override
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        HttpSession session = req.getSession();
 
-        String action = request.getParameter("action");
-        if (action != null) {
-            // Validate CSRF token
-            String csrfToken = request.getParameter("_csrf");
-            if (!isValidCsrfToken(csrfToken)) {
-                response.sendError(HttpServletResponse.SC_FORBIDDEN, "Invalid CSRF token");
-                return;
-            }
-            if (action.equals("delete")) {
-                int id = Integer.parseInt(request.getParameter("id"));
-                CategoryDB.getInstance().delete(id);
-            } else if (action.equals("add")) {
-                String name = request.getParameter("name");
-                String description = request.getParameter("description");
-                Category category = new Category(name, description);
-                CategoryDB.getInstance().insert(category);
-            } else if (action.equals("edit")) {
-                int id = Integer.parseInt(request.getParameter("id"));
-                String name = request.getParameter("name");
-                String description = request.getParameter("description");
-                Category category = new Category(id, name, description);
-                CategoryDB.getInstance().update(category);
-            }
-            response.sendRedirect("mscategory");
-            return;
+        if (session.getAttribute("categories") == null) {
+            List<Category> categories = CategoryDB.getInstance().selectAll();
+            session.setAttribute("categories", categories);
         }
 
-        List<Category> categories = CategoryDB.getInstance().selectAll();
-        request.setAttribute("categories", categories);
-        String url = "\\Management-System\\ms-category.jsp";
-        request.getRequestDispatcher(url).forward(request, response);
-    }
-
-    private boolean isValidCsrfToken(String csrfToken) {
-        // Implement CSRF token validation logic
-        return true;
+        req.getServletContext().getRequestDispatcher("/Management-System/ms-category.jsp").forward(req, resp);
     }
 
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        processRequest(request, response);
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        req.setCharacterEncoding("UTF-8");
+
+        String action = req.getParameter("action");
+        if (action != null) {
+            switch (action) {
+                case "edit": {
+                    CategoryDB.getInstance().update(new Category(Integer.parseInt(req.getParameter("id")), req.getParameter("name"), req.getParameter("description")));
+                    break;
+                }
+                case "add": {
+                    CategoryDB.getInstance().insert(new Category(req.getParameter("name"), req.getParameter("description")));
+                    break;
+                }
+                case "delete": {
+                    CategoryDB.getInstance().delete(Integer.parseInt(req.getParameter("id")));
+                    break;
+                }
+            }
+            HttpSession session = req.getSession();
+            List<Category> categories = CategoryDB.getInstance().selectAll();
+            session.removeAttribute("categories");
+            session.setAttribute("categories", categories);
+        }
+
+        resp.sendRedirect(getServletContext().getContextPath() + "/mscategory");
     }
-
-    /**
-     * Handles the HTTP <code>POST</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
-    @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        processRequest(request, response);
-    }
-
-    /**
-     * Returns a short description of the servlet.
-     *
-     * @return a String containing servlet description
-     */
-    @Override
-    public String getServletInfo() {
-        return "Short description";
-    }// </editor-fold>
-
 }

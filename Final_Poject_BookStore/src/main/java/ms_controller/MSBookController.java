@@ -84,6 +84,7 @@ public class MSBookController extends HttpServlet {
         int publisherId = Integer.parseInt(request.getParameter("publisher"));
         int publishYear = Integer.parseInt(request.getParameter("publishYear"));
         int discountCampaignId = Integer.parseInt(request.getParameter("discountCampaign"));
+        String language = request.getParameter("language");
         String[] selectedAuthors = request.getParameter("selectedAuthors").split(",");
         String[] selectedCategories = request.getParameter("selectedCategories").split(",");
 
@@ -97,7 +98,7 @@ public class MSBookController extends HttpServlet {
         Publisher publisher = PublisherDB.getInstance().selectByID(publisherId);
         DiscountCampaign discountCampaign = DiscountCampaignDB.getInstance().selectByID(discountCampaignId);
 
-        Book book = new Book(bookTitle, description, isbn, costPrice, sellingPrice, stocks, urlImage, publishYear, "English", publisher);
+        Book book = new Book(bookTitle, description, isbn, costPrice, sellingPrice, stocks, urlImage, publishYear, language, publisher);
         book.setDiscountCampaign(discountCampaign);
 
         for (String authorId : selectedAuthors) {
@@ -130,7 +131,7 @@ public class MSBookController extends HttpServlet {
     private void deleteBook(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         int bookId = Integer.parseInt(request.getParameter("bookId"));
-        boolean isDeleted = BookDB.getInstance().delete(bookId, Book.class);
+        boolean isDeleted = BookDB.getInstance().delete(bookId);
 
         if (isDeleted) {
             response.sendRedirect(request.getContextPath() + "/msbook");
@@ -140,8 +141,4 @@ public class MSBookController extends HttpServlet {
         }
     }
 
-    @Override
-    public String getServletInfo() {
-        return "Short description";
-    }
 }

@@ -6,7 +6,7 @@
   Map<String, String[]> tabs = new LinkedHashMap<>();
   tabs.put("dashboard", new String[]{"Tổng quan", "fa-gauge", "#"});
   tabs.put("book", new String[]{"Sách", "fa-book", "/MSBookController"});
-  tabs.put("category", new String[]{"Danh mục sách", "fa-layer-group", String.format("%s/MSCategoryController", pageContext.getServletContext().getContextPath())});
+  tabs.put("category", new String[]{"Danh mục sách", "fa-layer-group", String.format("%s/mscategory", pageContext.getServletContext().getContextPath())});
   tabs.put("order", new String[]{"Đơn hàng", "fa-box", "/MSOrderController"});
   tabs.put("bill", new String[]{"Hóa đơn", "fa-receipt", "/MSBillController"});
   tabs.put("customer", new String[]{"Khách hàng", "fa-user", String.format("%s/ms_customer", pageContext.getServletContext().getContextPath())});

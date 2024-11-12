@@ -20,16 +20,20 @@ import java.util.List;
 public class MSCampaignController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        List<DiscountCampaign> discountCampaigns = DiscountCampaignDB.getInstance().selectAll();
-
         HttpSession session = req.getSession();
-        session.setAttribute("campaigns", discountCampaigns);
+
+        if(session.getAttribute("campaigns") == null){
+            List<DiscountCampaign> discountCampaigns = DiscountCampaignDB.getInstance().selectAll();
+            session.setAttribute("campaigns", discountCampaigns);
+        }
 
         req.getServletContext().getRequestDispatcher("/Management-System/ms-campaign.jsp").forward(req,resp);
     }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        req.setCharacterEncoding("UTF-8");
+
         String action = req.getParameter("action");
         if(action != null) {
             switch (action) {
@@ -52,6 +56,10 @@ public class MSCampaignController extends HttpServlet {
                     break;
                 }
             }
+            HttpSession session = req.getSession();
+            List<DiscountCampaign> discountCampaigns = DiscountCampaignDB.getInstance().selectAll();
+            session.removeAttribute("campaigns");
+            session.setAttribute("campaigns", discountCampaigns);
         }
 
         resp.sendRedirect(getServletContext().getContextPath() + "/ms_campaign");

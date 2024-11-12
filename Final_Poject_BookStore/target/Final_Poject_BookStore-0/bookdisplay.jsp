@@ -52,7 +52,7 @@
   <!-- Title and Filter Button -->
   <div class="pb-2 mb-2 border-bottom">
     <div class="d-flex justify-content-between align-items-center">
-      <h2 class="fw-bolder">Sách mới</h2> <!-- Replace with page title -->
+      <h2 class="fw-bolder">${nameOfCategory}</h2>
       <button class="btn secondary-btn" type="button" data-bs-toggle="collapse" data-bs-target="#filterOptions">
         <i class="fas fa-filter"></i>
         <span id="filterButtonText">Bộ Lọc</span>
@@ -99,7 +99,7 @@
         <c:forEach var="book" items = "${books}">
           <div class="col-6 col-md-4 col-lg-2 p-2">
               
-            <a href="${pageContext.request.contextPath}/bookdetails?bookId=${book.getId()}" class="d-block text-decoration-none card-shadow" style="color: inherit;">
+            <a href="/bookdetails/${book.getId()}" class="d-block text-decoration-none card-shadow" style="color: inherit;">
               <div class="card">
                  <!--book image--> 
                 <img src=${book.getUrlImage()} class="card-img-top" alt="Sample Book Title">

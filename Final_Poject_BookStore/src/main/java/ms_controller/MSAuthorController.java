@@ -1,8 +1,8 @@
 package ms_controller;
 
+import dbmodel.AuthorDB;
 import dbmodel.BookDB;
 import dbmodel.CustomerDB;
-import dbmodel.DiscountCampaignDB;
 import dbmodel.ReviewDB;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -10,27 +10,26 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import model.Author;
 import model.Book;
 import model.Customer;
-import model.DiscountCampaign;
 import model.Review;
 
 import java.io.IOException;
-import java.time.LocalDate;
 import java.util.List;
 
-@WebServlet("/ms_review")
-public class MSReviewController extends HttpServlet {
+@WebServlet("/ms_author")
+public class MSAuthorController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         HttpSession session = req.getSession();
 
-        if(session.getAttribute("reviews") == null){
-            List<Review> reviews = ReviewDB.getInstance().selectAll();
-            session.setAttribute("reviews", reviews);
+        if(session.getAttribute("authors") == null){
+            List<Author> authors = AuthorDB.getInstance().selectAll();
+            session.setAttribute("authors", authors);
         }
 
-        req.getServletContext().getRequestDispatcher("/Management-System/ms-review.jsp").forward(req,resp);
+        req.getServletContext().getRequestDispatcher("/Management-System/ms-author.jsp").forward(req,resp);
     }
 
     @Override
@@ -42,25 +41,27 @@ public class MSReviewController extends HttpServlet {
             switch (action) {
                 case "edit":
                 {
-                    Book book = BookDB.getInstance().selectByID(Integer.parseInt(req.getParameter("bookId")));
-                    Customer customer = CustomerDB.getInstance().selectByID(Integer.parseInt(req.getParameter("customerId")));
-                    ReviewDB.getInstance().update(new Review(Integer.parseInt(req.getParameter("reviewId")), Integer.parseInt(req.getParameter("rate")), req.getParameter("description"), customer, book));
+                    AuthorDB.getInstance().update(new Author(Integer.parseInt(req.getParameter("author_id")), req.getParameter("author"), req.getParameter("avatar")));
+                    break;
+                }
+                case "add":{
+                    AuthorDB.getInstance().insert(new Author(req.getParameter("author")));
                     break;
                 }
                 case "delete":
                 {
                     System.out.println(req.getParameter("deleteId"));
-                    ReviewDB.getInstance().delete(Integer.parseInt(req.getParameter("deleteId")), Review.class);
+                    AuthorDB.getInstance().delete(Integer.parseInt(req.getParameter("deleteId")), Author.class);
                     break;
                 }
             }
             HttpSession session = req.getSession();
-            List<Review> reviews = ReviewDB.getInstance().selectAll();
-            session.removeAttribute("reviews");
-            session.setAttribute("reviews", reviews);
+            List<Author> authors = AuthorDB.getInstance().selectAll();
+            session.removeAttribute("authors");
+            session.setAttribute("authors", authors);
         }
 
-        resp.sendRedirect(getServletContext().getContextPath() + "/ms_review");
+        resp.sendRedirect(getServletContext().getContextPath() + "/ms_author");
 
     }
 }

@@ -16,16 +16,18 @@ import java.util.List;
 public class MSCustomerController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        List<Customer> allCustomers = CustomerDB.getInstance().selectAll();
-
         HttpSession session = req.getSession();
-        session.setAttribute("customers", allCustomers);
-
+        if(session.getAttribute("customers") == null){
+            List<Customer> allCustomers = CustomerDB.getInstance().selectAll();
+            session.setAttribute("customers", allCustomers);
+        }
         req.getServletContext().getRequestDispatcher("/Management-System/ms-customer.jsp").forward(req,resp);
     }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        req.setCharacterEncoding("UTF-8");
+
         String action = req.getParameter("action");
 
         if(action != null) {
@@ -44,7 +46,12 @@ public class MSCustomerController extends HttpServlet {
                     CustomerDB.getInstance().updateCustomer(customer);
                     break;
                 }
+                    
             }
+            HttpSession session = req.getSession();
+            List<Customer> allCustomers = CustomerDB.getInstance().selectAll();
+            session.removeAttribute("customers");
+            session.setAttribute("customers", allCustomers);
         }
 
         resp.sendRedirect(getServletContext().getContextPath() + "/ms_customer");

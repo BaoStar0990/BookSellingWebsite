@@ -52,23 +52,24 @@ public class HomeControllerServlet extends HttpServlet {
         //Lay session
         HttpSession session = req.getSession();
         //Ba tham so truyen ve cho UI
-        List<Book> books = null;
+        List<Book> allBook = null; // Sử dụng cho tat cả các trang
+        List<Book> homeBooks = null; // Sử dụng cho trang home
         List<Author> authors = null;
 
 
 
         //lan truy cap dau tien, book chua ton tai trong session
             //Book
-        if(session.getAttribute("books") == null) {
-            books = BookDB.getInstance().selectAll();
-            session.setAttribute("books", books);
+        if(session.getAttribute("allBook") == null) {
+            allBook = BookDB.getInstance().selectAll();
+            session.setAttribute("allBook", allBook);
         }else{ // lan truy cap sau,  lay book trong session
-            books = (List<Book>)session.getAttribute("books");
+            allBook = (List<Book>)session.getAttribute("allBook");
         }
-        if(books != null) {
-            if(books.size() > 6)
+        if(allBook != null) {
+            if(allBook.size() > 6)
             {
-                books = books.stream().limit(6).collect(Collectors.toList());
+                homeBooks = allBook.stream().limit(6).collect(Collectors.toList());
             }
         }
 
@@ -114,7 +115,7 @@ public class HomeControllerServlet extends HttpServlet {
         }
 
         //req.setAttribute("categories", categories);
-        req.setAttribute("bestsellerBooks", books);
+        req.setAttribute("bestsellerBooks", homeBooks);
         req.setAttribute("authors", authors);
 
         String url = "/home.jsp";

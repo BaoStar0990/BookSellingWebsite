@@ -91,9 +91,8 @@
                     </li>
 
                     <li id="danhmuc" class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="${pageContext.request.contextPath}/category/all" role="button" data-bs-toggle="dropdown" aria-expanded="false">Danh mục</a>
+                        <a class="nav-link active dropdown-toggle " href="/category/all">Sách</a>
                         <ul id="dropdowns" class="dropdown-menu mx-auto multi-column columns-3 dropdown-menu-center">
-
                             <%--attribute : categories List<Category>--%>
                             <c:set var = "count" scope = "request" value = "${4}"/>
                             <c:forEach items="${categories}" var="category">
@@ -103,7 +102,7 @@
                                 </c:if>
                                 <c:if test="${count <= 3}">
                                     <div class="col-md-4">
-                                        <li><a href="#" class="dropdown-item btn btn-outline-danger">${category.name}</a></li>
+                                        <li><a href="/category/${category.id}" class="dropdown-item btn btn-outline-danger">${category.name}</a></li>
                                     </div>
                                     <c:set var = "count" scope = "request" value = "${count + 1}"/>
                                 </c:if>

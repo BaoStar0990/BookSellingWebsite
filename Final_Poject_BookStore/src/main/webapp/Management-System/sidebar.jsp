@@ -5,17 +5,17 @@
   // Map tabs to their titles, icons, and URLs
   Map<String, String[]> tabs = new LinkedHashMap<>();
   tabs.put("dashboard", new String[]{"Tổng quan", "fa-gauge", "#"});
-  tabs.put("book", new String[]{"Sách", "fa-book", "/msbook"});
+  tabs.put("book", new String[]{"Sách", "fa-book", "/MSBookController"});
   tabs.put("category", new String[]{"Danh mục sách", "fa-layer-group", String.format("%s/mscategory", pageContext.getServletContext().getContextPath())});
   tabs.put("order", new String[]{"Đơn hàng", "fa-box", "/MSOrderController"});
   tabs.put("bill", new String[]{"Hóa đơn", "fa-receipt", "/MSBillController"});
   tabs.put("customer", new String[]{"Khách hàng", "fa-user", String.format("%s/ms_customer", pageContext.getServletContext().getContextPath())});
   tabs.put("campaign", new String[]{"Chiến dịch", "fa-tags", String.format("%s/ms_campaign", pageContext.getServletContext().getContextPath())});
   tabs.put("review", new String[]{"Đánh giá", "fa-message", String.format("%s/ms_review", pageContext.getServletContext().getContextPath())});
-  tabs.put("author", new String[]{"Tác giả", "fa-square-pen", "/MSAuthorController"});
-  tabs.put("publisher", new String[]{"Nhà xuất bản", "fa-print", "/MSPublisherController"});
-  tabs.put("staff", new String[]{"Nhân viên", "fa-clipboard-user", "/MSStaffController"});
-  tabs.put("signout", new String[]{"Đăng xuất", "fa-right-from-bracket", "/signoutadmin"});
+  tabs.put("author", new String[]{"Tác giả", "fa-square-pen", String.format("%s/ms_author", pageContext.getServletContext().getContextPath())});
+  tabs.put("publisher", new String[]{"Nhà xuất bản", "fa-print", String.format("%s/ms_publisher", pageContext.getServletContext().getContextPath())});
+  tabs.put("staff", new String[]{"Nhân viên", "fa-clipboard-user", String.format("%s/ms_staff", pageContext.getServletContext().getContextPath())});
+  tabs.put("signout", new String[]{"Đăng xuất", "fa-right-from-bracket", String.format("%s/signoutadmin", pageContext.getServletContext().getContextPath())});
 
   String currentTab = request.getParameter("currentTab") != null ? request.getParameter("currentTab") : "dashboard";
   String tabTitle = tabs.containsKey(currentTab) ? tabs.get(currentTab)[0] : "Tổng quan";

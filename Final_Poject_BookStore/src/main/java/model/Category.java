@@ -24,7 +24,7 @@ public class Category implements Serializable {
     // )
     // private Set<Book> books = new HashSet<Book>();
 
-    @ManyToMany(mappedBy = "categories", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @ManyToMany(mappedBy = "categories", cascade = CascadeType.ALL)
     private Set<Book> books = new HashSet<>();
 
     public Category() {}

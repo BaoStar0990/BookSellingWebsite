@@ -23,7 +23,7 @@ public class Author implements Serializable {
     //         joinColumns = @JoinColumn(name = "authorID"),
     //         inverseJoinColumns = @JoinColumn(name = "bookID")
     // )
-    @ManyToMany(mappedBy = "authors", cascade = {CascadeType.PERSIST, CascadeType.MERGE}) 
+    @ManyToMany(mappedBy = "authors", cascade = CascadeType.ALL) 
     private Set<Book> books = new HashSet<>();
 
     public Author() {}

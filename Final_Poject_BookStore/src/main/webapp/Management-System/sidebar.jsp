@@ -5,7 +5,7 @@
   // Map tabs to their titles, icons, and URLs
   Map<String, String[]> tabs = new LinkedHashMap<>();
   tabs.put("dashboard", new String[]{"Tổng quan", "fa-gauge", "#"});
-  tabs.put("book", new String[]{"Sách", "fa-book", String.format("%s/mscategory", pageContext.getServletContext().getContextPath())});
+  tabs.put("book", new String[]{"Sách", "fa-book", String.format("%s/msbook", pageContext.getServletContext().getContextPath())});
   tabs.put("category", new String[]{"Danh mục sách", "fa-layer-group", String.format("%s/mscategory", pageContext.getServletContext().getContextPath())});
   tabs.put("order", new String[]{"Đơn hàng", "fa-box", "/MSOrderController"});
   tabs.put("bill", new String[]{"Hóa đơn", "fa-receipt", "/MSBillController"});

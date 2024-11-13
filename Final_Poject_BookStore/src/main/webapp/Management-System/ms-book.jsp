@@ -67,7 +67,17 @@
           <c:forEach var="book" items="${books}">
             <tr class="fw-medium">
                 <td class="d-flex">
-                    <button class="btn btn-warning btn-sm me-2" data-bs-toggle="modal" data-bs-target="#addEditBookModal">
+                    <button class="btn btn-warning btn-sm me-2" data-bs-toggle="modal" data-bs-target="#addEditBookModal" 
+                            data-book-id="${book.getId()}" data-book-title="${book.getTitle()}" 
+                            data-book-authors='${fn:escapeXml(book.getAuthorsJson())}'
+                            data-book-categories='${fn:escapeXml(book.getCategoriesJson())}'
+                            data-book-cost-price="${book.getCostPrice()}" data-book-selling-price="${book.getSellingPrice()}"
+                            data-book-stocks="${book.getStocks()}" data-book-url-image="${book.getUrlImage()}"
+                            data-book-description="${book.getDescription()}" data-book-publisher="${book.getPublisher().getId()}"
+                            data-book-publish-year="${book.getPublishYear()}" data-book-language="${book.getLanguage()}"
+                            data-book-discount-campaign="${book.getDiscountCampaign() != null ? book.getDiscountCampaign().getCampaignId() : ''}"
+                            data-book-isbn="${book.getIsbn()}" 
+                            onclick="editBook(this)">
                         <i class="fas fa-edit"></i>
                     </button>
                     <button class="btn btn-danger btn-sm" data-book-id="${book.getId()}" onclick="confirmDelete(this)">
@@ -179,18 +189,18 @@
                                   </div>
                                   <div>
                                       <label for="urlImage" class="form-label">Hình ảnh</label>
-                                      <input type="file" class="form-control" id="urlImage" name="urlImage" required accept="image/png, image/jpeg, image/jpg, image/webp" onchange="previewImage(event)">
+                                      <input type="file" class="form-control" id="urlImage" name="urlImage" accept="image/png, image/jpeg, image/jpg, image/webp" onchange="previewImage(event)">
                                   </div>
                               </div>
                               <div class="mb-3">
                                   <label for="description" class="form-label">Mô tả</label>
-                                  <textarea class="form-control" id="description" name="description" rows="3" required></textarea>
+                                  <textarea class="form-control" id="description" name="description" rows="3"></textarea>
                               </div>
                                 <div class="mb-3">
                                     <label for="language" class="form-label">Ngôn ngữ</label>
                                     <select class="form-select" id="language" name="language" required>
-                                        <option value="Tiếng Anh">Tiếng Anh</option>
                                         <option value="Tiếng Việt">Tiếng Việt</option>
+                                        <option value="Tiếng Anh">Tiếng Anh</option>
                                         <option value="Tiếng Pháp">Tiếng Pháp</option>
                                         <option value="Tiếng Đức">Tiếng Đức</option>
                                         <option value="Tiếng Trung Giản Thể">Tiếng Trung Giản Thể</option>
@@ -214,7 +224,8 @@
                               </div>
                               <div class="mb-3">
                                   <label for="discountCampaign" class="form-label">Campaign</label>
-                                  <select class="form-select" id="discountCampaign" name="discountCampaign" required>
+                                  <select class="form-select" id="discountCampaign" name="discountCampaign">
+                                      <option value="">None</option>
                                         <!-- Dynamically load campaigns -->
                                         <c:forEach var="campaign" items="${discountCampaigns}">
                                             <option value="${campaign.getCampaignId()}">${fn:escapeXml(campaign.getCampaignName())}</option>
@@ -250,6 +261,24 @@
                 document.getElementById('deleteBookForm').submit();
             }
         }
+    </script>
+    <script>
+        document.getElementById('addEditBookModal').addEventListener('hidden.bs.modal', function () {
+            document.getElementById('addEditBookForm').reset();
+            document.getElementById('bookId').value = '';
+            document.getElementById('selectedAuthors').innerHTML = '';
+            document.getElementById('selectedCategories').innerHTML = '';
+            document.querySelectorAll('.author-checkbox').forEach(function(checkbox) {
+                checkbox.checked = false;
+            });
+            document.querySelectorAll('.category-checkbox').forEach(function(checkbox) {
+                checkbox.checked = false;
+            });
+            document.getElementById('imagePreview').style.display = 'none';
+            document.getElementById('urlImage').required = true; // Make image required when adding a new book
+            document.getElementById('addEditBookForm').action = 'msbook?action=add';
+            document.getElementById('addEditBookModalLabel').textContent = 'Thêm Sách';
+        });
     </script>
 </body>
 </html>

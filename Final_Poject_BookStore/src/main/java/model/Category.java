@@ -16,14 +16,6 @@ public class Category implements Serializable {
     private String name;
     private String description;
 
-    // @ManyToMany(cascade = CascadeType.ALL)
-    // @JoinTable(
-    //         name = "CategoryDetail",
-    //         joinColumns = @JoinColumn(name = "categoryID"),
-    //         inverseJoinColumns = @JoinColumn(name = "bookID")
-    // )
-    // private Set<Book> books = new HashSet<Book>();
-
     @ManyToMany(mappedBy = "categories", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private Set<Book> books = new HashSet<>();
 
@@ -65,7 +57,7 @@ public class Category implements Serializable {
     }
 
     public Set<Book> getBooks() {
-        return CategoryDB.getInstance().getBooks(this);
+        return books;
     }
 
     public void setBooks(Set<Book> books) {

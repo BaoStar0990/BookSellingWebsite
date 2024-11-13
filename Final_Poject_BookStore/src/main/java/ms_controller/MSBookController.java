@@ -22,6 +22,7 @@ import firebasecloud.FirebaseStorageUploader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @WebServlet(name = "MSBookController", urlPatterns = {"/msbook"})
 @MultipartConfig
@@ -43,6 +44,19 @@ public class MSBookController extends HttpServlet {
         List<Category> categories = CategoryDB.getInstance().selectAll();
         List<Publisher> publishers = PublisherDB.getInstance().selectAll();
         List<DiscountCampaign> discountCampaigns = DiscountCampaignDB.getInstance().selectAll();
+
+        // Prepare JSON strings for authors and categories
+        for (Book book : books) {
+            String authorsJson = book.getAuthors().stream()
+                    .map(a -> String.format("{\"id\": %d, \"name\": \"%s\"}", a.getId(), a.getName()))
+                    .collect(Collectors.joining(", ", "[", "]"));
+            String categoriesJson = book.getCategories().stream()
+                    .map(c -> String.format("{\"id\": %d, \"name\": \"%s\"}", c.getId(), c.getName()))
+                    .collect(Collectors.joining(", ", "[", "]"));
+            book.setAuthorsJson(authorsJson);
+            book.setCategoriesJson(categoriesJson);
+        }
+
         request.setAttribute("books", books);
         request.setAttribute("authors", authors);
         request.setAttribute("categories", categories);
@@ -83,7 +97,7 @@ public class MSBookController extends HttpServlet {
         String description = request.getParameter("description");
         int publisherId = Integer.parseInt(request.getParameter("publisher"));
         int publishYear = Integer.parseInt(request.getParameter("publishYear"));
-        int discountCampaignId = Integer.parseInt(request.getParameter("discountCampaign"));
+        String discountCampaignIdStr = request.getParameter("discountCampaign");
         String language = request.getParameter("language");
         String[] selectedAuthors = request.getParameter("selectedAuthors").split(",");
         String[] selectedCategories = request.getParameter("selectedCategories").split(",");
@@ -96,19 +110,23 @@ public class MSBookController extends HttpServlet {
         String urlImage = FirebaseStorageUploader.uploadImage(inputStream, contentType, fileName);
 
         Publisher publisher = PublisherDB.getInstance().selectByID(publisherId);
-        DiscountCampaign discountCampaign = DiscountCampaignDB.getInstance().selectByID(discountCampaignId);
+        DiscountCampaign discountCampaign = discountCampaignIdStr.isEmpty() ? null : DiscountCampaignDB.getInstance().selectByID(Integer.parseInt(discountCampaignIdStr));
 
         Book book = new Book(bookTitle, description, isbn, costPrice, sellingPrice, stocks, urlImage, publishYear, language, publisher);
         book.setDiscountCampaign(discountCampaign);
 
         for (String authorId : selectedAuthors) {
-            Author author = AuthorDB.getInstance().selectByID(Integer.parseInt(authorId));
-            book.getAuthors().add(author);
+            if (!authorId.isEmpty()) {
+                Author author = AuthorDB.getInstance().selectByID(Integer.parseInt(authorId));
+                book.getAuthors().add(author);
+            }
         }
 
         for (String categoryId : selectedCategories) {
-            Category category = CategoryDB.getInstance().selectByID(Integer.parseInt(categoryId));
-            book.getCategories().add(category);
+            if (!categoryId.isEmpty()) {
+                Category category = CategoryDB.getInstance().selectByID(Integer.parseInt(categoryId));
+                book.getCategories().add(category);
+            }
         }
 
         boolean isInserted = BookDB.getInstance().insert(book);
@@ -123,9 +141,72 @@ public class MSBookController extends HttpServlet {
 
     private void editBook(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        // Logic to edit an existing book
-        // ...code to edit book...
-        processRequest(request, response);
+        int bookId = Integer.parseInt(request.getParameter("bookId"));
+        String bookTitle = request.getParameter("bookTitle");
+        Double costPrice = Double.parseDouble(request.getParameter("costPrice"));
+        Double sellingPrice = Double.parseDouble(request.getParameter("sellingPrice"));
+        int stocks = Integer.parseInt(request.getParameter("stocks"));
+        String isbn = request.getParameter("isbn");
+        String description = request.getParameter("description");
+        int publisherId = Integer.parseInt(request.getParameter("publisher"));
+        int publishYear = Integer.parseInt(request.getParameter("publishYear"));
+        String discountCampaignIdStr = request.getParameter("discountCampaign");
+        String language = request.getParameter("language");
+        String[] selectedAuthors = request.getParameter("selectedAuthors").split(",");
+        String[] selectedCategories = request.getParameter("selectedCategories").split(",");
+
+        // Handle file upload
+        Part filePart = request.getPart("urlImage");
+        String fileName = filePart.getSubmittedFileName();
+        String urlImage = null;
+        if (fileName != null && !fileName.isEmpty()) {
+            InputStream inputStream = filePart.getInputStream();
+            String contentType = filePart.getContentType();
+            urlImage = FirebaseStorageUploader.uploadImage(inputStream, contentType, fileName);
+        }
+
+        Publisher publisher = PublisherDB.getInstance().selectByID(publisherId);
+        DiscountCampaign discountCampaign = discountCampaignIdStr.isEmpty() ? null : DiscountCampaignDB.getInstance().selectByID(Integer.parseInt(discountCampaignIdStr));
+
+        Book book = BookDB.getInstance().selectByID(bookId);
+        book.setTitle(bookTitle);
+        book.setDescription(description);
+        book.setIsbn(isbn);
+        book.setCostPrice(costPrice);
+        book.setSellingPrice(sellingPrice);
+        book.setStocks(stocks);
+        if (urlImage != null) {
+            book.setUrlImage(urlImage);
+        }
+        book.setPublishDate(publishYear);
+        book.setLanguage(language);
+        book.setPublisher(publisher);
+        book.setDiscountCampaign(discountCampaign);
+
+        book.getAuthors().clear();
+        for (String authorId : selectedAuthors) {
+            if (!authorId.isEmpty()) {
+                Author author = AuthorDB.getInstance().selectByID(Integer.parseInt(authorId));
+                book.getAuthors().add(author);
+            }
+        }
+
+        book.getCategories().clear();
+        for (String categoryId : selectedCategories) {
+            if (!categoryId.isEmpty()) {
+                Category category = CategoryDB.getInstance().selectByID(Integer.parseInt(categoryId));
+                book.getCategories().add(category);
+            }
+        }
+
+        boolean isUpdated = BookDB.getInstance().update(book);
+
+        if (isUpdated) {
+            response.sendRedirect(request.getContextPath() + "/msbook");
+        } else {
+            request.setAttribute("errorMessage", "Failed to edit book.");
+            processRequest(request, response);
+        }
     }
 
     private void deleteBook(HttpServletRequest request, HttpServletResponse response)

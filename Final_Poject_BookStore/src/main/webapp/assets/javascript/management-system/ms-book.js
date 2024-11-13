@@ -97,15 +97,6 @@ document.getElementById('addEditBookModal').addEventListener('hidden.bs.modal', 
 });
 
 document.getElementById('addEditBookForm').addEventListener('submit', function(event) {
-    if (document.querySelectorAll('.author-checkbox:checked').length === 0) {
-        alert('Vui lòng chọn ít nhất một tác giả');
-        event.preventDefault();
-    }
-    if (document.querySelectorAll('.category-checkbox:checked').length === 0) {
-        alert('Vui lòng chọn ít nhất một loại sách');
-        event.preventDefault();
-    }
-
     const selectedAuthors = Array.from(document.querySelectorAll('.author-checkbox:checked')).map(cb => cb.value).join(',');
     const selectedCategories = Array.from(document.querySelectorAll('.category-checkbox:checked')).map(cb => cb.value).join(',');
     document.getElementById('selectedAuthorsInput').value = selectedAuthors;
@@ -123,4 +114,59 @@ function previewImage(event) {
         imagePreview.style.display = 'block';
     };
     reader.readAsDataURL(input.files[0]);
+}
+
+function editBook(button) {
+    const bookId = button.getAttribute('data-book-id');
+    const bookTitle = button.getAttribute('data-book-title');
+    const bookAuthors = JSON.parse(button.getAttribute('data-book-authors'));
+    const bookCategories = JSON.parse(button.getAttribute('data-book-categories'));
+    const bookCostPrice = button.getAttribute('data-book-cost-price');
+    const bookSellingPrice = button.getAttribute('data-book-selling-price');
+    const bookStocks = button.getAttribute('data-book-stocks');
+    const bookUrlImage = button.getAttribute('data-book-url-image');
+    const bookDescription = button.getAttribute('data-book-description');
+    const bookPublisher = button.getAttribute('data-book-publisher');
+    const bookPublishYear = button.getAttribute('data-book-publish-year');
+    const bookLanguage = button.getAttribute('data-book-language');
+    const bookDiscountCampaign = button.getAttribute('data-book-discount-campaign');
+    const bookIsbn = button.getAttribute('data-book-isbn');
+
+    document.getElementById('bookId').value = bookId;
+    document.getElementById('bookTitle').value = bookTitle;
+    document.getElementById('costPrice').value = bookCostPrice;
+    document.getElementById('sellingPrice').value = bookSellingPrice;
+    document.getElementById('stocks').value = bookStocks;
+    document.getElementById('isbn').value = bookIsbn;
+    document.getElementById('description').value = bookDescription;
+    document.getElementById('publishYear').value = bookPublishYear;
+    document.getElementById('language').value = bookLanguage;
+    document.getElementById('publisher').value = bookPublisher;
+    document.getElementById('discountCampaign').value = bookDiscountCampaign;
+
+    // Set authors
+    document.getElementById('selectedAuthors').innerHTML = '';
+    bookAuthors.forEach(author => {
+        document.getElementById(`author${author.id}`).checked = true;
+        createTag(`author${author.id}`, author.name, 'selectedAuthors');
+    });
+
+    // Set categories
+    document.getElementById('selectedCategories').innerHTML = '';
+    bookCategories.forEach(category => {
+        document.getElementById(`category${category.id}`).checked = true;
+        createTag(`category${category.id}`, category.name, 'selectedCategories');
+    });
+
+    // Set image preview
+    if (bookUrlImage) {
+        const imagePreview = document.getElementById('imagePreview');
+        imagePreview.src = bookUrlImage;
+        imagePreview.style.display = 'block';
+    }
+
+    // Set form action to edit
+    document.getElementById('addEditBookForm').action = 'msbook?action=edit';
+    document.getElementById('addEditBookModalLabel').textContent = 'Chỉnh sửa thông tin sách';
+    document.getElementById('urlImage').required = false; // Make image optional when editing a book
 }

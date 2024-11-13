@@ -91,7 +91,7 @@
                     </li>
 
                     <li id="danhmuc" class="nav-item dropdown">
-                        <a class="nav-link active dropdown-toggle " href="/category/all">Sách</a>
+                        <a class="nav-link dropdown-toggle ${param.currentTab eq '/category/all' ? 'active' : ''}" href="/category/all">Danh mục sách</a>
                         <ul id="dropdowns" class="dropdown-menu mx-auto multi-column columns-3 dropdown-menu-center">
                             <%--attribute : categories List<Category>--%>
                             <c:set var = "count" scope = "request" value = "${4}"/>

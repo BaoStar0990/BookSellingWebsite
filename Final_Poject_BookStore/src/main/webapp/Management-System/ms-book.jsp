@@ -41,7 +41,7 @@
         </div>
       </div>
       <div class="table-responsive border border-2 p-2" style="max-height: 75%; overflow: auto;">
-        <table class="table table-bordered" style="min-width: 1500px;">
+        <table class="table table-bordered" style="min-width: 2500px;">
           <thead>
           <tr>
             <th>Action</th>
@@ -85,16 +85,20 @@
                     </button>
                 </td>
               <td>${fn:escapeXml(book.getId())}</td>
-              <td>${fn:escapeXml(book.getTitle())}</td>
-              <td>
-                <c:forEach var="author" items="${book.getAuthors()}" varStatus="status">
-                  ${fn:escapeXml(author.getName())}<c:if test="${!status.last}">, </c:if>
-                </c:forEach>
+              <td style="min-width: 200px;">${fn:escapeXml(book.getTitle())}</td>
+              <td  style="min-width: 200px;">
+                <ul>
+                    <c:forEach var="author" items="${book.getAuthors()}">
+                        <li>${fn:escapeXml(author.getName())}</li>
+                    </c:forEach>
+                </ul>
               </td>
-              <td>
-                <c:forEach var="category" items="${book.getCategories()}" varStatus="status">
-                  ${fn:escapeXml(category.getName())}<c:if test="${!status.last}">, </c:if>
-                </c:forEach>
+              <td  style="min-width: 200px;">
+                <ul>
+                  <c:forEach var="category" items="${book.getCategories()}">
+                    <li>${fn:escapeXml(category.getName())}</li>
+                  </c:forEach>
+                </ul>
               </td>
               <td>${fn:escapeXml(book.getCostPrice())}</td>
               <td>${fn:escapeXml(book.getSellingPrice())}</td>
@@ -102,10 +106,20 @@
               <td><img src="${fn:escapeXml(book.getUrlImage())}" alt="Book Image" style="width: 100px;"></td>
               <td>${fn:escapeXml(book.getDescription())}</td>
               <td>${fn:escapeXml(book.getPublisher().getName())}</td>
-              <td>${fn:escapeXml(book.getPublishYear())}</td>
+              <td style="min-width: 100px;">${fn:escapeXml(book.getPublishYear())}</td>
               <td>${fn:escapeXml(book.getLanguage())}</td>
               <td>${fn:escapeXml(book.getReviews().size())}</td>
-              <td>${fn:escapeXml(book.getDiscountCampaign() != null ? book.getDiscountCampaign().getCampaignName(): "N/A")}</td>
+              <td>
+                <c:choose>
+                  <c:when test="${book.getDiscountCampaign() != null}">
+                    ${fn:escapeXml(book.getDiscountCampaign().getCampaignName())} 
+                    (<fmt:formatNumber value="${book.getDiscountCampaign().getPercentDiscount()}" type="number" minFractionDigits="0" maxFractionDigits="2"/>%)
+                  </c:when>
+                  <c:otherwise>
+                    N/A
+                  </c:otherwise>
+                </c:choose>
+              </td>
               <td>${fn:escapeXml(book.getIsbn())}</td>
             </tr>
           </c:forEach>
@@ -275,7 +289,7 @@
                 checkbox.checked = false;
             });
             document.getElementById('imagePreview').style.display = 'none';
-            document.getElementById('urlImage').required = true; // Make image required when adding a new book
+            document.getElementById('urlImage').required = true;
             document.getElementById('addEditBookForm').action = 'msbook?action=add';
             document.getElementById('addEditBookModalLabel').textContent = 'Thêm Sách';
         });

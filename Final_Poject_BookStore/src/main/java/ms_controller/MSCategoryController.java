@@ -17,10 +17,15 @@ public class MSCategoryController extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        //          if(request.getSession().getAttribute("admin") == null) {
+//            response.sendRedirect("signin.jsp");
+//            return;
+//        }
         HttpSession session = req.getSession();
 
         if (session.getAttribute("categories") == null) {
             List<Category> categories = CategoryDB.getInstance().selectAll();
+            categories.sort((c1, c2) -> Integer.compare(c2.getId(), c1.getId()));
             session.setAttribute("categories", categories);
         }
 

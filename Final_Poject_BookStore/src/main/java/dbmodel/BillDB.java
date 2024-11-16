@@ -38,5 +38,8 @@ public class BillDB extends ModifyDB<Bill> implements DBInterface<Bill> {
         }
     }
     
+    public boolean update(Bill bill) {
+        return super.update(bill);
+    }
     
 }

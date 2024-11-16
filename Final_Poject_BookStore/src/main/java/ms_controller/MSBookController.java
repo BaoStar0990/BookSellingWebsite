@@ -31,6 +31,11 @@ public class MSBookController extends HttpServlet {
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+
+//          if(request.getSession().getAttribute("admin") == null) {
+//            response.sendRedirect("signin.jsp");
+//            return;
+//        }
         request.setCharacterEncoding("UTF-8");
         response.setContentType("text/html; charset=UTF-8");
         response.setCharacterEncoding("UTF-8");
@@ -39,7 +44,7 @@ public class MSBookController extends HttpServlet {
 
         if (session.getAttribute("books") == null) {
             List<Book> books = BookDB.getInstance().selectAll();
-            books.sort((b1, b2) -> Integer.compare(b2.getId(), b1.getId())); // Sort in descending order by ID
+            books.sort((b1, b2) -> Integer.compare(b2.getId(), b1.getId()));
             session.setAttribute("books", books);
         }
 

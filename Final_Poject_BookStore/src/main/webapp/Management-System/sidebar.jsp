@@ -7,8 +7,7 @@
   tabs.put("dashboard", new String[]{"Tổng quan", "fa-gauge", "#"});
   tabs.put("book", new String[]{"Sách", "fa-book", String.format("%s/msbook", pageContext.getServletContext().getContextPath())});
   tabs.put("category", new String[]{"Danh mục sách", "fa-layer-group", String.format("%s/mscategory", pageContext.getServletContext().getContextPath())});
-  tabs.put("order", new String[]{"Đơn hàng", "fa-box", "/MSOrderController"});
-  tabs.put("bill", new String[]{"Hóa đơn", "fa-receipt", "/MSBillController"});
+  tabs.put("orderdetail", new String[]{"Đơn hàng", "fa-box",  String.format("%s/msorder", pageContext.getServletContext().getContextPath())});
   tabs.put("customer", new String[]{"Khách hàng", "fa-user", String.format("%s/ms_customer", pageContext.getServletContext().getContextPath())});
   tabs.put("campaign", new String[]{"Chiến dịch", "fa-tags", String.format("%s/ms_campaign", pageContext.getServletContext().getContextPath())});
   tabs.put("review", new String[]{"Đánh giá", "fa-message", String.format("%s/ms_review", pageContext.getServletContext().getContextPath())});

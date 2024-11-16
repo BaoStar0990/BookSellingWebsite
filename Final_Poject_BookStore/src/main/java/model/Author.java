@@ -9,7 +9,7 @@ import java.util.Set;
 import dbmodel.AuthorDB;
 
 @Entity
-@Table(name="author")
+@Table(name="Author")
 public class Author implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

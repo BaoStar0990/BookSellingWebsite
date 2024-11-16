@@ -1,14 +1,14 @@
 package model;
 
-import dbmodel.BillDB;
 import dbmodel.CustomerDB;
 import jakarta.persistence.*;
 
 import java.io.Serializable;
-import java.time.LocalDate;
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Entity
 @Table(name="Customer")
@@ -73,9 +73,12 @@ public class Customer extends User implements Serializable {
     public boolean makeAnOrder(Bill cart){
         return CustomerDB.getInstance().makeAnOrder(cart, this);
     }
-    // chức năng thêm vào giỏ hàng
-    public boolean addToCart(OrderDetail orderDetail){
-        
-        return true;
+    
+    // chức năng xem các đơn hàng đã đặt
+    public List<Bill> getOrders(){
+        return this.getBills().stream()
+                    .filter(b -> !("Storing".equals(b.getStatusOrder().toString())))
+                    .sorted(Comparator.comparingInt(Bill::getId))
+                    .collect(Collectors.toList());
     }
 }

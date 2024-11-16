@@ -5,20 +5,22 @@
 
   <!-- Address List -->
   <div class="row">
-    <c:forEach var="i" begin="1" end="3">
+    <c:forEach var="address" items="${sessionScope.user.getAddresses()}">
       <div class="col-12 mb-3">
         <div class="card p-3 shadow-sm h-100">
           <div class="d-flex justify-content-between align-items-center mb-2">
             <p class="mb-0">
-              <strong>Họ tên:</strong> <span class="me-3">Vũ Xuân Quang</span>
-              <c:if test="${i == 1}"> <!-- Check if this is the default address -->
+              <strong>Họ tên:</strong> <span class="me-3">${address.getFullName()}</span>
+              <c:if test="${address.isDefaultAddress()}"> <!-- Check if this is the default address -->
                   <span class="text-success d-block d-md-inline-block mt-1 mt-md-0">
                       <i class="fas fa-check-circle mb-1 me-2"></i> Địa chỉ thanh toán mặc định
                   </span>
               </c:if>
             </p>
             <div class="d-flex align-items-center">
-              <a href="#" class="text-primary me-2" data-bs-toggle="modal" data-bs-target="#addressModal" onclick="setModalForEdit(${i})">
+              <a href="#" class="text-primary me-2" data-bs-toggle="modal"
+                 data-bs-target="#addressModal" 
+                 onclick="setModalForEdit('<c:out value="${address.createJson()}" />')">
                 <i class="fas fa-edit mb-1"></i>
               </a>
               <a href="" class="text-primary">
@@ -26,9 +28,9 @@
               </a>
             </div>
           </div>
-          <p class="mb-2"><strong>Địa chỉ:</strong> 1 Võ Văn Ngân, Phường Linh Chiểu, Thành phố Thủ Đức , Thành phố Hồ Chí Minh , Việt Nam</p>
-          <p class="mb-1"><strong>Số điện thoại:</strong> 0912345678</p>
-          <c:if test="${i != 1}"> <!-- Check if this is not the default address -->
+          <p class="mb-2"><strong>Địa chỉ:</strong>${address.toString()}</p>
+          <p class="mb-1"><strong>Số điện thoại:</strong>${address.getPhonenumber()}</p>
+          <c:if test="${!address.isDefaultAddress()}"> <!-- Check if this is not the default address -->
             <form action="" method="post" class="d-inline my-1">
               <input type="hidden" name="id" value="" />
               <a type="submit" class="text-primary text-decoration-none mb-0 p-0">
@@ -42,7 +44,8 @@
   </div>
 
   <!-- Button to trigger modal for adding new address -->
-  <button type="button" class="primary-btn mt-2" data-bs-toggle="modal" data-bs-target="#addressModal" onclick="setModalForAdd()">
+  <button type="button" class="primary-btn mt-2" data-bs-toggle="modal" 
+          data-bs-target="#addressModal" onclick="setModalForAdd()">
     Thêm địa chỉ
   </button>
 
@@ -51,6 +54,7 @@
     <div class="modal-dialog modal-lg"> <!-- Modal enlarged with modal-lg class -->
       <div class="modal-content">
         <form action="" method="post" id="addressForm">
+            <input type="hidden" name="action" id ="action" value ="">
           <div class="modal-header">
             <h5 class="modal-title fs-semibold" id="addressModalLabel">Thêm địa chỉ giao hàng</h5>
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -111,7 +115,8 @@
 <script>
   // JavaScript to handle Add/Edit modal functionality
   function setModalForAdd() {
-    document.getElementById("addressForm").action = "";
+    document.getElementById("action").value = "add";
+    alert("bbbbb");
     document.getElementById("addressModalLabel").innerText = "Thêm địa chỉ giao hàng";
     document.getElementById("name").value = "";
     document.getElementById("phone").value = "";
@@ -121,13 +126,20 @@
     $("#quan, #phuong").html('<option value="0">Quận Huyện</option><option value="0">Phường Xã</option>'); // Reset district and ward
   }
 
-  function setModalForEdit(id) {
-    document.getElementById("addressForm").action = "";
+  function setModalForEdit(valueJson) {
+    // lấy address
+    var address = JSON.parse(valueJson);
+         
+    document.getElementById("action").value = "edit";
     document.getElementById("addressModalLabel").innerText = "Chỉnh sửa địa chỉ giao hàng";
-    document.getElementById("name").value = "Vũ Xuân Quang";
-    document.getElementById("phone").value = "0912345678";
-    document.getElementById("addressDetail").value = "1 Võ Văn Ngân, Phường Linh Chiểu, Thành phố Thủ Đức, Thành phố Hồ Chí Minh, Việt Nam";
-    document.getElementById("addressId").value = id;
+    document.getElementById("name").value = address.fullName;
+    document.getElementById("phone").value = address.phonenumber;
+    // set các giá trị options địa chỉ
+    document.getElementById("addressDetail").value = address.street;
+    setLocationByNames(address.province, address.district, address.ward);
+    
+    document.getElementById("addressDetail").value = address.street + ", " + address.ward + ", " + address.district + ", " + address.province;
+    document.getElementById("addressId").value = address.id;
     loadProvinces(); // Load province data for edit
   }
 </script>

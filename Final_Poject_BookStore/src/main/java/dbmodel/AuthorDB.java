@@ -116,8 +116,6 @@ public class AuthorDB extends ModifyDB<Author> implements DBInterface<Author> {
             for(Book b : entity.getBooks()){
                 for(Author a : b.getAuthors())
                     b.getAuthors().remove(a);
-                for(Category c : b.getCategories())    
-                    b.getCategories().remove(c);
                 
                 if(!BookDB.getInstance().update(b)){
                     tr.rollback();

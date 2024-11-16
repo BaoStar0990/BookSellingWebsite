@@ -65,6 +65,7 @@ public abstract class ModifyDB<T> {
             return true;
         }
          catch(Exception ex){
+             ex.printStackTrace();
             if(tr != null && tr.isActive())
                 tr.rollback();
             return false;

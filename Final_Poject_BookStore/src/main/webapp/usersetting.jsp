@@ -48,7 +48,7 @@
                 <!-- Greeting Section -->
                 <div class="col-12 mb-3">
                     <h5 class="greeting fw-semibold">
-                        Xin chào <span class="text-primary">${user.username}</span>!
+                        Xin chào <span class="text-primary">${sessionScope.user.username}</span>!
                     </h5>
                 </div>
                 <ul class="list-group fw-semibold">
@@ -72,6 +72,7 @@
                     </c:when>
                     <c:when test="${param.setting == 'orders'}">
                         <%@ include file="WEB-INF/views/customers/orders.jsp" %>
+                        <%--<c:redirect url="/ordercustomer" />--%>
                     </c:when>
                     <c:when test="${param.setting == 'address'}">
                         <%@ include file="WEB-INF/views/customers/address.jsp" %>

@@ -1,3 +1,7 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@page import="model.Bill"%>
+<%@page import="java.util.List"%>
+<%@page import="java.util.stream.Collectors"%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <h4 class="mb-3 fw-semibold">Đơn hàng của bạn</h4>
@@ -12,13 +16,21 @@
   </tr>
   </thead>
   <tbody>
-  <c:forEach var="i" begin="1" end="5">
+      <!--lấy các đơn hàng của khách hàng-->
+      
+  <c:forEach var="order" items = "${sessionScope.user.getOrders()}">
     <tr>
-      <td>DH001</td>
-      <td>28/10/2024</td>
-      <td>9999999</td>
-      <td>COD</td>
-      <td>Giao Thành Công</td>
+      <td>${order.getId()}</td>
+      <td>${order.getOrderDate()}</td>
+      <c:set var = "total" value = "0"/>
+          <c:forEach var="orderDetail" items="${order.getOrderDetails()}">
+              <c:set var="total" value="${totalCost + orderDetail.getBook().sellingPrice*(1 - orderDetail.getBook()
+                                                           .getDiscountCampaign()
+                                                           .getPercentDiscount()) * orderDetail.getQuantity()}"/>
+          </c:forEach>
+      <td>${total}đ</td>
+      <td>${order.getPaymentMethod()}</td>
+      <td>${order.getStatusOrder()}</td>
     </tr>
   </c:forEach>
   </tbody>

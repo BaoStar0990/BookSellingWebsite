@@ -190,27 +190,49 @@ public class BookDB extends ModifyDB<Book> implements DBInterface<Book> {
         }
     }
 
-    public boolean delete(int bookId) {
+    @Override
+    public boolean delete(Object id, Class<Book> entityClass){
         EntityManager em = null;
         EntityTransaction tr = null;
-        try {
+        try{
             em = DBUtil.getEmFactory().createEntityManager();
             tr = em.getTransaction();
             tr.begin();
-
-            Book book = em.find(Book.class, bookId);
-            if (book != null) {
-                em.remove(book);
+            // chuyển thực thể sang trạng thái persistent
+            Book entity = em.find(entityClass, id);
+            // xóa author khỏi book và book khỏi author
+            for(Author a : entity.getAuthors()){
+                for(Book b : a.getBooks())
+                    a.getBooks().remove(b);
+                
+                if(!AuthorDB.getInstance().update(a)){
+                    tr.rollback();
+                    return false;
+                }
             }
-
+            // xóa category khỏi book và book khỏi category
+            for(Category c : entity.getCategories()){
+                for(Book b : c.getBooks())
+                    c.getBooks().remove(b);
+                
+                if(!CategoryDB.getInstance().update(c)){
+                    tr.rollback();
+                    return false;
+                }
+            }
+            // xóa thực thể
+            em.remove(entity);
             tr.commit();
             return true;
-        } catch (Exception ex) {
-            if (tr != null && tr.isActive()) tr.rollback();
-            ex.printStackTrace();
+        }
+         catch(Exception ex){
+            if(tr != null && tr.isActive())
+                tr.rollback();
             return false;
-        } finally {
-            if (em != null) em.close();
+        }
+        finally{
+            if(em != null)
+                em.close();
         }
     }
 }

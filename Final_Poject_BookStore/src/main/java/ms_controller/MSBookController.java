@@ -237,17 +237,17 @@ public class MSBookController extends HttpServlet {
     private void deleteBook(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         int bookId = Integer.parseInt(request.getParameter("bookId"));
-        boolean isDeleted = BookDB.getInstance().delete(bookId);
-
-        if (isDeleted) {
-            HttpSession session = request.getSession();
-            List<Book> books = BookDB.getInstance().selectAll();
-            session.setAttribute("books", books);
-            response.sendRedirect(request.getContextPath() + "/msbook");
-        } else {
-            request.setAttribute("errorMessage", "Failed to delete book.");
-            processRequest(request, response);
-        }
+//        boolean isDeleted = BookDB.getInstance().delete(bookId);
+//
+//        if (isDeleted) {
+//            HttpSession session = request.getSession();
+//            List<Book> books = BookDB.getInstance().selectAll();
+//            session.setAttribute("books", books);
+//            response.sendRedirect(request.getContextPath() + "/msbook");
+//        } else {
+//            request.setAttribute("errorMessage", "Failed to delete book.");
+//            processRequest(request, response);
+//        }
     }
 
 }

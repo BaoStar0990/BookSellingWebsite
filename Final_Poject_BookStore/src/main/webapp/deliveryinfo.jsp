@@ -240,7 +240,7 @@
             var phuongName = $("#phuong option:selected").text();
             selectedText =  soNha + ", " + phuongName + ", " + quanName + ", " + tinhName;
         }
-        alert(selectedText);
+//        alert(selectedText);
         document.getElementById("addressSelected").value = selectedText;
     }
     function submitForms() {

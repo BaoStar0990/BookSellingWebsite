@@ -9,35 +9,46 @@ public class Address implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+    private String fullName;
+    private String phonenumber;
     private String street;
     private String province;
     private String ward;
     private String district;
+    private boolean defaultAddress;
 
     //Với bảng customer
     @ManyToOne()
     @JoinColumn(name = "customerID")
     private Customer customer;
 
-    public Address(int id, String street, String province, 
-            String ward, String district, Customer customer) {
+    public Address(int id, String fullName, String phonenumber,
+            String street, String province, String ward, String district, 
+            boolean defaultAddress, Customer customer) {
         this.id = id;
+        this.fullName = fullName;
+        this.phonenumber = phonenumber;
         this.street = street;
         this.province = province;
         this.ward = ward;
         this.district = district;
+        this.defaultAddress = defaultAddress;
         this.customer = customer;
     }
 
-    
-    public Address(String street, String province, 
-            String ward, String district, Customer customer) {
+    public Address(String fullName, String phonenumber, String street,
+            String province, String ward, String district, 
+            boolean defaultAddress, Customer customer) {
+        this.fullName = fullName;
+        this.phonenumber = phonenumber;
         this.street = street;
         this.province = province;
         this.ward = ward;
         this.district = district;
+        this.defaultAddress = defaultAddress;
         this.customer = customer;
     }
+
     public Address() {
 
     }
@@ -81,9 +92,39 @@ public class Address implements Serializable {
         this.customer = customer;
     }
 
+    public String getFullName() {
+        return fullName;
+    }
+
+    public String getPhonenumber() {
+        return phonenumber;
+    }
+
+    public boolean isDefaultAddress() {
+        return defaultAddress;
+    }
+
+    
+
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
+    }
+
+    public void setPhonenumber(String phonenumber) {
+        this.phonenumber = phonenumber;
+    }
+
+    public void setDefaultAddress(boolean defaultAddress) {
+        this.defaultAddress = defaultAddress;
+    }
+
+    
+    
     public String createJson() {
         return "{"
                 + "\"id\":" + id + ","
+                + "\"fullName\":\"" + fullName + "\","
+                + "\"phonenumber\":\"" + phonenumber + "\","
                 + "\"street\":\"" + street + "\","
                 + "\"ward\":\"" + ward + "\","
                 + "\"district\":\"" + district + "\","

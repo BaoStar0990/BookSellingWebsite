@@ -104,33 +104,40 @@ public class CategoryDB extends ModifyDB<Category> implements DBInterface<Catego
         } 
     }
     
-    public boolean insert(Category category) {
-        return super.insert(category);
-    }
 
-    public boolean update(Category category) {
-        return super.update(category);
-    }
-
-    public boolean delete(int id) {
-        try (EntityManager em = DBUtil.getEmFactory().createEntityManager()) {
-            EntityTransaction tr = em.getTransaction();
-            try {
-                tr.begin();
-                Category category = em.find(Category.class, id);
-                if (category != null) {
-                    em.remove(category);
-                    tr.commit();
-                    return true;
-                }
-                return false;
-            } catch (Exception ex) {
-                if (tr.isActive()) {
+    @Override
+    public boolean delete(Object id, Class<Category> entityClass){
+        EntityManager em = null;
+        EntityTransaction tr = null;
+        try{
+            em = DBUtil.getEmFactory().createEntityManager();
+            tr = em.getTransaction();
+            tr.begin();
+            // chuyển thực thể sang trạng thái persistent
+            Category entity = em.find(entityClass, id);
+            // xóa author khỏi book và book khỏi author
+            for(Book b : entity.getBooks()){
+                for(Category c : b.getCategories())
+                    b.getCategories().remove(c);
+                
+                if(!BookDB.getInstance().update(b)){
                     tr.rollback();
+                    return false;
                 }
-                ex.printStackTrace();
-                return false;
             }
+            // xóa thực thể
+            em.remove(entity);
+            tr.commit();
+            return true;
+        }
+         catch(Exception ex){
+            if(tr != null && tr.isActive())
+                tr.rollback();
+            return false;
+        }
+        finally{
+            if(em != null)
+                em.close();
         }
     }
      

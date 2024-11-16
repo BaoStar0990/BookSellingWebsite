@@ -46,6 +46,7 @@ test\TestMail.class
 controller\ForgotPasswordController.class
 model\Review.class
 dbmodel\CustomerDB.class
+controller\ModifyAddressController.class
 test\TestCategory.class
 controller\BookListController.class
 controller\AddBookController.class

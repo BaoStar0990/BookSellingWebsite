@@ -73,7 +73,6 @@ public class PublisherDB extends ModifyDB<Publisher> implements DBInterface<Publ
             // set null cho publisher, campaign
             for(Book b : entity.getBooks()){
                 b.setPublisher(null);
-                b.setDiscountCampaign(null);
                 if(!BookDB.getInstance().update(b)){
                     tr.rollback();
                     return false;

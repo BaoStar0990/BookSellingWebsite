@@ -43,7 +43,7 @@ public class MSCategoryController extends HttpServlet {
                     break;
                 }
                 case "delete": {
-                    CategoryDB.getInstance().delete(Integer.parseInt(req.getParameter("id")));
+//                    CategoryDB.getInstance().delete(Integer.parseInt(req.getParameter("id")));
                     break;
                 }
             }

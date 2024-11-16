@@ -72,8 +72,8 @@ public class MSBookController extends HttpServlet {
             String categoriesJson = book.getCategories().stream()
                     .map(c -> String.format("{\"id\": %d, \"name\": \"%s\"}", c.getId(), c.getName()))
                     .collect(Collectors.joining(", ", "[", "]"));
-            book.setAuthorsJson(authorsJson);
-            book.setCategoriesJson(categoriesJson);
+//            book.setAuthorsJson(authorsJson);
+//            book.setCategoriesJson(categoriesJson);
         }
 
         request.setAttribute("books", books);

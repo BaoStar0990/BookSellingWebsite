@@ -34,20 +34,23 @@ public class TestBook {
 //            System.out.println(r.getRate() + " " + r.getDescription() +
 //                    " " + r.getCustomer().getFullName());
 //        }
-        Publisher P2 = PublisherDB.getInstance().selectByID(2);
-        Author a = AuthorDB.getInstance().selectByID(3);
-        Category c = CategoryDB.getInstance().selectByID(2);
-        Book newBook = new Book("acbs", "abs", "01567", 4.5, 3.5, 12, "adv", 4, "TV", P2);
-        if(BookDB.getInstance().insert(newBook)){
-            if(AuthorDB.getInstance().addBook(a, newBook)){
-                System.out.println("Thêm tác giả thành công");
-            }
-            if(CategoryDB.getInstance().addBook(c, newBook)){
-                System.out.println("Thêm thể loại thành công");
-            }
-        }
-        else{
-            System.out.println("Lỗi chèn sách");
-        }
+//        Publisher P2 = PublisherDB.getInstance().selectByID(2);
+//        Author a = AuthorDB.getInstance().selectByID(3);
+//        Category c = CategoryDB.getInstance().selectByID(2);
+//        Book newBook = new Book("acbs", "abs", "01567", 4.5, 3.5, 12, "adv", 4, "TV", P2);
+//        if(BookDB.getInstance().insert(newBook)){
+//            if(AuthorDB.getInstance().addBook(a, newBook)){
+//                System.out.println("Thêm tác giả thành công");
+//            }
+//            if(CategoryDB.getInstance().addBook(c, newBook)){
+//                System.out.println("Thêm thể loại thành công");
+//            }
+//        }
+//        else{
+//            System.out.println("Lỗi chèn sách");
+//        }
+        
+        Book b = BookDB.getInstance().selectByID(66);
+        BookDB.getInstance().delete(b.getId(), Book.class);
     }
 }

@@ -1,6 +1,5 @@
 package model;
 
-import dbmodel.AuthorDB;
 import dbmodel.BookDB;
 import jakarta.persistence.*;
 
@@ -24,8 +23,6 @@ public class Book implements Serializable {
     private int publishYear;
     private String language;
 
-    private String authorsJson;
-    private String categoriesJson;
 
     @OneToMany(mappedBy = "book", cascade = CascadeType.REMOVE)
     private Set<Review> reviews;
@@ -47,7 +44,7 @@ public class Book implements Serializable {
     private Set<Category> categories = new HashSet<>();
 
     @ManyToOne
-    @JoinColumn(name="publisherID")
+    @JoinColumn(name="publisherID", nullable = true)
     private Publisher publisher;
 
     @OneToMany(mappedBy = "book")
@@ -229,19 +226,5 @@ public class Book implements Serializable {
         this.categories = categories;
     }
 
-    public String getAuthorsJson() {
-        return authorsJson;
-    }
-
-    public void setAuthorsJson(String authorsJson) {
-        this.authorsJson = authorsJson;
-    }
-
-    public String getCategoriesJson() {
-        return categoriesJson;
-    }
-
-    public void setCategoriesJson(String categoriesJson) {
-        this.categoriesJson = categoriesJson;
-    }
+    
 }

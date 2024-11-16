@@ -60,7 +60,7 @@ public class MSOrderController extends HttpServlet {
                     break;
                 }
                 case "delete": {
-                    OrderDetailDB.getInstance().delete(Integer.parseInt(req.getParameter("id")));
+                    // OrderDetailDB.getInstance().delete(Integer.parseInt(req.getParameter("id")));
                     break;
                 }
                 case "approve": {

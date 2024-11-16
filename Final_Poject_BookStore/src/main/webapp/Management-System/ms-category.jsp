@@ -40,7 +40,7 @@
   <main class="content" style="margin-left: 250px; padding: 20px;">
     <div class="container fw-medium">
       <div class="row mb-3">
-        <div class="col-md-4 d-flex flex-colum">
+        <div class="col-md-4 d-flex flex-column">
           <input type="text" class="form-control fw-medium" id="searchBox" placeholder="Search categories...">
         </div>
         <div class="col-md-8 d-flex justify-content-end">

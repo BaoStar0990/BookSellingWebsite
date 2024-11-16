@@ -17,44 +17,61 @@ public class Book implements Serializable {
     @Lob
     private String description;
     private String Isbn;
-    private Double costPrice; // ?
-    private Double sellingPrice; // ?
+    private Double costPrice;
+    private Double sellingPrice;
     private int stocks;
     private String urlImage;
-    
     private int publishYear;
     private String language;
 
-    //hibernate, xóa sách thì xóa reviews
+    private String authorsJson;
+    private String categoriesJson;
+
     @OneToMany(mappedBy = "book", cascade = CascadeType.REMOVE)
-    private Set<Review> reviews; 
+    private Set<Review> reviews;
 
-    //hibernate, xóa sách không xóa tác giả, chèn và cập nhật sách thì cập nhật bên tác giả
-    @ManyToMany(mappedBy = "books", fetch = FetchType.EAGER, 
-            cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-    private Set<Author> authors;
+    @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @JoinTable(
+        name = "AuthorDetail",
+        joinColumns = @JoinColumn(name = "bookID"),
+        inverseJoinColumns = @JoinColumn(name = "authorID")
+    )
+    private Set<Author> authors = new HashSet<>();
 
-    //Many Category, xóa sách không xóa thể loại
-    @ManyToMany(mappedBy = "books", fetch = FetchType.EAGER,
-            cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-    private Set<Category> categories;
+    @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @JoinTable(
+        name = "CategoryDetail",
+        joinColumns = @JoinColumn(name = "bookID"),
+        inverseJoinColumns = @JoinColumn(name = "categoryID")
+    )
+    private Set<Category> categories = new HashSet<>();
 
-    //one Publisher, xóa sách không xóa nhà xuất bản
-    @ManyToOne()
+    @ManyToOne
     @JoinColumn(name="publisherID")
     private Publisher publisher;
 
-    //many orderdetail
     @OneToMany(mappedBy = "book")
     private Set<OrderDetail> orderDetails;
 
-    //many discount detail
-    @ManyToOne()
-    @JoinColumn(name = "campaignID")
+    @ManyToOne
+    @JoinColumn(name = "campaignID", nullable = true)
     private DiscountCampaign discountCampaign;
-    public Book() {
 
+    public Book() {}
+
+    public Book(String title, String description, String Isbn, Double costPrice, Double sellingPrice, int stocks, String urlImage, int publishYear, String language, Publisher publisher) {
+        this.title = title;
+        this.description = description;
+        this.Isbn = Isbn;
+        this.costPrice = costPrice;
+        this.sellingPrice = sellingPrice;
+        this.stocks = stocks;
+        this.urlImage = urlImage;
+        this.publishYear = publishYear;
+        this.language = language;
+        this.publisher = publisher;
     }
+
     public Book(String title, Publisher publisher, 
             int bookID, String description, String isbn, Double costPrice, 
             Double sellingPrice, int stocks, String urlImage, 
@@ -70,24 +87,8 @@ public class Book implements Serializable {
         this.urlImage = urlImage;
         this.publishYear = publishYear;
         this.language = language;
-
     }
 
-    public Book(String title, String description, String Isbn, 
-            Double costPrice, Double sellingPrice, int stocks, String urlImage, 
-            int publishYear, String language, Publisher publisher) {
-        this.title = title;
-        this.description = description;
-        this.Isbn = Isbn;
-        this.costPrice = costPrice;
-        this.sellingPrice = sellingPrice;
-        this.stocks = stocks;
-        this.urlImage = urlImage;
-        this.publishYear = publishYear;
-        this.language = language;
-        this.publisher = publisher;
-    }
-    
     public String getTitle() {
         return title;
     }
@@ -219,5 +220,28 @@ public class Book implements Serializable {
         int hash = 7;
         hash = 47 * hash + this.bookID;
         return hash;
+    }
+    public void setAuthors(Set<Author> authors) {
+        this.authors = authors;
+    }
+
+    public void setCategories(Set<Category> categories) {
+        this.categories = categories;
+    }
+
+    public String getAuthorsJson() {
+        return authorsJson;
+    }
+
+    public void setAuthorsJson(String authorsJson) {
+        this.authorsJson = authorsJson;
+    }
+
+    public String getCategoriesJson() {
+        return categoriesJson;
+    }
+
+    public void setCategoriesJson(String categoriesJson) {
+        this.categoriesJson = categoriesJson;
     }
 }

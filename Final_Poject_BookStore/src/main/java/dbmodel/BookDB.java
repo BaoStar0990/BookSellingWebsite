@@ -3,13 +3,17 @@ package dbmodel;
 import database.DBUtil;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.NoResultException;
+
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+
+import model.Author;
 import model.Book;
 import model.Category;
 import model.Review;
 import org.hibernate.TransientObjectException;
+import jakarta.persistence.EntityTransaction;
 
 public class BookDB extends ModifyDB<Book> implements DBInterface<Book> {
     public static BookDB getInstance(){
@@ -62,5 +66,151 @@ public class BookDB extends ModifyDB<Book> implements DBInterface<Book> {
         catch(Exception ex){
             return null;
         } 
+    }
+
+    @Override
+    public boolean insert(Book book) {
+        EntityManager em = null;
+        EntityTransaction tr = null;
+        try {
+            em = DBUtil.getEmFactory().createEntityManager();
+            tr = em.getTransaction();
+            tr.begin();
+
+            // Manage authors
+            Set<Author> managedAuthors = new HashSet<>();
+            for (Author author : book.getAuthors()) {
+                Author managedAuthor = em.find(Author.class, author.getId());
+                if (managedAuthor != null) {
+                    managedAuthor.getBooks().add(book);
+                    managedAuthors.add(managedAuthor);
+                } else {
+                    managedAuthor = em.merge(author);
+                    managedAuthors.add(managedAuthor);
+                }
+            }
+            book.setAuthors(managedAuthors);
+
+            // Manage categories
+            Set<Category> managedCategories = new HashSet<>();
+            for (Category category : book.getCategories()) {
+                Category managedCategory = em.find(Category.class, category.getId());
+                if (managedCategory != null) {
+                    managedCategory.getBooks().add(book);
+                    managedCategories.add(managedCategory);
+                } else {
+                    managedCategory = em.merge(category);
+                    managedCategories.add(managedCategory);
+                }
+            }
+            book.setCategories(managedCategories);
+
+            // Persist the book itself
+            em.persist(book);
+
+            tr.commit();
+            return true;
+        } catch (Exception ex) {
+            if (tr != null && tr.isActive())
+                tr.rollback();
+            ex.printStackTrace();
+            return false;
+        } finally {
+            if (em != null)
+                em.close();
+        }
+    }
+
+    public boolean update(Book book) {
+        EntityManager em = null;
+        EntityTransaction tr = null;
+        try {
+            em = DBUtil.getEmFactory().createEntityManager();
+            tr = em.getTransaction();
+            tr.begin();
+
+            // Fetch the existing managed Book entity if it exists in the session
+            Book existingBook = em.find(Book.class, book.getId());
+            if (existingBook != null) {
+                // Update properties of the managed entity
+                existingBook.setTitle(book.getTitle());
+                existingBook.setIsbn(book.getIsbn());
+                existingBook.setPublishDate(book.getPublishYear());
+                existingBook.setCostPrice(book.getCostPrice());
+                existingBook.setSellingPrice(book.getSellingPrice());
+                existingBook.setStocks(book.getStocks());
+                if (book.getUrlImage() != null) {
+                    existingBook.setUrlImage(book.getUrlImage());
+                }
+                existingBook.setDescription(book.getDescription());
+                existingBook.setLanguage(book.getLanguage());
+                existingBook.setPublisher(book.getPublisher());
+                existingBook.setDiscountCampaign(book.getDiscountCampaign());
+
+                // Manually update collections if needed, and make sure cascading is handled correctly
+                Set<Author> managedAuthors = new HashSet<>();
+                for (Author author : book.getAuthors()) {
+                    Author managedAuthor = em.find(Author.class, author.getId());
+                    if (managedAuthor != null) {
+                        managedAuthors.add(managedAuthor);
+                    } else {
+                        em.persist(author);
+                        managedAuthors.add(author);
+                    }
+                }
+                existingBook.setAuthors(managedAuthors);
+
+                Set<Category> managedCategories = new HashSet<>();
+                for (Category category : book.getCategories()) {
+                    Category managedCategory = em.find(Category.class, category.getId());
+                    if (managedCategory != null) {
+                        managedCategories.add(managedCategory);
+                    } else {
+                        em.persist(category);
+                        managedCategories.add(category);
+                    }
+                }
+                existingBook.setCategories(managedCategories);
+
+            } else {
+                // If no managed entity exists, use merge to persist a new entity
+                em.merge(book);
+            }
+
+            tr.commit();
+            return true;
+        } catch (Exception ex) {
+            if (tr != null && tr.isActive())
+                tr.rollback();
+            ex.printStackTrace();
+            return false;
+        } finally {
+            if (em != null)
+                em.close();
+        }
+    }
+
+    public boolean delete(int bookId) {
+        EntityManager em = null;
+        EntityTransaction tr = null;
+        try {
+            em = DBUtil.getEmFactory().createEntityManager();
+            tr = em.getTransaction();
+            tr.begin();
+
+            Book book = em.find(Book.class, bookId);
+            if (book != null) {
+                em.remove(book);
+            }
+
+            tr.commit();
+            return true;
+        } catch (Exception ex) {
+            if (tr != null && tr.isActive()) tr.rollback();
+            ex.printStackTrace();
+            return false;
+        } finally {
+            if (em != null) em.close();
+        }
     }
 }

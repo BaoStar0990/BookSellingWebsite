@@ -44,44 +44,46 @@ public class BookDetailController extends HttpServlet {
         response.setCharacterEncoding("UTF-8");
 
         //Category
-       // List<Category> categories = null;
         List<Book> books = null;
+        Book book = null;
         HttpSession session = request.getSession();
-//        if(session.getAttribute("categories") == null) {
-//            categories = CategoryDB.getInstance().selectAll();
-//            session.setAttribute("categories", categories);
-//        }
-//        else{
-//            categories = (List<Category>)session.getAttribute("categories");
-//        }
+        String pathInfo = request.getPathInfo();
+        int id = -1;
+        try {
+            id = Integer.parseInt(pathInfo.substring(1));
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
         //Book
-        if(session.getAttribute("books") == null) {
-            books = BookDB.getInstance().selectAll();
-            session.setAttribute("books", books);
-        }else{ // lan truy cap sau,  lay book trong session
-            books = (List<Book>)session.getAttribute("books");
+        if (id > -1) {
+            if (session.getAttribute("allBook") == null) {
+                book = BookDB.getInstance().selectByID(id);
+            } else { // lan truy cap sau,  lay book trong session
+                books = (List<Book>) session.getAttribute("allBook");
+                try {
+                    int id_for_search = id; // nếu lấy id thì sẽ không được 
+                    book = books.stream().filter(b -> {
+                        return b.getId() == id_for_search;
+                    }).findFirst().get();
+                } catch (NumberFormatException ex) {
+                    System.out.println("Vui lòng nhập đúng dữ liệu");
+                } catch (NoSuchElementException ex) {
+                    System.out.println("Không tìm thấy sách");
+                }
+            }
         }
 
-
-        // lấy id của book
-
         // Lấy cuốn sách
-        try{
-            String pathInfo = request.getPathInfo();
-            int id = Integer.parseInt(pathInfo.substring(1));
-            Book book = books.stream().filter(b -> {
-                return b.getId() == id;
-            }).findFirst().get();
+        if (book != null) {
             request.setAttribute("book", book);
             String url = "/bookdetails.jsp";
             System.out.println("Called Bookdetail");
             request.getRequestDispatcher(url).forward(request, response);
-        }catch(NumberFormatException ex){
-            System.out.println("Vui lòng nhập đúng dữ liệu");
-        }catch (NoSuchElementException ex){
-            System.out.println("Không tìm thấy sách");
+        } else {
+            response.sendRedirect("/404error.jsp");
         }
     }
+
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.

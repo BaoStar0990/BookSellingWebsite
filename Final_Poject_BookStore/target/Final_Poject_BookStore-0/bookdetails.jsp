@@ -1,4 +1,4 @@
-<%--
+<%@ page import="model.Book" %><%--
   Created by IntelliJ IDEA.
   User: ASUS
   Date: 10/6/2024
@@ -52,20 +52,19 @@
         <%--end Header--%>
 
         <%--    attribute : List<Book>--%>
-        <!--Link--> 
+        <!--Link-->
+        <!--Lấy tên thể loại đầu tiên của sách -->
+        <%
+            Book b =(Book) request.getAttribute("book");
+            // kiểm tra sách có thể loại không, nếu có lấy thể loại đầu tiên
+            String firstCategoryName = b == null || b.getCategories() == null
+                    || b.getCategories().isEmpty() ? " " :
+                    b.getCategories().stream().findFirst().get().getName();
+        %>
         <div class="container mt-2">
             <p class="fw-semibold">
                 <a href="${pageContext.request.contextPath}" class="text-decoration-none text-dark">Trang chủ</a>
                 <i class="fa-solid fa-chevron-right"></i>
-                <!--Lấy tên thể loại đầu tiên của sách -->
-                <%  
-                    Book b =(Book) request.getAttribute("book");
-                    // kiểm tra sách có thể loại không, nếu có lấy thể loại đầu tiên
-                    String firstCategoryName = b == null || b.getCategories() == null
-                            || b.getCategories().isEmpty() ? " " : 
-                            b.getCategories().stream().findFirst().get().getName();
-
-                %>
                 <a href="" class="text-decoration-none text-dark"><%=firstCategoryName%></a>
                 <i class="fa-solid fa-chevron-right"></i>
                 ${book.title}

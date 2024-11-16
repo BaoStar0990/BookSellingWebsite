@@ -19,9 +19,9 @@
         categories = CategoryDB.getInstance().selectAll();
         session.setAttribute("categories", categories);
     }
-    else{
-        categories = (List<Category>)session.getAttribute("categories");
-    }
+//    else{
+//        categories = (List<Category>)session.getAttribute("categories");
+//    }
 %>
 <header class="container p-0 border-bottom">
     <nav class="navbar navbar-expand-md pt-3">
@@ -107,9 +107,8 @@
                     </li>
 
                     <li id="danhmuc" class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">Danh mục</a>
+                        <a class="nav-link dropdown-toggle ${param.currentTab eq '/category/all' ? 'active' : ''}" href="/category/all">Danh mục sách</a>
                         <ul id="dropdowns" class="dropdown-menu mx-auto multi-column columns-3 dropdown-menu-center">
-
                             <%--attribute : categories List<Category>--%>
                             <c:set var = "count" scope = "request" value = "${4}"/>
                             <c:forEach items="${categories}" var="category">
@@ -119,7 +118,7 @@
                                 </c:if>
                                 <c:if test="${count <= 3}">
                                     <div class="col-md-4">
-                                        <li><a href="#" class="dropdown-item btn btn-outline-danger">${category.name}</a></li>
+                                        <li><a href="/category/${category.id}" class="dropdown-item btn btn-outline-danger">${category.name}</a></li>
                                     </div>
                                     <c:set var = "count" scope = "request" value = "${count + 1}"/>
                                 </c:if>

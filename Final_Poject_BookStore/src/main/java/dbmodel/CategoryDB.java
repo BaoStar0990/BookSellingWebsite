@@ -78,7 +78,6 @@ public class CategoryDB extends ModifyDB<Category> implements DBInterface<Catego
     }
     
     
-    
     public Set<Book> getBooks(Category c){
         try(EntityManager em = DBUtil.getEmFactory().createEntityManager()){
             // find Author

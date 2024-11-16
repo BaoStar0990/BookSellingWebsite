@@ -163,4 +163,24 @@ public class CustomerDB  extends ModifyDB<Customer> implements DBInterface<Custo
                 em.close();
         }
     }
+    public boolean insertCustomer(Customer c){
+        try(EntityManager em = DBUtil.getEmFactory().createEntityManager()){
+            em.getTransaction().begin();
+            em.persist(c);
+            em.getTransaction().commit();
+            return true;
+        }
+    }
+    public boolean deleteCustomer(int id){
+        try(EntityManager em = DBUtil.getEmFactory().createEntityManager()){
+            Customer customer = em.find(Customer.class, id);
+            em.getTransaction().begin();
+            em.remove(customer);
+            em.getTransaction().commit();
+            return true;
+        }
+        catch (TransientObjectException ex) {
+            return false;
+        }
+    }
 }

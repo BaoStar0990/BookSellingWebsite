@@ -16,17 +16,11 @@ public class Category implements Serializable {
     private String name;
     private String description;
 
-    @ManyToMany(cascade = CascadeType.ALL)
-    @JoinTable(
-            name = "CategoryDetail",
-            joinColumns = @JoinColumn(name = "categoryID"),
-            inverseJoinColumns = @JoinColumn(name = "bookID")
-    )
-    private Set<Book> books = new HashSet<Book>();
+    @ManyToMany(mappedBy = "categories", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    private Set<Book> books = new HashSet<>();
 
-    public Category() {
+    public Category() {}
 
-    }
     public Category(int id, String name, String description) {
         this.id = id;
         this.name = name;
@@ -37,34 +31,39 @@ public class Category implements Serializable {
         this.name = name;
         this.description = description;
     }
-    
+
     public int getId() {
         return id;
     }
+
     public void setId(int id) {
         this.id = id;
     }
+
     public String getName() {
         return name;
     }
+
     public void setName(String name) {
         this.name = name;
-
     }
+
     public String getDescription() {
         return description;
     }
+
     public void setDescription(String description) {
         this.description = description;
     }
 
     public Set<Book> getBooks() {
-        return CategoryDB.getInstance().getBooks(this);
+        return books;
     }
-    
+
     public void setBooks(Set<Book> books) {
         this.books = books;
     }
+
     public void addBook(Book b){
         this.books.add(b);
     }

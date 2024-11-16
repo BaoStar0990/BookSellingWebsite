@@ -140,5 +140,4 @@ public class CategoryDB extends ModifyDB<Category> implements DBInterface<Catego
                 em.close();
         }
     }
-     
 }

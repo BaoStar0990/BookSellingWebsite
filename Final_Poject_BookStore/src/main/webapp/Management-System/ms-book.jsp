@@ -69,8 +69,6 @@
                 <td class="d-flex">
                     <button class="btn btn-warning btn-sm me-2" data-bs-toggle="modal" data-bs-target="#addEditBookModal" 
                             data-book-id="${book.getId()}" data-book-title="${book.getTitle()}" 
-                            data-book-authors='${fn:escapeXml(book.getAuthorsJson())}'
-                            data-book-categories='${fn:escapeXml(book.getCategoriesJson())}'
                             data-book-cost-price="${book.getCostPrice()}" data-book-selling-price="${book.getSellingPrice()}"
                             data-book-stocks="${book.getStocks()}" data-book-url-image="${book.getUrlImage()}"
                             data-book-description="${book.getDescription()}" data-book-publisher="${book.getPublisher().getId()}"

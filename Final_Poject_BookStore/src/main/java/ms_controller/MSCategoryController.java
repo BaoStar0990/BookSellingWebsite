@@ -17,20 +17,20 @@ public class MSCategoryController extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        HttpSession session = req.getSession();
-
-        if (session.getAttribute("categories") == null) {
-            List<Category> categories = CategoryDB.getInstance().selectAll();
-            session.setAttribute("categories", categories);
-        }
-
+        req.setCharacterEncoding("UTF-8");
+        // HttpSession session = req.getSession(false); 
+        // if (session == null || session.getAttribute("admin") == null) {
+        //     resp.sendRedirect("signin.jsp");
+        //     return;
+        // }
+        updateCategoriesInSession(req);
         req.getServletContext().getRequestDispatcher("/Management-System/ms-category.jsp").forward(req, resp);
     }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        // checkAdmin(req, resp);
         req.setCharacterEncoding("UTF-8");
-
         String action = req.getParameter("action");
         if (action != null) {
             switch (action) {
@@ -43,16 +43,33 @@ public class MSCategoryController extends HttpServlet {
                     break;
                 }
                 case "delete": {
-//                    CategoryDB.getInstance().delete(Integer.parseInt(req.getParameter("id")));
+                    CategoryDB.getInstance().delete(Integer.parseInt(req.getParameter("id")), Category.class);
                     break;
                 }
             }
-            HttpSession session = req.getSession();
-            List<Category> categories = CategoryDB.getInstance().selectAll();
-            session.removeAttribute("categories");
-            session.setAttribute("categories", categories);
+            // Update the session attribute after any CRUD operation
+            updateCategoriesInSession(req);
         }
 
         resp.sendRedirect(getServletContext().getContextPath() + "/mscategory");
     }
+
+    protected void updateCategoriesInSession(HttpServletRequest req) {
+        HttpSession session = req.getSession();
+        // Get the categories from the database
+        List<Category> categories = CategoryDB.getInstance().selectAll();
+        // Sort the categories by id in descending order
+        categories.sort((c1, c2) -> Integer.compare(c2.getId(), c1.getId()));
+        // Update the categories attribute in the session
+        session.setAttribute("categories", categories);
+    }
+
+    // protected void checkAdmin(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    //     if (req.getSession().getAttribute("admin") == null) {
+    //         resp.sendRedirect("signin.jsp");
+    //         return;
+    //     }
+    // }
 }
+
+

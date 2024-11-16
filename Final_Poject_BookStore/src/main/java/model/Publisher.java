@@ -14,9 +14,10 @@ public class Publisher implements Serializable {
     private int id;
     private String name;
 
-    @OneToMany(mappedBy = "publisher",  cascade = CascadeType.ALL)
+    // orphanRemoval = false không xóa khi Publisher không có sách nàos
+    @OneToMany(mappedBy = "publisher",  cascade = {CascadeType.PERSIST, CascadeType.MERGE}, orphanRemoval = false)
     private Set<Book> books = new HashSet<Book>();
-
+    
     public Publisher(){
 
     }

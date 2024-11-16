@@ -1,0 +1,22 @@
+
+package test;
+
+import dbmodel.BillDB;
+import dbmodel.CustomerDB;
+import model.Bill;
+import model.Customer;
+import model.StatusOrder;
+
+public class TestBill {
+    public static void main(String[] args) {
+//        Bill bill = BillDB.getInstance().selectByID(3);
+//        BillDB.getInstance().delete(bill.getId(), Bill.class);
+         // tạo cart mới cho khách hàng  
+//         Customer customer = CustomerDB.getInstance().selectByID(2);
+//            Bill newCart = new Bill();
+//            newCart.setCustomer(customer);
+//            newCart.setStatusOrder(StatusOrder.Storing);
+//            BillDB.getInstance().insert(newCart);
+    }
+    
+}

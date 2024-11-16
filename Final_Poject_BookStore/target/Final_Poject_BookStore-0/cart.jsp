@@ -1,3 +1,8 @@
+<%@page import="java.util.stream.Collectors"%>
+<%@page import="java.util.Comparator"%>
+<%@page import="model.OrderDetail"%>
+<%@page import="java.util.Set"%>
+<%@page import="model.Bill"%>
 <%@ page import="java.util.Map" %>
 <%@ page import="java.util.ArrayList" %>
 <%@ page import="java.util.List" %>
@@ -66,43 +71,76 @@
             </tr>
             </thead>
             <tbody>
-            <c:forEach var="i" begin="1" end="5">
-                <tr class="cart-item-row">
-                    <!-- Product Details -->
-                    <td class="text-start d-flex align-items-center flex-column flex-md-row">
-                        <img src="https://bizweb.dktcdn.net/thumb/1024x1024/100/363/455/products/nhagiakimnew03.jpg?v=1705552576547"
-                             alt="Nhà Giả Kim" class="img-fluid me-3" style="width: 80px; height: auto;">
-                        <div class="text-center text-md-start">
-                            <p class="fw-bold mb-1 cart-item-title">Nhà Giả Kim - Cuốn sách thay đổi cuộc đời bạn mãi mãi</p>
-                            <p class="text-muted fw-semibold mb-1">
-                                <fmt:formatNumber value="200000" type="number" pattern="#,##0" />đ
-                            </p>
-                            <p class="text-muted text-decoration-line-through">
-                                <fmt:formatNumber value="160000" type="number" pattern="#,##0" />đ
-                            </p>
-                        </div>
-                    </td>
-                    <!-- Price for Desktop -->
-                    <td class="fw-bold fs-5 text-primary d-none d-md-table-cell">
-                        <fmt:formatNumber value="200000" type="number" pattern="#,##0" />đ
-                    </td>
-                    <!-- Quantity Control -->
-                    <td class="text-center">
-                        <p class="fw-bold fs-5 text-danger mb-2 d-block d-md-none">
-                            <fmt:formatNumber value="200000" type="number" pattern="#,##0" />đ
-                        </p>
+               <c:set var="totalCost" value="0.0" />
 
-                        <div class="d-flex justify-content-center align-items-center">
-                            <button class="btn btn-outline-secondary" onclick="">-</button>
-                            <input type="text" value="1" class="form-control text-center mx-2" style="width: 50px;" readonly>
-                            <button class="btn btn-outline-secondary" onclick="">+</button>
-                            <button class="btn primary-btn ms-3" onclick="">
-                                <i class="fas fa-trash"></i>
-                            </button>
-                        </div>
-                    </td>
-                </tr>
-            </c:forEach>
+                <c:if test = "${not empty listOrderDetails}">
+                    <c:forEach var="orderDetail" items = "${listOrderDetails}">
+                        <c:set var="totalCost" value="${totalCost + orderDetail.getBook().sellingPrice*(1 - orderDetail.getBook()
+                                                           .getDiscountCampaign().getPercentDiscount()) * orderDetail.getQuantity()}"/>
+                        <tr class="cart-item-row"> 
+                            <!-- Product Details -->
+                            <td class="text-start d-flex align-items-center flex-column flex-md-row">
+                                <img src="${orderDetail.getBook().getUrlImage()}"
+                                     alt="Nhà Giả Kim" class="img-fluid me-3" style="width: 80px; height: auto;">
+                                <div class="text-center text-md-start">
+                                    <p class="fw-bold mb-1 cart-item-title">${orderDetail.getBook().getTitle()}</p>
+                                    <p class="text-muted fw-semibold mb-1">
+                                        <fmt:formatNumber value="${orderDetail.getBook().sellingPrice*(1 - orderDetail.getBook()
+                                                                   .getDiscountCampaign().getPercentDiscount())}" type="number" pattern="#,##0" />đ
+                                    </p>
+                                    <p class="text-muted text-decoration-line-through">
+                                        <fmt:formatNumber value="${orderDetail.getBook().getSellingPrice()}" type="number" pattern="#,##0" />đ
+                                    </p>
+                                </div>
+                            </td>
+                            <!-- Price for Desktop -->
+                            <td class="fw-bold fs-5 text-primary d-none d-md-table-cell">
+                                <fmt:formatNumber value="${orderDetail.getBook().sellingPrice*(1 - orderDetail.getBook()
+                                                           .getDiscountCampaign().getPercentDiscount()) * orderDetail.getQuantity()}"
+                                                  type="number" pattern="#,##0" />đ
+                            </td>
+                            <!-- Quantity Control -->
+                            <td class="text-center">
+                                <p class="fw-bold fs-5 text-danger mb-2 d-block d-md-none">
+                                    <!-- Tăng quantity, giá thay đổi -->
+                                    <fmt:formatNumber value="${orderDetail.getQuantity()}"  type="number" pattern="#,##0" />đ
+                                </p>
+
+                                    <div class="d-flex justify-content-center align-items-center">
+                                        <div style="display: flex;  align-items: center;">
+                                            <form  action ="/modifyitemcart" method="post">
+                                                    <input type="hidden" name ="action" value ="decreate">
+                                                    <input type ="hidden" id = "orderDetailId" value="${orderDetail.getId()}" name = "orderDetailId">
+                                                    <button type = "submit" name = ""  class="btn btn-outline-secondary">-</button>
+                                            </form>
+                                                    
+                                            <form>
+                                                <input type="text" name ="quantity" id = "quantity" value="${orderDetail.getQuantity()}" 
+                                                    class="form-control text-center mx-2" style="width: 50px;" readonly>
+                                            </form>
+                                            
+
+                                            <form  action ="/modifyitemcart" method="post">
+                                                <input type="hidden" name ="action" value ="increate">
+                                                <input type ="hidden" id = "orderDetailId" value="${orderDetail.getId()}" name = "orderDetailId"> 
+                                                <button  type = "submit" class="btn btn-outline-secondary">+</button>
+                                            </form>
+
+                                        </div>
+
+                                        <form  action ="/modifyitemcart" method="post">
+                                            <input type="hidden" name ="action" value ="delete">
+                                            <input type ="hidden" id = "orderDetailId" value="${orderDetail.getId()}" name = "orderDetailId">
+                                            <button  type = "submit"  class="btn primary-btn ms-3">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                        </form>
+                                   </div>
+                            </td>
+                        </tr>
+                    </c:forEach>
+                </c:if>
+                                
             </tbody>
         </table>
     </div>
@@ -111,13 +149,18 @@
     <div class="d-flex justify-content-between align-items-center mt-4">
         <h4 class="fw-bold ms-auto me-4">Tổng: </h4>
         <h4 class="fw-bold text-primary">
-            <fmt:formatNumber value="9999999" type="number" pattern="#,##0" />đ
+            <fmt:formatNumber value="${totalCost}" type="number" pattern="#,##0" />đ
         </h4>
     </div>
     <!-- Checkout Button -->
-    <div class="mt-4 d-flex justify-content-end">
-        <a href="deliveryinfo.jsp" class="primary-btn d-inline-block">Thanh toán</a>
-    </div>
+    <form action ="/payment" method ="post">
+        <div class="mt-4 d-flex justify-content-end">
+            <!--<input type="action" value="thanhtoan">-->
+            <input type="hidden" name ="cartId" value="${cartId}">
+            <input type ="submit" value ="Thanh toán" class="primary-btn d-inline-block">
+        </div>
+    </form>
+    
 </div>
 
 
@@ -125,6 +168,6 @@
 <jsp:include page="WEB-INF/views/footer.jsp"/>
 <%-- end Footer--%>
 <script src="./assets/javascript/header.js"></script>
-
+<script src="./assets/javascript/quantity.js"></script>
 </body>
 </html>

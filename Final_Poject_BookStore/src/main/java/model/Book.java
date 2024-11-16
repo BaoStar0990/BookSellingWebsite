@@ -1,6 +1,5 @@
 package model;
 
-import dbmodel.AuthorDB;
 import dbmodel.BookDB;
 import jakarta.persistence.*;
 
@@ -24,6 +23,7 @@ public class Book implements Serializable {
     private int publishYear;
     private String language;
 
+
     @OneToMany(mappedBy = "book", cascade = CascadeType.REMOVE)
     private Set<Review> reviews;
 
@@ -44,7 +44,7 @@ public class Book implements Serializable {
     private Set<Category> categories = new HashSet<>();
 
     @ManyToOne
-    @JoinColumn(name="publisherID")
+    @JoinColumn(name="publisherID", nullable = true)
     private Publisher publisher;
 
     @OneToMany(mappedBy = "book")
@@ -204,6 +204,20 @@ public class Book implements Serializable {
         return authors;
     }
     
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null || getClass() != obj.getClass()) return false;
+        Book book = (Book) obj;
+        return Objects.equals(bookID, book.getId()); // Giả sử `id` là khóa chính
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 47 * hash + this.bookID;
+        return hash;
+    }
     public void setAuthors(Set<Author> authors) {
         this.authors = authors;
     }
@@ -211,4 +225,6 @@ public class Book implements Serializable {
     public void setCategories(Set<Category> categories) {
         this.categories = categories;
     }
+
+    
 }

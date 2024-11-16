@@ -58,7 +58,51 @@ $(document).ready(function() {
     });
 });
 
+//function getSelectedNames() {
+//    // Lấy phần tử đã chọn trong mỗi <select>
+//    var tinhName = $("#tinh option:selected").text();
+//    var quanName = $("#quan option:selected").text();
+//    var phuongName = $("#phuong option:selected").text();
+//    
+//    // Hiển thị tên đã chọn
+////    alert("Tỉnh: " + tinhName + "\nQuận: " + quanName + "\nPhường: " + phuongName);
+//    document.getElementById()
+//}
 
+ function setSelectedTinhByName(tinhName, callback) {
+    $("#tinh option").filter(function() {
+        return $(this).text().trim() === tinhName.trim();
+    }).prop('selected', true);
+    $("#tinh").trigger("change"); // Kích hoạt change để tải quận
+    
+    // Chờ một chút để quận được tải
+    setTimeout(callback, 500); // Gọi callback sau khi quận tải xong (tăng/giảm thời gian nếu cần)
+}
+
+function setSelectedQuanByName(quanName, callback) {
+    $("#quan option").filter(function() {
+        return $(this).text().trim() === quanName.trim();
+    }).prop('selected', true);
+    $("#quan").trigger("change"); // Kích hoạt change để tải phường
+    
+    // Chờ phường được tải
+    setTimeout(callback, 500); // Gọi callback sau khi phường tải xong
+}
+
+function setSelectedPhuongByName(phuongName) {
+    $("#phuong option").filter(function() {
+        return $(this).text().trim() === phuongName.trim();
+    }).prop('selected', true);
+}
+
+function setLocationByNames(tinhName, quanName, phuongName) {
+    setSelectedTinhByName(tinhName, function() {
+        setSelectedQuanByName(quanName, function() {
+            setSelectedPhuongByName(phuongName);
+        });
+    });
+}
+   
 /*
 
 <div id="address" class="row g-2">

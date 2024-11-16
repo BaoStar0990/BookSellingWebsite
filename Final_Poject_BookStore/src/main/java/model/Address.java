@@ -19,12 +19,24 @@ public class Address implements Serializable {
     @JoinColumn(name = "customerID")
     private Customer customer;
 
-
-    public Address(String street, String province, String ward, String district) {
+    public Address(int id, String street, String province, 
+            String ward, String district, Customer customer) {
+        this.id = id;
         this.street = street;
         this.province = province;
         this.ward = ward;
         this.district = district;
+        this.customer = customer;
+    }
+
+    
+    public Address(String street, String province, 
+            String ward, String district, Customer customer) {
+        this.street = street;
+        this.province = province;
+        this.ward = ward;
+        this.district = district;
+        this.customer = customer;
     }
     public Address() {
 
@@ -68,5 +80,19 @@ public class Address implements Serializable {
     public void setCustomer(Customer customer) {
         this.customer = customer;
     }
-    
+
+    public String createJson() {
+        return "{"
+                + "\"id\":" + id + ","
+                + "\"street\":\"" + street + "\","
+                + "\"ward\":\"" + ward + "\","
+                + "\"district\":\"" + district + "\","
+                + "\"province\":\"" + province + "\""
+                + "}";
+    }
+
+    @Override
+    public String toString(){
+        return  street + ", " + ward + ", " + district + ", " + province;
+    }
 }

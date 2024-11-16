@@ -40,33 +40,32 @@ public class OrderDetailDB extends ModifyDB<OrderDetail> implements DBInterface<
         }
     }
     
-    public boolean insert(OrderDetail orderDetail) {
-        return super.insert(orderDetail);
-    }
+    @Override
+    public boolean delete(Object id, Class<OrderDetail> entityClass){
+        EntityManager em = null;
+        EntityTransaction tr = null;
 
-    public boolean update(OrderDetail orderDetail) {
-        return super.update(orderDetail);
-    }
-
-    public boolean delete(int id) {
-        try (EntityManager em = DBUtil.getEmFactory().createEntityManager()) {
-            EntityTransaction tr = em.getTransaction();
-            try {
-                tr.begin();
-                OrderDetail orderDetail = em.find(OrderDetail.class, id);
-                if (orderDetail != null) {
-                    em.remove(orderDetail);
-                    tr.commit();
-                    return true;
-                }
-                return false;
-            } catch (Exception ex) {
-                if (tr.isActive()) {
-                    tr.rollback();
-                }
-                ex.printStackTrace();
-                return false;
+        try {
+            em = DBUtil.getEmFactory().createEntityManager();
+            tr = em.getTransaction();
+            tr.begin();
+            OrderDetail entity = em.find(OrderDetail.class, id);
+            // Xóa trực tiếp bằng câu truy vấn JPQL
+            em.createQuery("DELETE FROM OrderDetail o WHERE o.id = :id")
+              .setParameter("id", entity.getId())
+              .executeUpdate();
+            tr.commit();
+            return true;
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            if (tr != null && tr.isActive()) {
+                tr.rollback();
             }
-        }
+            return false;
+        } finally {
+            if (em != null) {
+                em.close();
+            }
+        }   
     }
 }

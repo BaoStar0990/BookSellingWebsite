@@ -5,6 +5,7 @@
   Time: 4:34 PM
   To change this template use File | Settings | File Templates.
 --%>
+<%@page import="model.Book"%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
@@ -161,26 +162,32 @@
                             -<fmt:formatNumber value="${book.getDiscountCampaign().getPercentDiscount()*100}" type="number" pattern="#,##0" />%
                         </span>
                     </div>
-
-                    <%--                 Quantity Selector --%>
-                    <div class="mt-3">
-                        <label for="quantity" class="me-2">Số lượng</label>
-                        <div class="input-group mt-1" style="width: 120px;">
-                            <button class="btn btn-outline-secondary" onclick="decreaseQuantity()">-</button>
-                            <input type="text" class="form-control text-center" id="quantity" value="1">
-                            <button class="btn btn-outline-secondary" onclick="increaseQuantity()">+</button>
+                    
+                    <form style = "margin: 0; padding: 0;" action ="/addcart" method="post">
+                        <%--Quantity Selector --%>
+                        <div class="mt-3">
+                            <label for="quantity" class="me-2">Số lượng</label>
+                            <div class="input-group mt-1" style="width: 120px;">
+                                <button onclick="event.preventDefault()" class="btn btn-outline-secondary" onclick="decreaseQuantity()">-</button>
+                                <input type="text" class="form-control text-center" name="quantity" id="quantity" value="1">
+                                <button onclick="event.preventDefault()" class="btn btn-outline-secondary" onclick="increaseQuantity()">+</button>
+                            </div>
                         </div>
-                    </div>
 
-                    <%--                 Action Buttons --%>
-                    <div class="mt-4">
-                        <button class="btn secondary-btn me-3 d-inline-block">
+                        <%--Action Buttons --%>
+                        <div  style = "display: flex;  align-items: center;" class="mt-4">
+                        
+                            <input type="hidden" value="${book.getId()}" name="bookId">
+                            <button type = "submit" class="btn secondary-btn me-3 d-inline-block"/>
                             <i class="fas fa-shopping-cart me-2"></i> Thêm vào giỏ hàng
-                        </button>
-                        <button class="btn primary-btn d-inline-block">
-                            Mua ngay
-                        </button>
-                    </div>
+                            </button>
+                            
+                            <button type = "submit" class="btn primary-btn d-inline-block">
+                                Mua ngay
+                            </button>
+                        </div>
+                    </form>    
+                            
                 </div>
             </div>
             <%--         end Short Intro --%>

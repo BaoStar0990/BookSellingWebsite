@@ -1,3 +1,5 @@
+<%@page import="model.Customer"%>
+<%@page import="model.Bill"%>
 <%@ page import="dbmodel.CategoryDB" %>
 <%@ page import="model.Category" %>
 <%@ page import="java.util.List" %>
@@ -74,13 +76,27 @@
 
                             </ul>
                         </div>
-                        <a href="${pageContext.request.contextPath}/cart.jsp" class="btn">
+                        <a href="${pageContext.request.contextPath}/viewcart" class="btn">
                             <i class="fa-solid fa-cart-shopping header-icon pt-1"></i>
                             <span
                                     class="position-absolute translate-middle badge rounded-pill bg-danger text-light"
                                     style="top: calc(50% - 2.5rem)"
                             >
-                                2
+                                <c:choose>
+                                    <c:when test="${not empty user}">
+                                        <c:set var="cart" value="${user.bills.stream()
+                                                                   .filter(b -> b.statusOrder.toString() == 'Storing')
+                                                                   .findFirst().orElse(null)}" />
+                                        <c:if test="${not empty cart}">
+                                            <c:set var="soLuong" value="${cart.getOrderDetails().size()}" />
+                                            ${soLuong}
+                                        </c:if>
+                                    </c:when>
+                                    <c:otherwise>
+                                        0
+                                    </c:otherwise>
+                                </c:choose>
+
                             </span>
                         </a>
                     </div>

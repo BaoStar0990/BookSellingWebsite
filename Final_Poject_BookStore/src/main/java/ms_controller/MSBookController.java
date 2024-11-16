@@ -23,6 +23,7 @@ import firebasecloud.FirebaseStorageUploader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @WebServlet(name = "MSBookController", urlPatterns = {"/msbook"})
 @MultipartConfig
@@ -30,11 +31,6 @@ public class MSBookController extends HttpServlet {
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-
-//          if(request.getSession().getAttribute("admin") == null) {
-//            response.sendRedirect("signin.jsp");
-//            return;
-//        }
         request.setCharacterEncoding("UTF-8");
         response.setContentType("text/html; charset=UTF-8");
         response.setCharacterEncoding("UTF-8");
@@ -43,7 +39,7 @@ public class MSBookController extends HttpServlet {
 
         if (session.getAttribute("books") == null) {
             List<Book> books = BookDB.getInstance().selectAll();
-            books.sort((b1, b2) -> Integer.compare(b2.getId(), b1.getId()));
+            books.sort((b1, b2) -> Integer.compare(b2.getId(), b1.getId())); // Sort in descending order by ID
             session.setAttribute("books", books);
         }
 
@@ -67,7 +63,20 @@ public class MSBookController extends HttpServlet {
             session.setAttribute("discountCampaigns", discountCampaigns);
         }
 
-        request.setAttribute("books", session.getAttribute("books"));
+        // Prepare JSON strings for authors and categories
+        List<Book> books = (List<Book>) session.getAttribute("books");
+        for (Book book : books) {
+            String authorsJson = book.getAuthors().stream()
+                    .map(a -> String.format("{\"id\": %d, \"name\": \"%s\"}", a.getId(), a.getName()))
+                    .collect(Collectors.joining(", ", "[", "]"));
+            String categoriesJson = book.getCategories().stream()
+                    .map(c -> String.format("{\"id\": %d, \"name\": \"%s\"}", c.getId(), c.getName()))
+                    .collect(Collectors.joining(", ", "[", "]"));
+//            book.setAuthorsJson(authorsJson);
+//            book.setCategoriesJson(categoriesJson);
+        }
+
+        request.setAttribute("books", books);
         request.setAttribute("authors", session.getAttribute("authors"));
         request.setAttribute("categories", session.getAttribute("categories"));
         request.setAttribute("publishers", session.getAttribute("publishers"));

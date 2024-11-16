@@ -23,7 +23,6 @@ import firebasecloud.FirebaseStorageUploader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @WebServlet(name = "MSBookController", urlPatterns = {"/msbook"})
 @MultipartConfig
@@ -68,20 +67,7 @@ public class MSBookController extends HttpServlet {
             session.setAttribute("discountCampaigns", discountCampaigns);
         }
 
-        // Prepare JSON strings for authors and categories
-        List<Book> books = (List<Book>) session.getAttribute("books");
-        for (Book book : books) {
-            String authorsJson = book.getAuthors().stream()
-                    .map(a -> String.format("{\"id\": %d, \"name\": \"%s\"}", a.getId(), a.getName()))
-                    .collect(Collectors.joining(", ", "[", "]"));
-            String categoriesJson = book.getCategories().stream()
-                    .map(c -> String.format("{\"id\": %d, \"name\": \"%s\"}", c.getId(), c.getName()))
-                    .collect(Collectors.joining(", ", "[", "]"));
-            book.setAuthorsJson(authorsJson);
-            book.setCategoriesJson(categoriesJson);
-        }
-
-        request.setAttribute("books", books);
+        request.setAttribute("books", session.getAttribute("books"));
         request.setAttribute("authors", session.getAttribute("authors"));
         request.setAttribute("categories", session.getAttribute("categories"));
         request.setAttribute("publishers", session.getAttribute("publishers"));

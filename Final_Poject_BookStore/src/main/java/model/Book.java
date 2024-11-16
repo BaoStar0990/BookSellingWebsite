@@ -24,9 +24,6 @@ public class Book implements Serializable {
     private int publishYear;
     private String language;
 
-    private String authorsJson;
-    private String categoriesJson;
-
     @OneToMany(mappedBy = "book", cascade = CascadeType.REMOVE)
     private Set<Review> reviews;
 
@@ -214,21 +211,4 @@ public class Book implements Serializable {
     public void setCategories(Set<Category> categories) {
         this.categories = categories;
     }
-
-    public String getAuthorsJson() {
-        return authorsJson;
-    }
-
-    public void setAuthorsJson(String authorsJson) {
-        this.authorsJson = authorsJson;
-    }
-
-    public String getCategoriesJson() {
-        return categoriesJson;
-    }
-
-    public void setCategoriesJson(String categoriesJson) {
-        this.categoriesJson = categoriesJson;
-    }
-
 }

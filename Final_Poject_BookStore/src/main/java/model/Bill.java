@@ -21,6 +21,10 @@ public class Bill implements Serializable {
     private Double VAT;
     private LocalDate orderDate;
     private LocalDate deliveryDate;
+    private String shippingAddress;
+    private Double shippingFee;
+    @Lob
+    private String notes;
 
     //hibernate, xóa bill không xóa customer; cập nhật, chèn bill thì tự thay đổi bên customer 
     @ManyToOne()
@@ -35,7 +39,8 @@ public class Bill implements Serializable {
     public Bill() {
     }
     public Bill(int billID,Customer customer,String paymentMethod, StatusPayment statusPayment, 
-            StatusOrder statusOrder, Double VAT, LocalDate orderDate,LocalDate deliveryDate ) {
+            StatusOrder statusOrder, Double VAT, LocalDate orderDate,LocalDate deliveryDate, 
+            String shippingAddress, Double shippingFee, String notes) {
         this.billID = billID;
         this.customer = customer;
         this.paymentMethod = paymentMethod;
@@ -44,11 +49,15 @@ public class Bill implements Serializable {
         this.VAT = VAT;
         this.orderDate = orderDate;
         this.deliveryDate = deliveryDate;
+        this.shippingAddress = shippingAddress;
+        this.shippingFee = shippingFee;
+        this.notes = notes;
         orderDetails = new HashSet<>();
     }
 
     public Bill(String paymentMethod, StatusPayment statusPayment, StatusOrder statusOrder, Double VAT,
-            LocalDate orderDate, LocalDate deliveryDate, Customer customer) {
+            LocalDate orderDate, LocalDate deliveryDate, Customer customer, String shippingAddress,
+            Double shippingFee, String notes) {
         this.paymentMethod = paymentMethod;
         this.statusPayment = statusPayment;
         this.statusOrder = statusOrder;
@@ -56,6 +65,9 @@ public class Bill implements Serializable {
         this.orderDate = orderDate;
         this.deliveryDate = deliveryDate;
         this.customer = customer;
+        this.shippingAddress = shippingAddress;
+        this.shippingFee = shippingFee;
+        this.notes = notes;
         orderDetails = new HashSet<>();
     }
     
@@ -99,7 +111,7 @@ public class Bill implements Serializable {
         this.customer = customer;
     }
 
-    public void setOrderDetails(HashSet<OrderDetail> orderDetails) {
+    public void setOrderDetails(Set<OrderDetail> orderDetails) {
         for(OrderDetail order : orderDetails){
             this.addOrderDetail(order);
         }
@@ -134,6 +146,30 @@ public class Bill implements Serializable {
 
     public void setStatusOrder(StatusOrder statusOrder) {
         this.statusOrder = statusOrder;
+    }
+
+    public String getShippingAddress() {
+        return shippingAddress;
+    }
+
+    public void setShippingAddress(String shippingAddress) {
+        this.shippingAddress = shippingAddress;
+    }
+
+    public Double getShippingFee() {
+        return shippingFee;
+    }
+
+    public void setShippingFee(Double shippingFee) {
+        this.shippingFee = shippingFee;
+    }
+
+    public String getNotes() {
+        return notes;
+    }
+
+    public void setNotes(String notes) {
+        this.notes = notes;
     }
     
 }

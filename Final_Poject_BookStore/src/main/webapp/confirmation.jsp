@@ -36,22 +36,22 @@
                 <div class="row mt-3">
                     <div class="col-6">
                         <p class="mb-1 fw-bold">Họ và tên</p>
-                        <p>Nguyễn Văn A</p>
+                        <p>${sessionScope.user.getFullName()}</p>
                     </div>
                     <div class="col-6">
                         <p class="mb-1 fw-bold">Email</p>
-                        <p>nguyenvana@gmail.com</p>
+                        <p>${sessionScope.user.getEmail()}</p>
                     </div>
                     <div class="col-6">
                         <p class="mb-1 fw-bold">Số điện thoại</p>
-                        <p>0912345678</p>
+                        <p>${sessionScope.user.getNumberPhone()}</p>
                     </div>
                     <div class="col-6">
                         <p class="mb-1 fw-bold">Địa chỉ</p>
-                        <p>1 Võ Văn Ngân, Phường Linh Chiểu, Thành phố Thủ Đức , Thành phố Hồ Chí Minh , Việt Nam</p>
+                        <p>${address}</p>
                     </div>
                 </div>
-                <a href="index.jsp" class="primary-btn mt-3 mb-4 d-inline-block">Tiếp tục mua sắm</a>
+                <a href="/home" class="primary-btn mt-3 mb-4 d-inline-block">Tiếp tục mua sắm</a>
             </div>
 
             <!-- Right Section: Order Summary -->
@@ -61,48 +61,58 @@
                     <hr/>
                     <div class="d-flex justify-content-between">
                         <p>Ngày đặt</p>
-                        <p>28/10/2024</p>
+                        <p>${cart.getOrderDate()}</p>
                     </div>
                     <div class="d-flex justify-content-between">
                         <p>Số hiệu đơn</p>
-                        <p>DH12345678</p>
+                        <p>Order ID: ${cart.getId()}</p>
                     </div>
                     <div class="d-flex justify-content-between">
                         <p>Dự kiến</p>
-                        <p>28/10/2024</p>
+                        <p>${cart.getDeliveryDate()}</p>
                     </div>
                     <hr/>
 
                     <!-- Order Items List -->
                     <div style="max-height: 200px; overflow-y: auto;">
-                        <c:forEach var="i" begin="1" end="6">
-                            <div class="d-flex justify-content-between align-items-center mb-2">
-                                <img src="https://www.netabooks.vn/Data/Sites/1/Product/70144/loi-chua-noi.jpg" alt="product" width="60" class="me-3"/>
-                                <div class="flex-grow-1 pe-4">
-                                    <h6>Nhà Giả Kim - Cuốn sách thay đổi cuộc đời bạn mãi mãi</h6>
-                                    <p class="mb-0"><fmt:formatNumber value="200000" type="number" pattern="#,##0" />đ x 3</p>
+                         <!-- tạo biến total cost -->
+                        <c:set var="totalCost" value="0.0" />
+                        <c:if test = "${not empty listOrderDetails}">
+                            <c:forEach var = "orderDetail" items="${listOrderDetails}"> 
+                                <c:set var="totalCost" value="${totalCost + orderDetail.getBook().sellingPrice*(1 - orderDetail.getBook()
+                                                           .getDiscountCampaign().getPercentDiscount()) * orderDetail.getQuantity()}"/>
+                                <div class="d-flex justify-content-between align-items-center mb-2">
+                                    <img src="${orderDetail.getBook().getUrlImage()}" alt="product" width="60" class="me-3"/>
+                                    <div class="flex-grow-1 pe-4">
+                                        <h6>${orderDetail.getBook().getTitle()}</h6>
+                                        <p class="mb-0"><fmt:formatNumber value="${orderDetail.getBook().sellingPrice*(1 - orderDetail.getBook()
+                                                                   .getDiscountCampaign().getPercentDiscount())}"
+                                                          type="number" pattern="#,##0" />đ x ${orderDetail.getQuantity()}</p>
+                                    </div>
+                                    <span class="fw-semibold">
+                                        <fmt:formatNumber value="${orderDetail.getBook().sellingPrice*(1 - orderDetail.getBook()
+                                                                   .getDiscountCampaign().getPercentDiscount()) * orderDetail.getQuantity()}" type="number" pattern="#,##0" />đ
+                                    </span>
                                 </div>
-                                <span class="fw-semibold">
-                                    <fmt:formatNumber value="200000" type="number" pattern="#,##0" />đ
-                                </span>
-                            </div>
-                        </c:forEach>
+                            </c:forEach>
+                        </c:if>
 
                     </div>
 
                     <hr/>
                     <div class="d-flex justify-content-between">
                         <p>Giá sản phẩm</p>
-                        <p><fmt:formatNumber value="9999999" type="number" pattern="#,##0" /> đ</p>
+                        <p><fmt:formatNumber value="${totalCost}" type="number" pattern="#,##0" /> đ</p>
                     </div>
                     <div class="d-flex justify-content-between">
+                        <c:set var="shippingFee" value="40000" />
                         <p>Giá vận chuyển</p>
-                        <p>40,000 đ</p>
+                        <p><fmt:formatNumber value="${shippingFee}" type="number" pattern="#,##0" /> đ</p>
                     </div>
                     <hr/>
                     <div class="d-flex justify-content-between fw-bold fs-5">
                         <p>Tổng hóa đơn</p>
-                        <p class="text-danger"><fmt:formatNumber value="99999999" type="number" pattern="#,##0" /> đ</p>
+                        <p class="text-danger"><fmt:formatNumber value="${totalCost + shippingFee}" type="number" pattern="#,##0" /> đ</p>
                     </div>
                 </div>
             </div>

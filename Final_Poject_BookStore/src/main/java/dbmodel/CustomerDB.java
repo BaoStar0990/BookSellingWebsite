@@ -2,13 +2,16 @@ package dbmodel;
 
 import database.DBUtil;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityTransaction;
 import jakarta.persistence.NoResultException;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import model.Address;
 import model.Bill;
+import model.Book;
 import model.Customer;
+import model.StatusOrder;
 import org.hibernate.TransientObjectException;
 
 public class CustomerDB  extends ModifyDB<Customer> implements DBInterface<Customer>{
@@ -43,10 +46,13 @@ public class CustomerDB  extends ModifyDB<Customer> implements DBInterface<Custo
         }
     }
     
-    public List<Address> getAddressCustomer(Customer c){
+    public Set<Address> getAddressCustomer(Customer c){
         try(EntityManager em = DBUtil.getEmFactory().createEntityManager()){
-            return em.createQuery("from Address a where a.customer = :customer", 
+            List<Address> listAddress = em.createQuery("from Address a where a.customer = :customer", 
                      Address.class).setParameter("customer", c).getResultList();
+            // mọi phần tử trùng lặp sẽ bị bỏ
+            Set<Address> rs = new HashSet<>(listAddress);
+            return rs;
         }
         catch (TransientObjectException ex) {
             return null;
@@ -112,6 +118,49 @@ public class CustomerDB  extends ModifyDB<Customer> implements DBInterface<Custo
         }
         catch(Exception ex){
             return null;
+        }
+    }
+    public boolean makeAnOrder(Bill cart, Customer customer){
+        EntityManager em = null;
+        EntityTransaction tr = null;
+        try{
+            em = DBUtil.getEmFactory().createEntityManager();
+            tr = em.getTransaction();
+            tr.begin();
+            // kiểm tra số lượng đặt có vượt quá số lượng trong kho
+            boolean isExceedQuantity = cart.getOrderDetails().stream()
+                    .anyMatch(o -> o.getBook().getStocks() < o.getQuantity());
+            if(isExceedQuantity)
+                return false;
+            // chuyển trạng thái từ "storing" sang "Processing"
+            cart.setStatusOrder(StatusOrder.Processing);
+            // tạo cart mới cho khách hàng         
+            Bill newCart = new Bill();
+            newCart.setCustomer(customer);
+            newCart.setStatusOrder(StatusOrder.Storing);
+            em.persist(newCart);              
+            // trừ số lượng sách trong kho khi đặt
+            final EntityManager emFinal = em; 
+            cart.getOrderDetails().forEach(o ->{
+                        // lấy cuốn sách cập nhật số lượng trong kho
+                        var book = emFinal.find(Book.class, o.getBook().getId());
+                        book.setStocks(book.getStocks() - o.getQuantity());
+                        emFinal.merge(book);
+                    });
+            // cập nhật cart thành đơn hàng
+            em.merge(cart);            
+            tr.commit();
+            return true;
+        }
+        catch(Exception ex){
+            if(tr != null && tr.isActive())
+                tr.rollback();
+            ex.printStackTrace();
+            return false;
+        }
+        finally{
+            if(em != null)
+                em.close();
         }
     }
 }

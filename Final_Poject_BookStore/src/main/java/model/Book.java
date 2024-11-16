@@ -206,5 +206,18 @@ public class Book implements Serializable {
         return authors;
     }
     
-    // bussiness    
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null || getClass() != obj.getClass()) return false;
+        Book book = (Book) obj;
+        return Objects.equals(bookID, book.getId()); // Giả sử `id` là khóa chính
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 47 * hash + this.bookID;
+        return hash;
+    }
 }

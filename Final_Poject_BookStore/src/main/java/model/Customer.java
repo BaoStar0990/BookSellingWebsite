@@ -1,9 +1,11 @@
 package model;
 
+import dbmodel.BillDB;
 import dbmodel.CustomerDB;
 import jakarta.persistence.*;
 
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -42,10 +44,10 @@ public class Customer extends User implements Serializable {
         addresses = new HashSet<>();
     }
 
-    public List<Address> getAddresses() {
+    public Set<Address> getAddresses() {
         return CustomerDB.getInstance().getAddressCustomer(this);
     }
-    public void setAddresses(List<Address> addresses) {
+    public void setAddresses(Set<Address> addresses) {
         for(Address a : addresses){
             this.addAddress(a);
         }
@@ -68,9 +70,8 @@ public class Customer extends User implements Serializable {
     }
     
     // chức năng đặt hàng
-    public boolean makeAnOrder(HashSet<OrderDetail> orderDetails){
-        
-        return true;
+    public boolean makeAnOrder(Bill cart){
+        return CustomerDB.getInstance().makeAnOrder(cart, this);
     }
     // chức năng thêm vào giỏ hàng
     public boolean addToCart(OrderDetail orderDetail){

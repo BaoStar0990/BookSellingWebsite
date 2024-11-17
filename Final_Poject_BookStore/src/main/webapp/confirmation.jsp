@@ -36,7 +36,7 @@
                 <div class="row mt-3">
                     <div class="col-6">
                         <p class="mb-1 fw-bold">Họ và tên</p>
-                        <p>${sessionScope.user.getFullName()}</p>
+                        <p>${fullName}</p>
                     </div>
                     <div class="col-6">
                         <p class="mb-1 fw-bold">Email</p>
@@ -44,7 +44,7 @@
                     </div>
                     <div class="col-6">
                         <p class="mb-1 fw-bold">Số điện thoại</p>
-                        <p>${sessionScope.user.getNumberPhone()}</p>
+                        <p>${phonenumber}</p>
                     </div>
                     <div class="col-6">
                         <p class="mb-1 fw-bold">Địa chỉ</p>
@@ -61,15 +61,15 @@
                     <hr/>
                     <div class="d-flex justify-content-between">
                         <p>Ngày đặt</p>
-                        <p>${cart.getOrderDate()}</p>
+                        <p>${order.getOrderDate()}</p>
                     </div>
                     <div class="d-flex justify-content-between">
                         <p>Số hiệu đơn</p>
-                        <p>Order ID: ${cart.getId()}</p>
+                        <p>Order ID: ${order.getId()}</p>
                     </div>
                     <div class="d-flex justify-content-between">
                         <p>Dự kiến</p>
-                        <p>${cart.getDeliveryDate()}</p>
+                        <p>${order.getDeliveryDate()}</p>
                     </div>
                     <hr/>
 

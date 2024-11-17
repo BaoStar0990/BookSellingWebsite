@@ -7,6 +7,7 @@ import jakarta.persistence.NoResultException;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 import model.Address;
 import model.Bill;
 import model.Book;
@@ -127,6 +128,9 @@ public class CustomerDB  extends ModifyDB<Customer> implements DBInterface<Custo
             em = DBUtil.getEmFactory().createEntityManager();
             tr = em.getTransaction();
             tr.begin();
+            // kiểm tra trong cart có sp nào không, hoặc có phải là cart không
+            if(cart.getOrderDetails()==null || !cart.getStatusOrder().toString().equals("storing"))
+                return false;
             // kiểm tra số lượng đặt có vượt quá số lượng trong kho
             boolean isExceedQuantity = cart.getOrderDetails().stream()
                     .anyMatch(o -> o.getBook().getStocks() < o.getQuantity());
@@ -140,7 +144,7 @@ public class CustomerDB  extends ModifyDB<Customer> implements DBInterface<Custo
             newCart.setStatusOrder(StatusOrder.Storing);
             em.persist(newCart);              
             // trừ số lượng sách trong kho khi đặt
-            final EntityManager emFinal = em; 
+            final EntityManager emFinal = em;           
             cart.getOrderDetails().forEach(o ->{
                         // lấy cuốn sách cập nhật số lượng trong kho
                         var book = emFinal.find(Book.class, o.getBook().getId());
@@ -148,7 +152,25 @@ public class CustomerDB  extends ModifyDB<Customer> implements DBInterface<Custo
                         emFinal.merge(book);
                     });
             // cập nhật cart thành đơn hàng
-            em.merge(cart);            
+            em.merge(cart);   
+            // cập nhật lại số lượng các OrderDetail trong các cart của khách hàng khác có
+            // còn hợp lệ không
+            List<Bill> allCart = BillDB.getInstance().selectAll()
+                        .stream().filter(b -> "Storing".equals(b.getStatusOrder().toString()))
+                     .collect(Collectors.toList()); 
+            allCart.forEach(c -> c.getOrderDetails()
+                    .forEach(o -> 
+                    {
+                        // nếu số lượng = 0, xóa orderDetail này
+                        if(o.getBook().getStocks() == 0)
+                            cart.getOrderDetails().remove(o);
+                        // nếu số lương > số lượng trong kho, thì set về số lượng trong kho
+                        else if(o.getQuantity() > o.getBook().getStocks())
+                            o.setQuantity(o.getBook().getStocks());
+                        // lưu thay đổi orderDetail
+                        emFinal.merge(o);
+                    }));
+
             tr.commit();
             return true;
         }
@@ -161,6 +183,47 @@ public class CustomerDB  extends ModifyDB<Customer> implements DBInterface<Custo
         finally{
             if(em != null)
                 em.close();
+        }
+    }
+    public boolean setDefaltAddress(Customer customer, Address a){
+        EntityManager em = null;
+        EntityTransaction tr = null;
+
+        try {
+            em = DBUtil.getEmFactory().createEntityManager();
+            tr = em.getTransaction();
+            tr.begin(); 
+
+            if (a != null) {
+                final EntityManager emFinal = em;
+                // Đặt tất cả các địa chỉ mặc định thành false
+                customer.getAddresses().stream()
+                    .filter(b -> b.isDefaultAddress())
+                    .forEach(b -> {
+                        b.setDefaultAddress(false);
+                        emFinal.merge(b);  
+                    });
+
+                a.setDefaultAddress(true);
+                em.merge(a);
+
+                tr.commit(); // Commit giao dịch
+                return true;
+            } else {
+                System.out.println("Lỗi tìm địa chỉ");
+                tr.rollback(); 
+                return false;
+            }
+        } catch (Exception ex) {
+            if (tr != null && tr.isActive()) {
+                tr.rollback(); // Rollback khi có ngoại lệ xảy ra
+            }
+            ex.printStackTrace();
+            return false;
+        } finally {
+            if (em != null) {
+                em.close(); // Đóng EntityManager khi xong
+            }
         }
     }
     public boolean insertCustomer(Customer c){

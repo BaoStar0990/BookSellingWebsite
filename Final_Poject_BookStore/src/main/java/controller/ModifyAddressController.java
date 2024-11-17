@@ -6,7 +6,6 @@ package controller;
 
 import dbmodel.AddressDB;
 import java.io.IOException;
-import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -21,7 +20,7 @@ import model.Customer;
  *
  * @author PC
  */
-@WebServlet(name = "AddAddressController", urlPatterns = {"/modifyaddress"})
+@WebServlet(name = "ModifyAddressController", urlPatterns = {"/modifyaddress"})
 public class ModifyAddressController extends HttpServlet {
 
     /**
@@ -39,58 +38,103 @@ public class ModifyAddressController extends HttpServlet {
         request.setCharacterEncoding("UTF-8");
         request.setCharacterEncoding("UTF-8");
         
-        String url = "/WEB-INF/views/customers/address.jsp";
+        String url = "/usersetting.jsp?setting=address";
         // Lấy session
         HttpSession session = request.getSession();
         if(session.getAttribute("user") == null){
             url = "/signin.jsp";
         }
         else{
-            // lấy các thông tin address
-            String fullName = request.getParameter("name");
-            String phonenumber = request.getParameter("phone");
-            String tinh = request.getParameter("tinh");
-            String quan = request.getParameter("quan");
-            String phuong = request.getParameter("phuong");
-            String street = request.getParameter("addressDetail");
+            
             // lấy khách hàng
             Customer customer = (Customer) session.getAttribute("user");
             if(customer != null){
                 // lấy action
                 String action = request.getParameter("action");
-                if(action.equals("add")){               
-                    Address a = new Address(fullName, phonenumber, street,
-                            tinh, phuong, quan, false, customer);
-                    if(!AddressDB.getInstance().insert(a))
-                        System.out.println("Lưu không thành công");
-                    
-                }
-                else if(action.equals("edit")){
-                    String idStr = request.getParameter("addressId");
-                    try{
+                if(action.equals("defaultAddress")){
+                    String idStr = request.getParameter("id");
+                    try{                      
                         // find Address
-                        int id = Integer.parseInt(idStr);   
+                        int id = Integer.parseInt(idStr); 
                         Address a = AddressDB.getInstance().selectByID(id);
-                        if(a != null){
-                            a.setFullName(fullName);
-                            a.setPhonenumber(phonenumber);
-                            a.setDistrict(quan);
-                            a.setProvince(tinh);
-                            a.setWard(phuong);
-                            a.setStreet(street);
-                            // lưu cập nhật
-                            if(!AddressDB.getInstance().update(a))
-                                System.out.println("Cập nhật không thành công");
+                        if(a != null){                           
+                            if(!customer.setDefaultAddress(a))
+                                System.out.println("Lỗi đặt địa chỉ mặc định");
                         }
                         else
-                            System.out.println("Không tìm thấy địa chỉ");
-
+                            System.out.println("Lỗi tìm địa chỉ");
+                                
+                            
                     }catch(NumberFormatException ex){
                         System.out.println("Vui lòng nhập đúng dữ liệu");
                     }catch (NoSuchElementException ex){
                         System.out.println("Không tìm thấy sách");
                     }
                 }
+                if(action.equals("delete")){
+                    String idStr = request.getParameter("id");
+                    try{                      
+                        // find Address
+                        int id = Integer.parseInt(idStr); 
+                        Address a = AddressDB.getInstance().selectByID(id);
+                        if(a != null){                           
+                            if(AddressDB.getInstance().delete(id, Address.class))
+                                System.out.println("Xóa địa chỉ không thành công");
+                        }
+                        else
+                            System.out.println("Lỗi tìm địa chỉ");
+                                
+                            
+                    }catch(NumberFormatException ex){
+                        System.out.println("Vui lòng nhập đúng dữ liệu");
+                    }catch (NoSuchElementException ex){
+                        System.out.println("Không tìm thấy sách");
+                    }
+                }
+                else{
+                    // lấy các thông tin address
+                    String fullName = request.getParameter("name");
+                    String phonenumber = request.getParameter("phone");
+                    String tinh = request.getParameter("tinhText");
+                    String quan = request.getParameter("quanText");
+                    String phuong = request.getParameter("phuongText");
+                    String street = request.getParameter("addressDetail");
+
+                    if(action.equals("add")){               
+                        Address a = new Address(fullName, phonenumber, street,
+                                tinh, phuong, quan, false, customer);
+                        if(!AddressDB.getInstance().insert(a))
+                            System.out.println("Lưu không thành công");
+
+                    }
+                    else if(action.equals("edit")){
+                        String idStr = request.getParameter("addressId");
+                        try{
+                            // find Address
+                            int id = Integer.parseInt(idStr);   
+                            Address a = AddressDB.getInstance().selectByID(id);
+                            if(a != null){
+                                a.setFullName(fullName);
+                                a.setPhonenumber(phonenumber);
+                                a.setDistrict(quan);
+                                a.setProvince(tinh);
+                                a.setWard(phuong);
+                                a.setStreet(street);
+                                // lưu cập nhật
+                                if(!AddressDB.getInstance().update(a))
+                                    System.out.println("Cập nhật không thành công");
+                            }
+                            else
+                                System.out.println("Không tìm thấy địa chỉ");
+
+                        }catch(NumberFormatException ex){
+                            System.out.println("Vui lòng nhập đúng dữ liệu");
+                        }catch (NoSuchElementException ex){
+                            System.out.println("Không tìm thấy sách");
+                        }
+                    }
+                }
+                
             }
         }
         // chuyển trang

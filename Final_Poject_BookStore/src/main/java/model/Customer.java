@@ -81,4 +81,8 @@ public class Customer extends User implements Serializable {
                     .sorted(Comparator.comparingInt(Bill::getId))
                     .collect(Collectors.toList());
     }
+    // set địa chỉ mặc định
+    public boolean setDefaultAddress(Address a){
+        return CustomerDB.getInstance().setDefaltAddress(this, a);
+    }
 }

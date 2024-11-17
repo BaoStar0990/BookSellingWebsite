@@ -164,11 +164,14 @@
                     
                 <form id ="formDatHang" action="${pageContext.request.contextPath}/order" method = "post" 
                       class="text-decoration-none"  onsubmit="updateAddressSelected()">
+                    <input type="hidden" name ="name" id ="name">
+                    <input type="hidden" name ="phonenumber" id ="phonenumber">
                     <input type="hidden" value = "" name ="addressSelected" id ="addressSelected">
                     <input type="hidden" value ="${cartId}" name ="cartId">
                     <input type="hidden" name ="payment" id ="payment">
                     <input type="hidden" name ="notes" id ="notes">
                     <input type="hidden" name ="shipping" id ="shipping">
+                    
                     <button class="primary-btn mt-3 w-100" onclick="submitForms()">
                         ĐẶT HÀNG
                     </button>
@@ -193,31 +196,27 @@
         onChangeAddress();
     };
     function onChangeAddress(){
-//        alert("heheh");
-        var user = "${sessionScope.user}";
-        if(user !== null){
-            document.getElementById("fullName").value = "${user.getFullName()}";
-            document.getElementById("phone").value = "${user.getNumberPhone()}";
-            
-            var selectedValue = document.getElementById("addressBook").value;
+        var selectedValue = document.getElementById("addressBook").value;
 //            alert(selectedValue.toString());
-            if(!(selectedValue.toString() === "otherAddress")){    
-                try {
-                    var address = JSON.parse(selectedValue); // Chuyển từ JSON sang đối tượng
-                    
-                    // set các giá trị
-                    document.getElementById("street").value = address.street;
-                    setLocationByNames(address.province, address.district, address.ward);
+        if(!(selectedValue.toString() === "otherAddress")){    
+            try {
+                var address = JSON.parse(selectedValue); // Chuyển từ JSON sang đối tượng
 
-                } catch (e) {
-                    alert("Không thể chuyển đổi giá trị thành JSON: " + e);
-                }
+                // set các giá trị
+                document.getElementById("fullName").value = address.fullName;
+                document.getElementById("phone").value = address.phonenumber;
+                document.getElementById("street").value = address.street;
+                setLocationByNames(address.province, address.district, address.ward);
+
+            } catch (e) {
+                alert("Không thể chuyển đổi giá trị thành JSON: " + e);
             }
-            else {
-                document.getElementById("street").value = "";
-                setLocationByNames("Tỉnh Thành", "Quận Huyện", "Phường Xã");
-            }
-         } 
+        }
+        else {
+            document.getElementById("street").value = "";
+            setLocationByNames("Tỉnh Thành", "Quận Huyện", "Phường Xã");
+        }
+         
     }   
     function updateAddressSelected(){
         var selectElement = document.getElementById("addressBook");
@@ -244,6 +243,8 @@
         document.getElementById("addressSelected").value = selectedText;
     }
     function submitForms() {
+        document.getElementById("name").value = document.getElementById("fullName").value;
+        document.getElementById("phonenumber").value = document.getElementById("phone").value;
         document.getElementById("shipping").value = document.querySelector('input[name="shippingMethod"]:checked').value;
         document.getElementById("payment").value = document.querySelector('input[name="paymentMethod"]:checked').value;
         document.getElementById("notes").value = document.getElementById("note").value;

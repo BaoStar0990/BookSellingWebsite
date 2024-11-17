@@ -49,6 +49,7 @@ dbmodel\CustomerDB.class
 controller\ModifyAddressController.class
 test\TestCategory.class
 controller\BookListController.class
+controller\ChangePasswordController.class
 controller\AddBookController.class
 controller\UploadImageController.class
 controller\HomeControllerServlet.class

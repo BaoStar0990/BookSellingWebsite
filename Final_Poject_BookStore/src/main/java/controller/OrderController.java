@@ -60,6 +60,8 @@ public class OrderController extends HttpServlet {
             // Lấy giỏ hàng của khách hàng           
             String cartIdStr = request.getParameter("cartId");
             request.setAttribute("address", address);
+            request.setAttribute("fullName", request.getParameter("name"));
+            request.setAttribute("phonenumber", request.getParameter("phonenumber"));
             try{
                 // find cart
                 int cartId = Integer.parseInt(cartIdStr);

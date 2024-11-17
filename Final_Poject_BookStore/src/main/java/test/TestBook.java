@@ -50,7 +50,7 @@ public class TestBook {
 //            System.out.println("Lỗi chèn sách");
 //        }
         
-        Book b = BookDB.getInstance().selectByID(67);
+        Book b = BookDB.getInstance().selectByID(63);
         BookDB.getInstance().delete(b.getId(), Book.class);
     }
 }

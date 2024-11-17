@@ -14,6 +14,7 @@ import model.Category;
 import model.Review;
 import org.hibernate.TransientObjectException;
 import jakarta.persistence.EntityTransaction;
+import java.util.Iterator;
 
 public class BookDB extends ModifyDB<Book> implements DBInterface<Book> {
     public static BookDB getInstance(){
@@ -200,25 +201,24 @@ public class BookDB extends ModifyDB<Book> implements DBInterface<Book> {
             tr.begin();
             // chuyển thực thể sang trạng thái persistent
             Book entity = em.find(entityClass, id);
-            // xóa author khỏi book và book khỏi author
-            for(Author a : entity.getAuthors()){
-                for(Book b : a.getBooks())
-                    a.getBooks().remove(b);
-                
-                if(!AuthorDB.getInstance().update(a)){
-                    tr.rollback();
-                    return false;
-                }
+            if(entity == null){
+                tr.rollback();
+                return false;
             }
-            // xóa category khỏi book và book khỏi category
-            for(Category c : entity.getCategories()){
-                for(Book b : c.getBooks())
-                    c.getBooks().remove(b);
-                
-                if(!CategoryDB.getInstance().update(c)){
-                    tr.rollback();
-                    return false;
-                }
+            // Xóa liên kết với Author
+            Iterator<Author> authorIterator = entity.getAuthors().iterator();
+            while (authorIterator.hasNext()) {
+                Author author = authorIterator.next();
+                author.getBooks().remove(entity); // Xóa book khỏi author
+                authorIterator.remove();         // Xóa author khỏi book
+            }
+
+            // Xóa liên kết với Category
+            Iterator<Category> categoryIterator = entity.getCategories().iterator();
+            while (categoryIterator.hasNext()) {
+                Category category = categoryIterator.next();
+                category.getBooks().remove(entity); // Xóa book khỏi category
+                categoryIterator.remove();          // Xóa category khỏi book
             }
             // xóa thực thể
             em.remove(entity);

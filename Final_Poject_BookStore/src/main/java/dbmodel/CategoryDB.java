@@ -5,6 +5,7 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;
 import jakarta.persistence.NoResultException;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 import model.Book;
@@ -115,15 +116,20 @@ public class CategoryDB extends ModifyDB<Category> implements DBInterface<Catego
             tr.begin();
             // chuyển thực thể sang trạng thái persistent
             Category entity = em.find(entityClass, id);
-            // xóa author khỏi book và book khỏi author
-            for(Book b : entity.getBooks()){
-                for(Category c : b.getCategories())
-                    b.getCategories().remove(c);
-                
-                if(!BookDB.getInstance().update(b)){
-                    tr.rollback();
-                    return false;
-                }
+            if(entity == null){
+                tr.rollback();
+                return false;
+            }
+             // Xóa liên kết giữa Category và Book
+            Iterator<Book> bookIterator = entity.getBooks().iterator();
+            while (bookIterator.hasNext()) {
+                Book book = bookIterator.next();
+
+                // Xóa Category khỏi danh sách của Book
+                book.getCategories().remove(entity);
+
+                // Xóa Book khỏi danh sách của Category
+                bookIterator.remove();
             }
             // xóa thực thể
             em.remove(entity);

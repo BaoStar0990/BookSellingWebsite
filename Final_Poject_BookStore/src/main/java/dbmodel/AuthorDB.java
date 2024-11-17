@@ -5,6 +5,7 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;
 import jakarta.persistence.NoResultException;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 import model.Author;
@@ -112,16 +113,28 @@ public class AuthorDB extends ModifyDB<Author> implements DBInterface<Author> {
             tr.begin();
             // chuyển thực thể sang trạng thái persistent
             Author entity = em.find(entityClass, id);
-            // xóa author khỏi book và book khỏi author
-            for(Book b : entity.getBooks()){
-                for(Author a : b.getAuthors())
-                    b.getAuthors().remove(a);
-                
-                if(!BookDB.getInstance().update(b)){
-                    tr.rollback();
-                    return false;
-                }
+            if(entity == null){
+                tr.rollback();
+                return false;
             }
+            // Xóa liên kết với Book
+            Iterator<Book> bookIterator = entity.getBooks().iterator();
+            while (bookIterator.hasNext()) {
+                Book book = bookIterator.next();
+
+                // Xóa Author khỏi Book
+                Iterator<Author> authorIterator = book.getAuthors().iterator();
+                while (authorIterator.hasNext()) {
+                    Author author = authorIterator.next();
+                    if (author.equals(entity)) {
+                        authorIterator.remove(); // Xóa Author khỏi Book
+                    }
+                }
+
+                // Cập nhật Book trong danh sách của Author
+                bookIterator.remove(); // Xóa Book khỏi Author
+            }
+
             // xóa thực thể
             em.remove(entity);
             tr.commit();

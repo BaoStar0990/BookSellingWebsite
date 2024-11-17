@@ -59,6 +59,10 @@ public abstract class ModifyDB<T> {
             tr.begin();
             // chuyển thực thể sang trạng thái persistent
             T entity = em.find(entityClass, id);
+            if(entity == null){
+                tr.rollback();
+                return false;
+            }
             // xóa thực thể
             em.remove(entity);
             tr.commit();

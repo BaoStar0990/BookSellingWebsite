@@ -53,7 +53,7 @@
   <div class="modal fade" id="addressModal" tabindex="-1" aria-labelledby="addressModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg"> <!-- Modal enlarged with modal-lg class -->
       <div class="modal-content">
-        <form action="" method="post" id="addressForm">
+        <form action="/modifyaddress" method="post" id="addressForm">
             <input type="hidden" name="action" id ="action" value ="">
           <div class="modal-header">
             <h5 class="modal-title fs-semibold" id="addressModalLabel">Thêm địa chỉ giao hàng</h5>
@@ -135,12 +135,12 @@
     document.getElementById("name").value = address.fullName;
     document.getElementById("phone").value = address.phonenumber;
     // set các giá trị options địa chỉ
-    document.getElementById("addressDetail").value = address.street;
     setLocationByNames(address.province, address.district, address.ward);
     
-    document.getElementById("addressDetail").value = address.street + ", " + address.ward + ", " + address.district + ", " + address.province;
+    document.getElementById("addressDetail").value = address.street;
     document.getElementById("addressId").value = address.id;
-    loadProvinces(); // Load province data for edit
+    alert(address.id);
+//    loadProvinces(); // Load province data for edit
   }
 </script>
 

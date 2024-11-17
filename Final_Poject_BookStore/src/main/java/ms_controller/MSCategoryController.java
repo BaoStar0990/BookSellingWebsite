@@ -8,6 +8,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import model.Category;
+import model.Book;
 
 import java.io.IOException;
 import java.util.List;
@@ -26,7 +27,7 @@ public class MSCategoryController extends HttpServlet {
         updateCategoriesInSession(req);
         req.getServletContext().getRequestDispatcher("/Management-System/ms-category.jsp").forward(req, resp);
     }
-
+    
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         // checkAdmin(req, resp);
@@ -43,7 +44,9 @@ public class MSCategoryController extends HttpServlet {
                     break;
                 }
                 case "delete": {
-                    CategoryDB.getInstance().delete(Integer.parseInt(req.getParameter("id")), Category.class);
+                    int categoryId = Integer.parseInt(req.getParameter("id"));
+                    CategoryDB.getInstance().delete(categoryId, Category.class);
+                    removeCategoryFromBooksInSession(req, categoryId);
                     break;
                 }
             }
@@ -62,6 +65,17 @@ public class MSCategoryController extends HttpServlet {
         categories.sort((c1, c2) -> Integer.compare(c2.getId(), c1.getId()));
         // Update the categories attribute in the session
         session.setAttribute("categories", categories);
+    }
+
+    private void removeCategoryFromBooksInSession(HttpServletRequest req, int categoryId) {
+        HttpSession session = req.getSession();
+        List<Book> books = (List<Book>) session.getAttribute("books");
+        if (books != null) {
+            for (Book book : books) {
+                book.getCategories().removeIf(category -> category.getId() == categoryId);
+            }
+            session.setAttribute("books", books);
+        }
     }
 
     // protected void checkAdmin(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {

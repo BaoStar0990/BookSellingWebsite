@@ -74,7 +74,9 @@
                             data-book-description="${book.getDescription()}" data-book-publisher="${book.getPublisher().getId()}"
                             data-book-publish-year="${book.getPublishYear()}" data-book-language="${book.getLanguage()}"
                             data-book-discount-campaign="${book.getDiscountCampaign() != null ? book.getDiscountCampaign().getCampaignId() : ''}"
-                            data-book-isbn="${book.getIsbn()}" 
+                            data-book-isbn="${book.getIsbn()}"
+                            data-book-authors="<c:forEach var='author' items='${book.getAuthors()}' varStatus='status'>${author.getId()}${status.last ? '' : ','}</c:forEach>"
+                            data-book-categories="<c:forEach var='category' items='${book.getCategories()}' varStatus='status'>${category.getId()}${status.last ? '' : ','}</c:forEach>"
                             onclick="editBook(this)">
                         <i class="fas fa-edit"></i>
                     </button>
@@ -154,7 +156,7 @@
                                       <!-- Dynamically load authors -->
                                       <c:forEach var="author" items="${authors}">
                                           <div class="form-check">
-                                              <input class="form-check-input author-checkbox" type="checkbox" value="${author.getId()}" id="author${author.getId()}">
+                                              <input class="form-check-input author-checkbox" type="checkbox" value="${author.getId()}" id="author${author.getId()}" >
                                               <label class="form-check-label" for="author${author.getId()}">${fn:escapeXml(author.getName())}</label>
                                           </div>
                                       </c:forEach>
@@ -258,12 +260,12 @@
   </div>
   <!-- End Add/Edit Book Modal -->
 
-  <!-- Hidden form for delete action -->
-  <form id="deleteBookForm" method="post" action="msbook?action=delete" style="display: none;">
-      <input type="hidden" name="bookId" id="deleteBookId">
-  </form>
+    <!-- Hidden form for delete action -->
+    <form id="deleteBookForm" method="post" action="msbook?action=delete" style="display: none;">
+        <input type="hidden" name="bookId" id="deleteBookId">
+    </form>
 
-  <!-- ms-book.js -->
+    <!-- ms-book.js -->
     <script src="${pageContext.request.contextPath}/assets/javascript/management-system/ms-book.js"></script>
     <script>
         function confirmDelete(button) {
@@ -273,24 +275,6 @@
                 document.getElementById('deleteBookForm').submit();
             }
         }
-    </script>
-    <script>
-        document.getElementById('addEditBookModal').addEventListener('hidden.bs.modal', function () {
-            document.getElementById('addEditBookForm').reset();
-            document.getElementById('bookId').value = '';
-            document.getElementById('selectedAuthors').innerHTML = '';
-            document.getElementById('selectedCategories').innerHTML = '';
-            document.querySelectorAll('.author-checkbox').forEach(function(checkbox) {
-                checkbox.checked = false;
-            });
-            document.querySelectorAll('.category-checkbox').forEach(function(checkbox) {
-                checkbox.checked = false;
-            });
-            document.getElementById('imagePreview').style.display = 'none';
-            document.getElementById('urlImage').required = true;
-            document.getElementById('addEditBookForm').action = 'msbook?action=add';
-            document.getElementById('addEditBookModalLabel').textContent = 'Thêm Sách';
-        });
     </script>
 </body>
 </html>

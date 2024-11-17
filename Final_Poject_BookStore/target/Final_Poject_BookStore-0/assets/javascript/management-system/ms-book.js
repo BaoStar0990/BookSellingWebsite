@@ -12,6 +12,7 @@ document.getElementById('searchBox').addEventListener('input', function() {
     }
 });
 
+// Create Tag Function
 function createTag(value, text, containerId) {
     const container = document.getElementById(containerId);
     const tag = document.createElement('span');
@@ -30,6 +31,7 @@ function createTag(value, text, containerId) {
     container.appendChild(tag);
 }
 
+// Add Event Listener for Author and Category Checkboxes
 document.querySelectorAll('.author-checkbox').forEach(function(checkbox) {
     checkbox.addEventListener('change', function() {
         if (this.checked) {
@@ -43,6 +45,7 @@ document.querySelectorAll('.author-checkbox').forEach(function(checkbox) {
     });
 });
 
+// Add Event Listener for Author and Category Checkboxes
 document.querySelectorAll('.category-checkbox').forEach(function(checkbox) {
     checkbox.addEventListener('change', function() {
         if (this.checked) {
@@ -56,6 +59,7 @@ document.querySelectorAll('.category-checkbox').forEach(function(checkbox) {
     });
 });
 
+// Search Author and Category
 document.getElementById('authorSearch').addEventListener('input', function() {
     let filter = this.value.toUpperCase();
     let checkboxes = document.querySelectorAll('#bookAuthors .form-check');
@@ -69,6 +73,7 @@ document.getElementById('authorSearch').addEventListener('input', function() {
     });
 });
 
+// Search Author and Category
 document.getElementById('categorySearch').addEventListener('input', function() {
     let filter = this.value.toUpperCase();
     let checkboxes = document.querySelectorAll('#bookCategories .form-check');
@@ -82,6 +87,7 @@ document.getElementById('categorySearch').addEventListener('input', function() {
     });
 });
 
+// Add Event Listener for Author and Category Checkboxes
 document.getElementById('addEditBookModal').addEventListener('hidden.bs.modal', function () {
     document.getElementById('addEditBookForm').reset();
     document.getElementById('bookId').value = '';
@@ -94,7 +100,11 @@ document.getElementById('addEditBookModal').addEventListener('hidden.bs.modal', 
         checkbox.checked = false;
     });
     document.getElementById('imagePreview').style.display = 'none';
+    document.getElementById('urlImage').required = true;
+    document.getElementById('addEditBookForm').action = 'msbook?action=add';
+    document.getElementById('addEditBookModalLabel').textContent = 'Thêm Sách';
 });
+
 
 document.getElementById('addEditBookForm').addEventListener('submit', function(event) {
     const selectedAuthors = Array.from(document.querySelectorAll('.author-checkbox:checked')).map(cb => cb.value).join(',');
@@ -116,57 +126,84 @@ function previewImage(event) {
     reader.readAsDataURL(input.files[0]);
 }
 
+// When the modal is hidden, reset the form
+document.getElementById('addEditBookModal').addEventListener('hidden.bs.modal', function () {
+    document.getElementById('addEditBookForm').reset();
+    document.getElementById('bookId').value = '';
+    document.getElementById('selectedAuthors').innerHTML = '';
+    document.getElementById('selectedCategories').innerHTML = '';
+    document.querySelectorAll('.author-checkbox').forEach(function(checkbox) {
+        checkbox.checked = false;
+    });
+    document.querySelectorAll('.category-checkbox').forEach(function(checkbox) {
+        checkbox.checked = false;
+    });
+    document.getElementById('imagePreview').style.display = 'none';
+    document.getElementById('urlImage').required = true;
+    document.getElementById('addEditBookForm').action = 'msbook?action=add';
+    document.getElementById('addEditBookModalLabel').textContent = 'Thêm Sách';
+});
+
+// When the modal is shown, set the form values
 function editBook(button) {
     const bookId = button.getAttribute('data-book-id');
     const bookTitle = button.getAttribute('data-book-title');
-    const bookAuthors = JSON.parse(button.getAttribute('data-book-authors'));
-    const bookCategories = JSON.parse(button.getAttribute('data-book-categories'));
-    const bookCostPrice = button.getAttribute('data-book-cost-price');
-    const bookSellingPrice = button.getAttribute('data-book-selling-price');
-    const bookStocks = button.getAttribute('data-book-stocks');
-    const bookUrlImage = button.getAttribute('data-book-url-image');
-    const bookDescription = button.getAttribute('data-book-description');
-    const bookPublisher = button.getAttribute('data-book-publisher');
-    const bookPublishYear = button.getAttribute('data-book-publish-year');
-    const bookLanguage = button.getAttribute('data-book-language');
-    const bookDiscountCampaign = button.getAttribute('data-book-discount-campaign');
-    const bookIsbn = button.getAttribute('data-book-isbn');
+    const costPrice = button.getAttribute('data-book-cost-price');
+    const sellingPrice = button.getAttribute('data-book-selling-price');
+    const stocks = button.getAttribute('data-book-stocks');
+    const urlImage = button.getAttribute('data-book-url-image');
+    const description = button.getAttribute('data-book-description');
+    const publisher = button.getAttribute('data-book-publisher');
+    const publishYear = button.getAttribute('data-book-publish-year');
+    const language = button.getAttribute('data-book-language');
+    const discountCampaign = button.getAttribute('data-book-discount-campaign');
+    const isbn = button.getAttribute('data-book-isbn');
 
     document.getElementById('bookId').value = bookId;
     document.getElementById('bookTitle').value = bookTitle;
-    document.getElementById('costPrice').value = bookCostPrice;
-    document.getElementById('sellingPrice').value = bookSellingPrice;
-    document.getElementById('stocks').value = bookStocks;
-    document.getElementById('isbn').value = bookIsbn;
-    document.getElementById('description').value = bookDescription;
-    document.getElementById('publishYear').value = bookPublishYear;
-    document.getElementById('language').value = bookLanguage;
-    document.getElementById('publisher').value = bookPublisher;
-    document.getElementById('discountCampaign').value = bookDiscountCampaign;
+    document.getElementById('costPrice').value = costPrice;
+    document.getElementById('sellingPrice').value = sellingPrice;
+    document.getElementById('stocks').value = stocks;
+    document.getElementById('description').value = description;
+    document.getElementById('publisher').value = publisher;
+    document.getElementById('publishYear').value = publishYear;
+    document.getElementById('language').value = language;
+    document.getElementById('discountCampaign').value = discountCampaign;
+    document.getElementById('isbn').value = isbn;
 
-    // Set authors
-    document.getElementById('selectedAuthors').innerHTML = '';
-    bookAuthors.forEach(author => {
-        document.getElementById(`author${author.id}`).checked = true;
-        createTag(`author${author.id}`, author.name, 'selectedAuthors');
-    });
-
-    // Set categories
-    document.getElementById('selectedCategories').innerHTML = '';
-    bookCategories.forEach(category => {
-        document.getElementById(`category${category.id}`).checked = true;
-        createTag(`category${category.id}`, category.name, 'selectedCategories');
-    });
-
-    // Set image preview
-    if (bookUrlImage) {
-        const imagePreview = document.getElementById('imagePreview');
-        imagePreview.src = bookUrlImage;
-        imagePreview.style.display = 'block';
+    // Set selected authors
+    const selectedAuthors = button.getAttribute('data-book-authors');
+    if (selectedAuthors) {
+        selectedAuthors.split(',').forEach(function(authorId) {
+            const authorCheckbox = document.getElementById('author' + authorId);
+            if (authorCheckbox) {
+                authorCheckbox.checked = true;
+                createTag(authorCheckbox.id, authorCheckbox.nextElementSibling.textContent, 'selectedAuthors');
+            }
+        });
     }
 
-    // Set form action to edit
+    // Set selected categories
+    const selectedCategories = button.getAttribute('data-book-categories');
+    if (selectedCategories) {
+        selectedCategories.split(',').forEach(function(categoryId) {
+            const categoryCheckbox = document.getElementById('category' + categoryId);
+            if (categoryCheckbox) {
+                categoryCheckbox.checked = true;
+                createTag(categoryCheckbox.id, categoryCheckbox.nextElementSibling.textContent, 'selectedCategories');
+            }
+        });
+    }
+
+    if (urlImage) {
+        document.getElementById('imagePreview').src = urlImage;
+        document.getElementById('imagePreview').style.display = 'block';
+        document.getElementById('urlImage').required = false;
+    } else {
+        document.getElementById('imagePreview').style.display = 'none';
+        document.getElementById('urlImage').required = true;
+    }
+
     document.getElementById('addEditBookForm').action = 'msbook?action=edit';
-    document.getElementById('addEditBookModalLabel').textContent = 'Chỉnh sửa thông tin sách';
-    document.getElementById('urlImage').required = false; // Make image optional when editing a book
+    document.getElementById('addEditBookModalLabel').textContent = 'Chỉnh sửa Sách';
 }

@@ -23,7 +23,6 @@ import firebasecloud.FirebaseStorageUploader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @WebServlet(name = "MSBookController", urlPatterns = {"/msbook"})
 @MultipartConfig
@@ -36,53 +35,33 @@ public class MSBookController extends HttpServlet {
         response.setCharacterEncoding("UTF-8");
 
         HttpSession session = request.getSession();
+        initializeSessionAttributes(session);
 
-        if (session.getAttribute("books") == null) {
-            List<Book> books = BookDB.getInstance().selectAll();
-            books.sort((b1, b2) -> Integer.compare(b2.getId(), b1.getId())); // Sort in descending order by ID
-            session.setAttribute("books", books);
-        }
-
-        if (session.getAttribute("authors") == null) {
-            List<Author> authors = AuthorDB.getInstance().selectAll();
-            session.setAttribute("authors", authors);
-        }
-
-        if (session.getAttribute("categories") == null) {
-            List<Category> categories = CategoryDB.getInstance().selectAll();
-            session.setAttribute("categories", categories);
-        }
-
-        if (session.getAttribute("publishers") == null) {
-            List<Publisher> publishers = PublisherDB.getInstance().selectAll();
-            session.setAttribute("publishers", publishers);
-        }
-
-        if (session.getAttribute("discountCampaigns") == null) {
-            List<DiscountCampaign> discountCampaigns = DiscountCampaignDB.getInstance().selectAll();
-            session.setAttribute("discountCampaigns", discountCampaigns);
-        }
-
-        // Prepare JSON strings for authors and categories
-        List<Book> books = (List<Book>) session.getAttribute("books");
-        for (Book book : books) {
-            String authorsJson = book.getAuthors().stream()
-                    .map(a -> String.format("{\"id\": %d, \"name\": \"%s\"}", a.getId(), a.getName()))
-                    .collect(Collectors.joining(", ", "[", "]"));
-            String categoriesJson = book.getCategories().stream()
-                    .map(c -> String.format("{\"id\": %d, \"name\": \"%s\"}", c.getId(), c.getName()))
-                    .collect(Collectors.joining(", ", "[", "]"));
-//            book.setAuthorsJson(authorsJson);
-//            book.setCategoriesJson(categoriesJson);
-        }
-
-        request.setAttribute("books", books);
+        request.setAttribute("books", session.getAttribute("books"));
         request.setAttribute("authors", session.getAttribute("authors"));
         request.setAttribute("categories", session.getAttribute("categories"));
         request.setAttribute("publishers", session.getAttribute("publishers"));
         request.setAttribute("discountCampaigns", session.getAttribute("discountCampaigns"));
         String url = "\\Management-System\\ms-book.jsp";
         request.getRequestDispatcher(url).forward(request, response);
+    }
+
+    private void initializeSessionAttributes(HttpSession session) {
+        if (session.getAttribute("books") == null) {
+            session.setAttribute("books", BookDB.getInstance().selectAll());
+        }
+        if (session.getAttribute("authors") == null) {
+            session.setAttribute("authors", AuthorDB.getInstance().selectAll());
+        }
+        if (session.getAttribute("categories") == null) {
+            session.setAttribute("categories", CategoryDB.getInstance().selectAll());
+        }
+        if (session.getAttribute("publishers") == null) {
+            session.setAttribute("publishers", PublisherDB.getInstance().selectAll());
+        }
+        if (session.getAttribute("discountCampaigns") == null) {
+            session.setAttribute("discountCampaigns", DiscountCampaignDB.getInstance().selectAll());
+        }
     }
 
     @Override
@@ -95,18 +74,23 @@ public class MSBookController extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String action = request.getParameter("action");
-        if ("add".equals(action)) {
-            addBook(request, response);
-        } else if ("edit".equals(action)) {
-            editBook(request, response);
-        } else if ("delete".equals(action)) {
-            deleteBook(request, response);
-        } else {
-            processRequest(request, response);
+        switch (action) {
+            case "add":
+                handleAddOrEditBook(request, response, true);
+                break;
+            case "edit":
+                handleAddOrEditBook(request, response, false);
+                break;
+            case "delete":
+                deleteBook(request, response);
+                break;
+            default:
+                processRequest(request, response);
+                break;
         }
     }
 
-    private void addBook(HttpServletRequest request, HttpServletResponse response)
+    private void handleAddOrEditBook(HttpServletRequest request, HttpServletResponse response, boolean isAdd)
             throws ServletException, IOException {
         String bookTitle = request.getParameter("bookTitle");
         Double costPrice = Double.parseDouble(request.getParameter("costPrice"));
@@ -120,90 +104,42 @@ public class MSBookController extends HttpServlet {
         String language = request.getParameter("language");
         String[] selectedAuthors = request.getParameter("selectedAuthors").split(",");
         String[] selectedCategories = request.getParameter("selectedCategories").split(",");
-
-        // Handle file upload
-        Part filePart = request.getPart("urlImage");
-        String fileName = filePart.getSubmittedFileName();
-        InputStream inputStream = filePart.getInputStream();
-        String contentType = filePart.getContentType();
-        String urlImage = FirebaseStorageUploader.uploadImage(inputStream, contentType, fileName);
 
         Publisher publisher = PublisherDB.getInstance().selectByID(publisherId);
         DiscountCampaign discountCampaign = discountCampaignIdStr.isEmpty() ? null : DiscountCampaignDB.getInstance().selectByID(Integer.parseInt(discountCampaignIdStr));
 
-        Book book = new Book(bookTitle, description, isbn, costPrice, sellingPrice, stocks, urlImage, publishYear, language, publisher);
-        book.setDiscountCampaign(discountCampaign);
-
-        for (String authorId : selectedAuthors) {
-            if (!authorId.isEmpty()) {
-                Author author = AuthorDB.getInstance().selectByID(Integer.parseInt(authorId));
-                book.getAuthors().add(author);
-            }
-        }
-
-        for (String categoryId : selectedCategories) {
-            if (!categoryId.isEmpty()) {
-                Category category = CategoryDB.getInstance().selectByID(Integer.parseInt(categoryId));
-                book.getCategories().add(category);
-            }
-        }
-
-        boolean isInserted = BookDB.getInstance().insert(book);
-
-        if (isInserted) {
-            HttpSession session = request.getSession();
-            List<Book> books = BookDB.getInstance().selectAll();
-            session.setAttribute("books", books);
-            response.sendRedirect(request.getContextPath() + "/msbook");
+        Book book;
+        if (isAdd) {
+            book = new Book(bookTitle, description, isbn, costPrice, sellingPrice, stocks, null, publishYear, language, publisher);
         } else {
-            request.setAttribute("errorMessage", "Failed to add book.");
-            processRequest(request, response);
+            int bookId = Integer.parseInt(request.getParameter("bookId"));
+            book = BookDB.getInstance().selectByID(bookId);
+            if (book == null) {
+                request.setAttribute("errorMessage", "Book not found.");
+                processRequest(request, response);
+                return;
+            }
+            book.setTitle(bookTitle);
+            book.setCostPrice(costPrice);
+            book.setSellingPrice(sellingPrice);
+            book.setStocks(stocks);
+            book.setIsbn(isbn);
+            book.setDescription(description);
+            book.setPublisher(publisher);
+            book.setPublishDate(publishYear);
+            book.setLanguage(language);
         }
-    }
-
-    private void editBook(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        int bookId = Integer.parseInt(request.getParameter("bookId"));
-        String bookTitle = request.getParameter("bookTitle");
-        Double costPrice = Double.parseDouble(request.getParameter("costPrice"));
-        Double sellingPrice = Double.parseDouble(request.getParameter("sellingPrice"));
-        int stocks = Integer.parseInt(request.getParameter("stocks"));
-        String isbn = request.getParameter("isbn");
-        String description = request.getParameter("description");
-        int publisherId = Integer.parseInt(request.getParameter("publisher"));
-        int publishYear = Integer.parseInt(request.getParameter("publishYear"));
-        String discountCampaignIdStr = request.getParameter("discountCampaign");
-        String language = request.getParameter("language");
-        String[] selectedAuthors = request.getParameter("selectedAuthors").split(",");
-        String[] selectedCategories = request.getParameter("selectedCategories").split(",");
+        book.setDiscountCampaign(discountCampaign);
 
         // Handle file upload
         Part filePart = request.getPart("urlImage");
-        String fileName = filePart.getSubmittedFileName();
-        String urlImage = null;
-        if (fileName != null && !fileName.isEmpty()) {
+        if (filePart != null && filePart.getSize() > 0) {
+            String fileName = filePart.getSubmittedFileName();
             InputStream inputStream = filePart.getInputStream();
             String contentType = filePart.getContentType();
-            urlImage = FirebaseStorageUploader.uploadImage(inputStream, contentType, fileName);
-        }
-
-        Publisher publisher = PublisherDB.getInstance().selectByID(publisherId);
-        DiscountCampaign discountCampaign = discountCampaignIdStr.isEmpty() ? null : DiscountCampaignDB.getInstance().selectByID(Integer.parseInt(discountCampaignIdStr));
-
-        Book book = BookDB.getInstance().selectByID(bookId);
-        book.setTitle(bookTitle);
-        book.setDescription(description);
-        book.setIsbn(isbn);
-        book.setCostPrice(costPrice);
-        book.setSellingPrice(sellingPrice);
-        book.setStocks(stocks);
-        if (urlImage != null) {
+            String urlImage = FirebaseStorageUploader.uploadImage(inputStream, contentType, fileName);
             book.setUrlImage(urlImage);
         }
-        book.setPublishDate(publishYear);
-        book.setLanguage(language);
-        book.setPublisher(publisher);
-        book.setDiscountCampaign(discountCampaign);
 
         book.getAuthors().clear();
         for (String authorId : selectedAuthors) {
@@ -221,15 +157,14 @@ public class MSBookController extends HttpServlet {
             }
         }
 
-        boolean isUpdated = BookDB.getInstance().update(book);
+        boolean isSuccess = isAdd ? BookDB.getInstance().insert(book) : BookDB.getInstance().update(book);
 
-        if (isUpdated) {
+        if (isSuccess) {
             HttpSession session = request.getSession();
-            List<Book> books = BookDB.getInstance().selectAll();
-            session.setAttribute("books", books);
+            session.setAttribute("books", BookDB.getInstance().selectAll());
             response.sendRedirect(request.getContextPath() + "/msbook");
         } else {
-            request.setAttribute("errorMessage", "Failed to edit book.");
+            request.setAttribute("errorMessage", isAdd ? "Failed to add book." : "Failed to update book.");
             processRequest(request, response);
         }
     }
@@ -237,17 +172,17 @@ public class MSBookController extends HttpServlet {
     private void deleteBook(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         int bookId = Integer.parseInt(request.getParameter("bookId"));
-//        boolean isDeleted = BookDB.getInstance().delete(bookId);
-//
-//        if (isDeleted) {
-//            HttpSession session = request.getSession();
-//            List<Book> books = BookDB.getInstance().selectAll();
-//            session.setAttribute("books", books);
-//            response.sendRedirect(request.getContextPath() + "/msbook");
-//        } else {
-//            request.setAttribute("errorMessage", "Failed to delete book.");
-//            processRequest(request, response);
-//        }
-    }
+        Book b = BookDB.getInstance().selectByID(bookId);
 
+        boolean isDeleted = BookDB.getInstance().delete(b.getId(), Book.class);
+
+        if (isDeleted) {
+            HttpSession session = request.getSession();
+            session.setAttribute("books", BookDB.getInstance().selectAll());
+            response.sendRedirect(request.getContextPath() + "/msbook");
+        } else {
+            request.setAttribute("errorMessage", "Failed to delete book.");
+            processRequest(request, response);
+        }
+    }
 }

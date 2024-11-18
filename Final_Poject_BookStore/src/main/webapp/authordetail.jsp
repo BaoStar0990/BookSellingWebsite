@@ -56,21 +56,13 @@
            style="background-color: #fff; background-image: repeating-linear-gradient(90deg, #f9d7d7 20px, #ffffff 20px, #ffffff 40px); border-radius: 10px;">
         <!-- Image Column -->
         <div class="col-12 col-md-4 text-center">
-          <img src="${pageContext.request.contextPath}/assets/images/authors/author.jpg" alt="Paulo Coelho" class="img-fluid rounded-circle shadow-sm mb-3"
+          <img src="${author.imageURL}" alt="Image of author" class="img-fluid rounded-circle shadow-sm mb-3"
                style="width: 250px; height: 250px; object-fit: cover;" />
         </div>
         <!-- Author Details Column -->
         <div class="col-12 col-md-8">
-          <h2 class="fw-bold">Paulo Coelho</h2>
-          <p class="fw-medium">Paulo Coelho sinh năm 1947 tại Rio de Janeiro (Brazil) trong một gia đình trung lưu.
-            Năm 1970, ông bỏ dở việc học để lên đường du lịch qua nhiều nơi thuộc châu Mỹ,
-            châu Âu và Bắc Phi trước khi trở về Brazil và kết hôn với vợ, họa sĩ Christina Oiticica.
-            Sau chuyến hành hương năm 1986, Coelho quyết định từ bỏ sự nghiệp sáng tác lời ca khúc đang
-            rất thành công để quay lại theo đuổi giấc mơ văn chương thời trẻ. Nhà giả kim (1988)
-            đã đưa ông trở thành tên tuổi được biết đến trên toàn thế giới. Cho tới nay Coelho
-            đã cho ra đời hơn 30 cuốn sách, dịch ra trên 80 thứ tiếng, phát hành ở hơn 170 nước trên thế giới.
-            Ông là tác giả viết tiếng Bồ Đào Nha được đọc nhiều nhất mọi thời đại, và cũng là tác giả được
-            theo dõi nhiều nhất trên mạng xã hội. Năm 2007, ông được bổ nhiệm làm Sứ giả hòa bình của Liên Hiệp Quốc.</p>
+          <h2 class="fw-bold">${author.name}</h2>
+          <p class="fw-medium">${author.description}</p>
         </div>
       </div>
 
@@ -86,19 +78,21 @@
           Xem thêm <i class="fas fa-chevron-right"></i>
         </a>
       </div>
-      <c:forEach var="i" begin="1" end="6">
+      <c:forEach items="${books}" var="book">
         <div class="col-6 col-md-4 col-lg-2 p-2">
-          <a href="bookdetails" class="d-block text-decoration-none card-shadow" style="color: inherit;">
+          <a href="/bookdetails/${book.bookID}" class="d-block text-decoration-none card-shadow" style="color: inherit;">
             <div class="card">
               <!-- book image -->
-              <img src="https://thpthuongphung.quangtri.edu.vn/upload/32303/fck/files/Picture1(8).jpg" class="card-img-top" alt="Sample Book Title">
+              <img src="${book.urlImage}" class="card-img-top" alt="Sample Book Title">
               <div class="card-body">
                 <!-- book title -->
-                <h6 class="card-title mb-1">Trên đường băng</h6>
+                <h6 class="card-title mb-1">${book.title}</h6>
                 <!-- author name -->
-                <p class="text-muted mb-0 card-text">
-                  <span class="fw-semibold">Tony Buổi Sáng</span>
-                </p>
+                <c:forEach items="${book.getAuthors()}" var="author">
+                  <p class="text-muted mb-0 card-text">
+                    <span class="fw-semibold">${author.name}</span>
+                  </p>
+                </c:forEach>
                 <div class="mt-2">
                   <!--  price -->
                   <span class="text-danger font-semibold">

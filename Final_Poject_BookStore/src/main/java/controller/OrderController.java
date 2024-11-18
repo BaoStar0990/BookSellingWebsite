@@ -76,7 +76,7 @@ public class OrderController extends HttpServlet {
                     // cập nhật các thuocj tính
                     cart.setOrderDate(LocalDate.now()); // ngày đặt hàng
                     cart.setDeliveryDate(LocalDate.now().plusDays(4)); // ngày nhận hàng dự kiến
-                    cart.setVAT(0.5); // thuế giá trị gia tăng
+                    cart.setVAT(0.05); // thuế giá trị gia tăng
 
                     cart.setStatusPayment(StatusPayment.Unpaid); // trạng thái thanh toán                      
                     cart.setShippingAddress(address);                 

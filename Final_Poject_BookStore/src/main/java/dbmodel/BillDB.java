@@ -69,4 +69,25 @@ public class BillDB extends ModifyDB<Bill> implements DBInterface<Bill> {
                 em.close();
         }
     }
+
+    public boolean update(Bill bill) {
+        EntityManager em = null;
+        EntityTransaction tr = null;
+        try {
+            em = DBUtil.getEmFactory().createEntityManager();
+            tr = em.getTransaction();
+            tr.begin();
+            em.merge(bill);
+            tr.commit();
+            return true;
+        } catch (Exception ex) {
+            if (tr != null && tr.isActive())
+                tr.rollback();
+            ex.printStackTrace();
+            return false;
+        } finally {
+            if (em != null)
+                em.close();
+        }
+    }
 }

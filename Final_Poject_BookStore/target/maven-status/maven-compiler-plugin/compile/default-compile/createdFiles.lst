@@ -58,6 +58,7 @@ dbmodel\ModifyDB.class
 test\TestReview.class
 controller\SigninController.class
 dbmodel\ReviewDB.class
+ms_controller\MSOrderController$1.class
 model\StatusPayment.class
 firebasecloud\FirebaseInitializer.class
 test\TestCustomer.class

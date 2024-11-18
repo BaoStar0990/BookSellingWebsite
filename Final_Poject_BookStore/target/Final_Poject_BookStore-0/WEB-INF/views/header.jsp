@@ -19,9 +19,20 @@
         categories = CategoryDB.getInstance().selectAll();
         session.setAttribute("categories", categories);
     }
-//    else{
-//        categories = (List<Category>)session.getAttribute("categories");
-//    }
+    else{
+        categories = (List<Category>)session.getAttribute("categories");
+    }
+%>
+<%
+    // Lấy thông báo từ request
+    String alertMessage = (String) request.getAttribute("alertMessage");
+    if (alertMessage != null) {
+%>
+<script type="text/javascript">
+    alert(<%= alertMessage %>);
+</script>
+<%
+    }
 %>
 <header class="container p-0 border-bottom">
     <nav class="navbar navbar-expand-md pt-3">
@@ -52,13 +63,10 @@
                             <i class="btn fs-5 fa-solid fa-user header-icon" data-bs-toggle="dropdown"></i>
                             <ul class="dropdown-menu">
                                 <c:choose>
-                                    <c:when test="${sessionScope.user == null}">
-                                        <div class="px-3 py-2">
-                                            <a href="${pageContext.request.contextPath}/signin" class="primary-btn w-100 mb-2">Đăng nhập</a>
-                                            <a href="${pageContext.request.contextPath}/signup" class="secondary-btn w-100">Đăng ký</a>
-                                        </div>
-                                    </c:when>
-                                    <c:otherwise>
+                                    <c:when test="${sessionScope.csrfToken != null}">
+                                        <script>
+                                            localStorage.setItem("csrfToken", '${sessionScope.csrfToken}');
+                                        </script>
                                         <li class="dropdown-header fs-6 fw-bold">Xin chào, ${sessionScope.user.username}</li>
                                         <div class="dropdown-divider"></div>
                                         <li><a href="${pageContext.request.contextPath}/usersetting" class="dropdown-item"><i class="fa-solid fa-user me-2"></i>Tài khoản của tôi</a></li>
@@ -71,8 +79,15 @@
                                                 <a href="javascript:" class="dropdown-item" onclick="parentNode.submit()"><i class="fa-solid fa-right-from-bracket"></i>Đăng xuất</a>
                                             </form>
                                         </li>
+                                    </c:when>
+                                    <c:otherwise>
+                                        <div class="px-3 py-2">
+                                            <a href="${pageContext.request.contextPath}/signin" class="primary-btn w-100 mb-2">Đăng nhập</a>
+                                            <a href="${pageContext.request.contextPath}/signup" class="secondary-btn w-100">Đăng ký</a>
+                                        </div>
                                     </c:otherwise>
                                 </c:choose>
+
 
                             </ul>
                         </div>

@@ -6,16 +6,24 @@ package controller;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.List;
+
+import dbmodel.AuthorDB;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
-import jakarta.servlet.http.*;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
+import model.Author;
 
 /**
  *
  * @author hadan
  */
-@WebServlet(name = "SignoutController", urlPatterns = {"/signout"})
-public class SignoutController extends HttpServlet {
+@WebServlet(name = "AuthorController", urlPatterns = {"/authors"})
+public class AuthorController extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -29,23 +37,16 @@ public class SignoutController extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         HttpSession session = request.getSession();
-        //remove tài khoảng người dùng khỏi session
-        session.removeAttribute("user");
-        session.removeAttribute("csrfToken");
-        //remove tài khoảng người dùng khỏi cookie vì người dùng đã logout
-        Cookie[] cookies = request.getCookies();
-        if (cookies != null) {
-            for (Cookie cookie : cookies) {
-                if (cookie.getName().equals("email")) {
-                    cookie.setMaxAge(0);
-                    response.addCookie(cookie);
-                } else if (cookie.getName().equals("password")) {
-                    cookie.setMaxAge(0);
-                    response.addCookie(cookie);
-                }
-            }
+        List<Author> allAuthor = null;
+        if(session.getAttribute("authors") != null) {
+             allAuthor = (List<Author>)session.getAttribute("authors");
+        }else{
+            allAuthor = AuthorDB.getInstance().selectAll();
         }
-        response.sendRedirect(String.format("%s/", getServletContext().getContextPath()));
+        if(allAuthor != null) {
+            request.setAttribute("authors", allAuthor);
+        }
+        request.getRequestDispatcher("allauthors.jsp").forward(request, response);
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

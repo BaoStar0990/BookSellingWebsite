@@ -12,6 +12,7 @@ public class OrderDetail implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private int quantity;
+    //private double totalCost;
 
     //hibernate
     @ManyToOne()
@@ -64,5 +65,5 @@ public class OrderDetail implements Serializable {
     public void setBill(Bill bill) {
         this.bill = bill;
     }
-    
+
 }

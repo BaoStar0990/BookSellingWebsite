@@ -45,7 +45,7 @@ public class AuthorDetailController extends HttpServlet {
                 try {
                     int id_for_search = id; // nếu lấy id thì sẽ không được
                     author = authors.stream().filter(a -> {
-                        return a.getAuthorID() == id_for_search;
+                        return a.getId() == id_for_search;
                     }).findFirst().get();
                 } catch (NumberFormatException ex) {
                     System.out.println("Vui lòng nhập đúng dữ liệu");

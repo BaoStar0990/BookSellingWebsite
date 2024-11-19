@@ -21,6 +21,7 @@ model\Publisher.class
 dbmodel\CategoryDB.class
 controller\CategoryController.class
 controller\AboutUsController.class
+utils\authentication\ExpiringToken$1.class
 test\TestAdmin.class
 controller\UserSettingController.class
 mail\Mail.class
@@ -29,7 +30,9 @@ controller\BookDetailController.class
 model\User.class
 ms_controller\MSStaffController.class
 ms_controller\MSCustomerController.class
+utils\authentication\ExpiringToken.class
 model\DiscountCampaign.class
+utils\authentication\CSRFUtil.class
 dbmodel\StaffDB.class
 model\Author.class
 model\Category.class
@@ -38,9 +41,6 @@ test\TestDiscountCampaign.class
 dbmodel\BookDB.class
 database\DBUtil.class
 ms_controller\SignOutAdmin.class
-Utils\authentication\CookieUtil.class
-Utils\authentication\CSRFUtil.class
-Utils\authentication\ExpiringToken.class
 controller\PaymentController.class
 dbmodel\PublisherDB.class
 model\Staff.class
@@ -48,14 +48,13 @@ test\TestMail.class
 controller\ForgotPasswordController.class
 model\Review.class
 dbmodel\CustomerDB.class
-Utils\authentication\Regex.class
 controller\ModifyAddressController.class
 test\TestCategory.class
 controller\BookListController.class
 controller\ChangePasswordController.class
 controller\AddBookController.class
+utils\authentication\CookieUtil.class
 controller\UploadImageController.class
-Utils\authentication\ExpiringToken$1.class
 controller\HomeControllerServlet.class
 controller\ViewCartController.class
 dbmodel\DBInterface.class
@@ -63,6 +62,7 @@ dbmodel\ModifyDB.class
 test\TestReview.class
 dbmodel\ReviewDB.class
 controller\SignupController.class
+utils\authentication\Regex.class
 model\StatusPayment.class
 firebasecloud\FirebaseInitializer.class
 test\TestCustomer.class

@@ -42,6 +42,9 @@ public class SignoutController extends HttpServlet {
                 } else if (cookie.getName().equals("password")) {
                     cookie.setMaxAge(0);
                     response.addCookie(cookie);
+                } else if (cookie.getName().equals("csrfToken")) {
+                    cookie.setMaxAge(0);
+                    response.addCookie(cookie);
                 }
             }
         }

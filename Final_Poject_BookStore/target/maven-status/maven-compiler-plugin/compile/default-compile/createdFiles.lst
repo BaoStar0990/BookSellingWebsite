@@ -42,6 +42,9 @@ dbmodel\BookDB.class
 model\OrderDetail.class
 database\DBUtil.class
 ms_controller\SignOutAdmin.class
+Utils\authentication\CookieUtil.class
+Utils\authentication\CSRFUtil.class
+Utils\authentication\ExpiringToken.class
 controller\PaymentController.class
 dbmodel\PublisherDB.class
 model\Staff.class
@@ -55,6 +58,7 @@ test\TestCategory.class
 controller\BookListController.class
 controller\AddBookController.class
 controller\UploadImageController.class
+Utils\authentication\ExpiringToken$1.class
 controller\HomeControllerServlet.class
 controller\ViewCartController.class
 dbmodel\DBInterface.class
@@ -62,7 +66,7 @@ dbmodel\ModifyDB.class
 test\TestReview.class
 controller\SigninController.class
 dbmodel\ReviewDB.class
-ms_controller\MSOrderController$1.class
+controller\SignupController.class
 model\StatusPayment.class
 firebasecloud\FirebaseInitializer.class
 test\TestCustomer.class
@@ -74,3 +78,4 @@ controller\ModifyItemCartController.class
 model\Bill.class
 model\Admin.class
 ms_controller\MSBookController.class
+ms_controller\MSOrderController.class

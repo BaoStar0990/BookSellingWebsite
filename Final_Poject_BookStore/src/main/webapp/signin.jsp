@@ -50,15 +50,15 @@
                 <form action="signin" method="post">
                     <input type="hidden" name="csrfToken" id="csrfToken" >
                     <div class="mb-3">
-                        <input type="text" class="form-control input-field" name="email" id="email" placeholder="Email" required>
+                        <input type="text" class="form-control input-field" name="email" id="email" value="${cookie.email}" placeholder="Email" required>
                     </div>
                     <div class="mb-3">
-                        <input type="password" class="form-control input-field" id="password" name="password" placeholder="Mật khẩu" required>
+                        <input type="password" class="form-control input-field" id="password" name="password" value="${cookie.password}" placeholder="Mật khẩu" required>
                     </div>
 
                     <!-- Forgot password -->
                     <div class="mb-4">
-                        <a href="${pageContext.request.contextPath}/forgotpassword.jsp" class="text-primary fw-semibold text-decoration-none link-hover">Quên mật khẩu?</a>
+                        <a href="${pageContext.request.contextPath}/forgotpassword" class="text-primary fw-semibold text-decoration-none link-hover">Quên mật khẩu?</a>
                     </div>
 
                     <div class="mb-3 form-check d-flex align-items-center">

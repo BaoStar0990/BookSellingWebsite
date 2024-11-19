@@ -28,7 +28,7 @@ public class Mail {
     //
     private static final String fromEmail = "naoki8386maidinh@gmail.com";
     private static final String password = "oiwy fiut lsgy pbyy";
-    public static void sendMail(String to,String subject, String body, boolean bodyIsHTML) {
+    public static boolean sendMail(String to,String subject, String body, boolean bodyIsHTML) {
         Properties props = new Properties();
         props.put("mail.smtp.host", "smtp.gmail.com");
         props.put("mail.smtp.port", "587");
@@ -65,11 +65,14 @@ public class Mail {
             }
             Transport.send(message);
             System.out.println("Send");
+            return true;
 
         } catch (AddressException ex) {
             Logger.getLogger(Mail.class.getName()).log(Level.SEVERE, null, ex);
+            return false;
         } catch (MessagingException ex) {
             Logger.getLogger(Mail.class.getName()).log(Level.SEVERE, null, ex);
+            return false;
         }
     }
     /*
@@ -92,9 +95,11 @@ public class Mail {
     /*
     - Send code reset password to customer
      */
-    public static void sendCodeToCustomer(String toEmail,String code){
+    public static boolean sendCodeToCustomer(String toEmail,String code){
         //Send to customer
-        Mail.sendMail(toEmail,"Your code: ",code.toString(),false);
+        boolean checkSendFinish = false;
+        checkSendFinish =  Mail.sendMail(toEmail,"Your code: ",code.toString(),false);
+        return checkSendFinish;
     }
 
 }

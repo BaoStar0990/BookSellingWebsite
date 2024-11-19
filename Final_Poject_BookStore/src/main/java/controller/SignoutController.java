@@ -31,27 +31,20 @@ public class SignoutController extends HttpServlet {
         HttpSession session = request.getSession();
         //remove tài khoảng người dùng khỏi session
         session.removeAttribute("user");
-
+        session.removeAttribute("csrfToken");
         //remove tài khoảng người dùng khỏi cookie vì người dùng đã logout
         Cookie[] cookies = request.getCookies();
-        if(cookies != null){
-            for(Cookie cookie : cookies){
-                if(cookie.getName().equals("email")) {
+        if (cookies != null) {
+            for (Cookie cookie : cookies) {
+                if (cookie.getName().equals("email")) {
                     cookie.setMaxAge(0);
                     response.addCookie(cookie);
-                }
-                if(cookie.getName().equals("username")) {
-                    cookie.setMaxAge(0);
-                    response.addCookie(cookie);
-                }
-                if(cookie.getName().equals("password")) {
+                } else if (cookie.getName().equals("password")) {
                     cookie.setMaxAge(0);
                     response.addCookie(cookie);
                 }
             }
         }
-
-
         response.sendRedirect(String.format("%s/", getServletContext().getContextPath()));
     }
 

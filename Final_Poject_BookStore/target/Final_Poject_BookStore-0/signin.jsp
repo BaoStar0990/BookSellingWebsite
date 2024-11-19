@@ -5,6 +5,7 @@
   Time: 12:03 PM
   To change this template use File | Settings | File Templates.
 --%>
+
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
@@ -39,14 +40,15 @@
 <jsp:include page="WEB-INF/views/header.jsp"/>
 <!-- end Header -->
 
+
 <!-- Sign In -->
 <div class="container d-flex justify-content-center align-items-center mt-5">
     <div class="signin-container my-3 p-4 rounded" >
         <div class="d-flex flex-column align-items-center">
             <h2 class="text-center fw-bold mb-4">Đăng Nhập</h2>
             <div class="container-fluid">
-                <form action="signin" method="post" onsubmit="return validateEmail()">
-                    <input type="hidden" name="action" value="signin">
+                <form action="signin" method="post">
+                    <input type="hidden" name="csrfToken" id="csrfToken" >
                     <div class="mb-3">
                         <input type="text" class="form-control input-field" name="email" id="email" placeholder="Email" required>
                     </div>
@@ -63,42 +65,31 @@
                         <input type="checkbox" class="form-check-input" name="rememberMe" id="rememberMe">
                         <label class="form-check-label ms-2" for="rememberMe">Remember Me</label>
                     </div>
-
-                    <!-- Toggle button for customer/admin -->
-                    <div class="mb-3">
-                        <label for="userType" class="form-label">Loại tài khoản:</label>
-                        <select name="userType" id="userType" class="form-control">
-                            <option value="customer">Customer</option>
-                            <option value="admin">Admin</option>
-                            <option value="staff">Staff</option>
-                        </select>
-                    </div>
-
                     <!-- Login button -->
                     <input type="submit" class="primary-btn w-100 mb-4" value="Đăng nhập"/>
                 </form>
-                <script>
-                    function validateEmail() {
-                        const emailField = document.getElementById("email");
-                        const userType = document.getElementById("userType");
-                        const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; // Biểu thức chính quy kiểm tra email
-
-                        if (userType.value === 'customer' && !emailPattern.test(emailField.value)) {
-                            alert("Vui lòng nhập địa chỉ email hợp lệ.");
-                            return false;
-                        }
-                        return true;
-                    }
-                </script>
-
                 <p class="text-center mb-0">
                     Hoặc, <a href="signup" class="text-danger fw-bold text-decoration-none">Đăng ký</a>
                 </p>
             </div>
         </div>
     </div>
+
 </div>
 <!-- end Sign In -->
+<%
+    String csrfToken = (String) request.getAttribute("csrfToken");
+    if (csrfToken != null) {
+%>
+<script>
+    // Lưu giá trị csrfToken vào localStorage bằng JavaScript
+    //localStorage.setItem('csrfToken', '<%= csrfToken %>');
+    document.getElementById('csrfToken').value = '<%= csrfToken %>';
+</script>
+<%
+    }
+%>
+
 
 <%--    Footer--%>
 <jsp:include page="WEB-INF/views/footer.jsp"/>

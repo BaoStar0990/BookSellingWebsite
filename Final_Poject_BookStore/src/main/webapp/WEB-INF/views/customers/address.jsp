@@ -104,7 +104,6 @@
                 </div>
               </div>
             </div>
-
             <div class="mb-3">
               <label for="addressDetail" class="form-label">Địa chỉ chi tiết:</label>
               <input type="text" class="form-control" id="addressDetail" name="addressDetail" required />
@@ -127,6 +126,7 @@
     function resetAddress(){
         setLocationByNames("Tỉnh Thành", "Quận Huyện", "Phường Xã");
     }
+
   // JavaScript to handle Add/Edit modal functionality
   function setModalForAdd() {
     document.getElementById("action").value = "add";
@@ -143,14 +143,14 @@
   function setModalForEdit(valueJson) {
     // lấy address
     var address = JSON.parse(valueJson);
-         
+
     document.getElementById("action").value = "edit";
     document.getElementById("addressModalLabel").innerText = "Chỉnh sửa địa chỉ giao hàng";
     document.getElementById("name").value = address.fullName;
     document.getElementById("phone").value = address.phonenumber;
     // set các giá trị options địa chỉ
     setLocationByNames(address.province, address.district, address.ward);
-    
+
     document.getElementById("addressDetail").value = address.street;
     document.getElementById("addressId").value = address.id;
     
@@ -161,7 +161,7 @@
     alert($("#tinh option:selected").text());
 //    alert(address.id);
 //    loadProvinces(); // Load province data for edit
-  }
+
   function onclickSave(){
       // set các giá trị Text
         document.getElementById("tinhText").value = $("#tinh option:selected").text();

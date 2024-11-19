@@ -6,6 +6,7 @@ import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.Objects;
 
 @Entity
 public class Bill implements Serializable {
@@ -37,6 +38,8 @@ public class Bill implements Serializable {
 
 
     public Bill() {
+        this.VAT = 0.05;
+        this.shippingFee = 0.0;
     }
     public Bill(int billID,Customer customer,String paymentMethod, StatusPayment statusPayment, 
             StatusOrder statusOrder, Double VAT, LocalDate orderDate,LocalDate deliveryDate, 
@@ -46,11 +49,11 @@ public class Bill implements Serializable {
         this.paymentMethod = paymentMethod;
         this.statusPayment = statusPayment;
         this.statusOrder = statusOrder;
-        this.VAT = VAT;
+        this.VAT = VAT != null ? VAT : 0.05;
         this.orderDate = orderDate;
         this.deliveryDate = deliveryDate;
         this.shippingAddress = shippingAddress;
-        this.shippingFee = shippingFee;
+        this.shippingFee = shippingFee != null ? shippingFee : 0.0;
         this.notes = notes;
         orderDetails = new HashSet<>();
     }
@@ -61,12 +64,12 @@ public class Bill implements Serializable {
         this.paymentMethod = paymentMethod;
         this.statusPayment = statusPayment;
         this.statusOrder = statusOrder;
-        this.VAT = VAT;
+        this.VAT = VAT != null ? VAT : 0.05;
         this.orderDate = orderDate;
         this.deliveryDate = deliveryDate;
         this.customer = customer;
         this.shippingAddress = shippingAddress;
-        this.shippingFee = shippingFee;
+        this.shippingFee = shippingFee != null ? shippingFee : 0.0;
         this.notes = notes;
         orderDetails = new HashSet<>();
     }
@@ -172,4 +175,16 @@ public class Bill implements Serializable {
         this.notes = notes;
     }
     
+    // XQ thêm để tính tổng tiền sau khi đã có VAT và phí ship
+    public Double getGrandTotal() {
+        return getSubtotal() + (VAT != null ? VAT : 0) * getSubtotal() + (shippingFee != null ? shippingFee : 0);
+    }
+
+    // XQ thêm để tính tổng tiền trước khi có VAT và phí ship
+    public Double getSubtotal() {
+        return orderDetails.stream()
+                .filter(Objects::nonNull)
+                .mapToDouble(OrderDetail::getTotalPrice)
+                .sum();
+    }
 }

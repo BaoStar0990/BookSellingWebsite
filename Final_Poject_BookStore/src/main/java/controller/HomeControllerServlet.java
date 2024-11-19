@@ -46,6 +46,7 @@ public class HomeControllerServlet extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest req, HttpServletResponse res)
             throws ServletException, IOException {
+
         //set UTF8 - Tiếng việt
         req.setCharacterEncoding("UTF-8");
         res.setCharacterEncoding("UTF-8");
@@ -93,6 +94,7 @@ public class HomeControllerServlet extends HttpServlet {
         String email = null;
         String username = null;
         String password = null;
+        String csrfToken = null;
         Cookie[] cookies = req.getCookies();
         if(cookies != null){
             for(Cookie cookie : cookies){
@@ -105,10 +107,17 @@ public class HomeControllerServlet extends HttpServlet {
                 if(cookie.getName().equals("password")) {
                     password = cookie.getValue();
                 }
+                if(cookie.getName().equals("csrfToken")){
+                    csrfToken = cookie.getValue();
+                }
             }
+            System.out.println("Incookie: Email"+email+"Password: "+password);
+           // res.sendRedirect("/signin");
         }
-        if (email != null && username != null && password != null) {
+
+        if (email != null && password != null) {
             Customer customer = CustomerDB.getInstance().selectCustomerByEmailPassWord(email,password);
+            System.out.println("In session: "+customer.getEmail());
             if(customer != null){
                 session.setAttribute("user",customer);
             }
@@ -148,7 +157,7 @@ public class HomeControllerServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        //processRequest(request, response);
     }
 
     /**

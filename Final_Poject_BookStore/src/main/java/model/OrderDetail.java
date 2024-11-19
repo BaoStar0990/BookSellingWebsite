@@ -22,19 +22,25 @@ public class OrderDetail implements Serializable {
     @JoinColumn(name="billID")
     private Bill bill;
 
-    public OrderDetail() {
+    private Double unitPrice;
 
+    public OrderDetail() {
+        this.unitPrice = 0.0;
     }
 
     public OrderDetail(int id, int quantity, Book book) {
         this.id = id;
         this.quantity = quantity;
         this.book = book;
+        double discount = (book.getDiscountCampaign() != null) ? book.getDiscountCampaign().getPercentDiscount() : 0;
+        this.unitPrice = book.getSellingPrice() * (1 - discount);
     }
 
     public OrderDetail(int quantity, Book book) {
         this.quantity = quantity;
         this.book = book;
+        double discount = (book.getDiscountCampaign() != null) ? book.getDiscountCampaign().getPercentDiscount() : 0;
+        this.unitPrice = book.getSellingPrice() * (1 - discount);
     }
     
     public int getId() {
@@ -64,5 +70,12 @@ public class OrderDetail implements Serializable {
     public void setBill(Bill bill) {
         this.bill = bill;
     }
-    
+
+    public Double getUnitPrice() {
+        return unitPrice;
+    }
+
+    public Double getTotalPrice() {
+        return (unitPrice != null ? unitPrice : 0) * quantity;
+    }
 }

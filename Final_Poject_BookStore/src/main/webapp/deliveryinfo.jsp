@@ -56,11 +56,11 @@
                     </div>
                     <div class="mb-3">
                         <label class="mb-1">Họ và tên</label>
-                        <input type="text" id ="fullName" name="fullName" class="form-control" required readonly />
+                        <input type="text" id ="fullName" name="fullName" class="form-control" required  />
                     </div>
                     <div class="mb-3">
                         <label class="mb-1">Số điện thoại (tùy chọn)</label>
-                        <input type="tel" id ="phone" name="phone" class="form-control" readonly />
+                        <input type="tel" id ="phone" name="phone" class="form-control" required />
                     </div>
                     <div class="mb-3">
                         <label class="mb-1">Số nhà</label>
@@ -237,6 +237,7 @@
             var tinhName = $("#tinh option:selected").text();
             var quanName = $("#quan option:selected").text();
             var phuongName = $("#phuong option:selected").text();
+            
             selectedText =  soNha + ", " + phuongName + ", " + quanName + ", " + tinhName;
         }
 //        alert(selectedText);

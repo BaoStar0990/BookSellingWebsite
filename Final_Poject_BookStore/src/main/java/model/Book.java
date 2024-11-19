@@ -27,7 +27,7 @@ public class Book implements Serializable {
     @OneToMany(mappedBy = "book", cascade = CascadeType.REMOVE)
     private Set<Review> reviews;
 
-    @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinTable(
         name = "AuthorDetail",
         joinColumns = @JoinColumn(name = "bookID"),
@@ -35,7 +35,7 @@ public class Book implements Serializable {
     )
     private Set<Author> authors = new HashSet<>();
 
-    @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinTable(
         name = "CategoryDetail",
         joinColumns = @JoinColumn(name = "bookID"),
@@ -115,7 +115,7 @@ public class Book implements Serializable {
     }
 
     public Set<Category> getCategories() {
-        return categories;
+        return BookDB.getInstance().getCategories(this);
     }
     
     public int getStocks() {
@@ -201,7 +201,7 @@ public class Book implements Serializable {
     }
     
     public Set<Author> getAuthors() {
-        return authors;
+        return BookDB.getInstance().getAuthors(this);
     }
     
     @Override

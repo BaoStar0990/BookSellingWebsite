@@ -4,10 +4,13 @@ import database.DBUtil;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;
 import jakarta.persistence.NoResultException;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import model.Bill;
 import model.Book;
 import model.OrderDetail;
+import org.hibernate.TransientObjectException;
 
 public class BillDB extends ModifyDB<Bill> implements DBInterface<Bill> {
     public static BillDB getInstance(){
@@ -89,5 +92,22 @@ public class BillDB extends ModifyDB<Bill> implements DBInterface<Bill> {
             if (em != null)
                 em.close();
         }
+    }
+    public Set<OrderDetail> getOrderDetails(Bill b){
+        try(EntityManager em = DBUtil.getEmFactory().createEntityManager()){
+               List<OrderDetail> listOrderDetails = em.createQuery("from OrderDetail o where o.bill = :bill", 
+                        OrderDetail.class).setParameter("bill", b).getResultList();
+               Set<OrderDetail> rs = new HashSet<>(listOrderDetails);
+               return rs;
+        }
+        catch (TransientObjectException ex) {
+            return null;
+        }
+        catch(NoResultException ex){
+            return null;
+        }
+        catch(Exception ex){
+            return null;
+        }     
     }
 }

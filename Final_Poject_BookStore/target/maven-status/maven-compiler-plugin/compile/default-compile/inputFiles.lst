@@ -1,3 +1,4 @@
+D:\LapTrinhWebChinh\Final_Project_Web\FinalProject_BookStore\Final_Poject_BookStore\src\main\java\Utils\authentication\CSRFUtil.java
 D:\LapTrinhWebChinh\Final_Project_Web\FinalProject_BookStore\Final_Poject_BookStore\src\main\java\dbmodel\AuthorDB.java
 D:\LapTrinhWebChinh\Final_Project_Web\FinalProject_BookStore\Final_Poject_BookStore\src\main\java\dbmodel\BillDB.java
 D:\LapTrinhWebChinh\Final_Project_Web\FinalProject_BookStore\Final_Poject_BookStore\src\main\java\test\TestBill.java
@@ -10,6 +11,7 @@ D:\LapTrinhWebChinh\Final_Project_Web\FinalProject_BookStore\Final_Poject_BookSt
 D:\LapTrinhWebChinh\Final_Project_Web\FinalProject_BookStore\Final_Poject_BookStore\src\main\java\test\TestPublisher.java
 D:\LapTrinhWebChinh\Final_Project_Web\FinalProject_BookStore\Final_Poject_BookStore\src\main\java\controller\SignoutController.java
 D:\LapTrinhWebChinh\Final_Project_Web\FinalProject_BookStore\Final_Poject_BookStore\src\main\java\ms_controller\MSCampaignController.java
+D:\LapTrinhWebChinh\Final_Project_Web\FinalProject_BookStore\Final_Poject_BookStore\src\main\java\Utils\authentication\CookieUtil.java
 D:\LapTrinhWebChinh\Final_Project_Web\FinalProject_BookStore\Final_Poject_BookStore\src\main\java\model\Review.java
 D:\LapTrinhWebChinh\Final_Project_Web\FinalProject_BookStore\Final_Poject_BookStore\src\main\java\ms_controller\MSCategoryController.java
 D:\LapTrinhWebChinh\Final_Project_Web\FinalProject_BookStore\Final_Poject_BookStore\src\main\java\test\TestDiscountCampaign.java
@@ -22,6 +24,7 @@ D:\LapTrinhWebChinh\Final_Project_Web\FinalProject_BookStore\Final_Poject_BookSt
 D:\LapTrinhWebChinh\Final_Project_Web\FinalProject_BookStore\Final_Poject_BookStore\src\main\java\firebasecloud\FirebaseInitializer.java
 D:\LapTrinhWebChinh\Final_Project_Web\FinalProject_BookStore\Final_Poject_BookStore\src\main\java\firebasecloud\FirebaseStorageUploader.java
 D:\LapTrinhWebChinh\Final_Project_Web\FinalProject_BookStore\Final_Poject_BookStore\src\main\java\dbmodel\DBInterface.java
+D:\LapTrinhWebChinh\Final_Project_Web\FinalProject_BookStore\Final_Poject_BookStore\src\main\java\Utils\authentication\Regex.java
 D:\LapTrinhWebChinh\Final_Project_Web\FinalProject_BookStore\Final_Poject_BookStore\src\main\java\model\StatusOrder.java
 D:\LapTrinhWebChinh\Final_Project_Web\FinalProject_BookStore\Final_Poject_BookStore\src\main\java\test\TestCustomer.java
 D:\LapTrinhWebChinh\Final_Project_Web\FinalProject_BookStore\Final_Poject_BookStore\src\main\java\model\Staff.java
@@ -37,11 +40,13 @@ D:\LapTrinhWebChinh\Final_Project_Web\FinalProject_BookStore\Final_Poject_BookSt
 D:\LapTrinhWebChinh\Final_Project_Web\FinalProject_BookStore\Final_Poject_BookStore\src\main\java\dbmodel\DiscountCampaignDB.java
 D:\LapTrinhWebChinh\Final_Project_Web\FinalProject_BookStore\Final_Poject_BookStore\src\main\java\controller\ChangePasswordController.java
 D:\LapTrinhWebChinh\Final_Project_Web\FinalProject_BookStore\Final_Poject_BookStore\src\main\java\ms_controller\MSCustomerController.java
+D:\LapTrinhWebChinh\Final_Project_Web\FinalProject_BookStore\Final_Poject_BookStore\src\main\java\controller\AuthorDetailController.java
 D:\LapTrinhWebChinh\Final_Project_Web\FinalProject_BookStore\Final_Poject_BookStore\src\main\java\controller\PaymentController.java
 D:\LapTrinhWebChinh\Final_Project_Web\FinalProject_BookStore\Final_Poject_BookStore\src\main\java\model\Book.java
 D:\LapTrinhWebChinh\Final_Project_Web\FinalProject_BookStore\Final_Poject_BookStore\src\main\java\test\TestReview.java
 D:\LapTrinhWebChinh\Final_Project_Web\FinalProject_BookStore\Final_Poject_BookStore\src\main\java\dbmodel\BookDB.java
 D:\LapTrinhWebChinh\Final_Project_Web\FinalProject_BookStore\Final_Poject_BookStore\src\main\java\dbmodel\ReviewDB.java
+D:\LapTrinhWebChinh\Final_Project_Web\FinalProject_BookStore\Final_Poject_BookStore\src\main\java\controller\AboutUsController.java
 D:\LapTrinhWebChinh\Final_Project_Web\FinalProject_BookStore\Final_Poject_BookStore\src\main\java\controller\ForgotPasswordController.java
 D:\LapTrinhWebChinh\Final_Project_Web\FinalProject_BookStore\Final_Poject_BookStore\src\main\java\model\Publisher.java
 D:\LapTrinhWebChinh\Final_Project_Web\FinalProject_BookStore\Final_Poject_BookStore\src\main\java\test\TestCategory.java
@@ -59,6 +64,7 @@ D:\LapTrinhWebChinh\Final_Project_Web\FinalProject_BookStore\Final_Poject_BookSt
 D:\LapTrinhWebChinh\Final_Project_Web\FinalProject_BookStore\Final_Poject_BookStore\src\main\java\controller\CategoryController.java
 D:\LapTrinhWebChinh\Final_Project_Web\FinalProject_BookStore\Final_Poject_BookStore\src\main\java\model\Category.java
 D:\LapTrinhWebChinh\Final_Project_Web\FinalProject_BookStore\Final_Poject_BookStore\src\main\java\controller\BookListController.java
+D:\LapTrinhWebChinh\Final_Project_Web\FinalProject_BookStore\Final_Poject_BookStore\src\main\java\controller\AuthorController.java
 D:\LapTrinhWebChinh\Final_Project_Web\FinalProject_BookStore\Final_Poject_BookStore\src\main\java\controller\UploadImageController.java
 D:\LapTrinhWebChinh\Final_Project_Web\FinalProject_BookStore\Final_Poject_BookStore\src\main\java\ms_controller\MSBookController.java
 D:\LapTrinhWebChinh\Final_Project_Web\FinalProject_BookStore\Final_Poject_BookStore\src\main\java\dbmodel\CustomerDB.java

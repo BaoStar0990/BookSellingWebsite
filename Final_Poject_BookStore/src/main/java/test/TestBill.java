@@ -5,11 +5,12 @@ import dbmodel.BillDB;
 import dbmodel.CustomerDB;
 import model.Bill;
 import model.Customer;
+import model.OrderDetail;
 import model.StatusOrder;
 
 public class TestBill {
     public static void main(String[] args) {
-//        Bill bill = BillDB.getInstance().selectByID(3);
+        Bill bill = BillDB.getInstance().selectByID(10);
 //        BillDB.getInstance().delete(bill.getId(), Bill.class);
          // tạo cart mới cho khách hàng  
 //         Customer customer = CustomerDB.getInstance().selectByID(2);
@@ -17,6 +18,9 @@ public class TestBill {
 //            newCart.setCustomer(customer);
 //            newCart.setStatusOrder(StatusOrder.Storing);
 //            BillDB.getInstance().insert(newCart);
+        for(OrderDetail o : bill.getOrderDetails()){
+            System.out.println(o.getBook().getTitle());
+        }
     }
     
 }

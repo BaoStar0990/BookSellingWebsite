@@ -52,7 +52,7 @@ public class ModifyAddressController extends HttpServlet {
                 // lấy action
                 String action = request.getParameter("action");
                 if(action.equals("defaultAddress")){
-                    String idStr = request.getParameter("id");
+                    String idStr = request.getParameter("idDefault");
                     try{                      
                         // find Address
                         int id = Integer.parseInt(idStr); 

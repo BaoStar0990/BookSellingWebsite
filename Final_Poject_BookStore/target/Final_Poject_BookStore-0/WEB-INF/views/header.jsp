@@ -97,20 +97,7 @@
                                     class="position-absolute translate-middle badge rounded-pill bg-danger text-light"
                                     style="top: calc(50% - 2.5rem)"
                             >
-                                <c:choose>
-                                    <c:when test="${not empty user}">
-                                        <c:set var="cart" value="${user.bills.stream()
-                                                                   .filter(b -> b.statusOrder.toString() == 'Storing')
-                                                                   .findFirst().orElse(null)}" />
-                                        <c:if test="${not empty cart}">
-                                            <c:set var="soLuong" value="${cart.getOrderDetails().size()}" />
-                                            ${soLuong}
-                                        </c:if>
-                                    </c:when>
-                                    <c:otherwise>
-                                        0
-                                    </c:otherwise>
-                                </c:choose>
+                               0
 
                             </span>
                         </a>

@@ -16,7 +16,7 @@ public class Category implements Serializable {
     private String name;
     private String description;
 
-    @ManyToMany(fetch = FetchType.EAGER, mappedBy = "categories", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @ManyToMany(fetch = FetchType.LAZY, mappedBy = "categories", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private Set<Book> books = new HashSet<>();
 
     public Category() {}
@@ -57,7 +57,7 @@ public class Category implements Serializable {
     }
 
     public Set<Book> getBooks() {
-        return books;
+        return CategoryDB.getInstance().getBooks(this);
     }
 
     public void setBooks(Set<Book> books) {

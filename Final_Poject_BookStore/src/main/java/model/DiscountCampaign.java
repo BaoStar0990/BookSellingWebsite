@@ -1,5 +1,6 @@
 package model;
 
+import dbmodel.DiscountCampaignDB;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -25,7 +26,7 @@ public class DiscountCampaign implements Serializable {
     private Double percentDiscount;
     
     @OneToMany(mappedBy = "discountCampaign", cascade = CascadeType.MERGE,
-            fetch = FetchType.EAGER)
+            fetch = FetchType.LAZY)
     private Set<Book> books = new HashSet<>();
     
     public DiscountCampaign(){
@@ -69,7 +70,7 @@ public class DiscountCampaign implements Serializable {
     }
 
     public Set<Book> getBooks() {
-        return books;
+        return DiscountCampaignDB.getInstance().getBooks(this);
     }
 
     public void setCampaignId(int campaignId) {

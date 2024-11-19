@@ -36,13 +36,13 @@ public class TestDiscountCampaign {
                 System.out.println(b.getTitle());
             }
         }
-        System.out.println("------------");
-        // lấy 1 chiến dịch
-        DiscountCampaign d1 = DiscountCampaignDB.getInstance().selectByID(4);
-        System.out.println(d1.getCampaignName());
-        for(Book b : d1.getBooks()){
-            System.out.println(b.getTitle());
-        }
+//        System.out.println("------------");
+//        // lấy 1 chiến dịch
+//        DiscountCampaign d1 = DiscountCampaignDB.getInstance().selectByID(4);
+//        System.out.println(d1.getCampaignName());
+//        for(Book b : d1.getBooks()){
+//            System.out.println(b.getTitle());
+//        }
         
     }
 }

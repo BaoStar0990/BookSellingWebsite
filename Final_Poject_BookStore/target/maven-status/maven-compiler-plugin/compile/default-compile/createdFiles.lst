@@ -21,7 +21,6 @@ model\Publisher.class
 dbmodel\CategoryDB.class
 controller\CategoryController.class
 controller\AboutUsController.class
-controller\OrderController.class
 test\TestAdmin.class
 controller\UserSettingController.class
 mail\Mail.class
@@ -30,18 +29,17 @@ controller\BookDetailController.class
 model\User.class
 ms_controller\MSStaffController.class
 ms_controller\MSCustomerController.class
-dbmodel\BillDB.class
 model\DiscountCampaign.class
 dbmodel\StaffDB.class
 model\Author.class
 model\Category.class
 model\Book.class
 test\TestDiscountCampaign.class
-controller\SignoutController.class
 dbmodel\BookDB.class
-model\OrderDetail.class
 database\DBUtil.class
 ms_controller\SignOutAdmin.class
+Utils\authentication\CookieUtil.class
+Utils\authentication\CSRFUtil.class
 controller\PaymentController.class
 dbmodel\PublisherDB.class
 model\Staff.class
@@ -61,7 +59,6 @@ controller\ViewCartController.class
 dbmodel\DBInterface.class
 dbmodel\ModifyDB.class
 test\TestReview.class
-controller\SigninController.class
 dbmodel\ReviewDB.class
 ms_controller\MSOrderController$1.class
 model\StatusPayment.class
@@ -72,6 +69,5 @@ model\StatusOrder.class
 test\TestAuthor.class
 test\TestPublisher.class
 controller\ModifyItemCartController.class
-model\Bill.class
 model\Admin.class
 ms_controller\MSBookController.class

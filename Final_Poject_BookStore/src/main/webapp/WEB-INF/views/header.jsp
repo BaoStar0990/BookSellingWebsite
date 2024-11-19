@@ -92,16 +92,39 @@
 
                             </ul>
                         </div>
-                        <%--<a href="${pageContext.request.contextPath}/viewcart" class="btn">
+                        <a href="${pageContext.request.contextPath}/viewcart" class="btn">
                             <i class="fa-solid fa-cart-shopping header-icon pt-1"></i>
                             <span
                                     class="position-absolute translate-middle badge rounded-pill bg-danger text-light"
                                     style="top: calc(50% - 2.5rem)"
                             >
-                               0
+                                <%
+                                if (session.getAttribute("user") == null) {
+                                %>
+                                    0
+                                <%
+                                } else {
+                                    Customer c = (Customer) session.getAttribute("user");
+
+                                    // Tìm hóa đơn có trạng thái "Storing"
+                                    Bill cart = c.getBills().stream()
+                                                 .filter(b -> "Storing".equals(String.valueOf(b.getStatusOrder())))
+                                                 .findFirst()
+                                                 .orElse(null);
+
+                                    // Đếm số lượng OrderDetails nếu hóa đơn tồn tại
+                                    int num = (cart != null && cart.getOrderDetails() != null) 
+                                                ? cart.getOrderDetails().size() 
+                                                : 0;
+                                %>
+                                    <%= num %>
+                                <%
+                                }
+                                %>
+
 
                             </span>
-                        </a>--%>
+                        </a>
                     </div>
                 </div>
                 <ul class="navbar-nav d-flex justify-content-center fw-semibold mt-3 mb-0">

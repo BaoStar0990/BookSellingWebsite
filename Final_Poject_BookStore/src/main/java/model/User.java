@@ -3,6 +3,8 @@ package model;
 import jakarta.persistence.*;
 
 import java.io.Serializable;
+import java.time.LocalDate;
+import java.time.Period;
 
 @MappedSuperclass // Mỗi class khi map xuống nó sẽ khong có class cha mà chỉ có class con https://techmaster.vn/posts/36499/hibernate-inheritance-mapping
 public abstract class User implements Serializable {
@@ -15,6 +17,7 @@ public abstract class User implements Serializable {
     protected int age;
     protected String numberPhone;
     protected String email;
+    protected LocalDate birthday;
     public User() {
 
     }
@@ -34,6 +37,15 @@ public abstract class User implements Serializable {
         this.age = age;
         this.numberPhone = numberPhone;
         this.email = email;
+    }
+    public User(String username, String password, String fullName,String numberPhone, String email, LocalDate dob) {
+        this.username = username;
+        this.password = password;
+        this.fullName = fullName;
+        this.age = age;
+        this.numberPhone = numberPhone;
+        this.email = email;
+        this.birthday = dob;
     }
     public User(String username, String password) {
         this.username = username;
@@ -80,5 +92,13 @@ public abstract class User implements Serializable {
     }
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    @PrePersist
+    @PreUpdate
+    public void calculateAge() {
+        if (birthday != null) {
+            this.age = Period.between(birthday, LocalDate.now()).getYears();
+        }
     }
 }

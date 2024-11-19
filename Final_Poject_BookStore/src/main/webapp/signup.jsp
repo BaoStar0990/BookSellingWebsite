@@ -47,16 +47,34 @@
             <div class="container-fluid">
                 <form action="signup" method="post">
                     <div class="mb-3">
-                        <input type="text" class="form-control input-field" id="fullname" name="fullname" placeholder="Họ và tên" required>
+                        <input type="text" value="${fullName}"  class="form-control input-field" id="fullName" name="fullName" placeholder="Họ và tên" required>
                     </div>
                     <div class="mb-3">
-                        <input type="date" class="form-control input-field" id="dob" name="dob" required>
+                        <input type="date" value="${dateStr}" class="form-control input-field" id="dob" name="dob" required>
+                    </div>
+                    <script>
+                        document.getElementById('dob').addEventListener('change', function() {
+                            let dob = new Date(this.value);
+                            let today = new Date();
+
+                            // Check if the date is in the future
+                            if (dob > today) {
+                                alert('Date of birth cannot be in the future.');
+                                this.setCustomValidity('Date of birth cannot be in the future.');
+                            } else {
+                                // If the date is valid, reset custom validity
+                                this.setCustomValidity('');
+                            }
+                        });
+                    </script>
+                    <div class="mb-3">
+                        <input type="email" value="${email}" class="form-control input-field" id="email" name="email" placeholder="Email" required>
                     </div>
                     <div class="mb-3">
-                        <input type="email" class="form-control input-field" id="emailOrPhone" name="emailOrPhone" placeholder="Nhập SĐT hoặc Email" required>
+                        <input type="text" value="${numberPhone}" class="form-control input-field" id="numberPhone" name="numberPhone" placeholder="Số điện thoại" required oninput="this.value = this.value.replace(/[^0-9]/g, '') ">
                     </div>
                     <div class="mb-3">
-                        <input type="password" class="form-control input-field" id="password" name="password" placeholder="Nhập mật khẩu" required>
+                        <input type="password" value="${password}" class="form-control input-field" id="password" name="password" placeholder="Nhập mật khẩu" required>
                     </div>
                     <div class="mb-3">
                         <input type="password" class="form-control input-field" id="confirmPassword" name="confirmPassword" placeholder="Nhập lại mật khẩu" required>

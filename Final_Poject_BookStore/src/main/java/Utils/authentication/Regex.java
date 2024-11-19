@@ -19,4 +19,14 @@ public class Regex {
         }
         return false;
     }
+    public static boolean validPhoneNumber(String numberPhone) {
+        // Define the regular expression for a valid email
+        String regex = "^\\d{10,11}$"; // domain part
+        Pattern pattern = Pattern.compile(regex);
+        Matcher matcher = pattern.matcher(numberPhone);
+        if (matcher.matches()) {
+            return true;
+        }
+        return false;
+    }
 }

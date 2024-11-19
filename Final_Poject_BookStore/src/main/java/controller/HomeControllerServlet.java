@@ -46,12 +46,15 @@ public class HomeControllerServlet extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest req, HttpServletResponse res)
             throws ServletException, IOException {
+        System.out.println("----------------------------------------------------");
+        System.out.println("Home Controller Servlet");
 
         //set UTF8 - Tiếng việt
         req.setCharacterEncoding("UTF-8");
         res.setCharacterEncoding("UTF-8");
         //Lay session
         HttpSession session = req.getSession();
+        System.out.println("Session ID:"+session.getId());
         //Ba tham so truyen ve cho UI
         List<Book> allBook = null; // Sử dụng cho tat cả các trang
         List<Book> homeBooks = null; // Sử dụng cho trang home
@@ -62,9 +65,13 @@ public class HomeControllerServlet extends HttpServlet {
         //lan truy cap dau tien, book chua ton tai trong session
             //Book
         if(session.getAttribute("allBook") == null) {
+            System.out.println("--------------------------------------------");
+            System.out.println("Book doesn't exist on session");
             allBook = BookDB.getInstance().selectAll();
             session.setAttribute("allBook", allBook);
         }else{ // lan truy cap sau,  lay book trong session
+            System.out.println("--------------------------------------------");
+            System.out.println("Book exist on session");
             allBook = (List<Book>)session.getAttribute("allBook");
         }
         if(allBook != null) {
@@ -76,9 +83,13 @@ public class HomeControllerServlet extends HttpServlet {
 
             //Author
         if(session.getAttribute("authors") == null) {
+            System.out.println("--------------------------------------------");
+            System.out.println("Author doesn't exist on session");
             authors = AuthorDB.getInstance().selectAll();
             session.setAttribute("authors", authors);
         }else{
+            System.out.println("--------------------------------------------");
+            System.out.println("Author exist on session");
             authors = (List<Author>)session.getAttribute("authors");
         }
         if(authors != null)
@@ -101,13 +112,10 @@ public class HomeControllerServlet extends HttpServlet {
                 if(cookie.getName().equals("email")) {
                     email = cookie.getValue();
                 }
-                if(cookie.getName().equals("username")) {
-                    username = cookie.getValue();
-                }
-                if(cookie.getName().equals("password")) {
+                else if(cookie.getName().equals("password")) {
                     password = cookie.getValue();
                 }
-                if(cookie.getName().equals("csrfToken")){
+                else if(cookie.getName().equals("csrfToken")){
                     csrfToken = cookie.getValue();
                 }
             }
@@ -115,11 +123,12 @@ public class HomeControllerServlet extends HttpServlet {
            // res.sendRedirect("/signin");
         }
 
-        if (email != null && password != null) {
+        if (email != null && password != null && csrfToken != null) {
             Customer customer = CustomerDB.getInstance().selectCustomerByEmailPassWord(email,password);
             System.out.println("In session: "+customer.getEmail());
             if(customer != null){
                 session.setAttribute("user",customer);
+                session.setAttribute("csrfToken",csrfToken);
             }
         }
 

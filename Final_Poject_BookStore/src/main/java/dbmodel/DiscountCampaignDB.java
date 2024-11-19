@@ -4,9 +4,12 @@ import database.DBUtil;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;
 import jakarta.persistence.NoResultException;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import model.Book;
 import model.DiscountCampaign;
+import org.hibernate.TransientObjectException;
 
 public class DiscountCampaignDB extends ModifyDB<DiscountCampaign> implements DBInterface<DiscountCampaign> {
     public static DiscountCampaignDB getInstance(){
@@ -74,4 +77,21 @@ public class DiscountCampaignDB extends ModifyDB<DiscountCampaign> implements DB
                 em.close();
         }
     } 
+    public Set<Book> getBooks(DiscountCampaign d){
+        try(EntityManager em = DBUtil.getEmFactory().createEntityManager()){
+               List<Book> listBooks = em.createQuery("from Book b where b.discountCampaign = :discountCampaign", 
+                        Book.class).setParameter("discountCampaign", d).getResultList();
+               Set<Book> rs = new HashSet<>(listBooks);
+               return rs;
+        }
+        catch (TransientObjectException ex) {
+            return null;
+        }
+        catch(NoResultException ex){
+            return null;
+        }
+        catch(Exception ex){
+            return null;
+        }     
+    }
 }

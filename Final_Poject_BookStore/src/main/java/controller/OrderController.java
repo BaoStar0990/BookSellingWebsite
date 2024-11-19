@@ -56,10 +56,13 @@ public class OrderController extends HttpServlet {
         }
         else{
             String address = request.getParameter("addressSelected");
-               
+            String name = request.getParameter("name");
+            String phone = request.getParameter("phonenumber");
             // Lấy giỏ hàng của khách hàng           
             String cartIdStr = request.getParameter("cartId");
             request.setAttribute("address", address);
+            request.setAttribute("fullName", name);
+            request.setAttribute("phonenumber", phone);
             try{
                 // find cart
                 int cartId = Integer.parseInt(cartIdStr);
@@ -79,7 +82,7 @@ public class OrderController extends HttpServlet {
                     cart.setVAT(0.05); // thuế giá trị gia tăng
 
                     cart.setStatusPayment(StatusPayment.Unpaid); // trạng thái thanh toán                      
-                    cart.setShippingAddress(address);                 
+                    cart.setShippingAddress(name + "; " + phone + "; " + address);                 
                     cart.setNotes(request.getParameter("notes"));
                     
                     // Kiểm tra giá trị của "paymentMethod" trước khi sử dụng equals

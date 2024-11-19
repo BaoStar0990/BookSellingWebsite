@@ -1,5 +1,6 @@
 package model;
 
+import dbmodel.BillDB;
 import jakarta.persistence.*;
 
 import java.io.Serializable;
@@ -83,7 +84,7 @@ public class Bill implements Serializable {
     }
 
     public Set<OrderDetail> getOrderDetails() {
-        return orderDetails;
+        return BillDB.getInstance().getOrderDetails(this);
     }
 
     public String getPaymentMethod() {

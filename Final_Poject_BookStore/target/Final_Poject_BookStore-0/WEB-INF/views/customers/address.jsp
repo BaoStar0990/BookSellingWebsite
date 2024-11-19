@@ -23,19 +23,27 @@
                  onclick="setModalForEdit('<c:out value="${address.createJson()}" />')">
                 <i class="fas fa-edit mb-1"></i>
               </a>
-              <a href="" class="text-primary">
-                <i class="fas fa-trash mb-1"></i>
-              </a>
+                <form action ="/modifyaddress" method="post" class="d-inline my-1" id ="deleteAdderessForm">
+                    <input type="hidden" name="action" value="delete" />
+                    <input type="hidden" id="id" name="id" value="${address.getId()}"/>
+                    <a href="javascript:void(0);" class="text-primary text-decoration-none mb-0 p-0" 
+                  onclick="document.getElementById('deleteAdderessForm').submit();">
+                        <i class="fas fa-trash mb-1"></i>
+                  </a>
+                </form>
+              
             </div>
           </div>
-          <p class="mb-2"><strong>Địa chỉ:</strong>${address.toString()}</p>
-          <p class="mb-1"><strong>Số điện thoại:</strong>${address.getPhonenumber()}</p>
+          <p class="mb-2"><strong>Địa chỉ: </strong>${address.toString()}</p>
+          <p class="mb-1"><strong>Số điện thoại: </strong>${address.getPhonenumber()}</p>
           <c:if test="${!address.isDefaultAddress()}"> <!-- Check if this is not the default address -->
-            <form action="" method="post" class="d-inline my-1">
-              <input type="hidden" name="id" value="" />
-              <a type="submit" class="text-primary text-decoration-none mb-0 p-0">
-                Đặt làm mặc định
-              </a>
+            <form action="/modifyaddress" method="post" class="d-inline my-1" id ="defaultAddressForm">
+                <input type="hidden" name="action" value="defaultAddress" />              
+                <input type="hidden" id="idDefault" name="idDefault" value="${address.getId()}"/>
+               <a href="javascript:void(0);" class="text-primary text-decoration-none mb-0 p-0" 
+                  onclick="document.getElementById('defaultAddressForm').submit();">
+                    Đặt làm mặc định
+                </a>
             </form>
           </c:if>
         </div>
@@ -57,7 +65,7 @@
             <input type="hidden" name="action" id ="action" value ="">
           <div class="modal-header">
             <h5 class="modal-title fs-semibold" id="addressModalLabel">Thêm địa chỉ giao hàng</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" onclick="resetAddress()" aria-label="Close"></button>
           </div>
           <div class="modal-body">
             <!-- Name and Phone Number in the same row -->
@@ -77,31 +85,34 @@
               <label for="address" class="form-label">Địa chỉ chi tiết:</label>
               <div id="address" class="row g-2">
                 <div class="col-md-4">
-                  <select class="form-select" id="tinh" name="tinh" title="Chọn Tỉnh Thành">
-                    <option selected value="0">Tỉnh Thành</option>
+                    <select class="form-select" id="tinh" name="tinh" title="Chọn Tỉnh Thành" required>
+                    <option selected value="0" disabled selected >Tỉnh Thành</option>
                   </select>
+                    <input type ="hidden" name="tinhText" id ="tinhText" value ="">
                 </div>
                 <div class="col-md-4">
-                  <select class="form-select" id="quan" name="quan" title="Chọn Quận Huyện">
-                    <option selected value="0">Quận Huyện</option>
+                    <select class="form-select" id="quan" name="quan" title="Chọn Quận Huyện" required>
+                    <option selected value="0" disabled selected >Quận Huyện</option>
                   </select>
+                    <input type ="hidden" name="quanText" id ="quanText" value ="">
                 </div>
                 <div class="col-md-4">
-                  <select class="form-select" id="phuong" name="phuong" title="Chọn Phường Xã">
-                    <option selected value="0">Phường Xã</option>
+                    <select class="form-select" id="phuong" name="phuong" title="Chọn Phường Xã" required>
+                        <option selected value="0" disabled selected>Phường Xã</option>
                   </select>
+                    <input type ="hidden" name="phuongText" id ="phuongText" value ="">
                 </div>
               </div>
             </div>
             <div class="mb-3">
               <label for="addressDetail" class="form-label">Địa chỉ chi tiết:</label>
-              <input type="text" class="form-control" id="addressDetail" name="address" required />
+              <input type="text" class="form-control" id="addressDetail" name="addressDetail" required />
             </div>
-            <input type="hidden" id="addressId" name="id" />
+            <input type="hidden" id="addressId" name="addressId" />
           </div>
           <div class="modal-footer">
-            <button type="submit" class="primary-btn">Lưu</button>
-            <button type="button" class="secondary-btn" data-bs-dismiss="modal">Hủy</button>
+              <button type="submit" class="primary-btn" onclick="onclickSave()">Lưu</button>
+            <button type="button" class="secondary-btn" data-bs-dismiss="modal" onclick="resetAddress()">Hủy</button>
           </div>
         </form>
       </div>
@@ -109,9 +120,13 @@
   </div>
 </div>
 
-  <script src="https://esgoo.net/scripts/jquery.js"></script>
-  <script src="${pageContext.request.contextPath}/assets/javascript/GetAddress.js"></script>
-  <script>
+<script src="https://esgoo.net/scripts/jquery.js"></script>
+<script src="${pageContext.request.contextPath}/assets/javascript/GetAddress.js"></script>
+<script>
+    function resetAddress(){
+        setLocationByNames("Tỉnh Thành", "Quận Huyện", "Phường Xã");
+    }
+
   // JavaScript to handle Add/Edit modal functionality
   function setModalForAdd() {
     document.getElementById("action").value = "add";
@@ -121,8 +136,8 @@
     document.getElementById("phone").value = "";
     document.getElementById("addressDetail").value = "";
     document.getElementById("addressId").value = "";
-    loadProvinces(); // Reset province dropdown
-    $("#quan, #phuong").html('<option value="0">Quận Huyện</option><option value="0">Phường Xã</option>'); // Reset district and ward
+    
+    setLocationByNames("Tỉnh Thành", "Quận Huyện", "Phường Xã");
   }
 
   function setModalForEdit(valueJson) {
@@ -138,7 +153,21 @@
 
     document.getElementById("addressDetail").value = address.street;
     document.getElementById("addressId").value = address.id;
-    alert(address.id);
+    
+    // set các giá trị Text
+    document.getElementById("tinhText").value = $("#tinh option:selected").text();
+    document.getElementById("quanText").value = $("#quan option:selected").text();
+    document.getElementById("phuongText").value = $("#phuong option:selected").text();
+    alert($("#tinh option:selected").text());
+//    alert(address.id);
+//    loadProvinces(); // Load province data for edit
+  }
+  
+  function onclickSave(){
+      // set các giá trị Text
+        document.getElementById("tinhText").value = $("#tinh option:selected").text();
+        document.getElementById("quanText").value = $("#quan option:selected").text();
+        document.getElementById("phuongText").value = $("#phuong option:selected").text();
   }
 </script>
 

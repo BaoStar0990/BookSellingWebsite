@@ -68,7 +68,57 @@ public class BookDB extends ModifyDB<Book> implements DBInterface<Book> {
             return null;
         } 
     }
-
+    
+    public Set<Author> getAuthors(Book b){
+        try(EntityManager em = DBUtil.getEmFactory().createEntityManager()){
+            // find Book
+            Book bookFind = em.find(Book.class, b.getId());
+            // find Books
+            List<Author> authors = em.createQuery("SELECT a FROM Book b JOIN b.authors a "
+                    + "WHERE b.id = :bookId", Author.class)
+                     .setParameter("bookId", bookFind.getId())
+                     .getResultList();
+            if(authors == null)
+                return null;
+            else
+                return new HashSet<>(authors);
+        }
+        catch (NullPointerException e) {
+            return null;
+        }
+        // lỗi truy vấn đối tượng transient
+        catch (TransientObjectException | NoResultException ex) {
+            return null;
+        }
+        catch(Exception ex){
+            return null;
+        } 
+    }
+    public Set<Category> getCategories(Book b){
+        try(EntityManager em = DBUtil.getEmFactory().createEntityManager()){
+            // find Book
+            Book bookFind = em.find(Book.class, b.getId());
+            // find Books
+            List<Category> categories = em.createQuery("SELECT a FROM Book b JOIN b.categories a "
+                    + "WHERE b.id = :bookId", Category.class)
+                     .setParameter("bookId", bookFind.getId())
+                     .getResultList();
+            if(categories == null)
+                return null;
+            else
+                return new HashSet<>(categories);
+        }
+        catch (NullPointerException e) {
+            return null;
+        }
+        // lỗi truy vấn đối tượng transient
+        catch (TransientObjectException | NoResultException ex) {
+            return null;
+        }
+        catch(Exception ex){
+            return null;
+        } 
+    }
     @Override
     public boolean insert(Book book) {
         EntityManager em = null;

@@ -28,19 +28,44 @@ public class OrderDetail implements Serializable {
         this.unitPrice = 0.0;
     }
 
+    public OrderDetail(int id, int quantity, Book book, Bill bill, Double unitPrice) {
+        this.id = id;
+        this.quantity = quantity;
+        this.book = book;
+        this.bill = bill;
+        this.unitPrice = unitPrice;
+    }
+
+    public OrderDetail(int quantity, Book book, Bill bill, Double unitPrice) {
+        this.quantity = quantity;
+        this.book = book;
+        this.bill = bill;
+        this.unitPrice = unitPrice;
+    }
+
     public OrderDetail(int id, int quantity, Book book) {
         this.id = id;
         this.quantity = quantity;
         this.book = book;
-        double discount = (book.getDiscountCampaign() != null) ? book.getDiscountCampaign().getPercentDiscount() : 0;
-        this.unitPrice = book.getSellingPrice() * (1 - discount);
+        if(book != null){
+            double discount = (book.getDiscountCampaign() != null) 
+                    ? book.getDiscountCampaign().getPercentDiscount() : 0.0;
+            this.unitPrice = book.getSellingPrice() * (1 - discount);
+        }
+        else
+            this.unitPrice = 0.0;
     }
 
     public OrderDetail(int quantity, Book book) {
         this.quantity = quantity;
         this.book = book;
-        double discount = (book.getDiscountCampaign() != null) ? book.getDiscountCampaign().getPercentDiscount() : 0;
-        this.unitPrice = book.getSellingPrice() * (1 - discount);
+        if(book != null){
+            double discount = (book.getDiscountCampaign() != null) 
+                    ? book.getDiscountCampaign().getPercentDiscount() : 0.0;
+            this.unitPrice = book.getSellingPrice() * (1 - discount);
+        }
+        else
+            this.unitPrice = 0.0;
     }
     
     public int getId() {

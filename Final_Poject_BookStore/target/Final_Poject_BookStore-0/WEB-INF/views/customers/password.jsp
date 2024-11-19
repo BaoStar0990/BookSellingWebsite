@@ -6,12 +6,12 @@
     <div id="errorMessage" class="alert alert-danger d-none"></div>
     <div id="successMessage" class="alert alert-success d-none"></div>
 
-    <form action="" id="changePasswordForm" onsubmit="handleChangePassword(event)">
+    <form action="/changepassword" id="changePasswordForm" onsubmit="handleChangePassword(event)">
       <div class="mb-3">
         <label for="currentPassword" class="form-label">Mật khẩu hiện tại</label>
         <div class="input-group">
           <span class="input-group-text">&#128274;</span>
-          <input type="password" id="currentPassword" class="form-control" placeholder="Nhập mật khẩu hiện tại">
+          <input type="password" id="currentPassword" name ="currentPassword" class="form-control" placeholder="Nhập mật khẩu hiện tại">
         </div>
       </div>
 
@@ -19,7 +19,7 @@
         <label for="newPassword" class="form-label">Mật khẩu mới</label>
         <div class="input-group">
           <span class="input-group-text">&#128274;</span>
-          <input type="password" id="newPassword" class="form-control" placeholder="Nhập mật khẩu mới">
+          <input type="password" id="newPassword" name ="newPassword" class="form-control" placeholder="Nhập mật khẩu mới">
         </div>
       </div>
 
@@ -37,9 +37,19 @@
 </div>
 
 <script>
+    const currentPasswordFromServer = "${sessionScope.user.password}";
+    document.getElementById("currentPassword").addEventListener('input', function(event) {
+        const errorMessage = document.getElementById("errorMessage");
+        const inputPassword = document.getElementById("currentPassword").value;
+        // Reset messages
+        errorMessage.classList.add("d-none");
+        // So sánh mật khẩu
+        if (currentPasswordFromServer !== inputPassword) {
+            errorMessage.classList.remove("d-none");
+            errorMessage.innerHTML = "Mật khẩu hiện tại không đúng";
+        }
+    });
   function handleChangePassword(event) {
-    event.preventDefault();
-
     // Get elements
     const currentPassword = document.getElementById("currentPassword").value;
     const newPassword = document.getElementById("newPassword").value;
@@ -55,26 +65,32 @@
     if (!currentPassword || !newPassword || !confirmPassword) {
       errorMessage.innerHTML = "Vui lòng điền tất cả các trường.";
       errorMessage.classList.remove("d-none");
+      event.preventDefault(); // Ngăn form submit
       return;
     }
     if (newPassword !== confirmPassword) {
       errorMessage.innerHTML = "Mật khẩu mới không khớp.";
       errorMessage.classList.remove("d-none");
+      event.preventDefault(); // Ngăn form submit
       return;
     }
     if (newPassword.length < 6) {
       errorMessage.innerHTML = "Mật khẩu mới phải có ít nhất 6 ký tự.";
       errorMessage.classList.remove("d-none");
+      event.preventDefault(); // Ngăn form submit
       return;
     }
-
+    if(currentPasswordFromServer !== currentPassword){
+        errorMessage.innerHTML = "Mật khẩu hiện tại không đúng";
+        errorMessage.classList.remove("d-none");
+        event.preventDefault(); // Ngăn form submit
+        alert("aaa");
+        return;
+    }
     // Simulate successful password change
     successMessage.innerHTML = "Mật khẩu đã được thay đổi thành công!";
     successMessage.classList.remove("d-none");
 
-    // Clear input fields
-    document.getElementById("currentPassword").value = "";
-    document.getElementById("newPassword").value = "";
-    document.getElementById("confirmPassword").value = "";
+   
   }
 </script>

@@ -200,7 +200,7 @@
 //            alert(selectedValue.toString());
         if(!(selectedValue.toString() === "otherAddress")){    
             try {
-                var address = JSON.parse(selectedValue); // Chuyển từ JSON sang đối tượng
+                var address = JSON.parse(selectedValue.toString()); // Chuyển từ JSON sang đối tượng
 
                 // set các giá trị
                 document.getElementById("fullName").value = address.fullName;

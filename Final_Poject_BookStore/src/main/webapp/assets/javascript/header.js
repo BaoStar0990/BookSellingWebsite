@@ -1,13 +1,13 @@
 const dropdown = document.getElementById("dropdowns");
 const danhmuc = document.getElementById("danhmuc");
 window.addEventListener("resize", function(e){
-    console.log(danhmuc)
+    // console.log(danhmuc)
     DanhMuc()
 })
 
 window.addEventListener("load", function(e){
-    console.log(dropdown)
-    console.log(danhmuc)
+    // console.log(dropdown)
+    // console.log(danhmuc)
     DanhMuc()
 })
 

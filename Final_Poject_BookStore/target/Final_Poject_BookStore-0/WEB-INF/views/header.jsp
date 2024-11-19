@@ -23,13 +23,14 @@
         categories = (List<Category>)session.getAttribute("categories");
     }
 %>
+
 <%
     // Lấy thông báo từ request
     String alertMessage = (String) request.getAttribute("alertMessage");
     if (alertMessage != null) {
 %>
 <script type="text/javascript">
-    alert(<%= alertMessage %>);
+    alert('<%= alertMessage %>');
 </script>
 <%
     }
@@ -67,7 +68,7 @@
                                         <script>
                                             localStorage.setItem("csrfToken", '${sessionScope.csrfToken}');
                                         </script>
-                                        <li class="dropdown-header fs-6 fw-bold">Xin chào, ${sessionScope.user.username}</li>
+                                        <li class="dropdown-header fs-6 fw-bold">Xin chào, ${sessionScope.user.fullName}</li>
                                         <div class="dropdown-divider"></div>
                                         <li><a href="${pageContext.request.contextPath}/usersetting" class="dropdown-item"><i class="fa-solid fa-user me-2"></i>Tài khoản của tôi</a></li>
                                         <li><a href="#" class="dropdown-item"><i class="fa-solid fa-cart-shopping me-2"></i>Đơn hàng của tôi</a></li>
@@ -91,7 +92,7 @@
 
                             </ul>
                         </div>
-                        <a href="${pageContext.request.contextPath}/viewcart" class="btn">
+                        <%--<a href="${pageContext.request.contextPath}/viewcart" class="btn">
                             <i class="fa-solid fa-cart-shopping header-icon pt-1"></i>
                             <span
                                     class="position-absolute translate-middle badge rounded-pill bg-danger text-light"
@@ -100,7 +101,7 @@
                                0
 
                             </span>
-                        </a>
+                        </a>--%>
                     </div>
                 </div>
                 <ul class="navbar-nav d-flex justify-content-center fw-semibold mt-3 mb-0">

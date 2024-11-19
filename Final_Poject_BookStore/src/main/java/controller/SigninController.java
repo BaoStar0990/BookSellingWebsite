@@ -86,14 +86,17 @@ public class SigninController extends HttpServlet {
                         if (rememberMe.equalsIgnoreCase("on")) {
                             Cookie cookieEmail = new Cookie("email", email);
                             Cookie cookiePassword = new Cookie("password", password);
-
+                            Cookie cookieCsrfToken = new Cookie("csrfToken", csrfToken);
 
                             // Cookie tồn tại trong 30 ngày
                             cookieEmail.setMaxAge(30 * 24 * 60 * 60);
                             cookiePassword.setMaxAge(30 * 24 * 60 * 60);
+                            cookieCsrfToken.setMaxAge(30 * 24 * 60 * 60);
+
 
                             response.addCookie(cookieEmail);
                             response.addCookie(cookiePassword);
+                            response.addCookie(cookieCsrfToken);
 
                         }
                     }

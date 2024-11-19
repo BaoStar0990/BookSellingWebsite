@@ -87,7 +87,7 @@ public class CustomerDB  extends ModifyDB<Customer> implements DBInterface<Custo
             return null;
         }
     }
-    public Customer checkExistEmail(String email){
+    public Customer checkExistCustomerHaveEmail(String email){
         List<Customer> customers = selectAll();
         for(Customer c : customers){
             if(c.getEmail().equals(email)){

@@ -163,7 +163,7 @@ public class CustomerDB  extends ModifyDB<Customer> implements DBInterface<Custo
             cart.setStatusOrder(StatusOrder.Processing);
               // sleep ở đây, nó mà sleep lại là bấm bên kia xem nó có chạy ko
             System.out.println("Tien trinh dung trong 20s");
-                             Thread.sleep(20000);       
+//                             Thread.sleep(20000);       
             // trừ số lượng sách trong kho khi đặt
             final EntityManager emFinal = em;           
             cart.getOrderDetails().forEach(o ->{

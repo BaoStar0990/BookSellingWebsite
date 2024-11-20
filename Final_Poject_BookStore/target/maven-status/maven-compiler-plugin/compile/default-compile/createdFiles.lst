@@ -42,9 +42,6 @@ test\TestDiscountCampaign.class
 dbmodel\BookDB.class
 database\DBUtil.class
 ms_controller\SignOutAdmin.class
-Utils\authentication\CookieUtil.class
-Utils\authentication\CSRFUtil.class
-Utils\authentication\ExpiringToken.class
 test\TestPasswordHash.class
 controller\PaymentController.class
 dbmodel\PublisherDB.class
@@ -67,6 +64,7 @@ dbmodel\ModifyDB.class
 test\TestReview.class
 dbmodel\ReviewDB.class
 controller\SignupController.class
+ms_controller\MSOrderController$1.class
 utils\authentication\Regex.class
 model\StatusPayment.class
 firebasecloud\FirebaseInitializer.class

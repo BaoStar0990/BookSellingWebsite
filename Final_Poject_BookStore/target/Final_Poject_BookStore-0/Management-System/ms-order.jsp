@@ -144,10 +144,6 @@
                 }
             });
         }
-
-        function printBill(billId) {
-            window.open(`/printBill?billId=${billId}`, '_blank');
-        }
     </script>
 </body>
 </html>

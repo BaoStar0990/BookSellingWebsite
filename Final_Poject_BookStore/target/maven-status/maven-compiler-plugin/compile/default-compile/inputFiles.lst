@@ -15,6 +15,7 @@ D:\University\HK5\Web\FinalProject\FinalProject_BookStore\Final_Poject_BookStore
 D:\University\HK5\Web\FinalProject\FinalProject_BookStore\Final_Poject_BookStore\src\main\java\dbmodel\StaffDB.java
 D:\University\HK5\Web\FinalProject\FinalProject_BookStore\Final_Poject_BookStore\src\main\java\test\TestBill.java
 D:\University\HK5\Web\FinalProject\FinalProject_BookStore\Final_Poject_BookStore\src\main\java\test\TestDiscountCampaign.java
+D:\University\HK5\Web\FinalProject\FinalProject_BookStore\Final_Poject_BookStore\src\main\java\test\TestPasswordHash.java
 D:\University\HK5\Web\FinalProject\FinalProject_BookStore\Final_Poject_BookStore\src\main\java\test\TestAuthor.java
 D:\University\HK5\Web\FinalProject\FinalProject_BookStore\Final_Poject_BookStore\src\main\java\test\TestMail.java
 D:\University\HK5\Web\FinalProject\FinalProject_BookStore\Final_Poject_BookStore\src\main\java\dbmodel\BookDB.java
@@ -55,6 +56,7 @@ D:\University\HK5\Web\FinalProject\FinalProject_BookStore\Final_Poject_BookStore
 D:\University\HK5\Web\FinalProject\FinalProject_BookStore\Final_Poject_BookStore\src\main\java\database\DBUtil.java
 D:\University\HK5\Web\FinalProject\FinalProject_BookStore\Final_Poject_BookStore\src\main\java\controller\ModifyItemCartController.java
 D:\University\HK5\Web\FinalProject\FinalProject_BookStore\Final_Poject_BookStore\src\main\java\model\StatusPayment.java
+D:\University\HK5\Web\FinalProject\FinalProject_BookStore\Final_Poject_BookStore\src\main\java\PasswordUtil\PasswordUtil.java
 D:\University\HK5\Web\FinalProject\FinalProject_BookStore\Final_Poject_BookStore\src\main\java\model\Customer.java
 D:\University\HK5\Web\FinalProject\FinalProject_BookStore\Final_Poject_BookStore\src\main\java\controller\ForgotPasswordController.java
 D:\University\HK5\Web\FinalProject\FinalProject_BookStore\Final_Poject_BookStore\src\main\java\test\TestPublisher.java

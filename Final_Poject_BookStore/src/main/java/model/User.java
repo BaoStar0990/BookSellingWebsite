@@ -18,6 +18,8 @@ public abstract class User implements Serializable {
     protected String numberPhone;
     protected String email;
     protected LocalDate birthday;
+    protected String salt;
+    
     public User() {
 
     }
@@ -38,9 +40,21 @@ public abstract class User implements Serializable {
         this.numberPhone = numberPhone;
         this.email = email;
     }
-    public User(String username, String password, String fullName,String numberPhone, String email, LocalDate dob) {
+    public User(String username, String password, String fullName,
+            String numberPhone, String email, LocalDate dob) {
         this.username = username;
         this.password = password;
+        this.fullName = fullName;
+        this.age = age;
+        this.numberPhone = numberPhone;
+        this.email = email;
+        this.birthday = dob;
+    }
+    public User(String username, String password, String salt, String fullName,
+            String numberPhone, String email, LocalDate dob) {
+        this.username = username;
+        this.password = password;
+        this.salt = salt;
         this.fullName = fullName;
         this.age = age;
         this.numberPhone = numberPhone;
@@ -51,6 +65,7 @@ public abstract class User implements Serializable {
         this.username = username;
         this.password = password;
     }
+    
     public int getId() {
         return id;
     }
@@ -94,6 +109,22 @@ public abstract class User implements Serializable {
         this.email = email;
     }
 
+    public LocalDate getBirthday() {
+        return birthday;
+    }
+
+    public String getSalt() {
+        return salt;
+    }
+
+    public void setBirthday(LocalDate birthday) {
+        this.birthday = birthday;
+    }
+
+    public void setSalt(String salt) {
+        this.salt = salt;
+    }
+    
     @PrePersist
     @PreUpdate
     public void calculateAge() {

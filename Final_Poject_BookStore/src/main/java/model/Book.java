@@ -226,5 +226,11 @@ public class Book implements Serializable {
         this.categories = categories;
     }
 
-    
+    public int getBookID() {
+        return bookID;
+    }
+
+    public Set<OrderDetail> getOrderDetails() {
+        return orderDetails;
+    }
 }

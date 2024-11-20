@@ -20,7 +20,10 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.security.NoSuchAlgorithmException;
+
+import model.Bill;
 import model.Customer;
+import model.StatusOrder;
 
 /**
  *
@@ -124,6 +127,8 @@ public class SignupController extends HttpServlet {
                     //Email, numberphone,password, dob, fullname
                     Customer newCustomer = new Customer(passHash, salt, fullname, numberPhone, email, dateOfBirth);
                     if(CustomerDB.getInstance().insertCustomer(newCustomer)){
+                        // tạo cart mới cho khách hàng
+
                         alertMessage = "Vui lòng nhập tài khoảng của bạn để đăng nhập";
                         request.setAttribute("alertMessage", alertMessage);
                         request.getRequestDispatcher("/signin.jsp").forward(request, response);

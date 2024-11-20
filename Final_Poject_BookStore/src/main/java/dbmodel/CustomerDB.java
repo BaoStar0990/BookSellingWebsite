@@ -107,6 +107,23 @@ public class CustomerDB  extends ModifyDB<Customer> implements DBInterface<Custo
             return false;
         }
     }
+    public Customer selectCustomerByEmail(String email){
+        try(EntityManager em = DBUtil.getEmFactory().createEntityManager()){
+            Customer customer = em.createQuery("from Customer b where b.email =: email ", Customer.class).
+                    setParameter("email",email).getResultList().get(0);
+            // mọi phần tử trùng lặp sẽ bị bỏ
+            return  customer;
+        }
+        catch (TransientObjectException ex) {
+            return null;
+        }
+        catch(NoResultException ex){
+            return null;
+        }
+        catch(Exception ex){
+            return null;
+        }
+    }
     public Customer selectCustomerByEmailPassWord(String email,String password){
         try(EntityManager em = DBUtil.getEmFactory().createEntityManager()){
             Customer customer = em.createQuery("from Customer b where b.email =: email " + "and b.password =: password", Customer.class).

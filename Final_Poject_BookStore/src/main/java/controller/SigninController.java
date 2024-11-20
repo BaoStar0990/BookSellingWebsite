@@ -13,6 +13,8 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.*;
 import model.Customer;
+import PasswordUtil.PasswordUtil;
+import java.security.NoSuchAlgorithmException;
 
 /**
  *
@@ -72,10 +74,11 @@ public class SigninController extends HttpServlet {
             String csrfToken = null;
             if (session.getAttribute("csrfToken") == null) { // Lần đăng nhập đầu tiên
                 Customer customer = loginCustomer(email, password);
-                if (customer != null) { // đăng nhâập đúng
+                if (customer != null) { // đăng nhập đúng
                     csrfToken = CSRFUtil.getCSRFToken();
                     request.setAttribute("csrfToken", csrfToken);
-                    System.out.println("First request" + "email: " + email + "password: " + password + "csrfToken: " + csrfToken);
+                    System.out.println("First request" + "email: " + email + "password: " 
+                            + customer.getPassword() + "csrfToken: " + csrfToken);
 
                     //Set customer trong session
                     session.setAttribute("csrfToken", csrfToken);
@@ -85,7 +88,7 @@ public class SigninController extends HttpServlet {
                     if (rememberMe != null) {
                         if (rememberMe.equalsIgnoreCase("on")) {
                             Cookie cookieEmail = new Cookie("email", email);
-                            Cookie cookiePassword = new Cookie("password", password);
+                            Cookie cookiePassword = new Cookie("password", customer.getPassword());
                             Cookie cookieCsrfToken = new Cookie("csrfToken", csrfToken);
 
                             // Cookie tồn tại trong 30 ngày
@@ -119,11 +122,21 @@ public class SigninController extends HttpServlet {
     Lúc login sẽ set đối tượng customer và csrf trong session và csrf token trong request.
     * */
     private Customer loginCustomer(String email, String password) {
-       Customer  customer =   CustomerDB.getInstance().selectCustomerByEmailPassWord(email, password);
-       if(customer != null) {
-           return customer;
-       }
-       return null;
+//       Customer  customer =   CustomerDB.getInstance().selectCustomerByEmailPassWord(email, password);
+        Customer  customer =   CustomerDB.getInstance().selectCustomerByEmail(email);
+        if(customer != null) {
+            try {
+                // lấy salt của customer
+                String salt = customer.getSalt();
+                String passHash = PasswordUtil.HashPassword(password + salt);
+                if(passHash.equalsIgnoreCase(customer.getPassword()))
+                    return customer;
+            } catch (NoSuchAlgorithmException e) {
+                System.out.println(e);
+                return null;
+            }
+        }
+        return null;
     }
 
     private boolean loginAdmin(String email, String password, HttpServletRequest request, HttpServletResponse response) {

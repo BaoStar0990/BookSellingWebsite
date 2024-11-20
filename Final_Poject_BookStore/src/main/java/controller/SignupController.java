@@ -4,6 +4,7 @@
  */
 package controller;
 
+import PasswordUtil.PasswordUtil;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Date;
@@ -18,6 +19,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.security.NoSuchAlgorithmException;
 import model.Customer;
 
 /**
@@ -114,16 +116,25 @@ public class SignupController extends HttpServlet {
                 request.setAttribute("alertMessage", alertMessage);
                 doGet(request, response);
             } else {
-                //Email, numberphone,password, dob, fullname
-                Customer newCustomer = new Customer(password, fullname, numberPhone, email, dateOfBirth);
-                if(CustomerDB.getInstance().insertCustomer(newCustomer)){
-                    alertMessage = "Vui lòng nhập tài khoảng của bạn để đăng nhập";
-                    request.setAttribute("alertMessage", alertMessage);
-                    request.getRequestDispatcher("/signin.jsp").forward(request, response);
-                }else{
-                    alertMessage = "Lỗi trong quá trình đăng kí, mời bạn đăng ký lại";
-                    request.setAttribute("alertMessage", alertMessage);
-                    doGet(request, response);
+                try {
+                    // lấy salt 
+                    String salt = PasswordUtil.getSalt();
+                    // mã hóa mật khẩu
+                    String passHash = PasswordUtil.HashPassword(password + salt);
+                    //Email, numberphone,password, dob, fullname
+                    Customer newCustomer = new Customer(passHash, salt, fullname, numberPhone, email, dateOfBirth);
+                    if(CustomerDB.getInstance().insertCustomer(newCustomer)){
+                        alertMessage = "Vui lòng nhập tài khoảng của bạn để đăng nhập";
+                        request.setAttribute("alertMessage", alertMessage);
+                        request.getRequestDispatcher("/signin.jsp").forward(request, response);
+                    }else{
+                        alertMessage = "Lỗi trong quá trình đăng kí, mời bạn đăng ký lại";
+                        request.setAttribute("alertMessage", alertMessage);
+                        doGet(request, response);
+                    }
+                }catch (NoSuchAlgorithmException ex) {
+                    System.out.println(ex);
+                    request.setAttribute("alertMessage", "Lỗi trong quá trình đăng ký.");
                 }
 
             }

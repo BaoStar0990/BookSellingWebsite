@@ -12,7 +12,7 @@
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
-      <module name="Final_Poject_BookStore" options="--enable-preview" />
+      <module name="Final_Poject_BookStore" options="" />
     </option>
   </component>
 </project>

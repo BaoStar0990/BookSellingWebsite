@@ -107,6 +107,23 @@ public class CustomerDB  extends ModifyDB<Customer> implements DBInterface<Custo
             return false;
         }
     }
+    public Customer selectCustomerByEmail(String email){
+        try(EntityManager em = DBUtil.getEmFactory().createEntityManager()){
+            Customer customer = em.createQuery("from Customer b where b.email =: email ", Customer.class).
+                    setParameter("email",email).getResultList().get(0);
+            // mọi phần tử trùng lặp sẽ bị bỏ
+            return  customer;
+        }
+        catch (TransientObjectException ex) {
+            return null;
+        }
+        catch(NoResultException ex){
+            return null;
+        }
+        catch(Exception ex){
+            return null;
+        }
+    }
     public Customer selectCustomerByEmailPassWord(String email,String password){
         try(EntityManager em = DBUtil.getEmFactory().createEntityManager()){
             Customer customer = em.createQuery("from Customer b where b.email =: email " + "and b.password =: password", Customer.class).
@@ -146,7 +163,7 @@ public class CustomerDB  extends ModifyDB<Customer> implements DBInterface<Custo
             cart.setStatusOrder(StatusOrder.Processing);
               // sleep ở đây, nó mà sleep lại là bấm bên kia xem nó có chạy ko
             System.out.println("Tien trinh dung trong 20s");
-                             Thread.sleep(20000);       
+                             //Thread.sleep(20000);
             // trừ số lượng sách trong kho khi đặt
             final EntityManager emFinal = em;           
             cart.getOrderDetails().forEach(o ->{
@@ -250,7 +267,11 @@ public class CustomerDB  extends ModifyDB<Customer> implements DBInterface<Custo
     }
     public boolean insertCustomer(Customer c){
         try(EntityManager em = DBUtil.getEmFactory().createEntityManager()){
+            Bill newCart = new Bill();
+            newCart.setCustomer(c);
+            newCart.setStatusOrder(StatusOrder.Storing);
             em.getTransaction().begin();
+            em.persist(newCart);
             em.persist(c);
             em.getTransaction().commit();
             return true;

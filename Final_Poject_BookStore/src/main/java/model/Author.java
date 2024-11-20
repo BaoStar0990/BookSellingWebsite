@@ -73,4 +73,15 @@ public class Author implements Serializable {
     public String getImageURL() {
         return imageURL;
     }
+
+    public int getAuthorID() {
+        return authorID;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+    public void setDescription(String description) {
+        this.description = description;
+    }
 }

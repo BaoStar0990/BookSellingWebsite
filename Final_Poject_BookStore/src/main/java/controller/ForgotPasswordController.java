@@ -1,5 +1,6 @@
 package controller;
 
+import PasswordUtil.PasswordUtil;
 import Utils.authentication.CSRFUtil;
 import Utils.authentication.ExpiringToken;
 import dbmodel.CustomerDB;
@@ -14,6 +15,7 @@ import model.Customer;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
+import java.security.NoSuchAlgorithmException;
 import java.time.Instant;
 import java.util.HashMap;
 import java.util.Map;
@@ -91,7 +93,9 @@ public class ForgotPasswordController extends HttpServlet {
                         //So sanh code
                         if (codeEntered.equals(codeInSession)) {
                             // chuyen den trang nhap mat khau moi
-                            doGet(request,response);
+//                            doGet(request,response);
+                            url = "/enteringnewpassword.jsp";
+                            request.getServletContext().getRequestDispatcher(url).forward(request, response);
                         } else {
                             out.println("Code not match");
                         }
@@ -113,7 +117,13 @@ public class ForgotPasswordController extends HttpServlet {
                         Customer customer = (Customer) session.getAttribute("customer");
                         if (customer != null) {
                             try {
-                                customer.setPassword(newPassword);
+                                // lấy salt 
+                                String salt = PasswordUtil.getSalt();
+                                // mã hóa mật khẩu
+                                String passHash = PasswordUtil.HashPassword(newPassword + salt);
+                                customer.setPassword(passHash);
+                                customer.setSalt(salt);
+                                
                                 if (CustomerDB.getInstance().updateCustomer(customer) == true) {
                                     System.out.println("Hết phiên reset mật khẩu của bạn");
                                     request.setAttribute("alertMessage", "Reset mật khẩu thành công, vui lòng đăng nhập lại");
@@ -122,10 +132,16 @@ public class ForgotPasswordController extends HttpServlet {
                                 } else {
                                     out.println("Error when update password");
                                 }
-
-                            } catch (Exception e) {
+                            
+                            }catch(NoSuchAlgorithmException ex) {
+                                System.out.println(ex);
+                                request.setAttribute("alertMessage", "Lỗi trong quá trình đặt lại mật khẩu.");
+                           
+                            } 
+                            catch (Exception e) {
                                 e.printStackTrace();
                             }
+                            
                         }
                     }
                 }

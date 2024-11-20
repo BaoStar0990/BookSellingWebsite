@@ -45,7 +45,10 @@ public class Customer extends User implements Serializable {
         super("", password, fullName,numberPhone, email, dateOfBirth);
         addresses = new HashSet<>();
     }
-
+    public Customer(String password, String salt, String fullName, String numberPhone, String email, LocalDate dateOfBirth) {
+        super("", password, salt, fullName,numberPhone, email, dateOfBirth);
+        addresses = new HashSet<>();
+    }
     public Customer(String username, String password) {
         super(username, password);
         addresses = new HashSet<>();

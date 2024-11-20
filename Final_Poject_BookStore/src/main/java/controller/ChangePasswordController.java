@@ -14,6 +14,8 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import model.Customer;
+import PasswordUtil.PasswordUtil;
+import java.security.NoSuchAlgorithmException;
 
 /**
  *
@@ -47,11 +49,32 @@ public class ChangePasswordController extends HttpServlet {
             String newPass = request.getParameter("newPassword");
             Customer c = (Customer) session.getAttribute("user");
             if(c != null){
-                c.setPassword(newPass);
-//                CustomerDB.getInstance().update(c);
-                // sau khi cập nhật xong đăng xuất tài khoản
-                if(CustomerDB.getInstance().update(c)){
-                    response.sendRedirect("/signout");
+                try {
+                    // kiểm tra pass nhập hiện tại đúng chưa
+                    String currentPass = request.getParameter("currentPassword");
+                    // lấy satl hiện tại
+                    String currentSalt = c.getSalt();
+                    String currentPassHash = PasswordUtil.HashPassword(currentPass + currentSalt);
+                    if(currentPassHash.equalsIgnoreCase(c.getPassword())){ // nếu mật khẩu đúng
+                        // lấy salt 
+                        String salt = PasswordUtil.getSalt();
+                        // mã hóa mật khẩu
+                        String passHash = PasswordUtil.HashPassword(newPass + salt);
+                        c.setSalt(salt); // lưu salt
+                        c.setPassword(passHash); // lưu pass
+        //                CustomerDB.getInstance().update(c);
+                        // sau khi cập nhật xong đăng xuất tài khoản
+                        if(CustomerDB.getInstance().update(c)){
+                            response.sendRedirect("/signout");
+                        }
+                        else
+                            request.setAttribute("errorMessage", "Đổi mật khẩu không thành công!");
+                    }
+                    else
+                        request.setAttribute("errorMessage", "Mật khẩu hiện tại không đúng.");
+                }catch (NoSuchAlgorithmException ex) {
+                    System.out.println(ex);
+                    request.setAttribute("errorMessage", "Đổi mật khẩu không thành công!");
                 }
             }
         }

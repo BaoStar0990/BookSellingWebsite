@@ -37,18 +37,18 @@
 </div>
 
 <script>
-    const currentPasswordFromServer = "${sessionScope.user.password}";
-    document.getElementById("currentPassword").addEventListener('input', function(event) {
-        const errorMessage = document.getElementById("errorMessage");
-        const inputPassword = document.getElementById("currentPassword").value;
-        // Reset messages
-        errorMessage.classList.add("d-none");
-        // So sánh mật khẩu
-        if (currentPasswordFromServer !== inputPassword) {
-            errorMessage.classList.remove("d-none");
-            errorMessage.innerHTML = "Mật khẩu hiện tại không đúng";
-        }
-    });
+//    const currentPasswordFromServer = "${sessionScope.user.password}";
+//    document.getElementById("currentPassword").addEventListener('input', function(event) {
+//        const errorMessage = document.getElementById("errorMessage");
+//        const inputPassword = document.getElementById("currentPassword").value;
+//        // Reset messages
+//        errorMessage.classList.add("d-none");
+//        // So sánh mật khẩu
+//        if (currentPasswordFromServer !== inputPassword) {
+//            errorMessage.classList.remove("d-none");
+//            errorMessage.innerHTML = "Mật khẩu hiện tại không đúng";
+//        }
+//    });
   function handleChangePassword(event) {
     // Get elements
     const currentPassword = document.getElementById("currentPassword").value;
@@ -80,13 +80,13 @@
       event.preventDefault(); // Ngăn form submit
       return;
     }
-    if(currentPasswordFromServer !== currentPassword){
-        errorMessage.innerHTML = "Mật khẩu hiện tại không đúng";
-        errorMessage.classList.remove("d-none");
-        event.preventDefault(); // Ngăn form submit
-        alert("aaa");
-        return;
-    }
+//    if(currentPasswordFromServer !== currentPassword){
+//        errorMessage.innerHTML = "Mật khẩu hiện tại không đúng";
+//        errorMessage.classList.remove("d-none");
+//        event.preventDefault(); // Ngăn form submit
+//        alert("aaa");
+//        return;
+//    }
     // Simulate successful password change
     successMessage.innerHTML = "Mật khẩu đã được thay đổi thành công!";
     successMessage.classList.remove("d-none");

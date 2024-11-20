@@ -35,12 +35,17 @@ model\DiscountCampaign.class
 utils\authentication\CSRFUtil.class
 dbmodel\StaffDB.class
 model\Author.class
+PasswordUtil\PasswordUtil.class
 model\Category.class
 model\Book.class
 test\TestDiscountCampaign.class
 dbmodel\BookDB.class
 database\DBUtil.class
 ms_controller\SignOutAdmin.class
+Utils\authentication\CookieUtil.class
+Utils\authentication\CSRFUtil.class
+Utils\authentication\ExpiringToken.class
+test\TestPasswordHash.class
 controller\PaymentController.class
 dbmodel\PublisherDB.class
 model\Staff.class

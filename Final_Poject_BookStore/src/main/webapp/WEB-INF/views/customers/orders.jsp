@@ -24,9 +24,7 @@
       <td>${order.getOrderDate()}</td>
       <c:set var = "total" value = "0"/>
           <c:forEach var="orderDetail" items="${order.getOrderDetails()}">
-              <c:set var="total" value="${totalCost + orderDetail.getBook().sellingPrice*(1 - orderDetail.getBook()
-                                                           .getDiscountCampaign()
-                                                           .getPercentDiscount()) * orderDetail.getQuantity()}"/>
+                <c:set var="total" value="${totalCost + orderDetail.getUnitPrice() * orderDetail.getQuantity()}"/>
           </c:forEach>
       <td>${total}đ</td>
       <td>${order.getPaymentMethod()}</td>

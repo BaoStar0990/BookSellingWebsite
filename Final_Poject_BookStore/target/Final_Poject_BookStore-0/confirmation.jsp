@@ -36,7 +36,7 @@
                 <div class="row mt-3">
                     <div class="col-6">
                         <p class="mb-1 fw-bold">Họ và tên</p>
-                        <p>${sessionScope.user.getFullName()}</p>
+                        <p>${fullName}</p>
                     </div>
                     <div class="col-6">
                         <p class="mb-1 fw-bold">Email</p>
@@ -44,7 +44,7 @@
                     </div>
                     <div class="col-6">
                         <p class="mb-1 fw-bold">Số điện thoại</p>
-                        <p>${sessionScope.user.getNumberPhone()}</p>
+                        <p>${phonenumber}</p>
                     </div>
                     <div class="col-6">
                         <p class="mb-1 fw-bold">Địa chỉ</p>
@@ -61,15 +61,15 @@
                     <hr/>
                     <div class="d-flex justify-content-between">
                         <p>Ngày đặt</p>
-                        <p>${cart.getOrderDate()}</p>
+                        <p>${order.getOrderDate()}</p>
                     </div>
                     <div class="d-flex justify-content-between">
                         <p>Số hiệu đơn</p>
-                        <p>Order ID: ${cart.getId()}</p>
+                        <p>Order ID: ${order.getId()}</p>
                     </div>
                     <div class="d-flex justify-content-between">
                         <p>Dự kiến</p>
-                        <p>${cart.getDeliveryDate()}</p>
+                        <p>${order.getDeliveryDate()}</p>
                     </div>
                     <hr/>
 
@@ -79,19 +79,16 @@
                         <c:set var="totalCost" value="0.0" />
                         <c:if test = "${not empty listOrderDetails}">
                             <c:forEach var = "orderDetail" items="${listOrderDetails}"> 
-                                <c:set var="totalCost" value="${totalCost + orderDetail.getBook().sellingPrice*(1 - orderDetail.getBook()
-                                                           .getDiscountCampaign().getPercentDiscount()) * orderDetail.getQuantity()}"/>
+                                <c:set var="totalCost" value="${totalCost + orderDetail.getUnitPrice() * orderDetail.getQuantity()}"/>
                                 <div class="d-flex justify-content-between align-items-center mb-2">
                                     <img src="${orderDetail.getBook().getUrlImage()}" alt="product" width="60" class="me-3"/>
                                     <div class="flex-grow-1 pe-4">
                                         <h6>${orderDetail.getBook().getTitle()}</h6>
-                                        <p class="mb-0"><fmt:formatNumber value="${orderDetail.getBook().sellingPrice*(1 - orderDetail.getBook()
-                                                                   .getDiscountCampaign().getPercentDiscount())}"
+                                        <p class="mb-0"><fmt:formatNumber value="${orderDetail.getUnitPrice()}"
                                                           type="number" pattern="#,##0" />đ x ${orderDetail.getQuantity()}</p>
                                     </div>
                                     <span class="fw-semibold">
-                                        <fmt:formatNumber value="${orderDetail.getBook().sellingPrice*(1 - orderDetail.getBook()
-                                                                   .getDiscountCampaign().getPercentDiscount()) * orderDetail.getQuantity()}" type="number" pattern="#,##0" />đ
+                                        <fmt:formatNumber value="${orderDetail.getUnitPrice() * orderDetail.getQuantity()}" type="number" pattern="#,##0" />đ
                                     </span>
                                 </div>
                             </c:forEach>

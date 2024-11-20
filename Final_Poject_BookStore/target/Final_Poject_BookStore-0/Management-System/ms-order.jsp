@@ -96,7 +96,7 @@
                                 </td>
                                 <td>${bill.getId()}</td>
                                 <td>${bill.getCustomer().getFullName()}</td>
-                                <td>${bill.getGrandTotal()}<td>
+                                <td>${bill.getGrandTotal()}</td>
                                 <td>${bill.getOrderDate()}</td>
                                 <td>
                                     <span class="badge 

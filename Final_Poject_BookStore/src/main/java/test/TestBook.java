@@ -14,19 +14,23 @@ import model.Review;
 
 public class TestBook {
     public static void main(String[] args) {
-//         System.out.println("--------------Book---------------");
-//        // test select all book (bao gồm các thông tin như nhà xuất bản, tác giả, thể loại)
-//        List<Book> allBooks = BookDB.getInstance().selectAll();
-//        for(Book b : allBooks){
-//            System.out.println("--------");
-//            System.out.println(b.getId() + " " + b.getTitle() + " " +
-//                    b.getLanguage() + " "+b.getDescription());
-//            // lấy thông tin tác giả của sách
-//            Set<Author> authors = b.getAuthors();        
-//            for(Author a : authors){
-//                System.out.println(a.getName());
-//            }
-//        }
+         System.out.println("--------------Book---------------");
+        // test select all book (bao gồm các thông tin như nhà xuất bản, tác giả, thể loại)
+        List<Book> allBooks = BookDB.getInstance().selectAll();
+        for(Book b : allBooks){
+            System.out.println("--------");
+            System.out.println(b.getId() + " " + b.getTitle() + " " +
+                    b.getLanguage() + " "+b.getDescription());
+            // lấy thông tin tác giả của sách
+            Set<Author> authors = b.getAuthors();        
+            for(Author a : authors){
+                System.out.println(a.getName());
+            }
+            Set<Category> categories = b.getCategories();        
+            for(Category c : categories){
+                System.out.println(c.getName());
+            }
+        }
 //        System.out.println("--------Lấy các lượt review của 1 cuốn sách-------");
 //        Book book1 = BookDB.getInstance().selectByID(1);
 //        List<Review> rv = book1.getReviews();
@@ -49,8 +53,8 @@ public class TestBook {
 //        else{
 //            System.out.println("Lỗi chèn sách");
 //        }
-        
-        Book b = BookDB.getInstance().selectByID(63);
-        BookDB.getInstance().delete(b.getId(), Book.class);
+//        
+//        Book b = BookDB.getInstance().selectByID(63);
+//        BookDB.getInstance().delete(b.getId(), Book.class);
     }
 }

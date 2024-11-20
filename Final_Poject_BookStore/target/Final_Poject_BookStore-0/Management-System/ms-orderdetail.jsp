@@ -53,11 +53,12 @@
                     
                 </div>
                 <div class="d-flex justify-content-end">
-                    <form action="${pageContext.request.contextPath}/msorder" method="post" class="mb-0">
+                    <form id="statusForm" action="${pageContext.request.contextPath}/msorder" method="post" class="mb-0">
                         <input type="hidden" name="action" value="updateStatus">
                         <input type="hidden" name="billId" value="${bill.getId()}">
                         <input type="hidden" name="redirectUrl" value="${pageContext.request.requestURL}">
-                        <button type="submit" class="btn btn-primary me-2">
+                        <button type="button" class="btn btn-primary me-2" id="statusButton"
+                            <c:if test="${bill.getStatusOrder() == 'Completed'}">style="display:none;" disabled</c:if>>
                             <c:choose>
                                 <c:when test="${bill.getStatusOrder() == 'Processing'}">
                                     <i class="fas fa-box"></i>
@@ -75,18 +76,34 @@
                                     <i class="fas fa-check"></i>
                                     Hoàn thành
                                 </c:when>
-                                <c:otherwise>Chuyển trạng thái đơn hàng</c:otherwise>
+                                <c:when test="${bill.getStatusOrder() == 'Cancelled'}">
+                                    <i class="fas fa-box"></i>
+                                    Xử lý đơn hàng
+                                </c:when>
                             </c:choose>
                         </button>
                     </form>
-                    <button class="btn btn-danger me-2">
-                        <i class="fas fa-times"></i>
-                        Hủy đơn hàng
-                    </button>
-                    <button class="btn btn-danger">
-                        <i class="fas fa-trash"></i>
-                        Xóa đơn hàng
-                    </button>
+                    <c:if test="${(bill.getStatusOrder() == 'Processing' || bill.getStatusOrder() == 'Packing' || bill.getStatusOrder() == 'Delivering') && bill.getStatusPayment() == 'Unpaid'}">
+                        <form id="cancelForm" action="${pageContext.request.contextPath}/msorder" method="post" class="mb-0">
+                            <input type="hidden" name="action" value="cancelOrder">
+                            <input type="hidden" name="billId" value="${bill.getId()}">
+                            <input type="hidden" name="redirectUrl" value="${pageContext.request.requestURL}">
+                            <button type="button" class="btn btn-danger me-2" id="cancelButton">
+                                <i class="fas fa-times"></i>
+                                Hủy đơn hàng
+                            </button>
+                        </form>
+                    </c:if>
+                    <c:if test="${bill.getStatusOrder() == 'Cancelled'}">
+                        <form action="${pageContext.request.contextPath}/msorder" method="post" class="mb-0" onsubmit="return confirm('Bạn có chắc chắn muốn xóa đơn hàng này không?');">
+                            <input type="hidden" name="action" value="deleteOrder">
+                            <input type="hidden" name="billId" value="${bill.getId()}">
+                            <button type="submit" class="btn btn-danger">
+                                <i class="fas fa-trash"></i>
+                                Xóa đơn hàng
+                            </button>
+                        </form>
+                    </c:if>
                 </div>
             </div>
             <hr>
@@ -99,9 +116,23 @@
                             <p><strong>Khách hàng:</strong> <span>${bill.getCustomer().getFullName()}</span></p>
                             <p><strong>Ngày đặt hàng:</strong> <span>${bill.getOrderDate()}</span></p>
                             <p><strong>Ngày giao hàng:</strong> <span>${bill.getDeliveryDate()}</span></p>
-                            <p><strong>Địa chỉ giao hàng:</strong> <span>${bill.getShippingAddress()}</span></p>
+                            <p><strong>Người nhận hàng:</strong> <span>${bill.getRecipientName()}</span></p>
+                            <p><strong>Sđt người nhận hàng:</strong> <span>${bill.getRecipientPhone()}</span></p>
+                            <p><strong>Địa chỉ giao hàng:</strong> <span>${bill.getRecipientAddress()}</span></p>
                             <p><strong>Phương thức thanh toán:</strong> <span>${bill.getPaymentMethod()}</span></p>
-                            <p><strong>Tình trạng đơn hàng:</strong> <span>${bill.getStatusOrder()}</span></p>
+                            <p><strong>Tình trạng đơn hàng:</strong>
+                                <span class="badge 
+                                    <c:choose>
+                                        <c:when test="${bill.getStatusOrder() == 'Processing'}">bg-warning</c:when>
+                                        <c:when test="${bill.getStatusOrder() == 'Packing'}">bg-info</c:when>
+                                        <c:when test="${bill.getStatusOrder() == 'Delivering'}">bg-primary</c:when>
+                                        <c:when test="${bill.getStatusOrder() == 'Delivered'}">bg-success</c:when>
+                                        <c:when test="${bill.getStatusOrder() == 'Cancelled'}">bg-danger</c:when>
+                                        <c:when test="${bill.getStatusOrder() == 'Completed'}">bg-success</c:when>
+                                        <c:otherwise>bg-secondary</c:otherwise>
+                                    </c:choose>">
+                                    ${bill.getStatusOrder()}
+                                </span></p>
                             <p><strong>Tình trạng thanh toán:</strong> <span>${bill.getStatusPayment()}</span></p>
                         </div>
                     </div>
@@ -143,97 +174,27 @@
         </div>
     </main>
 
+    <div class="modal fade" id="confirmModal" tabindex="-1" aria-labelledby="confirmModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="confirmModalLabel">Xác nhận hành động</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p id="confirmMessage"></p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                    <button type="button" class="btn btn-primary" id="confirmButton">Xác nhận</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/2.3.4/purify.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.2/html2pdf.bundle.min.js"></script>
-    <script>
-        function goBack() {
-            window.history.back();
-        }
-
-        function getBillContent() {
-            return `
-                <html>
-                <head>
-                    <title>Hóa đơn</title>
-                    <style>
-                        .container { width: 100%; padding: 20px; }
-                        .text-danger { color: red; }
-                    </style>
-                </head>
-                <body>
-                    <div>
-                        <img src="${pageContext.request.contextPath}/assets/images/logos/logo-1.png" alt="Naoki Logo" style="width: 100px; margin-bottom: 16px;">
-                        <p>Địa chỉ công ty: Số 1, Võ Văn Ngân, Quận Thủ Đức, Tp. Hồ Chí Minh</p>
-                        <p>Số điện thoại: 0912345678</p>
-                        <p>Email: support@naoki.com</p>
-                        <p>Mã số thuế: 12345</p>
-                        <hr>
-                        <h3>Hóa đơn</h3>
-                        <p><strong>Số hóa đơn:</strong> ${bill.getId()}</p>
-                        <p><strong>Ngày đặt hàng:</strong> ${bill.getOrderDate()}</p>
-                        <p><strong>Ngày giao hàng:</strong> ${bill.getDeliveryDate()}</p>
-                        <p><strong>Khách hàng:</strong> ${bill.getCustomer().getFullName()}</p>
-                        <p><strong>Địa chỉ giao hàng:</strong> ${bill.getShippingAddress()}</p>
-                        <p><strong>Phương thức thanh toán:</strong> ${bill.getPaymentMethod()}</p>
-                        <p><strong>Tình trạng thanh toán:</strong> ${bill.getStatusPayment()}</p>
-                        <hr>
-                        <h4>Sách trong đơn hàng</h4>
-                        <table border="1" width="100%">
-                            <thead>
-                                <tr>
-                                    <th>Tên sách</th>
-                                    <th>Số lượng</th>
-                                    <th>Đơn giá</th>
-                                    <th>Thành tiền</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <c:forEach var="detail" items="${bill.getOrderDetails()}">
-                                    <tr>
-                                        <td>${detail.getBook().getTitle()}</td>
-                                        <td>${detail.getQuantity()}</td>
-                                        <td>${detail.getUnitPrice()}</td>
-                                        <td>${detail.getTotalPrice()}</td>
-                                    </tr>
-                                </c:forEach>
-                            </tbody>
-                        </table>
-                        <hr>
-                        <p><strong>Tạm tính:</strong> ${bill.getSubtotal()}</p>
-                        <p><strong>Thuế GTGT:</strong> ${bill.getVAT() * 100}%</p>
-                        <p><strong>Phí vận chuyển:</strong> ${bill.getShippingFee()}</p>
-                        <p class="fs-5"><strong class="text-danger fw-bold">Tổng số tiền:</strong> <span class="text-danger fw-bold">${bill.getGrandTotal()}</span></p>
-                        <hr>
-                        <h4>Điều khoản & Điều kiện</h4>
-                        <a href="https://www.naoki.com/terms_and_conditions">https://www.naoki.com/terms_and_conditions</a>
-                    </div>
-                </body>
-                </html>
-            `;
-        }
-
-        function printBill() {
-            const printContent = getBillContent();
-            const originalContent = document.body.innerHTML;
-
-            document.body.innerHTML = printContent;
-            window.print();
-            document.body.innerHTML = originalContent;
-        }
-
-        function downloadBill() {
-            const billContent = getBillContent();
-            const opt = {
-                margin: 1,
-                filename: `bill_${bill.getId()}.pdf`,
-                image: { type: 'jpeg', quality: 0.98 },
-                html2canvas: { scale: 2 },
-                jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
-            };
-            html2pdf().set(opt).from(billContent).save();
-        }
-
-    </script>
+    <script src="${pageContext.request.contextPath}/assets/javascript/management-system/ms-order.js"></script>
 </body>
 </html>

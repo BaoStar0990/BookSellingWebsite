@@ -17,7 +17,7 @@ public class Author implements Serializable {
     private String name;
     private String imageURL;
 
-    @ManyToMany(fetch = FetchType.EAGER, mappedBy = "authors", cascade = {CascadeType.PERSIST, CascadeType.MERGE}) 
+    @ManyToMany(fetch = FetchType.LAZY, mappedBy = "authors", cascade = {CascadeType.PERSIST, CascadeType.MERGE}) 
     private Set<Book> books = new HashSet<>();
 
     public Author() {}
@@ -54,7 +54,7 @@ public class Author implements Serializable {
     }
 
     public Set<Book> getBooks() {
-        return books;
+        return AuthorDB.getInstance().getBooks(this);
     }
 
     public void setBooks(Set<Book> books) {

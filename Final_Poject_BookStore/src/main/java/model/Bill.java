@@ -1,5 +1,6 @@
 package model;
 
+import dbmodel.BillDB;
 import jakarta.persistence.*;
 
 import java.io.Serializable;
@@ -83,7 +84,7 @@ public class Bill implements Serializable {
     }
 
     public Set<OrderDetail> getOrderDetails() {
-        return orderDetails;
+        return BillDB.getInstance().getOrderDetails(this);
     }
 
     public String getPaymentMethod() {
@@ -186,5 +187,32 @@ public class Bill implements Serializable {
                 .filter(Objects::nonNull)
                 .mapToDouble(OrderDetail::getTotalPrice)
                 .sum();
+    }
+
+    // XQ thêm để lấy tên người nhận hàng
+    public String getRecipientName() {
+        if (shippingAddress == null) {
+            return "";
+        }
+        String[] parts = shippingAddress.split(";");
+        return parts.length > 0 ? parts[0].trim() : "";
+    }
+
+    // XQ thêm để lấy số điện thoại người nhận hàng
+    public String getRecipientPhone() {
+        if (shippingAddress == null) {
+            return "";
+        }
+        String[] parts = shippingAddress.split(";");
+        return parts.length > 1 ? parts[1].trim() : "";
+    }
+
+    // XQ thêm để lấy địa chỉ người nhận hàng
+    public String getRecipientAddress() {
+        if (shippingAddress == null) {
+            return "";
+        }
+        String[] parts = shippingAddress.split(";");
+        return parts.length > 2 ? parts[2].trim() : "";
     }
 }

@@ -2,6 +2,7 @@ package dbmodel;
 
 import database.DBUtil;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityTransaction;
 import jakarta.persistence.NoResultException;
 import java.util.List;
 import model.Address;
@@ -38,4 +39,6 @@ public class AddressDB extends ModifyDB<Address> implements DBInterface<Address>
             return null;
         }
     }
+    
+    
 }

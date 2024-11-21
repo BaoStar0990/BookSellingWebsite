@@ -75,6 +75,7 @@ public class CustomerDB  extends ModifyDB<Customer> implements DBInterface<Custo
                      Bill.class).setParameter("customer", c).getResultList();
             // mọi phần tử trùng lặp sẽ bị bỏ
             Set<Bill> rs = new HashSet<>(listBill);
+            
             return rs;
         }
         catch (TransientObjectException ex) {
@@ -141,15 +142,14 @@ public class CustomerDB  extends ModifyDB<Customer> implements DBInterface<Custo
             return null;
         }
     }
-    private static final ReentrantLock lock = new ReentrantLock();
-    public boolean makeAnOrder(Bill cart, Customer customer){
-        lock.lock(); // Khóa trước khi truy cập logic
-        EntityManager em = null;
-        EntityTransaction tr = null;
-        try{
-            System.out.println("Mot tien trinh sang vao");
-            em = DBUtil.getEmFactory().createEntityManager();
-            tr = em.getTransaction();
+    /*
+    
+    */
+    public  boolean decreaseQuantity(Bill cart){
+                    //System.out.println("Mot tien trinh sang vao");
+           EntityManager em = DBUtil.getEmFactory().createEntityManager();
+           EntityTransaction tr = em.getTransaction();
+           try{
             tr.begin();
             // kiểm tra trong cart có sp nào không, hoặc có phải là cart không
             if(cart.getOrderDetails().isEmpty() || !("Storing".equals(cart.getStatusOrder().toString())))
@@ -161,9 +161,7 @@ public class CustomerDB  extends ModifyDB<Customer> implements DBInterface<Custo
                 return false;
             // chuyển trạng thái từ "storing" sang "Processing"
             cart.setStatusOrder(StatusOrder.Processing);
-              // sleep ở đây, nó mà sleep lại là bấm bên kia xem nó có chạy ko
-            System.out.println("Tien trinh dung trong 20s");
-                             //Thread.sleep(20000);
+            
             // trừ số lượng sách trong kho khi đặt
             final EntityManager emFinal = em;           
             cart.getOrderDetails().forEach(o ->{
@@ -173,7 +171,51 @@ public class CustomerDB  extends ModifyDB<Customer> implements DBInterface<Custo
                         emFinal.merge(book);
                     });
             // cập nhật cart thành đơn hàng
-            em.merge(cart);  
+            em.merge(cart); 
+            tr.commit();
+            return true; 
+           }catch(Exception ex){
+               System.out.println("Error in decrease quantity");
+               tr.rollback();
+               return false;
+           }finally{
+               em.close();
+           }
+    }
+//    private static final ReentrantLock lock = new ReentrantLock();
+    public boolean makeAnOrder(Bill cart, Customer customer){
+        //lock.lock(); // Khóa trước khi truy cập logic
+        EntityManager em = null;
+        EntityTransaction tr = null;
+        try{
+//            System.out.println("Mot tien trinh sang vao");
+            em = DBUtil.getEmFactory().createEntityManager();
+           tr = em.getTransaction();
+            tr.begin();
+//            // kiểm tra trong cart có sp nào không, hoặc có phải là cart không
+//            if(cart.getOrderDetails().isEmpty() || !("Storing".equals(cart.getStatusOrder().toString())))
+//                return false;
+//            // kiểm tra số lượng đặt có vượt quá số lượng trong kho
+//            boolean isExceedQuantity = cart.getOrderDetails().stream()
+//                    .anyMatch(o -> o.getBook().getStocks() < o.getQuantity());
+//            if(isExceedQuantity)
+//                return false;
+//            // chuyển trạng thái từ "storing" sang "Processing"
+//            cart.setStatusOrder(StatusOrder.Processing);
+//            // sleep ở đây, nó mà sleep lại là bấm bên kia xem nó có chạy ko
+//            System.out.println("Tien trinh dung trong 20s");
+//            Thread.sleep(20000);
+//            
+//            // trừ số lượng sách trong kho khi đặt
+//            final EntityManager emFinal = em;           
+//            cart.getOrderDetails().forEach(o ->{
+//                        // lấy cuốn sách cập nhật số lượng trong kho
+//                        var book = emFinal.find(Book.class, o.getBook().getId());
+//                        book.setStocks(book.getStocks() - o.getQuantity());
+//                        emFinal.merge(book);
+//                    });
+//            // cập nhật cart thành đơn hàng
+//            em.merge(cart);  
 
             // Tạm dừng luồng hiện tại trong 5 giây (5000 ms)
             // cập nhật lại số lượng các OrderDetail trong các cart của khách hàng khác có
@@ -220,10 +262,11 @@ public class CustomerDB  extends ModifyDB<Customer> implements DBInterface<Custo
             System.out.println("Tien trinh hoan thanh");
             if(em != null)
                 em.close();
-            lock.unlock(); // Mở khóa sau khi xử lý xong
+            //lock.unlock(); // Mở khóa sau khi xử lý xong
         }
             
     }
+    
     public boolean setDefaltAddress(Customer customer, Address a){
         EntityManager em = null;
         EntityTransaction tr = null;

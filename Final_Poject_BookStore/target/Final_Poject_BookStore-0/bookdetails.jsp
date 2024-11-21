@@ -55,11 +55,11 @@
         <!--Link-->
         <!--Lấy tên thể loại đầu tiên của sách -->
         <%
-            Book b =(Book) request.getAttribute("book");
+            Book b = (Book) request.getAttribute("book");
             // kiểm tra sách có thể loại không, nếu có lấy thể loại đầu tiên
             String firstCategoryName = b == null || b.getCategories() == null
-                    || b.getCategories().isEmpty() ? " " :
-                    b.getCategories().stream().findFirst().get().getName();
+                    || b.getCategories().isEmpty() ? " "
+                    : b.getCategories().stream().findFirst().get().getName();
         %>
         <div class="container mt-2">
             <p class="fw-semibold">
@@ -105,23 +105,23 @@
                     <%--Rating--%>
                     <div class="d-flex align-items-center">
                         <%-- Calculate Average Rating --%>
-<%--                        <c:set var="totalRating" value="0" />--%>
+                        <%--                        <c:set var="totalRating" value="0" />--%>
                         <%--                  Kiểm tra reviews có null không --%>
 
 
-<%--                        <c:choose>
-                            <c:when test = "${not empty book.getReviews()}">
-                                <c:set var="averageRating" value="${totalRating / fn:length(book.getReviews())}" />
-                            </c:when>
-                            <c:otherwise>
-                                <c:set var="averageRating" value="${totalRating}" />
-                            </c:otherwise>
-                        </c:choose>--%>
+                        <%--                        <c:choose>
+                                                    <c:when test = "${not empty book.getReviews()}">
+                                                        <c:set var="averageRating" value="${totalRating / fn:length(book.getReviews())}" />
+                                                    </c:when>
+                                                    <c:otherwise>
+                                                        <c:set var="averageRating" value="${totalRating}" />
+                                                    </c:otherwise>
+                                                </c:choose>--%>
 
 
                         <div class="text-warning fs-5 me-2">
                             <div class="text-warning fs-5 me-2 d-flex">
-<%--                                 Render filled stars for the rounded average rating--%>
+                                <%--                                 Render filled stars for the rounded average rating--%>
                                 <c:choose>
                                     <c:when test = "${not empty book.getReviews()}">
                                         <c:set var="roundedRating" value="${book.getAverageRatingStart()}" />
@@ -162,32 +162,32 @@
                             -<fmt:formatNumber value="${book.getDiscountCampaign().getPercentDiscount()*100}" type="number" pattern="#,##0" />%
                         </span>
                     </div>
-                    
+
                     <form style = "margin: 0; padding: 0;" action ="/addcart" method="post">
                         <%--Quantity Selector --%>
                         <div class="mt-3">
                             <label for="quantity" class="me-2">Số lượng</label>
                             <div class="input-group mt-1" style="width: 120px;">
-                                <button onclick="event.preventDefault()" class="btn btn-outline-secondary" onclick="decreaseQuantity()">-</button>
+                                <button type="button" class="btn btn-outline-secondary" onclick="decreaseQuantity()">-</button>
                                 <input type="text" class="form-control text-center" name="quantity" id="quantity" value="1">
-                                <button onclick="event.preventDefault()" class="btn btn-outline-secondary" onclick="increaseQuantity()">+</button>
+                                <button type="button" class="btn btn-outline-secondary" onclick="increaseQuantity()">+</button>
                             </div>
                         </div>
 
                         <%--Action Buttons --%>
                         <div  style = "display: flex;  align-items: center;" class="mt-4">
-                        
+
                             <input type="hidden" value="${book.getId()}" name="bookId">
                             <button type = "submit" class="btn secondary-btn me-3 d-inline-block"/>
                             <i class="fas fa-shopping-cart me-2"></i> Thêm vào giỏ hàng
                             </button>
-                            
+
                             <button type = "submit" class="btn primary-btn d-inline-block">
                                 Mua ngay
                             </button>
                         </div>
                     </form>    
-                            
+
                 </div>
             </div>
             <%--         end Short Intro --%>
@@ -264,11 +264,11 @@
                     <%--                </c:forEach>--%>
 
                     <%-- Round the rating to 1 decimal place and display --%>
-<%--                    <h1 class="fw-bold mt-2">--%>
-<%--                        <fmt:formatNumber value="${book.getAverageRatingStart()}" type="number" maxFractionDigits="1" />/5--%>
-<%--                    </h1>--%>
+                    <%--                    <h1 class="fw-bold mt-2">--%>
+                    <%--                        <fmt:formatNumber value="${book.getAverageRatingStart()}" type="number" maxFractionDigits="1" />/5--%>
+                    <%--                    </h1>--%>
 
-<%--                    <c:set var="averageRating" value="${book.getAverageRatingStart()}" />--%>
+                    <%--                    <c:set var="averageRating" value="${book.getAverageRatingStart()}" />--%>
                     <%--                 Display the stars based on average rating--%>
                     <div class="d-flex align-items-center fs-4">
                         <c:forEach var="i" begin="1" end="5">
@@ -282,7 +282,7 @@
                             </c:choose>
                         </c:forEach>
                     </div>
-<%--                    <span class="m-2 fs-5">(${book.getReviews().size()} Đánh giá)</span>--%>
+                    <%--                    <span class="m-2 fs-5">(${book.getReviews().size()} Đánh giá)</span>--%>
                 </div>
 
                 <%--             Rating Breakdown--%>
@@ -322,32 +322,32 @@
                 </div>
             </div>
             <c:if test="${book.getReviews() != null}">
-            <div class="row mt-5">
-                <c:forEach var="review" items="${book.getReviews()}">
-                    <div class="row border-top py-3">
-                        <%--                     User and Date Section--%>
-                        <div class="col-2 d-flex flex-column mb-2">
-                            <h6 class="fw-bold me-3">${review.getCustomer().getFullName()}</h6>
-                            <%--                        <span class="text-muted">${review.reviewDate}</span>--%>
-                        </div>
-                        <div class="col-10">
-                            <div class="d-flex align-items-center">
-                                <c:forEach var="i" begin="1" end="5">
-                                    <c:choose>
-                                        <c:when test="${i <= review.rate}">
-                                            <i class="fas fa-star text-warning"></i>
-                                        </c:when>
-                                        <c:otherwise>
-                                            <i class="far fa-star text-muted"></i>
-                                        </c:otherwise>
-                                    </c:choose>
-                                </c:forEach>
+                <div class="row mt-5">
+                    <c:forEach var="review" items="${book.getReviews()}">
+                        <div class="row border-top py-3">
+                            <%--                     User and Date Section--%>
+                            <div class="col-2 d-flex flex-column mb-2">
+                                <h6 class="fw-bold me-3">${review.getCustomer().getFullName()}</h6>
+                                <%--                        <span class="text-muted">${review.reviewDate}</span>--%>
                             </div>
-                            <p class="mt-2">${review.description}</p>
+                            <div class="col-10">
+                                <div class="d-flex align-items-center">
+                                    <c:forEach var="i" begin="1" end="5">
+                                        <c:choose>
+                                            <c:when test="${i <= review.rate}">
+                                                <i class="fas fa-star text-warning"></i>
+                                            </c:when>
+                                            <c:otherwise>
+                                                <i class="far fa-star text-muted"></i>
+                                            </c:otherwise>
+                                        </c:choose>
+                                    </c:forEach>
+                                </div>
+                                <p class="mt-2">${review.description}</p>
+                            </div>
                         </div>
-                    </div>
-                </c:forEach>
-            </div>
+                    </c:forEach>
+                </div>
             </c:if>
         </div>
         <%--     User Review --%>
@@ -387,6 +387,18 @@
         </script>
         <!-- end Pagination -->
 
-        <script src="./assets/javascript/quantity.js"></script>
+<!--        <script src="${pageContext}/assets/javascript/quantity.js"></script>-->
+        <!--Add script increase and decrease --> 
+        <script>
+            function increaseQuantity() {
+                let quantity = document.getElementById("quantity");
+                quantity.value = parseInt(quantity.value) + 1;
+            }
+            function decreaseQuantity() {
+                let quantity = document.getElementById("quantity");
+                if (parseInt(quantity.value) > 1)
+                    quantity.value = parseInt(quantity.value) - 1;
+            }
+        </script>
     </body>
 </html>

@@ -38,6 +38,7 @@ public class ModifyAddressController extends HttpServlet {
         request.setCharacterEncoding("UTF-8");
         request.setCharacterEncoding("UTF-8");
         
+        String errorMessage = null;
         String url = "/usersetting.jsp?setting=address";
         // Lấy session
         HttpSession session = request.getSession();
@@ -45,7 +46,6 @@ public class ModifyAddressController extends HttpServlet {
             url = "/signin.jsp";
         }
         else{
-            
             // lấy khách hàng
             Customer customer = (Customer) session.getAttribute("user");
             if(customer != null){
@@ -121,24 +121,32 @@ public class ModifyAddressController extends HttpServlet {
                                 a.setWard(phuong);
                                 a.setStreet(street);
                                 // lưu cập nhật
-                                if(!AddressDB.getInstance().update(a))
-                                    System.out.println("Cập nhật không thành công");
+                                if(!AddressDB.getInstance().update(a)){
+                                    errorMessage = "Cập nhật không thành công!";                                    
+                                }
                             }
-                            else
-                                System.out.println("Không tìm thấy địa chỉ");
-
+                            else{
+                                errorMessage = "Lỗi tìm đơn hàng!";
+                                
+                            }
                         }catch(NumberFormatException ex){
-                            System.out.println("Vui lòng nhập đúng dữ liệu");
+                            errorMessage = "Vui lòng nhập đúng dữ liệu";
                         }catch (NoSuchElementException ex){
-                            System.out.println("Không tìm thấy sách");
+                            errorMessage =  "Không tìm thấy đơn hàng";
+                            
                         }
                     }
                 }
                 
             }
         }
-        // chuyển trang
-        request.getServletContext().getRequestDispatcher(url).forward(request, response);
+        if(errorMessage != null){
+            request.setAttribute("errorMessage", errorMessage);
+            request.getServletContext()
+                       .getRequestDispatcher(url).forward(request, response);
+        }
+        else
+            response.sendRedirect(url);
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

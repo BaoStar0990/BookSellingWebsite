@@ -39,7 +39,7 @@ public class ChangePasswordController extends HttpServlet {
         request.setCharacterEncoding("UTF-8");
         request.setCharacterEncoding("UTF-8");
         
-        String url = "/WEB-INF/views/customers/password.jsp";
+         String url = "/usersetting.jsp?setting=change-password";
         // Lấy session
         HttpSession session = request.getSession();
         if(session.getAttribute("user") == null){

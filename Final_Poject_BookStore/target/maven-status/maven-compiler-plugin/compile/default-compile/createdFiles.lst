@@ -71,6 +71,7 @@ test\TestCustomer.class
 dbmodel\AuthorDB.class
 model\StatusOrder.class
 test\TestAuthor.class
+controller\ConfirmCancelOrderController.class
 test\TestPublisher.class
 controller\ModifyItemCartController.class
 model\Admin.class

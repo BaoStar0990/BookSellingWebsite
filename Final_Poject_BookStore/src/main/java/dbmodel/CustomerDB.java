@@ -163,8 +163,7 @@ public class CustomerDB  extends ModifyDB<Customer> implements DBInterface<Custo
             cart.setStatusOrder(StatusOrder.Processing);
               // sleep ở đây, nó mà sleep lại là bấm bên kia xem nó có chạy ko
             System.out.println("Tien trinh dung trong 20s");
-            Thread.sleep(20000); 
-            
+                             //Thread.sleep(20000);
             // trừ số lượng sách trong kho khi đặt
             final EntityManager emFinal = em;           
             cart.getOrderDetails().forEach(o ->{
@@ -268,7 +267,11 @@ public class CustomerDB  extends ModifyDB<Customer> implements DBInterface<Custo
     }
     public boolean insertCustomer(Customer c){
         try(EntityManager em = DBUtil.getEmFactory().createEntityManager()){
+            Bill newCart = new Bill();
+            newCart.setCustomer(c);
+            newCart.setStatusOrder(StatusOrder.Storing);
             em.getTransaction().begin();
+            em.persist(newCart);
             em.persist(c);
             em.getTransaction().commit();
             return true;

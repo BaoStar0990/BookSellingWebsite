@@ -68,6 +68,7 @@ controller\SignupController.class
 model\StatusPayment.class
 firebasecloud\FirebaseInitializer.class
 test\TestCustomer.class
+controller\SearchController.class
 dbmodel\AuthorDB.class
 model\StatusOrder.class
 test\TestAuthor.class

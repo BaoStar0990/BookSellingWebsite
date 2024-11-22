@@ -1,5 +1,6 @@
 package Utils.authentication;
 
+import java.text.Normalizer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -28,5 +29,10 @@ public class Regex {
             return true;
         }
         return false;
+    }
+    public static String normalizeVietnamese(String input) {
+        String normalized = Normalizer.normalize(input, Normalizer.Form.NFD);
+        Pattern pattern = Pattern.compile("\\p{InCombiningDiacriticalMarks}+");
+        return pattern.matcher(normalized).replaceAll("").replace("đ", "d").replace("Đ", "D").replaceAll("\\s+", " ");
     }
 }

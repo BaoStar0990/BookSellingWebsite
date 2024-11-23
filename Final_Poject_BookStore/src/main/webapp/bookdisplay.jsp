@@ -96,9 +96,12 @@
   <!-- End Filter -->
   
        <div class="row book-list">
+         <c:choose>
+         <c:when test="${books.size() > 0}">
+
+
         <c:forEach var="book" items = "${books}">
           <div class="col-6 col-md-4 col-lg-2 p-2">
-              
             <a href="/bookdetails/${book.getId()}" class="d-block text-decoration-none card-shadow" style="color: inherit;">
               <div class="card">
                  <!--book image--> 
@@ -136,6 +139,12 @@
             </a>
           </div>
         </c:forEach>
+         </c:when>
+           <c:otherwise>
+             <h1>Không tìm thấy ${nameOfCategory}</h1>
+             <img src="${pageContext.request.contextPath}/assets/images/notfound_image.svg" alt="Không tìm thấy ${nameOfCategory}" height="300" width="300"/>
+           </c:otherwise>
+         </c:choose>
       </div>  
        
        

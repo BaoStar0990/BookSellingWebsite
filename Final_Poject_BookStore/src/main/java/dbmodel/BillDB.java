@@ -4,13 +4,16 @@ import database.DBUtil;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;
 import jakarta.persistence.NoResultException;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+
+import java.util.*;
+import java.util.stream.Collectors;
+
 import model.Bill;
 import model.Book;
 import model.OrderDetail;
+import model.StatusPayment;
 import org.hibernate.TransientObjectException;
+import org.hibernate.query.Order;
 
 public class BillDB extends ModifyDB<Bill> implements DBInterface<Bill> {
     public static BillDB getInstance(){

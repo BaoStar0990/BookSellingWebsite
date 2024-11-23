@@ -69,9 +69,11 @@ utils\authentication\Regex.class
 model\StatusPayment.class
 firebasecloud\FirebaseInitializer.class
 test\TestCustomer.class
+controller\SearchController.class
 dbmodel\AuthorDB.class
 model\StatusOrder.class
 test\TestAuthor.class
+controller\ConfirmCancelOrderController.class
 test\TestPublisher.class
 controller\ModifyItemCartController.class
 model\Admin.class

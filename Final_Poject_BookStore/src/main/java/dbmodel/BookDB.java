@@ -1,12 +1,11 @@
 package dbmodel;
 
+import Utils.authentication.Regex;
 import database.DBUtil;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.NoResultException;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 import model.Author;
 import model.Book;
@@ -14,7 +13,6 @@ import model.Category;
 import model.Review;
 import org.hibernate.TransientObjectException;
 import jakarta.persistence.EntityTransaction;
-import java.util.Iterator;
 
 public class BookDB extends ModifyDB<Book> implements DBInterface<Book> {
     public static BookDB getInstance(){
@@ -284,5 +282,35 @@ public class BookDB extends ModifyDB<Book> implements DBInterface<Book> {
             if(em != null)
                 em.close();
         }
+    }
+    public  Set<Author> findAuthorByBook(Map<Author, Set<Book>> authorBooks, Book book) {
+        Set<Author> authors = new HashSet<Author>();
+        for (Map.Entry<Author, Set<Book>> entry : authorBooks.entrySet()) {
+            if (entry.getValue().contains(book)) {
+                authors.add(entry.getKey());
+            }
+        }
+        if(authors.size() == 0) {
+            return null; // Không tìm thấy
+        }else{
+            return authors;
+        }
+    }
+
+    public boolean checkSearchRequestRelatedWithBook(Book book, String searchRequest)
+    {
+        //Remove character vietnamese and space
+        String titleOfBook = Regex.normalizeVietnamese(book.getTitle()).trim();
+        searchRequest = Regex.normalizeVietnamese(searchRequest).trim();
+
+        //Trường hợp đeẹp nhất: Người dùng nhập đúng chính xác tên cuủa cốn sách, không quan tâm hoa thường, dấu cách, các ksi tự đặc biệt
+        if(titleOfBook.equalsIgnoreCase(searchRequest)){
+            return true;
+        }
+        //Title chỉ cần bao gồm những gì người dùng nhập
+        else if(titleOfBook.contains(searchRequest)){
+            return true;
+        }
+        return false;
     }
 }

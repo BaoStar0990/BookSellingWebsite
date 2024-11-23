@@ -4,10 +4,9 @@ import database.DBUtil;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;
 import jakarta.persistence.NoResultException;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
+
+import java.util.*;
+
 import model.Author;
 import model.Book;
 import model.Category;

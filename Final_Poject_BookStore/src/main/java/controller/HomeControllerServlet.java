@@ -5,10 +5,7 @@
 package controller;
 
 import database.DBUtil;
-import dbmodel.AuthorDB;
-import dbmodel.BookDB;
-import dbmodel.CategoryDB;
-import dbmodel.CustomerDB;
+import dbmodel.*;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;
 import java.io.IOException;
@@ -17,9 +14,8 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.*;
 import jakarta.transaction.TransactionManager;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+
+import java.util.*;
 import java.util.stream.Collectors;
 
 import model.Author;
@@ -59,6 +55,8 @@ public class HomeControllerServlet extends HttpServlet {
         List<Book> allBook = null; // Sử dụng cho tat cả các trang
         List<Book> homeBooks = null; // Sử dụng cho trang home
         List<Author> authors = null;
+        List<Book> bookIsBeingDiscounted = null;
+        List<Book> bookBestSelling = null;
 
 
 
@@ -74,6 +72,13 @@ public class HomeControllerServlet extends HttpServlet {
             System.out.println("Book exist on session");
             allBook = (List<Book>)session.getAttribute("allBook");
         }
+        bookIsBeingDiscounted = allBook.stream().filter(b -> DiscountCampaignDB.getInstance().isNotExpired(b.getDiscountCampaign())).collect(Collectors.toList());
+        session.setAttribute("bookIsBeingDiscounted", bookIsBeingDiscounted);
+
+        bookBestSelling = allBook.stream().filter(b -> DiscountCampaignDB.getInstance().isNotExpired(b.getDiscountCampaign())).collect(Collectors.toList());
+        session.setAttribute("bookBestSelling", bookBestSelling);
+
+
         if(allBook != null) {
             if(allBook.size() > 6)
             {
@@ -92,6 +97,25 @@ public class HomeControllerServlet extends HttpServlet {
             System.out.println("Author exist on session");
             authors = (List<Author>)session.getAttribute("authors");
         }
+
+
+        //Thêm MAP<Author,List<Book>
+        Map<Author, Set<Book>> authorBooks = null;
+        if(session.getAttribute("authorBooks") == null) {
+            authorBooks = new HashMap<>();
+            for (Author author : authors) {
+                Set<Book> booksOfAuthor = author.getBooks();
+                authorBooks.put(author, booksOfAuthor);
+            }
+            session.setAttribute("authorBooks", authorBooks);
+            req.setAttribute("authorBooks", authorBooks);
+        }else{
+            authorBooks = (Map<Author, Set<Book>>)session.getAttribute("authorBooks");
+            req.setAttribute("authorBooks", authorBooks);
+        }
+
+
+
         if(authors != null)
         {
             if(authors.size() > 6)
@@ -99,6 +123,7 @@ public class HomeControllerServlet extends HttpServlet {
                 authors = authors.stream().limit(6).collect(Collectors.toList());
             }
         }
+
 
 
         //Kiem tra trong cookie da co tai khoang nguoi dung chua

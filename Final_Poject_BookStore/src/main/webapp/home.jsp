@@ -33,22 +33,17 @@
     </jsp:include>
     <!-- end Header -->
 
-    <%-- New book section--%>
-    <jsp:include page="WEB-INF/views/book/book-list.jsp">
-        <jsp:param name="bookListName" value="Sách mới" />
-        <jsp:param name="booksAttribute" value="bestsellerBooks" />
-        <jsp:param name="seeMoreLink" value="/Naoki/books/newbook" />
-    </jsp:include>
+<%--    &lt;%&ndash; New book section&ndash;%&gt;--%>
 <%--    --%>
 <%--    &lt;%&ndash; On discount section&ndash;%&gt;--%>
     <jsp:include page="WEB-INF/views/book/book-list.jsp">
-        <jsp:param name="bookListName" value="Giảm đến 50%" />
+        <jsp:param name="bookListName" value="Sách bán chạy" />
         <jsp:param name="booksAttribute" value="bestsellerBooks" />
         <jsp:param name="seeMoreLink" value="/Naoki/books/ondiscount" />
     </jsp:include>
 <%--    &lt;%&ndash; Up comming section&ndash;%&gt;--%>
     <jsp:include page="WEB-INF/views/book/book-list.jsp">
-        <jsp:param name="bookListName" value="Sắp xuất bản" />
+        <jsp:param name="bookListName" value="Sách mới" />
         <jsp:param name="booksAttribute" value="bestsellerBooks" />
         <jsp:param name="seeMoreLink" value="/Naoki/books/upcomming" />
     </jsp:include>

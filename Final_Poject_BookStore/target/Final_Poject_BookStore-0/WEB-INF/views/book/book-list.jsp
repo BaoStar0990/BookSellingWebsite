@@ -1,3 +1,8 @@
+<%@ page import="model.Author" %>
+<%@ page import="model.Book" %>
+<%@ page import="java.util.Set" %>
+<%@ page import="java.util.Map" %>
+<%@ page import="dbmodel.BookDB" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
@@ -21,7 +26,7 @@
     <!-- Start of the Book List Grid -->
     <div class="row book-list">
 
-    <%--        attribute : books List<Books>--%>
+        <%--        attribute : books List<Books>--%>
 
         <c:forEach var="book" items="${books}" varStatus="status">
             <!-- Each book occupies 2, 4, or 6 columns depending on the screen size -->
@@ -32,9 +37,17 @@
                         <div class="card-body">
                             <h6 class="card-title mb-1">${book.title}</h6>
                             <p class="text-muted mb-0 card-text">
-                                <c:forEach var="author" items="${book.getAuthors()}" varStatus="status">
-                                    <span class="fw-semibold">${author.getName()}</span><c:if test="${!status.last}">, </c:if>
-                                </c:forEach>
+
+                                <c:choose>
+                                    <c:when test="${BookDB.getInstance().findAuthorByBook(authorBooks,book) != null}">
+                                        <c:forEach var="author" items="${BookDB.getInstance().findAuthorByBook(authorBooks,book)}" varStatus="status">
+                                            <span class="fw-semibold">${author.getName()}</span><c:if test="${!status.last}">, </c:if>
+                                        </c:forEach>
+                                    </c:when>
+                                    <c:otherwise>
+                                        <span class="fw-semibold">Đang cập nhật</span>
+                                    </c:otherwise>
+                                </c:choose>
                             </p>
 
                             <div class="mt-2">

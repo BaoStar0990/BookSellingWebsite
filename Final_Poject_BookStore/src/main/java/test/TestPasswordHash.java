@@ -11,18 +11,18 @@ public class TestPasswordHash {
         
         try {
             // -------- lấy pass -----------
-//            String salt = getSalt();
-//            String hashedPassword = HashPassword("123456" + salt);
-//            System.out.println(salt);
-//            System.out.println(hashedPassword);
+            String salt = getSalt();
+            String hashedPassword = HashPassword("password" + salt);
+            System.out.println(salt);
+            System.out.println(hashedPassword);
             // ------- Test lấy pass --------
-                String salt = "BKsMuNc0eEIDs/mtecMkrDG7mHIkbixV5GpG6QP1XdA=";
-                String pass = "123456";
-                String hashedPassword = HashPassword(pass + salt);
-                if(hashedPassword.equalsIgnoreCase("2c658c681c61ea7c88694222aec9bf6bf7114df434b730d9bc33c17592c1592e"))
-                    System.out.println("Đăng nhập thành công");
-                else
-                    System.out.println("Đăng nhập không thành công");
+//                String salt = "BKsMuNc0eEIDs/mtecMkrDG7mHIkbixV5GpG6QP1XdA=";
+//                String pass = "123456";
+//                String hashedPassword = HashPassword(pass + salt);
+//                if(hashedPassword.equalsIgnoreCase("2c658c681c61ea7c88694222aec9bf6bf7114df434b730d9bc33c17592c1592e"))
+//                    System.out.println("Đăng nhập thành công");
+//                else
+//                    System.out.println("Đăng nhập không thành công");
                 
         } catch (NoSuchAlgorithmException e) {
             System.out.println(e);

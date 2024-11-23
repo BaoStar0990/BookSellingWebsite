@@ -22,7 +22,6 @@ import firebasecloud.FirebaseStorageUploader;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.List;
 
 @WebServlet(name = "MSBookController", urlPatterns = {"/msbook"})
 @MultipartConfig

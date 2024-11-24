@@ -224,30 +224,30 @@ public class BookDB extends ModifyDB<Book> implements DBInterface<Book> {
             tr.begin();
 
             // Xóa tất cả các liên kết giữa Book và Author
-            em.createQuery("DELETE FROM BookAuthor ba WHERE ba.book = :book")
-                    .setParameter("book", book)
+            em.createQuery("DELETE FROM AuthorDetail ba WHERE ba.bookID = :bookID")
+                    .setParameter("bookID", book.getId())
                     .executeUpdate();
 
             // Xóa tất cả các liên kết giữa Book và Category
-            em.createQuery("DELETE FROM BookCategory bc WHERE bc.book = :book")
-                    .setParameter("book", book)
+            em.createQuery("DELETE FROM CategoryDetail bc WHERE bc.bookID = :bookID")
+                    .setParameter("bookID", book.getId())
                     .executeUpdate();
 
             // Thêm các liên kết mới giữa Book và Author
             for (Author author : authors) {
                 Author authorFind = em.find(Author.class, author.getId());
-                em.createQuery("INSERT INTO AuthorDetail (book, author) VALUES (:book, :author)")
-                        .setParameter("book", book)
-                        .setParameter("author", authorFind)
+                em.createQuery("INSERT INTO AuthorDetail (bookID, authorID) VALUES (:bookID, :authorID)")
+                        .setParameter("bookID", book.getId())
+                        .setParameter("authorID", authorFind.getAuthorID())
                         .executeUpdate();
             }
 
             // Thêm các liên kết mới giữa Book và Category
             for (Category category : categories) {
                 Category categoryFind = em.find(Category.class, category.getId());
-                em.createQuery("INSERT INTO CategoryDetail (book, category) VALUES (:book, :category)")
-                        .setParameter("book", book)
-                        .setParameter("category", categoryFind)
+                em.createQuery("INSERT INTO CategoryDetail (bookID, categoryID) VALUES (:bookID, :categoryID)")
+                        .setParameter("bookID", book.getId())
+                        .setParameter("categoryID", categoryFind.getId())
                         .executeUpdate();
             }
 

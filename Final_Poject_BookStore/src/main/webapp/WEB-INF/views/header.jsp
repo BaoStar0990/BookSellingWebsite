@@ -56,7 +56,7 @@
                         </form>
                     </div>
                     <div class="col-md-4 my-2 d-flex justify-content-center">
-                        <a href="${pageContext.request.contextPath}" class="nav-brand d-flex align-items-center justify-content-center">
+                        <a href="${pageContext.request.contextPath}/" class="nav-brand d-flex align-items-center justify-content-center">
                             <img src="${pageContext.request.contextPath}/assets/images/logos/logo-1.png" alt="logo" width="90%">
                         </a>
                     </div>

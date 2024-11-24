@@ -55,29 +55,24 @@ public class PaymentController extends HttpServlet {
         }
         else{
             Customer user = (Customer) session.getAttribute("user");
+            Set<Bill> bills = user.getBills();
+            Bill cart = bills.stream()
+                    .filter(b -> "Storing".equals(b.getStatusOrder().toString()))
+                    .findFirst()
+                    .orElse(null);
+            
             // lấy danh sách các địa chỉ của khách hàng
             List<Address> addresses = user.getAddresses().stream()
                     .sorted(Comparator.comparingInt(Address::getId))
                     .collect(Collectors.toList());
                     
-            // Lấy giỏ hàng của khách hàng           
-            String cartIdStr = request.getParameter("cartId");
-            try{
-                // find cart
-                int cartId = Integer.parseInt(cartIdStr);
-                Bill cart = (Bill) BillDB.getInstance().selectByID(cartId);
-                if(cart != null){
-                    List<OrderDetail> sortedOrderDetails = cart.getOrderDetails().stream()
-                                               .sorted(Comparator.comparingInt(OrderDetail::getId))
-                                               .collect(Collectors.toList());
-                    request.setAttribute("cartId", cartId);
-                    request.setAttribute("listOrderDetails", sortedOrderDetails);
-                } 
-            }catch(NumberFormatException ex){
-                System.out.println("Vui lòng nhập đúng dữ liệu");
-            }catch (NoSuchElementException ex){
-                System.out.println("Không tìm thấy sách");
-            }
+            if(cart != null){
+                List<OrderDetail> sortedOrderDetails = cart.getOrderDetails().stream()
+                                           .sorted(Comparator.comparingInt(OrderDetail::getId))
+                                           .collect(Collectors.toList());
+                request.setAttribute("cartId", cart.getId());
+                request.setAttribute("listOrderDetails", sortedOrderDetails);
+            } 
             request.setAttribute("addresses", addresses);
         }
         // chuyển trang

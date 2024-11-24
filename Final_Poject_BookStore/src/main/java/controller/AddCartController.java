@@ -38,12 +38,18 @@ public class AddCartController extends HttpServlet {
         //set UTF8 - Tiếng việt
         request.setCharacterEncoding("UTF-8");
         request.setCharacterEncoding("UTF-8");
+        response.setContentType("application/json");
         
-        String url = "/viewcart";
+        System.out.println("aaaaaaaaaaaa");
+        
+        String errorMessage = null;
         // Lấy session
         HttpSession session = request.getSession();
         if(session.getAttribute("user") == null){
-            url = "/signin.jsp";
+            System.out.println("oooooooooo");
+                // Tạo một đối tượng JSON với cả thông tin chuyển hướng và thông báo lỗi
+            String jsonResponse = "{\"redirect\":\"/signin.jsp\", \"errorMessage\":\"chưa đăng nhập\"}";
+            response.getWriter().write(jsonResponse);
         }
         else{
             // Lấy giỏ hàng của khách hàng
@@ -57,6 +63,8 @@ public class AddCartController extends HttpServlet {
             
             String quantityStr = request.getParameter("quantity");
             String idBookStr = request.getParameter("bookId");
+            String action = request.getParameter("action");
+            
             try{
                 // find sách
                 int idBook = Integer.parseInt(idBookStr);
@@ -67,15 +75,19 @@ public class AddCartController extends HttpServlet {
                     if(book.getStocks() >= quantity){
                         // check lỗi khách hàng ko có giỏ hàng
                         if(cart != null){
+                            
+                            // sửa lại lấy trong session
                             // kiểm tra cuốn sách đó có trong cart chưa, nếu có thì tăng số lượng lên 
                             Set<OrderDetail> orderDetails = cart.getOrderDetails();
                             OrderDetail orderDetail = orderDetails.stream()
                                     .filter(o -> o.getBook().equals(book))
                                     .findFirst()
                                     .orElse(null);
+                            // 
+                            
                             if(orderDetail == null){
                                if(BillDB.getInstance().addBookBill(book, quantity, cart) == false){
-                                    System.out.println("Lỗi thêm vào giỏ hàng");
+                                    errorMessage = "Lỗi thêm vào giỏ hàng";
                                 } 
                             }
                             else{
@@ -87,13 +99,24 @@ public class AddCartController extends HttpServlet {
                 }
                 
             }catch(NumberFormatException ex){
-                System.out.println("Vui lòng nhập đúng dữ liệu");
+                errorMessage = "Vui lòng nhập đúng dữ liệu";
             }catch (NoSuchElementException ex){
-                System.out.println("Không tìm thấy sách");
+               errorMessage = "Không tìm thấy sách";
+            }            
+            if(action.equals("muaNgay")){
+                System.out.println("mua ngay ----------");
+                // Trả về thông báo về chuyển hướng
+                String jsonResponse = "{\"redirect\":\"/payment\", \"errorMessage\":\"" + errorMessage + "\"}";
+                response.getWriter().write(jsonResponse); 
             }
+            else{
+                response.getWriter().write("{\"errorMessage\":\"" + errorMessage + "\"}"); 
+
+            }
+                    
         }
-        // chuyển trang
-        request.getServletContext().getRequestDispatcher(url).forward(request, response);
+//        // chuyển trang
+//        request.getServletContext().getRequestDispatcher(url).forward(request, response);
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

@@ -171,6 +171,104 @@ public class BookDB extends ModifyDB<Book> implements DBInterface<Book> {
                 em.close();
         }
     }
+    
+    public boolean insertBookAuthorsCategories(Book book, 
+            Set<Author> authors, Set<Category> categories) {
+        EntityManager em = null;
+        EntityTransaction tr = null;
+        try {
+            em = DBUtil.getEmFactory().createEntityManager();
+            tr = em.getTransaction();
+            tr.begin();
+
+            // chèn sách
+            em.persist(book);
+            
+            // Manage authors
+            for (Author author : authors) {
+                Author managedAuthor = em.find(Author.class, author.getId());
+                if (managedAuthor != null) {
+                    book.addAuthor(managedAuthor);
+                }
+            }
+
+            // Manage categories
+            for (Category category : categories) {
+                Category managedCategory = em.find(Category.class, category.getId());
+                if (managedCategory != null) {
+                   book.addCategory(managedCategory);
+                }
+            }
+            
+            // cập nhật sách
+            em.merge(book);
+
+            tr.commit();
+            return true;
+        } catch (Exception ex) {
+            if (tr != null && tr.isActive())
+                tr.rollback();
+            ex.printStackTrace();
+            return false;
+        } finally {
+            if (em != null)
+                em.close();
+        }
+    }
+
+
+    public boolean updateBookAuthorsCategories(Book book, Set<Author> authors, Set<Category> categories) {
+        EntityManager em = null;
+        EntityTransaction tr = null;
+        try {
+            em = DBUtil.getEmFactory().createEntityManager();
+            tr = em.getTransaction();
+            tr.begin();
+
+            // Xóa tất cả các liên kết giữa Book và Author
+            em.createQuery("DELETE FROM BookAuthor ba WHERE ba.book = :book")
+                    .setParameter("book", book)
+                    .executeUpdate();
+
+            // Xóa tất cả các liên kết giữa Book và Category
+            em.createQuery("DELETE FROM BookCategory bc WHERE bc.book = :book")
+                    .setParameter("book", book)
+                    .executeUpdate();
+
+            // Thêm các liên kết mới giữa Book và Author
+            for (Author author : authors) {
+                Author authorFind = em.find(Author.class, author.getId());
+                em.createQuery("INSERT INTO AuthorDetail (book, author) VALUES (:book, :author)")
+                        .setParameter("book", book)
+                        .setParameter("author", authorFind)
+                        .executeUpdate();
+            }
+
+            // Thêm các liên kết mới giữa Book và Category
+            for (Category category : categories) {
+                Category categoryFind = em.find(Category.class, category.getId());
+                em.createQuery("INSERT INTO CategoryDetail (book, category) VALUES (:book, :category)")
+                        .setParameter("book", book)
+                        .setParameter("category", categoryFind)
+                        .executeUpdate();
+            }
+
+            em.merge(book);
+            
+            // Commit transaction
+            tr.commit();
+            return true;
+        } catch (Exception ex) {
+            if (tr != null && tr.isActive())
+                tr.rollback();
+            ex.printStackTrace();
+            return false;
+        } finally {
+            if (em != null)
+                em.close();
+        }
+    }
+
 
     public boolean update(Book book) {
         EntityManager em = null;

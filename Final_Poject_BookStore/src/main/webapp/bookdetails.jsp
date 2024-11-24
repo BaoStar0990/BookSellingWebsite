@@ -38,9 +38,13 @@
         <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/styles/header.css" />
         <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/styles/footer.css" />
         <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/styles/bookdetails.css" />
-
+        <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/styles/loading.css" />
+        
         <%-- CSS for book list--%>
         <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/styles/book-list.css" />
+        <%-- biểu tượng check --%>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+        
     </head>
     <body>
 
@@ -50,7 +54,9 @@
         </jsp:include>
 
         <%--end Header--%>
-
+        <%-- loading --%>
+        <jsp:include page="WEB-INF/views/loading.jsp"></jsp:include>
+        
         <%--    attribute : List<Book>--%>
         <!--Link-->
         <!--Lấy tên thể loại đầu tiên của sách -->
@@ -61,6 +67,20 @@
                     || b.getCategories().isEmpty() ? " "
                     : b.getCategories().stream().findFirst().get().getName();
         %>
+        
+        <%-- Hiển thị thông báo thêm vào giỏ hàng --%>
+        <div class ="position-relative">
+            <div class="d-none position-absolute top-0 end-0 w-25 alert alert-success 
+                 alert-dismissible fade show d-flex align-items-center" role="alert">
+                <i class="bi bi-check-circle-fill me-2"></i> <!-- Icon -->
+                <div>
+                  <strong>Thêm vào giỏ hàng thành công</strong><br>
+                  Bấm <a href="/viewcart" class="text-decoration-none fw-bold">vào đây</a> để tới trang giỏ hàng
+                </div>
+                <button type="button" class="btn-close ms-3" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        </div>
+        
         <div class="container mt-2">
             <p class="fw-semibold">
                 <a href="${pageContext.request.contextPath}" class="text-decoration-none text-dark">Trang chủ</a>
@@ -70,8 +90,7 @@
                 ${book.title}
             </p>
         </div>
-        <!--end Link -->
-
+        <!--end Link -->    
         <div class="container my-4">
             <div class="row ">
                 <div class="col-md-5 text-center" style="padding: 32px 78px; border: 1px solid #f1f1f1;">
@@ -163,30 +182,30 @@
                         </span>
                     </div>
 
-                    <form style = "margin: 0; padding: 0;" action ="/addcart" method="post">
-                        <%--Quantity Selector --%>
-                        <div class="mt-3">
-                            <label for="quantity" class="me-2">Số lượng</label>
-                            <div class="input-group mt-1" style="width: 120px;">
-                                <button type="button" class="btn btn-outline-secondary" onclick="decreaseQuantity()">-</button>
-                                <input type="text" class="form-control text-center" name="quantity" id="quantity" value="1">
-                                <button type="button" class="btn btn-outline-secondary" onclick="increaseQuantity()">+</button>
-                            </div>
+                    <%--Quantity Selector --%>
+                    <div class="mt-3">
+                        <label for="quantity" class="me-2">Số lượng</label>
+                        <div class="input-group mt-1" style="width: 120px;">
+                            <button type="button" class="btn btn-outline-secondary" onclick="decreaseQuantity()">-</button>
+                            <input type="text" class="form-control text-center" name="quantity" id="quantity" value="1">
+                            <button type="button" class="btn btn-outline-secondary" onclick="increaseQuantity()">+</button>
                         </div>
+                    </div>
 
-                        <%--Action Buttons --%>
-                        <div  style = "display: flex;  align-items: center;" class="mt-4">
+                    <%--Action Buttons --%>
+                    <div  style = "display: flex;  align-items: center;" class="mt-4">
 
-                            <input type="hidden" value="${book.getId()}" name="bookId">
-                            <button type = "submit" class="btn secondary-btn me-3 d-inline-block"/>
+                        <input type="hidden" value="${book.getId()}" name="bookId" id ="bookId">
+                        <button id = "themVaoGio" class="btn secondary-btn me-3 d-inline-block"
+                               onclick="sendDataToAddCart(event)">
                             <i class="fas fa-shopping-cart me-2"></i> Thêm vào giỏ hàng
-                            </button>
-
-                            <button type = "submit" class="btn primary-btn d-inline-block">
-                                Mua ngay
-                            </button>
-                        </div>
-                    </form>    
+                        </button>           
+         
+                        <button onclick="sendDataToAddCart(event)" id = "muaNgay" class="btn primary-btn d-inline-block">
+                            Mua ngay
+                        </button>
+                       
+                    </div>
 
                 </div>
             </div>
@@ -387,7 +406,8 @@
         </script>
         <!-- end Pagination -->
 
-<!--        <script src="${pageContext}/assets/javascript/quantity.js"></script>-->
+<!--        <script src="<%--${pageContext}--%>/assets/javascript/quantity.js"></script>-->
+        <!--<script src="./assets/javascript/loading.js"></script>-->
         <!--Add script increase and decrease --> 
         <script>
             function increaseQuantity() {
@@ -399,6 +419,89 @@
                 if (parseInt(quantity.value) > 1)
                     quantity.value = parseInt(quantity.value) - 1;
             }
+            
+            // hiển thị thông báo thêm vào giỏ hàng
+            function showNotification(){
+                const alertBox = document.querySelector('.alert');
+                 // Hiển thị thông báo
+                alertBox.classList.remove('d-none');
+                alertBox.classList.add('fade');
+
+                // Ẩn thông báo sau 3 giây
+                setTimeout(() => {
+                    alertBox.classList.remove('fade');
+                    alertBox.classList.add('d-none');
+                }, 3000); // Đóng sau 3 giây
+            }
+            
+        </script>
+        
+        <script>
+            // gửi dữ liệu cho add cart
+            function sendDataToAddCart(event) {
+                const bookId = document.getElementById("bookId").value; // Dữ liệu cần gửi
+                const quantity = document.getElementById("quantity").value;
+                if (!bookId || !quantity) {
+                    alert("Vui lòng điền đủ thông tin.");
+                    return; // Dừng hàm nếu giá trị trống
+                }
+                // URLSearchParams() dùng để tạo đối tượng
+                const data = new URLSearchParams();
+                data.append('bookId', bookId);
+                data.append('quantity', quantity);
+                const buttonId = event.target.id; // Lấy ID của nút
+                if (buttonId === "muaNgay"){
+                    data.append('action', "muaNgay");
+                }
+                else{
+//                    if(<%= (session.getAttribute("user") != null)%>)
+//                        showNotification();
+                    data.append('action', "themVaoGio");
+                }
+                document.getElementById('loading-screen').style.display = 'flex';
+                
+                fetch('/addcart', {
+                    method: 'POST',
+                    headers: {
+                      'Content-Type': 'application/x-www-form-urlencoded',
+                    },
+                    body: data.toString() // chuyển chuỗi URLSearchParams thành chuỗi URL-encoded
+                  })
+                  .then(response => response.json())
+                  .then(result => {
+                    if(result.errorMessage !== "null"){
+                        // Xử lý hiện lỗi
+                        alert(result.errorMessage);
+                        document.getElementById('loading-screen').style.display = 'none';
+//                        document.getElementById("errorMessage").innerText = result.message;
+                    }
+                    else{
+                        if(buttonId === "themVaoGio"){
+                            document.getElementById('loading-screen').style.display = 'none';
+                            showNotification();
+                        }
+                    }
+                    if (result.redirect) {
+                        // Chuyển hướng
+//                        alert(result.redirect);
+                        window.location.href = result.redirect;
+                    }
+                    
+                  })
+                  .catch(error => console.error('Error:', error));
+                
+            }
+//        window.onload = function() {
+//            // Giả lập thời gian tải nội dung (nếu muốn)
+//            setTimeout(() => {
+//                // Ẩn màn hình loading
+//                document.getElementById('loading-screen').style.display = 'none';
+//                // Hiển thị nội dung chính
+//                document.getElementById('container').style.display = 'block';
+//            }, 0); // Không cần delay trong trường hợp tải trang hoàn tất
+//        };
+        
         </script>
     </body>
+    
 </html>

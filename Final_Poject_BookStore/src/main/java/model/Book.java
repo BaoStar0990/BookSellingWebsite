@@ -219,12 +219,25 @@ public class Book implements Serializable {
         return hash;
     }
     public void setAuthors(Set<Author> authors) {
-        this.authors = authors;
+        for( Author a : authors){
+            this.addAuthor(a);
+        }
     }
-
+    public void addAuthor(Author a){
+        this.authors.add(a);
+        a.addBook(this);
+    }
+    
     public void setCategories(Set<Category> categories) {
-        this.categories = categories;
+        for(Category c : categories){
+            this.addCategory(c);
+        }
     }
+    public void addCategory(Category c){
+        this.categories.add(c);
+        c.addBook(this);
+    }
+    
 
     public int getBookID() {
         return bookID;
@@ -233,4 +246,6 @@ public class Book implements Serializable {
     public Set<OrderDetail> getOrderDetails() {
         return orderDetails;
     }
+    
+    
 }

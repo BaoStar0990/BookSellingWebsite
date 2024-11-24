@@ -71,7 +71,6 @@ public class SignupController extends HttpServlet {
 
         //set UTF8 - Tiếng việt
         request.setCharacterEncoding("UTF-8");
-        request.setCharacterEncoding("UTF-8");
 
         String alertMessage = "";
 

@@ -44,6 +44,7 @@ public class ChangePasswordController extends HttpServlet {
         HttpSession session = request.getSession();
         if(session.getAttribute("user") == null){
             url = "/signin.jsp";
+            request.getServletContext().getRequestDispatcher(url).forward(request, response);
         }
         else{
             String newPass = request.getParameter("newPassword");
@@ -65,7 +66,7 @@ public class ChangePasswordController extends HttpServlet {
         //                CustomerDB.getInstance().update(c);
                         // sau khi cập nhật xong đăng xuất tài khoản
                         if(CustomerDB.getInstance().update(c)){
-                            response.sendRedirect("/signout");
+                            response.sendRedirect(String.format("%s/signout", getServletContext().getContextPath()));
                         }
                         else
                             request.setAttribute("errorMessage", "Đổi mật khẩu không thành công!");
@@ -79,7 +80,7 @@ public class ChangePasswordController extends HttpServlet {
             }
         }
         // chuyển trang
-        request.getServletContext().getRequestDispatcher(url).forward(request, response);
+
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

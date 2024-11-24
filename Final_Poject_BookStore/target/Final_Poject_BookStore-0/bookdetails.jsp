@@ -30,7 +30,7 @@
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
         <%-- Favicon --%>
-        <link rel="icon" href="assets/images/logos/square-logo.png" type="image/x-icon">
+        <link rel="icon" href="${pageContext.request.contextPath}/assets/images/logos/square-logo.png" type="image/x-icon">
         <%-- Fontawesome --%>
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
         <%-- Custom CSS --%>
@@ -94,7 +94,7 @@
         <div class="container my-4">
             <div class="row ">
                 <div class="col-md-5 text-center" style="padding: 32px 78px; border: 1px solid #f1f1f1;">
-                    <img src="${book.urlImage}" class="img-fluid rounded shadow-sm" alt="${book.getTitle()}">
+                    <img src="${book.urlImage}" class="img-fluid rounded shadow-sm" alt="${book.getTitle()}" style="width: 100%; height: auto;">
                 </div>
 
                 <div class="col-md-7 mt-4 ps-4 ps-2">
@@ -224,9 +224,19 @@
                     <h4 class="fw-semibold mb-3">Thông tin chi tiết</h4>
 
                     <p class="text-muted mt-3">Tác giả:
-                        <c:forEach var="author" items="${book.getAuthors()}" varStatus="status">
-                            <span class="fw-semibold">${author.getName()}</span><c:if test="${!status.last}">, </c:if>
-                        </c:forEach>
+                        <c:choose>
+                            <c:when test="${BookDB.getInstance().findAuthorByBook(authorBooks,book) != null}">
+                                <c:forEach var="author" items="${BookDB.getInstance().findAuthorByBook(authorBooks,book)}" varStatus="status">
+                                    <span class="fw-semibold">${author.getName()}</span><c:if test="${!status.last}">, </c:if>
+                                </c:forEach>
+                            </c:when>
+                            <c:otherwise>
+                                <span class="fw-semibold">Đang cập nhật</span>
+                            </c:otherwise>
+                        </c:choose>
+<%--                        <c:forEach var="author" items="${book.getAuthors()}" varStatus="status">--%>
+<%--                            <span class="fw-semibold">${author.getName()}</span><c:if test="${!status.last}">, </c:if>--%>
+<%--                        </c:forEach>--%>
                     </p>
 
                     <%--                 Publishers (multiple) --%>

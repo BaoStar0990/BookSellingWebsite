@@ -7,19 +7,24 @@ package controller;
 import dbmodel.BookDB;
 import java.io.IOException;
 import java.io.PrintWriter;
+
+import dbmodel.DiscountCampaignDB;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.util.List;
+import java.util.stream.Collectors;
+
+import jakarta.servlet.http.HttpSession;
 import model.Book;
 
 /**
  *
  * @author PC
  */
-@WebServlet(name = "BookListController", urlPatterns = {"/BookListController"})
+@WebServlet(name = "BookListController", urlPatterns = {"/filterbook/*"})
 public class BookListController extends HttpServlet {
 
     /**
@@ -38,56 +43,65 @@ public class BookListController extends HttpServlet {
         response.setContentType("text/html; charset=UTF-8");
         response.setCharacterEncoding("UTF-8");
 
-        //Take data
-            //Category
-//        List<Category> categories = CategoryDB.getInstance().selectAll();
-//        request.setAttribute("categories", categories);
+        HttpSession session = request.getSession();
+        //String action
+        String action = request.getPathInfo().substring(1);
+        if(action.equals("bookdiscount"))
+        {
+            List<Book> bookDiscount = null;
+            if(session.getAttribute("bookIsBeingDiscounted") != null) {
+                bookDiscount   = (List<Book>)session.getAttribute("bookIsBeingDiscounted");
+            }else{
+                List<Book> allBook = null;
+                if(session.getAttribute("allBook") == null) {
+                    System.out.println("--------------------------------------------");
+                    System.out.println("Book doesn't exist on session");
+                    allBook = BookDB.getInstance().selectAll();
+                    session.setAttribute("allBook", allBook);
+                }else{ // lan truy cap sau,  lay book trong session
+                    System.out.println("--------------------------------------------");
+                    System.out.println("Book exist on session");
+                    allBook = (List<Book>)session.getAttribute("allBook");
+                }
+                bookDiscount = allBook.stream().filter(b -> DiscountCampaignDB.getInstance().isNotExpired(b.getDiscountCampaign())).collect(Collectors.toList());
+                session.setAttribute("bookIsBeingDiscounted", bookDiscount);
+            }
+            request.setAttribute("books", bookDiscount);
+            request.setAttribute("nameOfCategory","Sách đang giảm giá");
+            request.getServletContext().getRequestDispatcher("/bookdisplay.jsp").forward(request, response);
+            System.out.println("--------------------Book discount in session-------------------------------");
+        }else if(action.equals("bestsellingbook")) {
+            List<Book> bookBestSelling = null;
+            if(session.getAttribute("bookIsBeingDiscounted") != null) {
+                bookBestSelling   = (List<Book>)session.getAttribute("bookBestSelling");
+            }else{
+                List<Book> allBook = null;
+                if(session.getAttribute("allBook") == null) {
+                    System.out.println("--------------------------------------------");
+                    System.out.println("Book doesn't exist on session");
+                    allBook = BookDB.getInstance().selectAll();
+                    session.setAttribute("allBook", allBook);
+                }else{ // lan truy cap sau,  lay book trong session
+                    System.out.println("--------------------------------------------");
+                    System.out.println("Book exist on session");
+                    allBook = (List<Book>)session.getAttribute("allBook");
+                }
+                bookBestSelling = allBook.stream().filter(b -> DiscountCampaignDB.getInstance().isNotExpired(b.getDiscountCampaign())).collect(Collectors.toList());
+                session.setAttribute("bookBestSelling", bookBestSelling);
+            }
+            request.setAttribute("books", bookBestSelling);
+            request.setAttribute("nameOfCategory","Sách bán chạy");
+            request.getServletContext().getRequestDispatcher("/bookdisplay.jsp").forward(request, response);
+            System.out.println("--------------------Book discount in session-------------------------------");
+        }else{
 
-            //Book
-        List<Book> books = BookDB.getInstance().selectAll();
-        request.setAttribute("books", books);
-            //Author
-//        List<Author> authors = AuthorDB.getInstance().selectAll();
-//        request.setAttribute("authors",authors);
-
-        String url = "/bookdisplay.jsp";
-        request.getRequestDispatcher(url).forward(request, response);
+        }
     }
-
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
-    /**
-     * Handles the HTTP <code>GET</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         processRequest(request, response);
     }
-
-    /**
-     * Handles the HTTP <code>POST</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
-    @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        processRequest(request, response);
-    }
-
-    /**
-     * Returns a short description of the servlet.
-     *
-     * @return a String containing servlet description
-     */
     @Override
     public String getServletInfo() {
         return "Short description";

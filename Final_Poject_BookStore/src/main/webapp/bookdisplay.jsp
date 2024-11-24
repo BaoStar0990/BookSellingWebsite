@@ -21,7 +21,7 @@
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/csss/all.min.css">
   <%-- Favicon --%>
-  <link rel="icon" href="assets/images/logos/square-logo.png" type="image/x-icon">
+  <link rel="icon" href="${pageContext.request.contextPath}/assets/images/logos/square-logo.png" type="image/x-icon">
   <%-- Fontawesome --%>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
   <%-- Custom CSS --%>
@@ -96,9 +96,12 @@
   <!-- End Filter -->
   
        <div class="row book-list">
+         <c:choose>
+         <c:when test="${books.size() > 0}">
+
+
         <c:forEach var="book" items = "${books}">
           <div class="col-6 col-md-4 col-lg-2 p-2">
-              
             <a href="/bookdetails/${book.getId()}" class="d-block text-decoration-none card-shadow" style="color: inherit;">
               <div class="card">
                  <!--book image--> 
@@ -136,6 +139,12 @@
             </a>
           </div>
         </c:forEach>
+         </c:when>
+           <c:otherwise>
+             <h1>Không tìm thấy ${nameOfCategory}</h1>
+             <img src="${pageContext.request.contextPath}/assets/images/notfound_image.svg" alt="Không tìm thấy ${nameOfCategory}" height="300" width="300"/>
+           </c:otherwise>
+         </c:choose>
       </div>  
        
        

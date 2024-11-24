@@ -340,9 +340,7 @@
                         <div class="d-flex align-items-center">
                             <%--                         Render stars that the user can click to add a review--%>
                             <c:forEach var="i" begin="1" end="5">
-                                <i class="fas fa-star fs-4 me-2"
-                                   style="cursor: pointer; color: ${i <= userRating ? 'gold' : 'gray'};"
-                                   onclick="setUserRating(${i})"></i>
+                                <i class="fas fa-star fs-4 me-2 user-rating-star text-muted" style="cursor: pointer;" onclick="setUserRating(${i})"></i>
                             </c:forEach>
                         </div>
                         <textarea class="form-control mt-3" rows="3" placeholder="Viết đánh giá của bạn..."></textarea>
@@ -396,9 +394,6 @@
         <%--                <a class="page-link text-muted px-3 mx-1" href="#">2</a>--%>
         <%--            </li>--%>
         <%--            <li class="page-item">--%>
-        <%--                <a class="page-link text-muted px-3 mx-1" href="#">3</a>--%>
-        <%--            </li>--%>
-        <%--            <li class="page-item">--%>
         <%--                <a class="page-link text-muted px-3 ms-1" href="#">--%>
         <%--                    <i class="fa-solid fa-chevron-right fs-5"></i>--%>
         <%--                </a>--%>
@@ -444,9 +439,6 @@
                 }, 3000); // Đóng sau 3 giây
             }
             
-        </script>
-        
-        <script>
             // gửi dữ liệu cho add cart
             function sendDataToAddCart(event) {
                 const bookId = document.getElementById("bookId").value; // Dữ liệu cần gửi
@@ -501,6 +493,25 @@
                   .catch(error => console.error('Error:', error));
                 
             }
+            
+            // Handle user rating stars
+            let userRating = 0;
+            function setUserRating(rating) {
+                userRating = rating;
+                const stars = document.querySelectorAll('.user-rating-star');
+                stars.forEach((star, index) => {
+                    if (index < rating) {
+                        star.classList.add('text-warning');
+                        star.classList.remove('text-muted');
+                    } else {
+                        star.classList.add('text-muted');
+                        star.classList.remove('text-warning');
+                    }
+                });
+
+                console.log(userRating);
+            }
+            
 //        window.onload = function() {
 //            // Giả lập thời gian tải nội dung (nếu muốn)
 //            setTimeout(() => {

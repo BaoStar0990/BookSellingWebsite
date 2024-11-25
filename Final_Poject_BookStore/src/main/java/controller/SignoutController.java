@@ -32,6 +32,9 @@ public class SignoutController extends HttpServlet {
         //remove tài khoảng người dùng khỏi session
         session.removeAttribute("user");
         session.removeAttribute("csrfToken");
+        // xóa cart và orderDetail khỏi session
+        session.removeAttribute("cart");
+        session.removeAttribute("orderDetails");
         //remove tài khoảng người dùng khỏi cookie vì người dùng đã logout
         Cookie[] cookies = request.getCookies();
         if (cookies != null) {

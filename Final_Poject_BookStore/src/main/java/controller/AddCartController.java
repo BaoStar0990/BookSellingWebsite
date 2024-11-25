@@ -10,8 +10,11 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import java.util.Comparator;
+import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Set;
+import java.util.stream.Collectors;
 import model.Bill;
 import model.Book;
 import model.Customer;
@@ -52,14 +55,37 @@ public class AddCartController extends HttpServlet {
             response.getWriter().write(jsonResponse);
         }
         else{
-            // Lấy giỏ hàng của khách hàng
-            Customer c = (Customer) session.getAttribute("user");
-            Set<Bill> bills = c.getBills();
-            Bill cart = bills.stream()
-                    .filter(b -> "Storing".equals(b.getStatusOrder().toString()))
-                    .findFirst()
-                    .orElse(null);
-            request.setAttribute("cart", cart);
+             Bill cart = null;
+            List<OrderDetail> sortedOrderDetails = null;
+            Set<OrderDetail> orderDetails = null;
+            // kiểm tra trong session có giỏ hàng chưa, nếu chưa thì lấy dưới database
+            if(session.getAttribute("cart") == null){
+                // Lấy giỏ hàng của khách hàng
+                Customer c = (Customer) session.getAttribute("user");
+                Set<Bill> bills = c.getBills();
+                cart = bills.stream()
+                        .filter(b -> "Storing".equals(b.getStatusOrder().toString()))
+                        .findFirst()
+                        .orElse(null);
+                session.setAttribute("cart", cart);
+                // lấy các orderDetail trong cart
+                if(cart != null){
+                    orderDetails = cart.getOrderDetails();
+                    session.setAttribute("orderDetails", orderDetails);         
+                    sortedOrderDetails = orderDetails.stream()
+                                               .sorted(Comparator.comparingInt(OrderDetail::getId))
+                                               .collect(Collectors.toList());
+                }
+            }
+            else {
+                cart = (Bill) session.getAttribute("cart");
+                orderDetails = (Set<OrderDetail>) session.getAttribute("orderDetails");
+                if(orderDetails != null){
+                    sortedOrderDetails = orderDetails.stream()
+                                               .sorted(Comparator.comparingInt(OrderDetail::getId))
+                                               .collect(Collectors.toList());
+                }
+            }
             
             String quantityStr = request.getParameter("quantity");
             String idBookStr = request.getParameter("bookId");
@@ -69,34 +95,58 @@ public class AddCartController extends HttpServlet {
                 // find sách
                 int idBook = Integer.parseInt(idBookStr);
                 int quantity = Integer.parseInt(quantityStr);
+                // lấy sách trong database
                 Book book = BookDB.getInstance().selectByID(idBook);
+                    
                 if(book != null){
                     // kiểm tra số lượng thêm vào có vượt quá số lượng trong kho không
                     if(book.getStocks() >= quantity){
                         // check lỗi khách hàng ko có giỏ hàng
                         if(cart != null){
-                            
+
                             // sửa lại lấy trong session
                             // kiểm tra cuốn sách đó có trong cart chưa, nếu có thì tăng số lượng lên 
-                            Set<OrderDetail> orderDetails = cart.getOrderDetails();
-                            OrderDetail orderDetail = orderDetails.stream()
+                            OrderDetail orderDetail = null;
+                            if(orderDetails != null){
+                                orderDetail = orderDetails.stream()
                                     .filter(o -> o.getBook().equals(book))
                                     .findFirst()
                                     .orElse(null);
-                            // 
-                            
-                            if(orderDetail == null){
-                               if(BillDB.getInstance().addBookBill(book, quantity, cart) == false){
-                                    errorMessage = "Lỗi thêm vào giỏ hàng";
-                                } 
+
+                                // 
+
+                                if(orderDetail == null){
+                                   if(BillDB.getInstance().addBookBill(book, quantity, cart) == false){
+                                        errorMessage = "Lỗi thêm vào giỏ hàng";
+                                   } 
+                                   else{
+                                       // thêm OrderDetail vào session
+                                       // tìm OrderDetail vừa thêm vào
+                                       OrderDetail findOrder = BillDB.getInstance().FindOrderDetailFromBill(book, cart);
+                                       if(findOrder != null)
+                                           orderDetails.add(findOrder);
+                                       else
+                                           errorMessage = "Lỗi cập nhật session";
+                                   }
+                                }
+                                else{
+                                    orderDetail.setQuantity(orderDetail.getQuantity()+quantity);
+                                    OrderDetailDB.getInstance().update(orderDetail);
+                                    // cập nhật OrderDetail vào session
+                                    int orderId = orderDetail.getId();
+                                    orderDetails.stream()
+                                        .filter(o -> o.getId() == orderId) 
+                                        .findFirst()  
+                                        .ifPresent(o -> o.setQuantity(o.getQuantity()));
+                                }
                             }
-                            else{
-                                orderDetail.setQuantity(orderDetail.getQuantity()+quantity);
-                                OrderDetailDB.getInstance().update(orderDetail);
-                            }
+
                         }
                     }
+                    
                 }
+//                Book book = BookDB.getInstance().selectByID(idBook);
+                
                 
             }catch(NumberFormatException ex){
                 errorMessage = "Vui lòng nhập đúng dữ liệu";

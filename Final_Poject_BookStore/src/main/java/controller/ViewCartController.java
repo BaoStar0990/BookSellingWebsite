@@ -51,20 +51,38 @@ public class ViewCartController extends HttpServlet {
             url = "/signin.jsp";
         }
         else{ 
-            // Lấy giỏ hàng của khách hàng
-            Customer c = (Customer) session.getAttribute("user");
-            Set<Bill> bills = c.getBills();
-            Bill cart = bills.stream()
-                    .filter(b -> "Storing".equals(b.getStatusOrder().toString()))
-                    .findFirst()
-                    .orElse(null);
+            Bill cart = null;
+            List<OrderDetail> sortedOrderDetails = null;
+            // kiểm tra trong session có giỏ hàng chưa, nếu chưa thì lấy dưới database
+            if(session.getAttribute("cart") == null){
+                // Lấy giỏ hàng của khách hàng
+                Customer c = (Customer) session.getAttribute("user");
+                Set<Bill> bills = c.getBills();
+                cart = bills.stream()
+                        .filter(b -> "Storing".equals(b.getStatusOrder().toString()))
+                        .findFirst()
+                        .orElse(null);
+                session.setAttribute("cart", cart);
+                // lấy các orderDetail trong cart
+                if(cart != null){
+                    session.setAttribute("orderDetails", cart.getOrderDetails());
+                    sortedOrderDetails = cart.getOrderDetails().stream()
+                                               .sorted(Comparator.comparingInt(OrderDetail::getId))
+                                               .collect(Collectors.toList());
+                }
+            }
+            else {
+                cart = (Bill) session.getAttribute("cart");
+                Set<OrderDetail> orderDetails = (Set<OrderDetail>) session.getAttribute("orderDetails");
+                if(orderDetails != null){
+                    sortedOrderDetails = orderDetails.stream()
+                                               .sorted(Comparator.comparingInt(OrderDetail::getId))
+                                               .collect(Collectors.toList());
+                }
+            }
             if(cart != null){
-                List<OrderDetail> sortedOrderDetails = cart.getOrderDetails().stream()
-                                           .sorted(Comparator.comparingInt(OrderDetail::getId))
-                                           .collect(Collectors.toList());
                 request.setAttribute("cartId", cart.getId());
                 request.setAttribute("listOrderDetails", sortedOrderDetails);
-
             }
                        
         }

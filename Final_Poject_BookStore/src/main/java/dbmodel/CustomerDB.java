@@ -182,42 +182,41 @@ public class CustomerDB  extends ModifyDB<Customer> implements DBInterface<Custo
                em.close();
            }
     }
-//    private static final ReentrantLock lock = new ReentrantLock();
+    private static final ReentrantLock lock = new ReentrantLock();
     public boolean makeAnOrder(Bill cart, Customer customer){
-        //lock.lock(); // Khóa trước khi truy cập logic
+        lock.lock(); // Khóa trước khi truy cập logic
         EntityManager em = null;
         EntityTransaction tr = null;
         try{
-//            System.out.println("Mot tien trinh sang vao");
+            System.out.println("Mot tien trinh sang vao");
             em = DBUtil.getEmFactory().createEntityManager();
-           tr = em.getTransaction();
+            tr = em.getTransaction();
             tr.begin();
-//            // kiểm tra trong cart có sp nào không, hoặc có phải là cart không
-//            if(cart.getOrderDetails().isEmpty() || !("Storing".equals(cart.getStatusOrder().toString())))
-//                return false;
-//            // kiểm tra số lượng đặt có vượt quá số lượng trong kho
-//            boolean isExceedQuantity = cart.getOrderDetails().stream()
-//                    .anyMatch(o -> o.getBook().getStocks() < o.getQuantity());
-//            if(isExceedQuantity)
-//                return false;
-//            // chuyển trạng thái từ "storing" sang "Processing"
-//            cart.setStatusOrder(StatusOrder.Processing);
-//            // sleep ở đây, nó mà sleep lại là bấm bên kia xem nó có chạy ko
+            // kiểm tra trong cart có sp nào không, hoặc có phải là cart không
+            if(cart.getOrderDetails().isEmpty() || !("Storing".equals(cart.getStatusOrder().toString())))
+                return false;
+            // kiểm tra số lượng đặt có vượt quá số lượng trong kho
+            boolean isExceedQuantity = cart.getOrderDetails().stream()
+                    .anyMatch(o -> o.getBook().getStocks() < o.getQuantity());
+            if(isExceedQuantity)
+                return false;
+            // chuyển trạng thái từ "storing" sang "Processing"
+            cart.setStatusOrder(StatusOrder.Processing);
+            // sleep ở đây, nó mà sleep lại là bấm bên kia xem nó có chạy ko
 //            System.out.println("Tien trinh dung trong 20s");
 //            Thread.sleep(20000);
-//            
-//            // trừ số lượng sách trong kho khi đặt
-//            final EntityManager emFinal = em;           
-//            cart.getOrderDetails().forEach(o ->{
-//                        // lấy cuốn sách cập nhật số lượng trong kho
-//                        var book = emFinal.find(Book.class, o.getBook().getId());
-//                        book.setStocks(book.getStocks() - o.getQuantity());
-//                        emFinal.merge(book);
-//                    });
-//            // cập nhật cart thành đơn hàng
-//            em.merge(cart);  
+            
+            // trừ số lượng sách trong kho khi đặt
+            final EntityManager emFinal = em;           
+            cart.getOrderDetails().forEach(o ->{
+                        // lấy cuốn sách cập nhật số lượng trong kho
+                        var book = emFinal.find(Book.class, o.getBook().getId());
+                        book.setStocks(book.getStocks() - o.getQuantity());
+                        emFinal.merge(book);
+                    });
+            // cập nhật cart thành đơn hàng
+            em.merge(cart);  
 
-            // Tạm dừng luồng hiện tại trong 5 giây (5000 ms)
             // cập nhật lại số lượng các OrderDetail trong các cart của khách hàng khác có
             // còn hợp lệ không
             List<Bill> allCart = em.createQuery(

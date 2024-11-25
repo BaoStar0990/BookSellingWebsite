@@ -18,6 +18,7 @@ import java.time.LocalDate;
 import java.util.Comparator;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Set;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.stream.Collectors;
 import model.Bill;
@@ -70,16 +71,28 @@ public class OrderController extends HttpServlet {
                 // find cart
                 int cartId = Integer.parseInt(cartIdStr);
                 Bill cart = (Bill) BillDB.getInstance().selectByID(cartId);
+                List<OrderDetail> sortedOrderDetails = null;
                 if (cart != null) {
                     // lấy ds các orderdetail của đơn hàng
-                    List<OrderDetail> sortedOrderDetails = cart.getOrderDetails().stream()
+                    // kiểm tra trong session
+                    if(session.getAttribute("orderDetails") != null){
+                        Set<OrderDetail> orderDetails = (Set<OrderDetail>) session.getAttribute("orderDetails");
+                        if(orderDetails != null){
+                            sortedOrderDetails = orderDetails.stream()
+                                                   .sorted(Comparator.comparingInt(OrderDetail::getId))
+                                                   .collect(Collectors.toList());
+                        }
+                    }
+                    else{
+                        sortedOrderDetails = cart.getOrderDetails().stream()
                             .sorted(Comparator.comparingInt(OrderDetail::getId))
                             .collect(Collectors.toList());
-
+                    }
+   
                     request.setAttribute("cartId", cartId);
                     request.setAttribute("listOrderDetails", sortedOrderDetails);
 
-                    // cập nhật các thuocj tính
+                    // cập nhật các thuộc tính
                     cart.setOrderDate(LocalDate.now()); // ngày đặt hàng
                     cart.setDeliveryDate(LocalDate.now().plusDays(4)); // ngày nhận hàng dự kiến
                     cart.setVAT(0.05); // thuế giá trị gia tăng
@@ -102,20 +115,14 @@ public class OrderController extends HttpServlet {
 
                     // gọi phương thức đặt hàng
                     Customer user = (Customer) session.getAttribute("user");
-                    boolean checkQuantityValid = false;
-                    lock.lock();
-                    if (CustomerDB.getInstance().decreaseQuantity(cart)) {
-                        checkQuantityValid = true;
-                    }
-                    lock.unlock();
-                    if (checkQuantityValid) {
-                        if (user.makeAnOrder(cart)) { // nếu đặt hàng thành công, chuyển trang
-                            request.setAttribute("order", cart);
-                        } else {
-                            url = "/payment";
-                        }
-                    }else{
-                        System.out.println("Error in Order Controller when order");
+                    if (user.makeAnOrder(cart)) { // nếu đặt hàng thành công, chuyển trang
+                        // xóa cart và orderDetail trong session
+                        session.removeAttribute("cart");
+                        session.removeAttribute("orderDetails");
+                        request.setAttribute("order", cart);
+                    } else {
+                        url = "/payment";
+                        System.out.println("Lỗi đặt hàng");
                     }
 
                 }

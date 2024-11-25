@@ -74,8 +74,7 @@
                                         <li class="dropdown-header fs-6 fw-bold">Xin chào, ${sessionScope.user.fullName}</li>
                                         <div class="dropdown-divider"></div>
                                         <li><a href="${pageContext.request.contextPath}/usersetting" class="dropdown-item"><i class="fa-solid fa-user me-2"></i>Tài khoản của tôi</a></li>
-                                        <li><a href="#" class="dropdown-item"><i class="fa-solid fa-cart-shopping me-2"></i>Đơn hàng của tôi</a></li>
-                                        <li><a href="#" class="dropdown-item"><i class="fa-solid fa-gear me-2"></i>Cài đặt</a></li>
+                                        <li><a href="/usersetting.jsp?setting=orders" class="dropdown-item"><i class="fa-solid fa-cart-shopping me-2"></i>Đơn hàng của tôi</a></li>
                                         <div class="dropdown-divider"></div>
                                         <li>
                                             <form class="m-0" action="signout" method="post">

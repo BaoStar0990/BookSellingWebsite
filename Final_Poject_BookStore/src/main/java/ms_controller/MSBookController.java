@@ -114,25 +114,42 @@ public class MSBookController extends HttpServlet {
         Publisher publisher = PublisherDB.getInstance().selectByID(publisherId);
         DiscountCampaign discountCampaign = discountCampaignIdStr.isEmpty() ? null : DiscountCampaignDB.getInstance().selectByID(Integer.parseInt(discountCampaignIdStr));
         Set<Author> authors = new HashSet<>();
+        System.out.println("----------------------Author ID from request update");
         for (String authorId : selectedAuthors) {
+            System.out.println(authorId);
             if (!authorId.isEmpty()) {
-                Author author = new Author();
-                author.setId(Integer.parseInt(authorId));
-                authors.add(author);
+//                Author author = new Author();
+//                author.setId(Integer.parseInt(authorId));
+                Author author = AuthorDB.getInstance().selectByID(Integer.parseInt(authorId));
+                if(author != null){
+                    authors.add(author);
+                }
             }
         }
+        System.out.println("------------------------------------------------------");
 
+
+        System.out.println("----------------------Cat ID from request update");
         Set<Category> categories = new HashSet<>();
         for (String categoryId : selectedCategories) {
             if (!categoryId.isEmpty()) {
-                Category category = new Category();
-                category.setId(Integer.parseInt(categoryId));
-                categories.add(category);
+//                Category category = new Category();
+//                category.setId(Integer.parseInt(categoryId));
+                Category category = CategoryDB.getInstance().selectByID(Integer.parseInt(categoryId));
+
+                if(category != null){
+                    categories.add(category);
+                }
             }
         }
+        System.out.println("------------------------------------------------------");
+
+
+
         System.out.println("-----------------------------------------------");
         System.out.println("Book title"+bookTitle);
         authors.stream().forEach(a -> System.out.println(a.getName()));
+        categories.stream().forEach(c -> System.out.println(c.getName()));
         System.out.println("-----------------------------------------------");
 
 
@@ -147,6 +164,29 @@ public class MSBookController extends HttpServlet {
             System.out.println("update book "+bookTitle);
             int bookId = Integer.parseInt(request.getParameter("bookId"));
             book = BookDB.getInstance().selectByID(bookId);
+
+            //Check book take all data
+//            System.out.println("--------------------Author of book---------------------------");
+//            if(book.getAuthors() == null){
+//                System.out.println("Book doesn't have author");
+//            }else{
+//                for (Author author : book.getAuthors()) {
+//                    System.out.println(author.getName());
+//                }
+//               //book.setAuthors(authors);
+//            }
+
+//            System.out.println("--------------------Category of book---------------------------");
+//            if(book.getCategories() == null){
+//                System.out.println("Book doesn't have category");
+//            }else{
+//
+//                for (Category category : book.getCategories()) {
+//                    System.out.println(category.getName());
+//                }
+//               // book.setCategories(castegories);
+//            }
+
             if (book == null) {
                 request.setAttribute("errorMessage", "Book not found.");
                 processRequest(request, response);

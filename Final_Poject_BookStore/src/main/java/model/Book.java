@@ -191,6 +191,9 @@ public class Book implements Serializable {
         return BookDB.getInstance().getReviews(this);
     }
 
+
+
+
     public int getAverageRatingStart() {
         int numberOfReview = this.getReviews().size();
         if (numberOfReview == 0) {
@@ -255,5 +258,6 @@ public class Book implements Serializable {
     public Set<OrderDetail> getOrderDetails() {
         return orderDetails;
     }
+
 
 }

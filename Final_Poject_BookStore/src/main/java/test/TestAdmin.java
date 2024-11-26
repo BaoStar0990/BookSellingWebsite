@@ -12,8 +12,11 @@ import java.util.stream.Collectors;
 
 public class TestAdmin {
     public static void main(String[] args) {
-        List<Book> allBook = BookDB.getInstance().selectAll();
-        List<Book> bookIsBeingDiscounted = allBook.stream().filter(b -> DiscountCampaignDB.getInstance().isNotExpired(b.getDiscountCampaign())).collect(Collectors.toList());
-        bookIsBeingDiscounted.forEach(b -> System.out.println(b.getTitle()));
+        Book b = BookDB.getInstance().selectByID(1);
+        if(b.getAuthors().size() > 0){
+            BookDB.getInstance().updateBookAuthorsCategories(b,null,null);
+        }else{
+            System.out.println("Book doesn't have author");
+        }
     }
 }

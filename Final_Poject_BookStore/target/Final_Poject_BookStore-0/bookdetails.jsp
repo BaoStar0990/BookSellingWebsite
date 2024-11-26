@@ -30,7 +30,7 @@
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
         <%-- Favicon --%>
-        <link rel="icon" href="assets/images/logos/square-logo.png" type="image/x-icon">
+        <link rel="icon" href="${pageContext.request.contextPath}/assets/images/logos/square-logo.png" type="image/x-icon">
         <%-- Fontawesome --%>
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
         <%-- Custom CSS --%>
@@ -38,9 +38,13 @@
         <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/styles/header.css" />
         <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/styles/footer.css" />
         <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/styles/bookdetails.css" />
-
+        <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/styles/loading.css" />
+        
         <%-- CSS for book list--%>
         <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/styles/book-list.css" />
+        <%-- biểu tượng check --%>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+        
     </head>
     <body>
 
@@ -50,17 +54,33 @@
         </jsp:include>
 
         <%--end Header--%>
-
+        <%-- loading --%>
+        <jsp:include page="WEB-INF/views/loading.jsp"></jsp:include>
+        
         <%--    attribute : List<Book>--%>
         <!--Link-->
         <!--Lấy tên thể loại đầu tiên của sách -->
         <%
-            Book b =(Book) request.getAttribute("book");
+            Book b = (Book) request.getAttribute("book");
             // kiểm tra sách có thể loại không, nếu có lấy thể loại đầu tiên
             String firstCategoryName = b == null || b.getCategories() == null
-                    || b.getCategories().isEmpty() ? " " :
-                    b.getCategories().stream().findFirst().get().getName();
+                    || b.getCategories().isEmpty() ? " "
+                    : b.getCategories().stream().findFirst().get().getName();
         %>
+        
+        <%-- Hiển thị thông báo thêm vào giỏ hàng --%>
+        <div class ="position-relative">
+            <div class="d-none position-absolute top-0 end-0 w-25 alert alert-success 
+                 alert-dismissible fade show d-flex align-items-center" role="alert">
+                <i class="bi bi-check-circle-fill me-2"></i> <!-- Icon -->
+                <div>
+                  <strong>Thêm vào giỏ hàng thành công</strong><br>
+                  Bấm <a href="/viewcart" class="text-decoration-none fw-bold">vào đây</a> để tới trang giỏ hàng
+                </div>
+                <button type="button" class="btn-close ms-3" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        </div>
+        
         <div class="container mt-2">
             <p class="fw-semibold">
                 <a href="${pageContext.request.contextPath}" class="text-decoration-none text-dark">Trang chủ</a>
@@ -70,12 +90,11 @@
                 ${book.title}
             </p>
         </div>
-        <!--end Link -->
-
+        <!--end Link -->    
         <div class="container my-4">
             <div class="row ">
                 <div class="col-md-5 text-center" style="padding: 32px 78px; border: 1px solid #f1f1f1;">
-                    <img src="${book.urlImage}" class="img-fluid rounded shadow-sm" alt="${book.getTitle()}">
+                    <img src="${book.urlImage}" class="img-fluid rounded shadow-sm" alt="${book.getTitle()}" style="width: 100%; height: auto;">
                 </div>
 
                 <div class="col-md-7 mt-4 ps-4 ps-2">
@@ -105,23 +124,23 @@
                     <%--Rating--%>
                     <div class="d-flex align-items-center">
                         <%-- Calculate Average Rating --%>
-<%--                        <c:set var="totalRating" value="0" />--%>
+                        <%--                        <c:set var="totalRating" value="0" />--%>
                         <%--                  Kiểm tra reviews có null không --%>
 
 
-<%--                        <c:choose>
-                            <c:when test = "${not empty book.getReviews()}">
-                                <c:set var="averageRating" value="${totalRating / fn:length(book.getReviews())}" />
-                            </c:when>
-                            <c:otherwise>
-                                <c:set var="averageRating" value="${totalRating}" />
-                            </c:otherwise>
-                        </c:choose>--%>
+                        <%--                        <c:choose>
+                                                    <c:when test = "${not empty book.getReviews()}">
+                                                        <c:set var="averageRating" value="${totalRating / fn:length(book.getReviews())}" />
+                                                    </c:when>
+                                                    <c:otherwise>
+                                                        <c:set var="averageRating" value="${totalRating}" />
+                                                    </c:otherwise>
+                                                </c:choose>--%>
 
 
                         <div class="text-warning fs-5 me-2">
                             <div class="text-warning fs-5 me-2 d-flex">
-<%--                                 Render filled stars for the rounded average rating--%>
+                                <%--                                 Render filled stars for the rounded average rating--%>
                                 <c:choose>
                                     <c:when test = "${not empty book.getReviews()}">
                                         <c:set var="roundedRating" value="${book.getAverageRatingStart()}" />
@@ -162,32 +181,32 @@
                             -<fmt:formatNumber value="${book.getDiscountCampaign().getPercentDiscount()*100}" type="number" pattern="#,##0" />%
                         </span>
                     </div>
-                    
-                    <form style = "margin: 0; padding: 0;" action ="/addcart" method="post">
-                        <%--Quantity Selector --%>
-                        <div class="mt-3">
-                            <label for="quantity" class="me-2">Số lượng</label>
-                            <div class="input-group mt-1" style="width: 120px;">
-                                <button onclick="event.preventDefault()" class="btn btn-outline-secondary" onclick="decreaseQuantity()">-</button>
-                                <input type="text" class="form-control text-center" name="quantity" id="quantity" value="1">
-                                <button onclick="event.preventDefault()" class="btn btn-outline-secondary" onclick="increaseQuantity()">+</button>
-                            </div>
-                        </div>
 
-                        <%--Action Buttons --%>
-                        <div  style = "display: flex;  align-items: center;" class="mt-4">
-                        
-                            <input type="hidden" value="${book.getId()}" name="bookId">
-                            <button type = "submit" class="btn secondary-btn me-3 d-inline-block"/>
-                            <i class="fas fa-shopping-cart me-2"></i> Thêm vào giỏ hàng
-                            </button>
-                            
-                            <button type = "submit" class="btn primary-btn d-inline-block">
-                                Mua ngay
-                            </button>
+                    <%--Quantity Selector --%>
+                    <div class="mt-3">
+                        <label for="quantity" class="me-2">Số lượng</label>
+                        <div class="input-group mt-1" style="width: 120px;">
+                            <button type="button" class="btn btn-outline-secondary" onclick="decreaseQuantity()">-</button>
+                            <input type="text" class="form-control text-center" name="quantity" id="quantity" value="1">
+                            <button type="button" class="btn btn-outline-secondary" onclick="increaseQuantity()">+</button>
                         </div>
-                    </form>    
-                            
+                    </div>
+
+                    <%--Action Buttons --%>
+                    <div  style = "display: flex;  align-items: center;" class="mt-4">
+
+                        <input type="hidden" value="${book.getId()}" name="bookId" id ="bookId">
+                        <button id = "themVaoGio" class="btn secondary-btn me-3 d-inline-block"
+                               onclick="sendDataToAddCart(event)">
+                            <i class="fas fa-shopping-cart me-2"></i> Thêm vào giỏ hàng
+                        </button>           
+         
+                        <button onclick="sendDataToAddCart(event)" id = "muaNgay" class="btn primary-btn d-inline-block">
+                            Mua ngay
+                        </button>
+                       
+                    </div>
+
                 </div>
             </div>
             <%--         end Short Intro --%>
@@ -205,9 +224,19 @@
                     <h4 class="fw-semibold mb-3">Thông tin chi tiết</h4>
 
                     <p class="text-muted mt-3">Tác giả:
-                        <c:forEach var="author" items="${book.getAuthors()}" varStatus="status">
-                            <span class="fw-semibold">${author.getName()}</span><c:if test="${!status.last}">, </c:if>
-                        </c:forEach>
+                        <c:choose>
+                            <c:when test="${BookDB.getInstance().findAuthorByBook(authorBooks,book) != null}">
+                                <c:forEach var="author" items="${BookDB.getInstance().findAuthorByBook(authorBooks,book)}" varStatus="status">
+                                    <span class="fw-semibold">${author.getName()}</span><c:if test="${!status.last}">, </c:if>
+                                </c:forEach>
+                            </c:when>
+                            <c:otherwise>
+                                <span class="fw-semibold">Đang cập nhật</span>
+                            </c:otherwise>
+                        </c:choose>
+<%--                        <c:forEach var="author" items="${book.getAuthors()}" varStatus="status">--%>
+<%--                            <span class="fw-semibold">${author.getName()}</span><c:if test="${!status.last}">, </c:if>--%>
+<%--                        </c:forEach>--%>
                     </p>
 
                     <%--                 Publishers (multiple) --%>
@@ -264,11 +293,11 @@
                     <%--                </c:forEach>--%>
 
                     <%-- Round the rating to 1 decimal place and display --%>
-<%--                    <h1 class="fw-bold mt-2">--%>
-<%--                        <fmt:formatNumber value="${book.getAverageRatingStart()}" type="number" maxFractionDigits="1" />/5--%>
-<%--                    </h1>--%>
+                    <%--                    <h1 class="fw-bold mt-2">--%>
+                    <%--                        <fmt:formatNumber value="${book.getAverageRatingStart()}" type="number" maxFractionDigits="1" />/5--%>
+                    <%--                    </h1>--%>
 
-<%--                    <c:set var="averageRating" value="${book.getAverageRatingStart()}" />--%>
+                    <%--                    <c:set var="averageRating" value="${book.getAverageRatingStart()}" />--%>
                     <%--                 Display the stars based on average rating--%>
                     <div class="d-flex align-items-center fs-4">
                         <c:forEach var="i" begin="1" end="5">
@@ -282,7 +311,7 @@
                             </c:choose>
                         </c:forEach>
                     </div>
-<%--                    <span class="m-2 fs-5">(${book.getReviews().size()} Đánh giá)</span>--%>
+                    <%--                    <span class="m-2 fs-5">(${book.getReviews().size()} Đánh giá)</span>--%>
                 </div>
 
                 <%--             Rating Breakdown--%>
@@ -311,9 +340,7 @@
                         <div class="d-flex align-items-center">
                             <%--                         Render stars that the user can click to add a review--%>
                             <c:forEach var="i" begin="1" end="5">
-                                <i class="fas fa-star fs-4 me-2"
-                                   style="cursor: pointer; color: ${i <= userRating ? 'gold' : 'gray'};"
-                                   onclick="setUserRating(${i})"></i>
+                                <i class="fas fa-star fs-4 me-2 user-rating-star text-muted" style="cursor: pointer;" onclick="setUserRating(${i})"></i>
                             </c:forEach>
                         </div>
                         <textarea class="form-control mt-3" rows="3" placeholder="Viết đánh giá của bạn..."></textarea>
@@ -322,32 +349,32 @@
                 </div>
             </div>
             <c:if test="${book.getReviews() != null}">
-            <div class="row mt-5">
-                <c:forEach var="review" items="${book.getReviews()}">
-                    <div class="row border-top py-3">
-                        <%--                     User and Date Section--%>
-                        <div class="col-2 d-flex flex-column mb-2">
-                            <h6 class="fw-bold me-3">${review.getCustomer().getFullName()}</h6>
-                            <%--                        <span class="text-muted">${review.reviewDate}</span>--%>
-                        </div>
-                        <div class="col-10">
-                            <div class="d-flex align-items-center">
-                                <c:forEach var="i" begin="1" end="5">
-                                    <c:choose>
-                                        <c:when test="${i <= review.rate}">
-                                            <i class="fas fa-star text-warning"></i>
-                                        </c:when>
-                                        <c:otherwise>
-                                            <i class="far fa-star text-muted"></i>
-                                        </c:otherwise>
-                                    </c:choose>
-                                </c:forEach>
+                <div class="row mt-5">
+                    <c:forEach var="review" items="${book.getReviews()}">
+                        <div class="row border-top py-3">
+                            <%--                     User and Date Section--%>
+                            <div class="col-2 d-flex flex-column mb-2">
+                                <h6 class="fw-bold me-3">${review.getCustomer().getFullName()}</h6>
+                                <%--                        <span class="text-muted">${review.reviewDate}</span>--%>
                             </div>
-                            <p class="mt-2">${review.description}</p>
+                            <div class="col-10">
+                                <div class="d-flex align-items-center">
+                                    <c:forEach var="i" begin="1" end="5">
+                                        <c:choose>
+                                            <c:when test="${i <= review.rate}">
+                                                <i class="fas fa-star text-warning"></i>
+                                            </c:when>
+                                            <c:otherwise>
+                                                <i class="far fa-star text-muted"></i>
+                                            </c:otherwise>
+                                        </c:choose>
+                                    </c:forEach>
+                                </div>
+                                <p class="mt-2">${review.description}</p>
+                            </div>
                         </div>
-                    </div>
-                </c:forEach>
-            </div>
+                    </c:forEach>
+                </div>
             </c:if>
         </div>
         <%--     User Review --%>
@@ -367,9 +394,6 @@
         <%--                <a class="page-link text-muted px-3 mx-1" href="#">2</a>--%>
         <%--            </li>--%>
         <%--            <li class="page-item">--%>
-        <%--                <a class="page-link text-muted px-3 mx-1" href="#">3</a>--%>
-        <%--            </li>--%>
-        <%--            <li class="page-item">--%>
         <%--                <a class="page-link text-muted px-3 ms-1" href="#">--%>
         <%--                    <i class="fa-solid fa-chevron-right fs-5"></i>--%>
         <%--                </a>--%>
@@ -387,6 +411,118 @@
         </script>
         <!-- end Pagination -->
 
-        <script src="./assets/javascript/quantity.js"></script>
+<!--        <script src="<%--${pageContext}--%>/assets/javascript/quantity.js"></script>-->
+        <!--<script src="./assets/javascript/loading.js"></script>-->
+        <!--Add script increase and decrease --> 
+        <script>
+            function increaseQuantity() {
+                let quantity = document.getElementById("quantity");
+                quantity.value = parseInt(quantity.value) + 1;
+            }
+            function decreaseQuantity() {
+                let quantity = document.getElementById("quantity");
+                if (parseInt(quantity.value) > 1)
+                    quantity.value = parseInt(quantity.value) - 1;
+            }
+            
+            // hiển thị thông báo thêm vào giỏ hàng
+            function showNotification(){
+                const alertBox = document.querySelector('.alert');
+                 // Hiển thị thông báo
+                alertBox.classList.remove('d-none');
+                alertBox.classList.add('fade');
+
+                // Ẩn thông báo sau 3 giây
+                setTimeout(() => {
+                    alertBox.classList.remove('fade');
+                    alertBox.classList.add('d-none');
+                }, 3000); // Đóng sau 3 giây
+            }
+            
+            // gửi dữ liệu cho add cart
+            function sendDataToAddCart(event) {
+                const bookId = document.getElementById("bookId").value; // Dữ liệu cần gửi
+                const quantity = document.getElementById("quantity").value;
+                if (!bookId || !quantity) {
+                    alert("Vui lòng điền đủ thông tin.");
+                    return; // Dừng hàm nếu giá trị trống
+                }
+                // URLSearchParams() dùng để tạo đối tượng
+                const data = new URLSearchParams();
+                data.append('bookId', bookId);
+                data.append('quantity', quantity);
+                const buttonId = event.target.id; // Lấy ID của nút
+                if (buttonId === "muaNgay"){
+                    data.append('action', "muaNgay");
+                }
+                else{
+//                    if(<%= (session.getAttribute("user") != null)%>)
+//                        showNotification();
+                    data.append('action', "themVaoGio");
+                }
+                document.getElementById('loading-screen').style.display = 'flex';
+                
+                fetch('/addcart', {
+                    method: 'POST',
+                    headers: {
+                      'Content-Type': 'application/x-www-form-urlencoded',
+                    },
+                    body: data.toString() // chuyển chuỗi URLSearchParams thành chuỗi URL-encoded
+                  })
+                  .then(response => response.json())
+                  .then(result => {
+                    if(result.errorMessage !== "null"){
+                        // Xử lý hiện lỗi
+                        alert(result.errorMessage);
+                        document.getElementById('loading-screen').style.display = 'none';
+//                        document.getElementById("errorMessage").innerText = result.message;
+                    }
+                    else{
+                        if(buttonId === "themVaoGio"){
+                            document.getElementById('loading-screen').style.display = 'none';
+                            showNotification();
+                        }
+                    }
+                    if (result.redirect) {
+                        // Chuyển hướng
+//                        alert(result.redirect);
+                        window.location.href = result.redirect;
+                    }
+                    
+                  })
+                  .catch(error => console.error('Error:', error));
+                
+            }
+            
+            // Handle user rating stars
+            let userRating = 0;
+            function setUserRating(rating) {
+                userRating = rating;
+                const stars = document.querySelectorAll('.user-rating-star');
+                stars.forEach((star, index) => {
+                    if (index < rating) {
+                        star.classList.add('text-warning');
+                        star.classList.remove('text-muted');
+                    } else {
+                        star.classList.add('text-muted');
+                        star.classList.remove('text-warning');
+                    }
+                });
+
+                console.log(userRating);
+            }
+            
+//        window.onload = function() {
+//            // Giả lập thời gian tải nội dung (nếu muốn)
+//            setTimeout(() => {
+//                // Ẩn màn hình loading
+//                document.getElementById('loading-screen').style.display = 'none';
+//                // Hiển thị nội dung chính
+//                document.getElementById('container').style.display = 'block';
+//            }, 0); // Không cần delay trong trường hợp tải trang hoàn tất
+//        };
+        
+        </script>
     </body>
+    
 </html>

@@ -13,6 +13,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import java.util.NoSuchElementException;
+import java.util.Set;
 import model.OrderDetail;
 
 /**
@@ -52,11 +53,21 @@ public class ModifyItemCartController extends HttpServlet {
                 
                 // find OrderDetail
                 int orderId = Integer.parseInt(orderIdStr);
-                OrderDetail order = OrderDetailDB.getInstance().selectByID(orderId);
+                // tìm orderDetail trong session
+                Set<OrderDetail> orderDetails = (Set<OrderDetail>) 
+                        session.getAttribute("orderDetails");               
+                OrderDetail order = orderDetails.stream()
+                        .filter(o -> o.getId()==orderId)
+                        .findFirst()
+                        .orElse(null);
+//                OrderDetail order = OrderDetailDB.getInstance().selectByID(orderId);
                 if(order != null){
                     if(action.equals("delete")){
                         if(!OrderDetailDB.getInstance().delete(orderId, OrderDetail.class))
-                            System.out.println("Xóa không thành công");                       
+                            System.out.println("Xóa không thành công");    
+                        else
+                            // xóa trong session
+                            orderDetails.removeIf(o -> o.getId() == orderId);
                     }
                     else{
                         if(action.equals("increate")){
@@ -65,6 +76,12 @@ public class ModifyItemCartController extends HttpServlet {
                                 if(!OrderDetailDB.getInstance().update(order)){
                                     System.out.println("Cập nhật không thành công");
                                 }
+                                else
+                                    // tăng trong session lên 1
+                                    orderDetails.stream()
+                                        .filter(o -> o.getId() == orderId) 
+                                        .findFirst()  
+                                        .ifPresent(o -> o.setQuantity(o.getQuantity()));
                             }
                             else
                                 System.out.println("Hết hàng");
@@ -75,6 +92,12 @@ public class ModifyItemCartController extends HttpServlet {
                                 if(!OrderDetailDB.getInstance().update(order)){
                                         System.out.println("Cập nhật không thành công");
                                 }
+                                else
+                                    // giảm trong session xuống 1
+                                    orderDetails.stream()
+                                        .filter(o -> o.getId() == orderId) 
+                                        .findFirst()
+                                        .ifPresent(o -> o.setQuantity(o.getQuantity()));
                             }
                         }
                     }

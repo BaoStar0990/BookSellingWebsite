@@ -16,7 +16,7 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
     <%-- Favicon --%>
-    <link rel="icon" href="assets/images/logos/square-logo.png" type="image/x-icon">
+    <link rel="icon" href="${pageContext.request.contextPath}/assets/images/logos/square-logo.png" type="image/x-icon">
     <%-- Fontawesome --%>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <%-- Custom CSS --%>
@@ -64,14 +64,14 @@
     <!-- Member Section -->
     <div class="container p-0 position-relative mt-5">
         <h2 class="text-center mb-4 mt-3 font-bold">Members</h2>
-        <div class="row justify-content-center">
+        <div class="row">
             <!-- Member 1 -->
-            <div class="col-12 col-sm-6 col-md-4 col-lg-3 text-center">
+            <div class="col text-center">
                 <div class="card shadow-sm text-center" style="border-radius: 15px; padding: 20px;">
                     <div class="position-relative">
                         <div class="border-wrapper">
                             <img
-                                    src="${pageContext.request.contextPath}/assets/images/authors/author.jpg"
+                                    src="${pageContext.request.contextPath}/assets/images/aboutus/dq.png"
                                     alt="Hà Đăng Quang"
                                     class="img-fluid rounded-circle m-0"
                                     style="width: 150px; height: 150px; object-fit: cover;"
@@ -90,12 +90,12 @@
             </div>
 
             <!-- Member 2 -->
-            <div class="col-12 col-sm-6 col-md-4 col-lg-3 text-center">
+            <div class="col text-center">
                 <div class="card shadow-sm text-center" style="border-radius: 15px; padding: 20px;">
                     <div class="position-relative">
                         <div class="border-wrapper">
                             <img
-                                    src="${pageContext.request.contextPath}/assets/images/authors/author.jpg"
+                                    src="${pageContext.request.contextPath}/assets/images/aboutus/xq.png"
                                     alt="Vũ Xuân Quang"
                                     class="img-fluid rounded-circle m-0"
                                     style="width: 150px; height: 150px; object-fit: cover;"
@@ -114,12 +114,12 @@
             </div>
 
             <!-- Member 3 -->
-            <div class="col-12 col-sm-6 col-md-4 col-lg-3 text-center">
+            <div class="col text-center">
                 <div class="card shadow-sm text-center" style="border-radius: 15px; padding: 20px;">
                     <div class="position-relative">
                         <div class="border-wrapper">
                             <img
-                                    src="${pageContext.request.contextPath}/assets/images/authors/author.jpg"
+                                    src="${pageContext.request.contextPath}/assets/images/aboutus/xh.jpg"
                                     alt="Cao Thị Xuân Hương"
                                     class="img-fluid rounded-circle m-0"
                                     style="width: 150px; height: 150px; object-fit: cover;"
@@ -138,12 +138,12 @@
             </div>
 
             <!-- Member 4 -->
-            <div class="col-12 col-sm-6 col-md-4 col-lg-3 text-center">
+            <div class="col text-center">
                 <div class="card shadow-sm text-center" style="border-radius: 15px; padding: 20px;">
                     <div class="position-relative">
                         <div class="border-wrapper">
                             <img
-                                    src="${pageContext.request.contextPath}/assets/images/authors/author.jpg"
+                                    src="${pageContext.request.contextPath}/assets/images/aboutus/gb.jpg"
                                     alt="Trần Đinh Gia Bảo"
                                     class="img-fluid rounded-circle m-0"
                                     style="width: 150px; height: 150px; object-fit: cover;"
@@ -152,6 +152,30 @@
                     </div>
                     <h5 class="card-title fw-bold mt-3">Trần Đinh Gia Bảo</h5>
                     <p class="card-text fw-semibold">22110212</p>
+                    <p class="card-text fw-semibold">Member</p>
+                    <div class="social-icons">
+                        <a href="#" class="text-danger fs-4 me-2"><i class="fab fa-facebook"></i></a>
+                        <a href="#" class="text-danger fs-4 me-2"><i class="fab fa-github"></i></a>
+                        <a href="#" class="text-danger fs-4"><i class="fab fa-linkedin"></i></a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Member 5 -->
+            <div class="col text-center">
+                <div class="card shadow-sm text-center" style="border-radius: 15px; padding: 20px;">
+                    <div class="position-relative">
+                        <div class="border-wrapper">
+                            <img
+                                    src="${pageContext.request.contextPath}/assets/images/aboutus/chatgpt.png"
+                                    alt="Trần Đinh Gia Bảo"
+                                    class="img-fluid rounded-circle m-0"
+                                    style="width: 150px; height: 150px; object-fit: cover;"
+                            />
+                        </div>
+                    </div>
+                    <h5 class="card-title fw-bold mt-3">Chat GPT</h5>
+                    <p class="card-text fw-semibold">---------</p>
                     <p class="card-text fw-semibold">Member</p>
                     <div class="social-icons">
                         <a href="#" class="text-danger fs-4 me-2"><i class="fab fa-facebook"></i></a>

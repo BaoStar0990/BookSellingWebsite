@@ -22,7 +22,9 @@ import firebasecloud.FirebaseStorageUploader;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @WebServlet(name = "MSBookController", urlPatterns = {"/msbook"})
 @MultipartConfig
@@ -107,10 +109,27 @@ public class MSBookController extends HttpServlet {
 
         Publisher publisher = PublisherDB.getInstance().selectByID(publisherId);
         DiscountCampaign discountCampaign = discountCampaignIdStr.isEmpty() ? null : DiscountCampaignDB.getInstance().selectByID(Integer.parseInt(discountCampaignIdStr));
+        Set<Author> authors = new HashSet<>();
+        for (String authorId : selectedAuthors) {
+            if (!authorId.isEmpty()) {
+                Author author = new Author();
+                author.setId(Integer.parseInt(authorId));
+                authors.add(author);
+            }
+        }
 
+        Set<Category> categories = new HashSet<>();
+        for (String categoryId : selectedCategories) {
+            if (!categoryId.isEmpty()) {
+                Category category = new Category();
+                category.setId(Integer.parseInt(categoryId));
+                categories.add(category);
+            }
+        }
+        
         Book book;
         if (isAdd) {
-            book = new Book(bookTitle, description, isbn, costPrice, sellingPrice, stocks, null, publishYear, language, publisher);
+            book = new Book();
         } else {
             int bookId = Integer.parseInt(request.getParameter("bookId"));
             book = BookDB.getInstance().selectByID(bookId);
@@ -119,16 +138,16 @@ public class MSBookController extends HttpServlet {
                 processRequest(request, response);
                 return;
             }
-            book.setTitle(bookTitle);
-            book.setCostPrice(costPrice);
-            book.setSellingPrice(sellingPrice);
-            book.setStocks(stocks);
-            book.setIsbn(isbn);
-            book.setDescription(description);
-            book.setPublisher(publisher);
-            book.setPublishDate(publishYear);
-            book.setLanguage(language);
         }
+        book.setTitle(bookTitle);
+        book.setCostPrice(costPrice);
+        book.setSellingPrice(sellingPrice);
+        book.setStocks(stocks);
+        book.setIsbn(isbn);
+        book.setDescription(description);
+        book.setPublisher(publisher);
+        book.setPublishDate(publishYear);
+        book.setLanguage(language);
         book.setDiscountCampaign(discountCampaign);
 
         // Handle file upload
@@ -140,24 +159,9 @@ public class MSBookController extends HttpServlet {
             String urlImage = FirebaseStorageUploader.uploadImage(inputStream, contentType, fileName);
             book.setUrlImage(urlImage);
         }
-
-        book.getAuthors().clear();
-        for (String authorId : selectedAuthors) {
-            if (!authorId.isEmpty()) {
-                Author author = AuthorDB.getInstance().selectByID(Integer.parseInt(authorId));
-                book.getAuthors().add(author);
-            }
-        }
-
-        book.getCategories().clear();
-        for (String categoryId : selectedCategories) {
-            if (!categoryId.isEmpty()) {
-                Category category = CategoryDB.getInstance().selectByID(Integer.parseInt(categoryId));
-                book.getCategories().add(category);
-            }
-        }
-
-        boolean isSuccess = isAdd ? BookDB.getInstance().insert(book) : BookDB.getInstance().update(book);
+        
+       
+        boolean isSuccess = isAdd ? BookDB.getInstance().insertBookAuthorsCategories(book, authors, categories) : BookDB.getInstance().updateBookAuthorsCategories(book, authors, categories);
 
         if (isSuccess) {
             HttpSession session = request.getSession();

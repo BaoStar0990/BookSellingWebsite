@@ -25,9 +25,14 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
     <%-- Favicon --%>
-    <link rel="icon" href="assets/images/logos/square-logo.png" type="image/x-icon">
+    <link rel="icon" href="${pageContext.request.contextPath}/assets/images/logos/square-logo.png" type="image/x-icon">
     <%-- Fontawesome --%>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <%-- Flatpickr CSS and JS --%>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+
     <%-- Custom CSS --%>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/styles/main.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/styles/header.css" />
@@ -50,20 +55,17 @@
                         <input type="text" value="${fullName}"  class="form-control input-field" id="fullName" name="fullName" placeholder="Họ và tên" required>
                     </div>
                     <div class="mb-3">
-                        <input type="date" value="${dateStr}" class="form-control input-field" id="dob" name="dob" required>
+                        <input type="text" value="${dateStr}" class="form-control input-field" id="dob" name="dob" placeholder="Sinh nhật (dd/mm/yyyy)" required>
                     </div>
                     <script>
-                        document.getElementById('dob').addEventListener('change', function() {
-                            let dob = new Date(this.value);
-                            let today = new Date();
-
-                            // Check if the date is in the future
-                            if (dob > today) {
-                                alert('Date of birth cannot be in the future.');
-                                this.setCustomValidity('Date of birth cannot be in the future.');
-                            } else {
-                                // If the date is valid, reset custom validity
-                                this.setCustomValidity('');
+                        flatpickr("#dob", {
+                            dateFormat: "d/m/Y",
+                            maxDate: "today",
+                            onChange: function(selectedDates, dateStr, instance) {
+                                if (new Date(selectedDates[0]) > new Date()) {
+                                    alert('Sinh nhật không hợp lệ');
+                                    instance.clear();
+                                }
                             }
                         });
                     </script>

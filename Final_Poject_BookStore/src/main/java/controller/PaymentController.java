@@ -54,30 +54,45 @@ public class PaymentController extends HttpServlet {
             url = "/signin.jsp";
         }
         else{
-            Customer user = (Customer) session.getAttribute("user");
+            // Lấy giỏ hàng của khách hàng
+            Customer c = (Customer) session.getAttribute("user");
+            Bill cart = null;
+            List<OrderDetail> sortedOrderDetails = null;
+            // kiểm tra trong session có giỏ hàng chưa, nếu chưa thì lấy dưới database
+            if(session.getAttribute("cart") == null){
+                Set<Bill> bills = c.getBills();
+                cart = bills.stream()
+                        .filter(b -> "Storing".equals(b.getStatusOrder().toString()))
+                        .findFirst()
+                        .orElse(null);
+                session.setAttribute("cart", cart);
+                // lấy các orderDetail trong cart
+                if(cart != null){
+                    session.setAttribute("orderDetails", cart.getOrderDetails());
+                    sortedOrderDetails = cart.getOrderDetails().stream()
+                                               .sorted(Comparator.comparingInt(OrderDetail::getId))
+                                               .collect(Collectors.toList());
+                }
+            }
+            else {
+                cart = (Bill) session.getAttribute("cart");
+                Set<OrderDetail> orderDetails = (Set<OrderDetail>) session.getAttribute("orderDetails");
+                if(orderDetails != null){
+                    sortedOrderDetails = orderDetails.stream()
+                                               .sorted(Comparator.comparingInt(OrderDetail::getId))
+                                               .collect(Collectors.toList());
+                }
+            }
+            
             // lấy danh sách các địa chỉ của khách hàng
-            List<Address> addresses = user.getAddresses().stream()
+            List<Address> addresses = c.getAddresses().stream()
                     .sorted(Comparator.comparingInt(Address::getId))
                     .collect(Collectors.toList());
                     
-            // Lấy giỏ hàng của khách hàng           
-            String cartIdStr = request.getParameter("cartId");
-            try{
-                // find cart
-                int cartId = Integer.parseInt(cartIdStr);
-                Bill cart = (Bill) BillDB.getInstance().selectByID(cartId);
-                if(cart != null){
-                    List<OrderDetail> sortedOrderDetails = cart.getOrderDetails().stream()
-                                               .sorted(Comparator.comparingInt(OrderDetail::getId))
-                                               .collect(Collectors.toList());
-                    request.setAttribute("cartId", cartId);
-                    request.setAttribute("listOrderDetails", sortedOrderDetails);
-                } 
-            }catch(NumberFormatException ex){
-                System.out.println("Vui lòng nhập đúng dữ liệu");
-            }catch (NoSuchElementException ex){
-                System.out.println("Không tìm thấy sách");
-            }
+            if(cart != null){
+                request.setAttribute("cartId", cart.getId());
+                request.setAttribute("listOrderDetails", sortedOrderDetails);
+            } 
             request.setAttribute("addresses", addresses);
         }
         // chuyển trang

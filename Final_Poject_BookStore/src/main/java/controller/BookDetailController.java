@@ -58,6 +58,7 @@ public class BookDetailController extends HttpServlet {
         if (id > -1) {
             if (session.getAttribute("allBook") == null) {
                 book = BookDB.getInstance().selectByID(id);
+                
             } else { // lan truy cap sau,  lay book trong session
                 books = (List<Book>) session.getAttribute("allBook");
                 try {

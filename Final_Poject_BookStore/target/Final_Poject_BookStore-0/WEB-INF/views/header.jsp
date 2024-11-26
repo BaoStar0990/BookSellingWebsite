@@ -15,11 +15,14 @@
 <%
     //Category
     List<Category> categories = null;
+    System.out.println("--------------------Take categories trong session----------------------------------");
     if(session.getAttribute("categories") == null) {
+        System.out.println("-------------------- not Categories exist in session----------------------------------");
         categories = CategoryDB.getInstance().selectAll();
         session.setAttribute("categories", categories);
     }
     else{
+        System.out.println("--------------------Categories exist in session----------------------------------");
         categories = (List<Category>)session.getAttribute("categories");
     }
 %>
@@ -45,15 +48,15 @@
             <div class="container">
                 <div class="row">
                     <div class="col-md-4 p-0 d-flex align-items-center">
-                        <form class="d-flex" action="google.com" role="search">
+                        <form class="d-flex" action="search" role="search" method="get">
                             <button onmouseover="showSearch(this)" class="btn" type="submit">
                                 <i class="fs-5 fa-solid fa-magnifying-glass"></i>
                             </button>
-                            <input class="form-control border-2 border-dark ms-2 search-input" type="search" name="" id="" placeholder="Search">
+                            <input class="form-control border-2 border-dark ms-2 search-input" type="search" name="searchRequest" id="" placeholder="Search">
                         </form>
                     </div>
                     <div class="col-md-4 my-2 d-flex justify-content-center">
-                        <a href="${pageContext.request.contextPath}" class="nav-brand d-flex align-items-center justify-content-center">
+                        <a href="${pageContext.request.contextPath}/" class="nav-brand d-flex align-items-center justify-content-center">
                             <img src="${pageContext.request.contextPath}/assets/images/logos/logo-1.png" alt="logo" width="90%">
                         </a>
                     </div>
@@ -71,8 +74,7 @@
                                         <li class="dropdown-header fs-6 fw-bold">Xin chào, ${sessionScope.user.fullName}</li>
                                         <div class="dropdown-divider"></div>
                                         <li><a href="${pageContext.request.contextPath}/usersetting" class="dropdown-item"><i class="fa-solid fa-user me-2"></i>Tài khoản của tôi</a></li>
-                                        <li><a href="#" class="dropdown-item"><i class="fa-solid fa-cart-shopping me-2"></i>Đơn hàng của tôi</a></li>
-                                        <li><a href="#" class="dropdown-item"><i class="fa-solid fa-gear me-2"></i>Cài đặt</a></li>
+                                        <li><a href="/usersetting.jsp?setting=orders" class="dropdown-item"><i class="fa-solid fa-cart-shopping me-2"></i>Đơn hàng của tôi</a></li>
                                         <div class="dropdown-divider"></div>
                                         <li>
                                             <form class="m-0" action="signout" method="post">
@@ -94,36 +96,11 @@
                         </div>
                         <a href="${pageContext.request.contextPath}/viewcart" class="btn">
                             <i class="fa-solid fa-cart-shopping header-icon pt-1"></i>
-                            <span
+<%--                                <span
                                     class="position-absolute translate-middle badge rounded-pill bg-danger text-light"
                                     style="top: calc(50% - 2.5rem)"
-                            >
-                                <%
-                                if (session.getAttribute("user") == null) {
-                                %>
-                                    0
-                                <%
-                                } else {
-                                    Customer c = (Customer) session.getAttribute("user");
-
-                                    // Tìm hóa đơn có trạng thái "Storing"
-                                    Bill cart = c.getBills().stream()
-                                                 .filter(b -> "Storing".equals(String.valueOf(b.getStatusOrder())))
-                                                 .findFirst()
-                                                 .orElse(null);
-
-                                    // Đếm số lượng OrderDetails nếu hóa đơn tồn tại
-                                    int num = (cart != null && cart.getOrderDetails() != null) 
-                                                ? cart.getOrderDetails().size() 
-                                                : 0;
-                                %>
-                                    <%= num %>
-                                <%
-                                }
-                                %>
-
-
-                            </span>
+                                >
+                            </span>--%>
                         </a>
                     </div>
                 </div>
@@ -137,7 +114,7 @@
                         <ul id="dropdowns" class="dropdown-menu mx-auto multi-column columns-3 dropdown-menu-center">
                             <%--attribute : categories List<Category>--%>
                             <c:set var = "count" scope = "request" value = "${4}"/>
-                            <c:forEach items="${categories}" var="category">
+                            <c:forEach items="<%=categories%>" var="category">
                                 <c:if test="${count > 3}">
                                     <div class="row">
                                     <c:set var = "count" scope = "request" value = "${1}"/>
@@ -156,10 +133,10 @@
                     </li>
 
                     <li class="nav-item">
-                        <a href="${pageContext.request.contextPath}/BookListController" class="nav-link ${param.currentTab eq 'newbooks' ? 'active' : ''}">Sách mới</a>
+                        <a href="${pageContext.request.contextPath}/filterbook/bookdiscount" class="nav-link ${param.currentTab eq 'newbooks' ? 'active' : ''}">Sách đang giảm giá</a>
                     </li>
                     <li class="nav-item">
-                        <a href="${pageContext.request.contextPath}/BookListController" class="nav-link ${param.currentTab eq 'bestsellers' ? 'active' : ''}">Sách bán chạy</a>
+                        <a href="${pageContext.request.contextPath}/filterbook/bestsellingbook" class="nav-link ${param.currentTab eq 'bestsellers' ? 'active' : ''}">Sách bán chạy</a>
                     </li>
                     <li class="nav-item">
                         <a href="${pageContext.request.contextPath}/authors" class="nav-link ${param.currentTab eq 'authors' ? 'active' : ''}">Tác giả</a>

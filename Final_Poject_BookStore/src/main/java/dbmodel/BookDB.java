@@ -1,12 +1,11 @@
 package dbmodel;
 
+import Utils.authentication.Regex;
 import database.DBUtil;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.NoResultException;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 import model.Author;
 import model.Book;
@@ -14,7 +13,6 @@ import model.Category;
 import model.Review;
 import org.hibernate.TransientObjectException;
 import jakarta.persistence.EntityTransaction;
-import java.util.Iterator;
 
 public class BookDB extends ModifyDB<Book> implements DBInterface<Book> {
     public static BookDB getInstance(){
@@ -171,6 +169,104 @@ public class BookDB extends ModifyDB<Book> implements DBInterface<Book> {
                 em.close();
         }
     }
+    
+    public boolean insertBookAuthorsCategories(Book book, 
+            Set<Author> authors, Set<Category> categories) {
+        EntityManager em = null;
+        EntityTransaction tr = null;
+        try {
+            em = DBUtil.getEmFactory().createEntityManager();
+            tr = em.getTransaction();
+            tr.begin();
+
+            // chèn sách
+            em.persist(book);
+            
+            // Manage authors
+            for (Author author : authors) {
+                Author managedAuthor = em.find(Author.class, author.getId());
+                if (managedAuthor != null) {
+                    book.addAuthor(managedAuthor);
+                }
+            }
+
+            // Manage categories
+            for (Category category : categories) {
+                Category managedCategory = em.find(Category.class, category.getId());
+                if (managedCategory != null) {
+                   book.addCategory(managedCategory);
+                }
+            }
+            
+            // cập nhật sách
+            em.merge(book);
+
+            tr.commit();
+            return true;
+        } catch (Exception ex) {
+            if (tr != null && tr.isActive())
+                tr.rollback();
+            ex.printStackTrace();
+            return false;
+        } finally {
+            if (em != null)
+                em.close();
+        }
+    }
+
+
+    public boolean updateBookAuthorsCategories(Book book, Set<Author> authors, Set<Category> categories) {
+        EntityManager em = null;
+        EntityTransaction tr = null;
+        try {
+            em = DBUtil.getEmFactory().createEntityManager();
+            tr = em.getTransaction();
+            tr.begin();
+
+            // Xóa tất cả các liên kết giữa Book và Author
+            em.createQuery("DELETE FROM AuthorDetail ba WHERE ba.bookID = :bookID")
+                    .setParameter("bookID", book.getId())
+                    .executeUpdate();
+
+            // Xóa tất cả các liên kết giữa Book và Category
+            em.createQuery("DELETE FROM CategoryDetail bc WHERE bc.bookID = :bookID")
+                    .setParameter("bookID", book.getId())
+                    .executeUpdate();
+
+            // Thêm các liên kết mới giữa Book và Author
+            for (Author author : authors) {
+                Author authorFind = em.find(Author.class, author.getId());
+                em.createQuery("INSERT INTO AuthorDetail (bookID, authorID) VALUES (:bookID, :authorID)")
+                        .setParameter("bookID", book.getId())
+                        .setParameter("authorID", authorFind.getAuthorID())
+                        .executeUpdate();
+            }
+
+            // Thêm các liên kết mới giữa Book và Category
+            for (Category category : categories) {
+                Category categoryFind = em.find(Category.class, category.getId());
+                em.createQuery("INSERT INTO CategoryDetail (bookID, categoryID) VALUES (:bookID, :categoryID)")
+                        .setParameter("bookID", book.getId())
+                        .setParameter("categoryID", categoryFind.getId())
+                        .executeUpdate();
+            }
+
+            em.merge(book);
+            
+            // Commit transaction
+            tr.commit();
+            return true;
+        } catch (Exception ex) {
+            if (tr != null && tr.isActive())
+                tr.rollback();
+            ex.printStackTrace();
+            return false;
+        } finally {
+            if (em != null)
+                em.close();
+        }
+    }
+
 
     public boolean update(Book book) {
         EntityManager em = null;
@@ -284,5 +380,35 @@ public class BookDB extends ModifyDB<Book> implements DBInterface<Book> {
             if(em != null)
                 em.close();
         }
+    }
+    public  Set<Author> findAuthorByBook(Map<Author, Set<Book>> authorBooks, Book book) {
+        Set<Author> authors = new HashSet<Author>();
+        for (Map.Entry<Author, Set<Book>> entry : authorBooks.entrySet()) {
+            if (entry.getValue().contains(book)) {
+                authors.add(entry.getKey());
+            }
+        }
+        if(authors.size() == 0) {
+            return null; // Không tìm thấy
+        }else{
+            return authors;
+        }
+    }
+
+    public boolean checkSearchRequestRelatedWithBook(Book book, String searchRequest)
+    {
+        //Remove character vietnamese and space
+        String titleOfBook = Regex.normalizeVietnamese(book.getTitle()).trim();
+        searchRequest = Regex.normalizeVietnamese(searchRequest).trim();
+
+        //Trường hợp đeẹp nhất: Người dùng nhập đúng chính xác tên cuủa cốn sách, không quan tâm hoa thường, dấu cách, các ksi tự đặc biệt
+        if(titleOfBook.equalsIgnoreCase(searchRequest)){
+            return true;
+        }
+        //Title chỉ cần bao gồm những gì người dùng nhập
+        else if(titleOfBook.contains(searchRequest)){
+            return true;
+        }
+        return false;
     }
 }

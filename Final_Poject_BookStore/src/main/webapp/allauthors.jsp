@@ -23,7 +23,7 @@
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
   <%-- Favicon --%>
-  <link rel="icon" href="assets/images/logos/square-logo.png" type="image/x-icon">
+  <link rel="icon" href="${pageContext.request.contextPath}/assets/images/logos/square-logo.png" type="image/x-icon">
   <%-- Fontawesome --%>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
   <%-- Custom CSS --%>
@@ -58,10 +58,10 @@
   <div class="container mt-4 author-section pb-4">
     <h2 class="text-start mb-4 font-bold">Các tác giả</h2>
 
-    <div class="row justify-content-center">
+    <div class="row justify-content-center" id="author-container">
       <!-- Loop through authors using JSTL -->
       <c:forEach items="${authors}" var="author">
-        <div class="col-6 col-md-4 col-lg-2 text-center mb-4">
+        <div class="col-6 col-md-4 col-lg-2 text-center mb-4 author-card pagination-item" data-author-id="${author.authorID}">
           <a href="${pageContext.request.contextPath}/authordetail/${author.authorID}" class="text-decoration-none text-dark">
             <div class="author-card">
               <img src="${pageContext.request.contextPath}${author.imageURL}" alt="${author.name}" class="author-image img-fluid rounded-circle" />
@@ -76,30 +76,10 @@
   <!--end Authors -->
 
     <!-- Pagination -->
-    <div class="container mt-4">
-      <ul class="pagination justify-content-center pagination-cus font-semibold ">
-        <li class="page-item ">
-          <a class="page-link px-3 me-1" href="#" >
-            <i class="fa-solid text-muted fa-chevron-left fs-5"></i>
-          </a>
-        </li>
-        <li class="page-item active ">
-          <a class="page-link text-muted px-3 mx-1" href="#">1</a>
-        </li>
-        <li class="page-item">
-          <a class="page-link text-muted px-3 mx-1" href="#">2</a>
-        </li>
-        <li class="page-item">
-          <a class="page-link text-muted px-3 mx-1" href="#">3</a>
-        </li>
-        <li class="page-item">
-          <a class="page-link text-muted px-3 ms-1" href="#">
-            <i class="fa-solid fa-chevron-right fs-5"></i>
-          </a>
-        </li>
-      </ul>
-    </div>
+    <jsp:include page="WEB-INF/views/pagination.jsp" />
     <!--end Pagination -->
+
+  <!--end Pagination -->
 <%--<div class="container my-4">--%>
 <%--  <h2 class="mb-3 font-semibold">Tác giả</h2>--%>
 
@@ -119,6 +99,5 @@
   <%--    Footer--%>
   <jsp:include page="WEB-INF/views/footer.jsp"/>
   <%-- end Footer--%>
-  <script src="./assets/javascript/header.js"></script>
 </body>
 </html>

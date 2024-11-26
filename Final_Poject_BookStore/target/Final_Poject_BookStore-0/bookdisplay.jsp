@@ -34,7 +34,7 @@
 <body>
 <%--    Header--%>
 <jsp:include page="WEB-INF/views/header.jsp">
-  <jsp:param name="currentTab" value="newbooks" />
+  <jsp:param name="currentTab" value="${currentTab}" />
 </jsp:include>
 <%--end Header--%>
 
@@ -101,7 +101,7 @@
 
 
         <c:forEach var="book" items = "${books}">
-          <div class="col-6 col-md-4 col-lg-2 p-2">
+          <div class="col-6 col-md-4 col-lg-2 p-2 pagination-item">
             <a href="/bookdetails/${book.getId()}" class="d-block text-decoration-none card-shadow" style="color: inherit;">
               <div class="card">
                  <!--book image--> 
@@ -115,8 +115,8 @@
                       <c:choose>
                           <c:when test = "${not empty book.getAuthors()}">
                               <span class="fw-semibold">
-                              <c:forEach var = "author" items="${book.getAuthors()}">
-                                  ${author.getName()}, 
+                              <c:forEach var="author" items="${book.getAuthors()}" varStatus="status">
+                                  ${author.getName()}<c:if test="${!status.last}">, </c:if>
                               </c:forEach>        
                                       </span>
                           </c:when>
@@ -151,29 +151,7 @@
   <!--end Book List -->
 
   <!-- Pagination -->
-  <div class="container mt-5">
-    <ul class="pagination justify-content-center pagination-cus font-semibold ">
-      <li class="page-item ">
-        <a class="page-link px-3 me-1" href="#" style="padding:6px 0">
-          <i class="fa-solid text-muted fa-chevron-left fs-5"></i>
-        </a>
-      </li>
-      <li class="page-item active ">
-        <a class="page-link text-muted px-3 mx-1" href="#">1</a>
-      </li>
-      <li class="page-item">
-        <a class="page-link text-muted px-3 mx-1" href="#">2</a>
-      </li>
-      <li class="page-item">
-        <a class="page-link text-muted px-3 mx-1" href="#">3</a>
-      </li>
-      <li class="page-item">
-        <a class="page-link text-muted px-3 ms-1" href="#" style="padding:6px 0">
-          <i class="fa-solid fa-chevron-right fs-5"></i>
-        </a>
-      </li>
-    </ul>
-  </div>
+  <jsp:include page="WEB-INF/views/pagination.jsp" />
   <!--end Pagination -->
 
 </div>

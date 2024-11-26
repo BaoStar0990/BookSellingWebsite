@@ -68,6 +68,7 @@ public class BookListController extends HttpServlet {
             }
             request.setAttribute("books", bookDiscount);
             request.setAttribute("nameOfCategory","Sách đang giảm giá");
+            request.setAttribute("currentTab", "bookdiscount"); // set current tab
             request.getServletContext().getRequestDispatcher("/bookdisplay.jsp").forward(request, response);
             System.out.println("--------------------Book discount in session-------------------------------");
         }else if(action.equals("bestsellingbook")) {
@@ -91,11 +92,13 @@ public class BookListController extends HttpServlet {
             }
             request.setAttribute("books", bookBestSelling);
             request.setAttribute("nameOfCategory","Sách bán chạy");
+            request.setAttribute("currentTab", "bestsellingbook"); // set current tab
             request.getServletContext().getRequestDispatcher("/bookdisplay.jsp").forward(request, response);
             System.out.println("--------------------Book discount in session-------------------------------");
         }else{
-
+            
         }
+
     }
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)

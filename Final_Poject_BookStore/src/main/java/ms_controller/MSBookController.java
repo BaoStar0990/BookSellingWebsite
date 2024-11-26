@@ -75,6 +75,9 @@ public class MSBookController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        request.setCharacterEncoding("UTF-8");
+        response.setContentType("text/html; charset=UTF-8");
+        response.setCharacterEncoding("UTF-8");
         String action = request.getParameter("action");
         switch (action) {
             case "add":
@@ -94,6 +97,7 @@ public class MSBookController extends HttpServlet {
 
     private void handleAddOrEditBook(HttpServletRequest request, HttpServletResponse response, boolean isAdd)
             throws ServletException, IOException {
+
         String bookTitle = request.getParameter("bookTitle");
         Double costPrice = Double.parseDouble(request.getParameter("costPrice"));
         Double sellingPrice = Double.parseDouble(request.getParameter("sellingPrice"));
@@ -126,11 +130,21 @@ public class MSBookController extends HttpServlet {
                 categories.add(category);
             }
         }
-        
+        System.out.println("-----------------------------------------------");
+        System.out.println("Book title"+bookTitle);
+        authors.stream().forEach(a -> System.out.println(a.getName()));
+        System.out.println("-----------------------------------------------");
+
+
+        //Add or update book
         Book book;
         if (isAdd) {
+            System.out.println("-----------------------------------------------");
+            System.out.println("Add book "+bookTitle);
             book = new Book();
         } else {
+            System.out.println("-----------------------------------------------");
+            System.out.println("update book "+bookTitle);
             int bookId = Integer.parseInt(request.getParameter("bookId"));
             book = BookDB.getInstance().selectByID(bookId);
             if (book == null) {

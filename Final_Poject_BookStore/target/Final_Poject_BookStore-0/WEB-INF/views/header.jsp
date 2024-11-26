@@ -48,7 +48,7 @@
             <div class="container">
                 <div class="row">
                     <div class="col-md-4 p-0 d-flex align-items-center">
-                        <form class="d-flex" action="search" role="search" method="get">
+                        <form class="d-flex" action="${pageContext.request.contextPath}/search" role="search" method="get">
                             <button onmouseover="showSearch(this)" class="btn" type="submit">
                                 <i class="fs-5 fa-solid fa-magnifying-glass"></i>
                             </button>

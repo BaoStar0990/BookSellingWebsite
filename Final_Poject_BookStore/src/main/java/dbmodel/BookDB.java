@@ -7,6 +7,7 @@ import jakarta.persistence.NoResultException;
 
 import java.util.*;
 
+import jakarta.persistence.Query;
 import model.Author;
 import model.Book;
 import model.Category;
@@ -208,67 +209,6 @@ public class BookDB extends ModifyDB<Book> implements DBInterface<Book> {
     }
 
 
-    //    public boolean updateBookAuthorsCategories(Book book, Set<Author> authors, Set<Category> categories) {
-//        System.out.println("----------------------------------------");
-//        System.out.println("Call update book in model");
-//        EntityManager em = null;
-//        EntityTransaction tr = null;
-//        try {
-//            em = DBUtil.getEmFactory().createEntityManager();
-//            tr = em.getTransaction();
-//            tr.begin();
-//
-//            // Xóa tất cả các liên kết giữa Book và Author
-//            System.out.println("----------------------------------------");
-//            System.out.println("Delete all link between book and author");
-//            em.createQuery("DELETE FROM AuthorDetail ba WHERE ba.bookID = :bookID")
-//                    .setParameter("bookID", book.getId())
-//                    .executeUpdate();
-//
-//            // Xóa tất cả các liên kết giữa Book và Category
-//            System.out.println("----------------------------------------");
-//            System.out.println("Delete all link between book and category");
-//            em.createQuery("DELETE FROM CategoryDetail bc WHERE bc.bookID = :bookID")
-//                    .setParameter("bookID", book.getId())
-//                    .executeUpdate();
-//
-//            // Thêm các liên kết mới giữa Book và Author
-//            System.out.println("----------------------------------------");
-//            System.out.println("add link between book and author");
-//            for (Author author : authors) {
-//                Author authorFind = em.find(Author.class, author.getId());
-//                em.createQuery("INSERT INTO AuthorDetail (bookID, authorID) VALUES (:bookID, :authorID)")
-//                        .setParameter("bookID", book.getId())
-//                        .setParameter("authorID", authorFind.getAuthorID())
-//                        .executeUpdate();
-//            }
-//
-//            // Thêm các liên kết mới giữa Book và Category
-//            System.out.println("----------------------------------------");
-//            System.out.println("add link between book and category");
-//            for (Category category : categories) {
-//                Category categoryFind = em.find(Category.class, category.getId());
-//                em.createQuery("INSERT INTO CategoryDetail (bookID, categoryID) VALUES (:bookID, :categoryID)")
-//                        .setParameter("bookID", book.getId())
-//                        .setParameter("categoryID", categoryFind.getId())
-//                        .executeUpdate();
-//            }
-//
-//            em.merge(book);
-//
-//            // Commit transaction
-//            tr.commit();
-//            return true;
-//        } catch (Exception ex) {
-//            if (tr != null && tr.isActive())
-//                tr.rollback();
-//            ex.printStackTrace();
-//            return false;
-//        } finally {
-//            if (em != null)
-//                em.close();
-//        }
-//    }
     public boolean updateBookAuthorsCategories(Book book, Set<Author> authors, Set<Category> categories) {
         System.out.println("----------------------------------------");
         System.out.println("Call update book in model");
@@ -279,19 +219,42 @@ public class BookDB extends ModifyDB<Book> implements DBInterface<Book> {
             tr = em.getTransaction();
             tr.begin();
 
-            // Xóa và thêm các liên kết giữa Book và Author
+            // Xóa tất cả các liên kết giữa Book và Author
             System.out.println("----------------------------------------");
-            System.out.println("Update links between book and authors");
-            book.getAuthors().clear();
-            book.getAuthors().addAll(authors);
+            System.out.println("Delete all link between book and author");
+            em.createNativeQuery("DELETE FROM AuthorDetail ba WHERE bookID = :bookID")
+                    .setParameter("bookID", book.getId())
+                    .executeUpdate();
 
-            // Xóa và thêm các liên kết giữa Book và Category
+            // Xóa tất cả các liên kết giữa Book và Category
             System.out.println("----------------------------------------");
-            System.out.println("Update links between book and categories");
-            book.getCategories().clear();
-            book.getCategories().addAll(categories);
+            System.out.println("Delete all link between book and category");
+            em.createNativeQuery("DELETE FROM CategoryDetail bc WHERE bookID = :bookID")
+                    .setParameter("bookID", book.getId())
+                    .executeUpdate();
 
-            // Cập nhật thông tin sách
+            // Thêm các liên kết mới giữa Book và Author
+            System.out.println("----------------------------------------");
+            System.out.println("add link between book and author");
+            for (Author author : authors) {
+                Author authorFind = em.find(Author.class, author.getId());
+                em.createNativeQuery("INSERT INTO AuthorDetail (bookID, authorID) VALUES (:bookID, :authorID)")
+                        .setParameter("bookID", book.getId())
+                        .setParameter("authorID", authorFind.getAuthorID())
+                        .executeUpdate();
+            }
+
+            // Thêm các liên kết mới giữa Book và Category
+            System.out.println("----------------------------------------");
+            System.out.println("add link between book and category");
+            for (Category category : categories) {
+                Category categoryFind = em.find(Category.class, category.getId());
+                em.createNativeQuery("INSERT INTO CategoryDetail (bookID, categoryID) VALUES (:bookID, :categoryID)")
+                        .setParameter("bookID", book.getId())
+                        .setParameter("categoryID", categoryFind.getId())
+                        .executeUpdate();
+            }
+
             em.merge(book);
 
             // Commit transaction
@@ -307,6 +270,33 @@ public class BookDB extends ModifyDB<Book> implements DBInterface<Book> {
                 em.close();
         }
     }
+//    public boolean updateBookAuthorsCategories(Book book, Set<Author> authors, Set<Category> categories) {
+//        System.out.println("----------------------------------------");
+//        System.out.println("Call update book in model");
+//        EntityManager em = null;
+//        EntityTransaction tr = null;
+//        try {
+//            em = DBUtil.getEmFactory().createEntityManager();
+//            tr = em.getTransaction();
+//            tr.begin();
+//
+//            // JPQL query to delete all authors linked to the book
+//            String jpql = "DELETE FROM AuthorDetail ad WHERE bookID = :bookID";
+//            em.createNativeQuery(jpql).setParameter("bookID", book.getId()).executeUpdate();
+//            // Execute the delete query
+//            // Commit transaction
+//            tr.commit();
+//            return true;
+//        } catch (Exception ex) {
+//            if (tr != null && tr.isActive())
+//                tr.rollback();
+//            ex.printStackTrace();
+//            return false;
+//        } finally {
+//            if (em != null)
+//                em.close();
+//        }
+//    }
 
 
     public boolean update(Book book) {
@@ -439,6 +429,9 @@ public class BookDB extends ModifyDB<Book> implements DBInterface<Book> {
         //Remove character vietnamese and space
         String titleOfBook = Regex.normalizeVietnamese(book.getTitle()).trim();
         searchRequest = Regex.normalizeVietnamese(searchRequest).trim();
+
+        System.out.println("Title of book: " + titleOfBook + " search request: " + searchRequest);
+
 
         //Trường hợp đeẹp nhất: Người dùng nhập đúng chính xác tên cuủa cốn sách, không quan tâm hoa thường, dấu cách, các ksi tự đặc biệt
         if (titleOfBook.equalsIgnoreCase(searchRequest)) {

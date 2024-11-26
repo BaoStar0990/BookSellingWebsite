@@ -3,7 +3,7 @@ D:\University\HK5\Web\FinalProject\FinalProject_BookStore\Final_Poject_BookStore
 D:\University\HK5\Web\FinalProject\FinalProject_BookStore\Final_Poject_BookStore\src\main\java\ms_controller\MSReviewController.java
 D:\University\HK5\Web\FinalProject\FinalProject_BookStore\Final_Poject_BookStore\src\main\java\controller\OrderController.java
 D:\University\HK5\Web\FinalProject\FinalProject_BookStore\Final_Poject_BookStore\src\main\java\ms_controller\MSOrderController.java
-D:\University\HK5\Web\FinalProject\FinalProject_BookStore\Final_Poject_BookStore\src\main\java\utils\authentication\ExpiringToken.java
+D:\University\HK5\Web\FinalProject\FinalProject_BookStore\Final_Poject_BookStore\src\main\java\Utils\authentication\ExpiringToken.java
 D:\University\HK5\Web\FinalProject\FinalProject_BookStore\Final_Poject_BookStore\src\main\java\controller\AddBookController.java
 D:\University\HK5\Web\FinalProject\FinalProject_BookStore\Final_Poject_BookStore\src\main\java\controller\AuthorDetailController.java
 D:\University\HK5\Web\FinalProject\FinalProject_BookStore\Final_Poject_BookStore\src\main\java\mail\Mail.java
@@ -42,7 +42,7 @@ D:\University\HK5\Web\FinalProject\FinalProject_BookStore\Final_Poject_BookStore
 D:\University\HK5\Web\FinalProject\FinalProject_BookStore\Final_Poject_BookStore\src\main\java\ms_controller\MSBookController.java
 D:\University\HK5\Web\FinalProject\FinalProject_BookStore\Final_Poject_BookStore\src\main\java\controller\AddCartController.java
 D:\University\HK5\Web\FinalProject\FinalProject_BookStore\Final_Poject_BookStore\src\main\java\controller\HomeControllerServlet.java
-D:\University\HK5\Web\FinalProject\FinalProject_BookStore\Final_Poject_BookStore\src\main\java\utils\authentication\CSRFUtil.java
+D:\University\HK5\Web\FinalProject\FinalProject_BookStore\Final_Poject_BookStore\src\main\java\Utils\authentication\CSRFUtil.java
 D:\University\HK5\Web\FinalProject\FinalProject_BookStore\Final_Poject_BookStore\src\main\java\controller\BookDetailController.java
 D:\University\HK5\Web\FinalProject\FinalProject_BookStore\Final_Poject_BookStore\src\main\java\test\TestBook.java
 D:\University\HK5\Web\FinalProject\FinalProject_BookStore\Final_Poject_BookStore\src\main\java\dbmodel\AddressDB.java
@@ -51,7 +51,7 @@ D:\University\HK5\Web\FinalProject\FinalProject_BookStore\Final_Poject_BookStore
 D:\University\HK5\Web\FinalProject\FinalProject_BookStore\Final_Poject_BookStore\src\main\java\model\User.java
 D:\University\HK5\Web\FinalProject\FinalProject_BookStore\Final_Poject_BookStore\src\main\java\controller\CategoryController.java
 D:\University\HK5\Web\FinalProject\FinalProject_BookStore\Final_Poject_BookStore\src\main\java\controller\AuthorController.java
-D:\University\HK5\Web\FinalProject\FinalProject_BookStore\Final_Poject_BookStore\src\main\java\utils\authentication\CookieUtil.java
+D:\University\HK5\Web\FinalProject\FinalProject_BookStore\Final_Poject_BookStore\src\main\java\Utils\authentication\CookieUtil.java
 D:\University\HK5\Web\FinalProject\FinalProject_BookStore\Final_Poject_BookStore\src\main\java\dbmodel\DBInterface.java
 D:\University\HK5\Web\FinalProject\FinalProject_BookStore\Final_Poject_BookStore\src\main\java\model\Author.java
 D:\University\HK5\Web\FinalProject\FinalProject_BookStore\Final_Poject_BookStore\src\main\java\ms_controller\MSCustomerController.java
@@ -62,7 +62,7 @@ D:\University\HK5\Web\FinalProject\FinalProject_BookStore\Final_Poject_BookStore
 D:\University\HK5\Web\FinalProject\FinalProject_BookStore\Final_Poject_BookStore\src\main\java\model\Customer.java
 D:\University\HK5\Web\FinalProject\FinalProject_BookStore\Final_Poject_BookStore\src\main\java\controller\ForgotPasswordController.java
 D:\University\HK5\Web\FinalProject\FinalProject_BookStore\Final_Poject_BookStore\src\main\java\test\TestPublisher.java
-D:\University\HK5\Web\FinalProject\FinalProject_BookStore\Final_Poject_BookStore\src\main\java\utils\authentication\Regex.java
+D:\University\HK5\Web\FinalProject\FinalProject_BookStore\Final_Poject_BookStore\src\main\java\Utils\authentication\Regex.java
 D:\University\HK5\Web\FinalProject\FinalProject_BookStore\Final_Poject_BookStore\src\main\java\model\Admin.java
 D:\University\HK5\Web\FinalProject\FinalProject_BookStore\Final_Poject_BookStore\src\main\java\model\Bill.java
 D:\University\HK5\Web\FinalProject\FinalProject_BookStore\Final_Poject_BookStore\src\main\java\controller\SignupController.java

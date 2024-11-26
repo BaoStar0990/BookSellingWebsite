@@ -108,7 +108,7 @@
 
                                     <div class="d-flex justify-content-center align-items-center">
                                         <div style="display: flex;  align-items: center;">
-                                            <form  action ="/modifyitemcart" method="post">
+                                            <form  action ="${pageContext.request.contextPath}/modifyitemcart" method="post">
                                                     <input type="hidden" name ="action" value ="decreate">
                                                     <input type ="hidden" id = "orderDetailId" value="${orderDetail.getId()}" name = "orderDetailId">
                                                     <button type = "submit" name = ""  class="btn btn-outline-secondary">-</button>
@@ -120,7 +120,7 @@
                                             </form>
                                             
 
-                                            <form  action ="/modifyitemcart" method="post">
+                                            <form  action ="${pageContext.request.contextPath}/modifyitemcart" method="post">
                                                 <input type="hidden" name ="action" value ="increate">
                                                 <input type ="hidden" id = "orderDetailId" value="${orderDetail.getId()}" name = "orderDetailId"> 
                                                 <button  type = "submit" class="btn btn-outline-secondary">+</button>
@@ -128,7 +128,7 @@
 
                                         </div>
 
-                                        <form  action ="/modifyitemcart" method="post">
+                                        <form  action ="${pageContext.request.contextPath}/modifyitemcart" method="post">
                                             <input type="hidden" name ="action" value ="delete">
                                             <input type ="hidden" id = "orderDetailId" value="${orderDetail.getId()}" name = "orderDetailId">
                                             <button  type = "submit"  class="btn primary-btn ms-3">

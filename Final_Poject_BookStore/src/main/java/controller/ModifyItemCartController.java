@@ -113,7 +113,7 @@ public class ModifyItemCartController extends HttpServlet {
             }
         }
         // chuyển trang
-        response.sendRedirect(url);
+        response.sendRedirect(getServletContext().getContextPath() + url);
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

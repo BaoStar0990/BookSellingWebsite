@@ -64,7 +64,7 @@
         <div class="col-6 col-md-4 col-lg-2 text-center mb-4 author-card pagination-item" data-author-id="${author.authorID}">
           <a href="${pageContext.request.contextPath}/authordetail/${author.authorID}" class="text-decoration-none text-dark">
             <div class="author-card">
-              <img src="${pageContext.request.contextPath}${author.imageURL}" alt="${author.name}" class="author-image img-fluid rounded-circle" />
+              <img src="${author.imageURL}" alt="${author.name}" class="author-image img-fluid rounded-circle" />
               <p class="fw-bold mt-2">${author.name}</p>
             </div>
           </a>

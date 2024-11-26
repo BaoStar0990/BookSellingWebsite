@@ -71,7 +71,7 @@
                     </div>
                     <div class="card bg-light mb-4">
                         <div class="card-body">
-                            <h5 class="card-title fw-bold"><i class="fa-solid fa-chart-line me-2"></i>Lợi nhuận</i></h5>
+                            <h5 class="card-title fw-bold"><i class="fa-solid fa-chart-line me-2"></i>Lợi nhuận</h5>
                             <p class="card-text fw-semibold text-success fs-5">
                                 <fmt:formatNumber value="${totalProfit}" type="currency" currencySymbol=""/> đ
                             </p>
@@ -151,7 +151,7 @@
                 <div class="col-md-8 mb-4">
                     <div class="card">
                         <div class="card-body">
-                            <h5 class="card-title fw-bold pb-3">Doanh thu theo thể loại sách</i></h5>
+                            <h5 class="card-title fw-bold pb-3">Doanh thu theo thể loại sách</h5>
                             <canvas id="categoryRevenueChart" style="max-height: 300px;"></canvas>
                         </div>
                     </div>

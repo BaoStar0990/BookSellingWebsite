@@ -59,6 +59,7 @@
           <th>SĐT</th>
           <th>Tài khoản</th>
           <th>Lương</th>
+          <th>Ngày sinh</th>
         </tr>
         </thead>
         <tbody>
@@ -66,7 +67,7 @@
           <tr class="fw-medium">
             <td class="d-flex">
               <button class="btn btn-warning btn-sm me-2" data-bs-toggle="modal" data-bs-target="#editCategoryModal"
-                      onclick="editCategory('${staff.getId()}','${staff.getAge()}','${staff.getEmail()}','${staff.getFullName()}','${staff.getNumberPhone()}','${staff.getUsername()}','${staff.getPassword()}','${staff.getSalary()}')">
+                      onclick="editCategory('${staff.getId()}','${staff.getAge()}','${staff.getEmail()}','${staff.getFullName()}','${staff.getNumberPhone()}','${staff.getUsername()}','${staff.getPassword()}','${staff.getSalary()}', '${staff.getBirthday()}')">
                 <i class="fas fa-edit"></i>
               </button>
               <form id="deleteForm" method="post" action="ms_staff" class="mb-0">
@@ -84,6 +85,7 @@
             <td>${fn:escapeXml(staff.getNumberPhone())}</td>
             <td>${fn:escapeXml(staff.getUsername())}</td>
             <td>${fn:escapeXml(staff.getSalary())}</td>
+            <td>${fn:escapeXml(staff.getBirthday())}</td>
           </tr>
         </c:forEach>
         </tbody>
@@ -107,7 +109,7 @@
         <div class="modal-body">
           <div class="mb-3">
             <label for="staffAge" class="form-label">Tuổi</label>
-            <input type="text" class="form-control" id="staffAge" name="age" required>
+            <input type="text" class="form-control" id="staffAge" name="age" required readonly>
           </div>
           <div class="mb-3">
             <label for="staffEmail" class="form-label">Email</label>
@@ -132,6 +134,10 @@
           <div class="mb-3">
             <label for="staffSalary" class="form-label">Lương</label>
             <input type="number" class="form-control" id="staffSalary" name="salary" required>
+          </div>
+          <div class="mb-3">
+            <label for="staffDateOfBirth" class="form-label">Ngày sinh</label>
+            <input type="date" class="form-control" id="staffDateOfBirth" name="dob" required onchange="AgeCalculate(this.value)">
           </div>
 
         </div>
@@ -160,7 +166,7 @@
           <input type="hidden" id="editStaffId" name="staffId"/>
           <div class="mb-3">
             <label for="editStaffAge" class="form-label">Tuổi</label>
-            <input type="text" class="form-control" id="editStaffAge" name="age" required>
+            <input type="text" class="form-control" id="editStaffAge" name="age" required readonly>
           </div>
           <div class="mb-3">
             <label for="editStaffEmail" class="form-label">Email</label>
@@ -186,6 +192,11 @@
             <label for="editStaffSalary" class="form-label">Lương</label>
             <input type="text" class="form-control" id="editStaffSalary" name="salary" required>
           </div>
+          <div class="mb-3">
+            <label for="editStaffDoB" class="form-label">Ngày sinh</label>
+            <input type="date" class="form-control" id="editStaffDoB" name="dob" required onchange="EditAgeCalculate(this.value)">
+          </div>
+
         </div>
         <div class="modal-footer">
           <button type="button" class="secondary-btn" data-bs-dismiss="modal">Close</button>
@@ -197,7 +208,17 @@
 </div>
 
 <script>
-  function editCategory(id, age, email, name, phone, account, password, salary) {
+  function EditAgeCalculate(dob) {
+    const age = document.getElementById("editStaffAge")
+    age.value = new Date().getFullYear() - new Date(dob).getFullYear();
+  }
+
+  function AgeCalculate(dob) {
+    const age = document.getElementById("staffAge")
+    age.value = new Date().getFullYear() - new Date(dob).getFullYear();
+  }
+
+  function editCategory(id, age, email, name, phone, account, password, salary, dob) {
     document.getElementById('editStaffId').value = id;
     document.getElementById('editStaffAge').value = age;
     document.getElementById('editStaffEmail').value = email;
@@ -206,6 +227,8 @@
     document.getElementById('editStaffAccount').value = account;
     document.getElementById('editStaffPassword').value = password;
     document.getElementById('editStaffSalary').value = salary;
+    console.log(dob);
+    document.getElementById('editStaffDoB').value = dob;
   }
 
   function deleteCategory() {

@@ -4,6 +4,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 
 import java.io.Serializable;
+import java.time.LocalDate;
+
 @Entity
 @Table(name="Staff")
 public class Staff extends User implements Serializable {
@@ -12,8 +14,13 @@ public class Staff extends User implements Serializable {
     public Staff() {
     }
 
-    public Staff(int id, String username, String password, String fullName, int age, String numberPhone, String email, Double salary ) {
-        super(id, username, password, fullName, age, numberPhone, email);
+    public Staff(int id, String username, String password, String fullName, int age, String numberPhone, String email, Double salary, LocalDate dob ) {
+        super(id, username, password, fullName, age, numberPhone, email, dob);
+        this.salary = salary;
+    }
+
+    public Staff(String username, String password, String fullName, int age, String numberPhone, String email, Double salary, LocalDate dob) {
+        super(username, password, fullName, age, numberPhone, email, dob);
         this.salary = salary;
     }
 

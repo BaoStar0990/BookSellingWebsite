@@ -17,6 +17,7 @@ public class Author implements Serializable {
     private String name;
     private String imageURL;
     private String description;
+    private String nationality;
 
     @ManyToMany(fetch = FetchType.LAZY, mappedBy = "authors", cascade = {CascadeType.PERSIST, CascadeType.MERGE}) 
     private Set<Book> books = new HashSet<>();
@@ -28,14 +29,25 @@ public class Author implements Serializable {
         this.name = name;
     }
 
-    public Author(int id, String name, String imageURL) {
+    public Author(int id, String name, String description) {
         this.authorID =  id;
         this.name = name;
-        this.imageURL = imageURL;
+        this.description = description;
     }
 
-    public Author(String name) {
+    public Author(int id, String name, String description, String imageURL, String nationality) {
+        this.authorID =  id;
         this.name = name;
+        this.description = description;
+        this.imageURL = imageURL;
+        this.nationality = nationality;
+    }
+
+    public Author(String name, String description, String imageURL, String nationality) {
+        this.name = name;
+        this.description = description;
+        this.imageURL = imageURL;
+        this.nationality = nationality;
     }
 
     public int getId() {
@@ -83,5 +95,11 @@ public class Author implements Serializable {
     }
     public void setDescription(String description) {
         this.description = description;
+    }
+    public String getNationality(){
+        return nationality;
+    }
+    public void setNationality(String nationality){
+        this.nationality = nationality;
     }
 }

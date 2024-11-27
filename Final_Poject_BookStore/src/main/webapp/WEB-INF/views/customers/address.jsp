@@ -120,7 +120,8 @@
   </div>
 </div>
 
-<script src="https://esgoo.net/scripts/jquery.js"></script>
+<!-- Ensure jQuery is loaded before using it -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="${pageContext.request.contextPath}/assets/javascript/GetAddress.js"></script>
 <script>
     function resetAddress(){

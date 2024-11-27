@@ -11,6 +11,7 @@ D:\University\HK5\Web\FinalProject\FinalProject_BookStore\Final_Poject_BookStore
 D:\University\HK5\Web\FinalProject\FinalProject_BookStore\Final_Poject_BookStore\src\main\java\dbmodel\ModifyDB.java
 D:\University\HK5\Web\FinalProject\FinalProject_BookStore\Final_Poject_BookStore\src\main\java\dbmodel\OrderDetailDB.java
 D:\University\HK5\Web\FinalProject\FinalProject_BookStore\Final_Poject_BookStore\src\main\java\model\DiscountCampaign.java
+D:\University\HK5\Web\FinalProject\FinalProject_BookStore\Final_Poject_BookStore\src\main\java\StaffController\StaffCustomerController.java
 D:\University\HK5\Web\FinalProject\FinalProject_BookStore\Final_Poject_BookStore\src\main\java\controller\BookListController.java
 D:\University\HK5\Web\FinalProject\FinalProject_BookStore\Final_Poject_BookStore\src\main\java\ms_controller\MSAuthorController.java
 D:\University\HK5\Web\FinalProject\FinalProject_BookStore\Final_Poject_BookStore\src\main\java\dbmodel\StaffDB.java
@@ -31,6 +32,7 @@ D:\University\HK5\Web\FinalProject\FinalProject_BookStore\Final_Poject_BookStore
 D:\University\HK5\Web\FinalProject\FinalProject_BookStore\Final_Poject_BookStore\src\main\java\controller\ChangePasswordController.java
 D:\University\HK5\Web\FinalProject\FinalProject_BookStore\Final_Poject_BookStore\src\main\java\model\Address.java
 D:\University\HK5\Web\FinalProject\FinalProject_BookStore\Final_Poject_BookStore\src\main\java\ms_controller\MSCategoryController.java
+D:\University\HK5\Web\FinalProject\FinalProject_BookStore\Final_Poject_BookStore\src\main\java\StaffController\StaffBookController.java
 D:\University\HK5\Web\FinalProject\FinalProject_BookStore\Final_Poject_BookStore\src\main\java\test\TestCustomer.java
 D:\University\HK5\Web\FinalProject\FinalProject_BookStore\Final_Poject_BookStore\src\main\java\firebasecloud\FirebaseStorageUploader.java
 D:\University\HK5\Web\FinalProject\FinalProject_BookStore\Final_Poject_BookStore\src\main\java\controller\ViewCartController.java
@@ -50,6 +52,7 @@ D:\University\HK5\Web\FinalProject\FinalProject_BookStore\Final_Poject_BookStore
 D:\University\HK5\Web\FinalProject\FinalProject_BookStore\Final_Poject_BookStore\src\main\java\controller\AboutUsController.java
 D:\University\HK5\Web\FinalProject\FinalProject_BookStore\Final_Poject_BookStore\src\main\java\model\User.java
 D:\University\HK5\Web\FinalProject\FinalProject_BookStore\Final_Poject_BookStore\src\main\java\controller\CategoryController.java
+D:\University\HK5\Web\FinalProject\FinalProject_BookStore\Final_Poject_BookStore\src\main\java\StaffController\StaffAuthorController.java
 D:\University\HK5\Web\FinalProject\FinalProject_BookStore\Final_Poject_BookStore\src\main\java\controller\AuthorController.java
 D:\University\HK5\Web\FinalProject\FinalProject_BookStore\Final_Poject_BookStore\src\main\java\Utils\authentication\CookieUtil.java
 D:\University\HK5\Web\FinalProject\FinalProject_BookStore\Final_Poject_BookStore\src\main\java\dbmodel\DBInterface.java
@@ -57,6 +60,7 @@ D:\University\HK5\Web\FinalProject\FinalProject_BookStore\Final_Poject_BookStore
 D:\University\HK5\Web\FinalProject\FinalProject_BookStore\Final_Poject_BookStore\src\main\java\ms_controller\MSCustomerController.java
 D:\University\HK5\Web\FinalProject\FinalProject_BookStore\Final_Poject_BookStore\src\main\java\database\DBUtil.java
 D:\University\HK5\Web\FinalProject\FinalProject_BookStore\Final_Poject_BookStore\src\main\java\controller\ModifyItemCartController.java
+D:\University\HK5\Web\FinalProject\FinalProject_BookStore\Final_Poject_BookStore\src\main\java\StaffController\StaffOrderController.java
 D:\University\HK5\Web\FinalProject\FinalProject_BookStore\Final_Poject_BookStore\src\main\java\model\StatusPayment.java
 D:\University\HK5\Web\FinalProject\FinalProject_BookStore\Final_Poject_BookStore\src\main\java\PasswordUtil\PasswordUtil.java
 D:\University\HK5\Web\FinalProject\FinalProject_BookStore\Final_Poject_BookStore\src\main\java\model\Customer.java
@@ -73,8 +77,11 @@ D:\University\HK5\Web\FinalProject\FinalProject_BookStore\Final_Poject_BookStore
 D:\University\HK5\Web\FinalProject\FinalProject_BookStore\Final_Poject_BookStore\src\main\java\test\TestCategory.java
 D:\University\HK5\Web\FinalProject\FinalProject_BookStore\Final_Poject_BookStore\src\main\java\dbmodel\CategoryDB.java
 D:\University\HK5\Web\FinalProject\FinalProject_BookStore\Final_Poject_BookStore\src\main\java\dbmodel\ReviewDB.java
+D:\University\HK5\Web\FinalProject\FinalProject_BookStore\Final_Poject_BookStore\src\main\java\StaffController\StaffCategoryController.java
 D:\University\HK5\Web\FinalProject\FinalProject_BookStore\Final_Poject_BookStore\src\main\java\model\Category.java
 D:\University\HK5\Web\FinalProject\FinalProject_BookStore\Final_Poject_BookStore\src\main\java\ms_controller\MSStaffController.java
+D:\University\HK5\Web\FinalProject\FinalProject_BookStore\Final_Poject_BookStore\src\main\java\StaffController\StaffReviewController.java
+D:\University\HK5\Web\FinalProject\FinalProject_BookStore\Final_Poject_BookStore\src\main\java\StaffController\StaffPublisherController.java
 D:\University\HK5\Web\FinalProject\FinalProject_BookStore\Final_Poject_BookStore\src\main\java\test\TestUploadingImage.java
 D:\University\HK5\Web\FinalProject\FinalProject_BookStore\Final_Poject_BookStore\src\main\java\model\Publisher.java
 D:\University\HK5\Web\FinalProject\FinalProject_BookStore\Final_Poject_BookStore\src\main\java\ms_controller\MSPublisherController.java

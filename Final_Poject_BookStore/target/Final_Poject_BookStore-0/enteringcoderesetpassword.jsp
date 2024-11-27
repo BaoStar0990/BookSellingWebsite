@@ -41,6 +41,30 @@
     <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/styles/header.css" />
     <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/styles/footer.css" />
     <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/styles/signin.css" />
+    <style>
+        #countdown-container {
+            width: 35px;
+            height: 35px;
+            border: 3px solid #E41936;
+            border-radius: 50%;
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #E41936;
+            margin-right: 10px;
+        }
+        #countdown {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+        .countdown-wrapper {
+            display: flex;
+            align-items: center;
+        }
+    </style>
 </head>
 <body>
 <!-- Header -->
@@ -59,6 +83,16 @@
                     <div class="mb-3">
                         <input type="text" class="form-control input-field" name="code" id="email" placeholder="Enter code" required>
                     </div>
+                    <div class="mb-3 countdown-wrapper">
+                        <span id="countdown-text" class="me-2">Mã có hiệu lực trong </span>
+                        <div id="countdown-container" class="d-flex justify-content-center align-items-center">
+                            <span id="countdown"></span>
+                        </div>
+                    </div>
+                    <form action="forgotpassword" method="post" id="resendForm" >
+                        <input type="hidden" name="action" value="ResendCodeResetPassword">
+                        <button type="submit" class="btn btn-link p-0" id="resendButton" style="display: none;">Gửi lại mã</button>
+                    </form>
                     <!-- Login button -->
                     <input type="submit" class="primary-btn w-100 mb-4" value="Submit"/>
                 </form>
@@ -67,7 +101,28 @@
     </div>
 
 </div>
+<script>
+    let timeLeft = 30;
+    const countdownElement = document.getElementById('countdown');
+    const countdownText = document.getElementById('countdown-text');
+    const resendButton = document.getElementById('resendButton');
+    const countdownContainer = document.getElementById('countdown-container');
+    const resendForm = document.getElementById('resendForm');
+    const countdownWrapper = document.querySelector('.countdown-wrapper');
 
+    const countdownInterval = setInterval(() => {
+        if (timeLeft <= 0) {
+            clearInterval(countdownInterval);
+            countdownWrapper.style.display = 'none';
+            resendButton.style.display = 'block';
+        } else {
+            countdownElement.textContent = timeLeft + 's';
+            timeLeft--;
+        }
+    }, 1000);
+
+
+</script>
 <%--    Footer--%>
 <jsp:include page="WEB-INF/views/footer.jsp"/>
 <%-- end    Footer--%>

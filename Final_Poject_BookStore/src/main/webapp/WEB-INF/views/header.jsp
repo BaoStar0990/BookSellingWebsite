@@ -48,7 +48,7 @@
             <div class="container">
                 <div class="row">
                     <div class="col-md-4 p-0 d-flex align-items-center">
-                        <form class="d-flex" action="search" role="search" method="get">
+                        <form class="d-flex" action="${pageContext.request.contextPath}/search" role="search" method="get">
                             <button onmouseover="showSearch(this)" class="btn" type="submit">
                                 <i class="fs-5 fa-solid fa-magnifying-glass"></i>
                             </button>
@@ -110,7 +110,7 @@
                     </li>
 
                     <li id="danhmuc" class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle ${param.currentTab eq '/category/all' ? 'active' : ''}" href="/category/all">Danh mục sách</a>
+                        <a class="nav-link dropdown-toggle ${param.currentTab eq 'allbook' ? 'active' : ''}" href="/category/all">Danh mục sách</a>
                         <ul id="dropdowns" class="dropdown-menu mx-auto multi-column columns-3 dropdown-menu-center">
                             <%--attribute : categories List<Category>--%>
                             <c:set var = "count" scope = "request" value = "${4}"/>
@@ -133,10 +133,10 @@
                     </li>
 
                     <li class="nav-item">
-                        <a href="${pageContext.request.contextPath}/filterbook/bookdiscount" class="nav-link ${param.currentTab eq 'newbooks' ? 'active' : ''}">Sách đang giảm giá</a>
+                        <a href="${pageContext.request.contextPath}/filterbook/bookdiscount" class="nav-link ${param.currentTab eq 'bookdiscount' ? 'active' : ''}">Sách đang giảm giá</a>
                     </li>
                     <li class="nav-item">
-                        <a href="${pageContext.request.contextPath}/filterbook/bestsellingbook" class="nav-link ${param.currentTab eq 'bestsellers' ? 'active' : ''}">Sách bán chạy</a>
+                        <a href="${pageContext.request.contextPath}/filterbook/bestsellingbook" class="nav-link ${param.currentTab eq 'bestsellingbook' ? 'active' : ''}">Sách bán chạy</a>
                     </li>
                     <li class="nav-item">
                         <a href="${pageContext.request.contextPath}/authors" class="nav-link ${param.currentTab eq 'authors' ? 'active' : ''}">Tác giả</a>

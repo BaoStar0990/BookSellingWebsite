@@ -7,8 +7,9 @@ import java.io.Serializable;
 import java.util.*;
 
 @Entity
-@Table(name="Book")
+@Table(name = "Book")
 public class Book implements Serializable {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int bookID;
@@ -23,28 +24,27 @@ public class Book implements Serializable {
     private int publishYear;
     private String language;
 
-
     @OneToMany(mappedBy = "book", cascade = CascadeType.REMOVE)
     private Set<Review> reviews;
 
     @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinTable(
-        name = "AuthorDetail",
-        joinColumns = @JoinColumn(name = "bookID"),
-        inverseJoinColumns = @JoinColumn(name = "authorID")
+            name = "AuthorDetail",
+            joinColumns = @JoinColumn(name = "bookID"),
+            inverseJoinColumns = @JoinColumn(name = "authorID")
     )
     private Set<Author> authors = new HashSet<>();
 
     @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinTable(
-        name = "CategoryDetail",
-        joinColumns = @JoinColumn(name = "bookID"),
-        inverseJoinColumns = @JoinColumn(name = "categoryID")
+            name = "CategoryDetail",
+            joinColumns = @JoinColumn(name = "bookID"),
+            inverseJoinColumns = @JoinColumn(name = "categoryID")
     )
     private Set<Category> categories = new HashSet<>();
 
     @ManyToOne
-    @JoinColumn(name="publisherID", nullable = true)
+    @JoinColumn(name = "publisherID", nullable = true)
     private Publisher publisher;
 
     @OneToMany(mappedBy = "book")
@@ -54,7 +54,8 @@ public class Book implements Serializable {
     @JoinColumn(name = "campaignID", nullable = true)
     private DiscountCampaign discountCampaign;
 
-    public Book() {}
+    public Book() {
+    }
 
     public Book(String title, String description, String Isbn, Double costPrice, Double sellingPrice, int stocks, String urlImage, int publishYear, String language, Publisher publisher) {
         this.title = title;
@@ -69,9 +70,9 @@ public class Book implements Serializable {
         this.publisher = publisher;
     }
 
-    public Book(String title, Publisher publisher, 
-            int bookID, String description, String isbn, Double costPrice, 
-            Double sellingPrice, int stocks, String urlImage, 
+    public Book(String title, Publisher publisher,
+            int bookID, String description, String isbn, Double costPrice,
+            Double sellingPrice, int stocks, String urlImage,
             int publishYear, String language) {
         this.title = title;
         this.publisher = publisher;
@@ -117,7 +118,7 @@ public class Book implements Serializable {
     public Set<Category> getCategories() {
         return BookDB.getInstance().getCategories(this);
     }
-    
+
     public int getStocks() {
         return stocks;
     }
@@ -185,29 +186,38 @@ public class Book implements Serializable {
     public void setDiscountCampaign(DiscountCampaign discountCampaign) {
         this.discountCampaign = discountCampaign;
     }
-    
+
     public Set<Review> getReviews() {
         return BookDB.getInstance().getReviews(this);
     }
-    public int getAverageRatingStart(){
+
+
+
+
+    public int getAverageRatingStart() {
         int numberOfReview = this.getReviews().size();
-        if(numberOfReview == 0)
+        if (numberOfReview == 0) {
             return 0;
+        }
         int totalRating = 0;
-        for(Review review : this.getReviews()){
+        for (Review review : this.getReviews()) {
             totalRating += review.getRate();
         }
-        return (totalRating/numberOfReview);
+        return (totalRating / numberOfReview);
     }
-    
+
     public Set<Author> getAuthors() {
         return BookDB.getInstance().getAuthors(this);
     }
-    
+
     @Override
     public boolean equals(Object obj) {
-        if (this == obj) return true;
-        if (obj == null || getClass() != obj.getClass()) return false;
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null || getClass() != obj.getClass()) {
+            return false;
+        }
         Book book = (Book) obj;
         return Objects.equals(bookID, book.getId()); // Giả sử `id` là khóa chính
     }
@@ -218,26 +228,28 @@ public class Book implements Serializable {
         hash = 47 * hash + this.bookID;
         return hash;
     }
+
     public void setAuthors(Set<Author> authors) {
-        for( Author a : authors){
+        for (Author a : authors) {
             this.addAuthor(a);
         }
     }
-    public void addAuthor(Author a){
+
+    public void addAuthor(Author a) {
         this.authors.add(a);
         a.addBook(this);
     }
-    
+
     public void setCategories(Set<Category> categories) {
-        for(Category c : categories){
+        for (Category c : categories) {
             this.addCategory(c);
         }
     }
-    public void addCategory(Category c){
+
+    public void addCategory(Category c) {
         this.categories.add(c);
         c.addBook(this);
     }
-    
 
     public int getBookID() {
         return bookID;
@@ -246,6 +258,6 @@ public class Book implements Serializable {
     public Set<OrderDetail> getOrderDetails() {
         return orderDetails;
     }
-    
-    
+
+
 }

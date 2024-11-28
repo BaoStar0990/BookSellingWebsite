@@ -29,8 +29,8 @@
   <%-- Fontawesome --%>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
   <%-- Custom CSS --%>
-  <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/styles/main.css">
-  <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/styles/book-list.css">
+  <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/styles/main.css"/>
+  <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/styles/book-list.css"/>
   <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/styles/header.css" />
   <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/styles/footer.css" />
 </head>
@@ -88,11 +88,18 @@
                 <!-- book title -->
                 <h6 class="card-title mb-1">${book.title}</h6>
                 <!-- author name -->
-                <c:forEach items="${book.getAuthors()}" var="author">
-                  <p class="text-muted mb-0 card-text">
-                    <span class="fw-semibold">${author.name}</span>
-                  </p>
-                </c:forEach>
+                <c:choose>
+                  <c:when test = "${not empty book.getAuthors()}">
+                      <span class="fw-semibold card-text">
+                      <c:forEach var="author" items="${book.getAuthors()}" varStatus="status">
+                          ${author.getName()}<c:if test="${!status.last}">, </c:if>
+                      </c:forEach>        
+                              </span>
+                  </c:when>
+                  <c:otherwise>
+                    <span class="fw-semibold">Chưa có tác giả</span>
+                  </c:otherwise>
+                </c:choose>
                 <div class="mt-2">
                   <!--  price -->
                   <span class="text-danger font-semibold">

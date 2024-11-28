@@ -41,16 +41,15 @@ public class MSAuthorController extends HttpServlet {
             switch (action) {
                 case "edit":
                 {
-                    AuthorDB.getInstance().update(new Author(Integer.parseInt(req.getParameter("author_id")), req.getParameter("author"), req.getParameter("avatar")));
+                    AuthorDB.getInstance().update(new Author(Integer.parseInt(req.getParameter("author_id")), req.getParameter("author"), req.getParameter("description"), req.getParameter("avatar"), req.getParameter("nationality")));
                     break;
                 }
                 case "add":{
-                    AuthorDB.getInstance().insert(new Author(req.getParameter("author")));
+                    AuthorDB.getInstance().insert(new Author(req.getParameter("author"), req.getParameter("description"), req.getParameter("avatar"), req.getParameter("nationality")));
                     break;
                 }
                 case "delete":
                 {
-                    System.out.println(req.getParameter("deleteId"));
                     AuthorDB.getInstance().delete(Integer.parseInt(req.getParameter("deleteId")), Author.class);
                     break;
                 }

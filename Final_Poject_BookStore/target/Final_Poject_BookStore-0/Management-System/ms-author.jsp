@@ -46,6 +46,57 @@
       <div class="col-md-8 d-flex justify-content-end">
         <button class="primary-btn" data-bs-toggle="modal" data-bs-target="#addCategoryModal">Add Author</button>
       </div>
+        <!-- Title and Filter Button -->
+        <div class="pb-2 my-3 border-bottom">
+            <div class="d-flex justify-content-between align-items-center">
+<%--                <h2 class="fw-bolder">${nameOfCategory}</h2>--%>
+                <button class="btn secondary-btn" type="button" data-bs-toggle="collapse" data-bs-target="#filterOptions">
+                    <i class="fas fa-filter"></i>
+                    <span id="filterButtonText">Bộ Lọc</span>
+                </button>
+            </div>
+
+            <!-- Filters -->
+            <div class="collapse mt-3 " id="filterOptions">
+                <div class="p-3 border rounded bg-light">
+                    <h2 class="fw-semibold">Bộ Lọc</h2>
+                    <form method="get">
+                        <div class="row">
+                            <div class="col-md-3">
+                                <b class="text-danger">Quốc tịch</b>
+                                <div class="form-check">
+                                    <input onclick="filterNationality(this)" type="checkbox" id="asia" name="nationality" class="form-check-input" value="Châu Á" >
+                                    <label for="asia" class="form-check-label">Châu Á</label>
+                                </div>
+                                <div class="form-check">
+                                    <input onclick="filterNationality(this)" type="checkbox" id="europe" name="nationality" class="form-check-input" value="Châu Âu" >
+                                    <label for="europe" class="form-check-label">Châu Âu</label>
+                                </div>
+                                <div class="form-check">
+                                    <input onclick="filterNationality(this)" type="checkbox" id="americas" name="nationality" class="form-check-input" value="Châu Mỹ" >
+                                    <label for="americas" class="form-check-label">Châu Mỹ</label>
+                                </div>
+                                <div class="form-check">
+                                    <input onclick="filterNationality(this)" type="checkbox" id="africa" name="nationality" class="form-check-input" value="Châu Phi">
+                                    <label for="africa" class="form-check-label">Châu Phi</label>
+                                </div>
+                                <div class="form-check">
+                                    <input onclick="filterNationality(this)" type="checkbox" id="oceania" name="nationality" class="form-check-input" value="Châu Đại Dương" >
+                                    <label for="oceania" class="form-check-label">Châu Đại Dương</label>
+                                </div>
+                                <div class="form-check">
+                                    <input onclick="filterNationality(this)" type="checkbox" id="territory" name="nationality" class="form-check-input" value="Lãnh thổ và các vùng phụ thuộc" >
+                                    <label for="territory" class="form-check-label">Vùng lãnh thổ</label>
+                                </div>
+
+                            </div>
+                            <div class="col-md-8"></div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <!-- End Filter -->
     </div>
     <div class="table-responsive border border-2 p-2" style="max-height: 75%; overflow: auto;">
       <table class="table table-bordered" style="min-width: 1000px;">
@@ -54,7 +105,9 @@
           <th></th>
           <th>ID</th>
           <th>Tác giả</th>
-          <th>Ảnh đại diện</th>
+          <th>Ảnh tác giả</th>
+          <th>Mô tả</th>
+          <th>Quốc tịch</th>
         </tr>
         </thead>
         <tbody>
@@ -62,7 +115,7 @@
           <tr class="fw-medium">
             <td class="d-flex">
               <button class="btn btn-warning btn-sm me-2" data-bs-toggle="modal" data-bs-target="#editCategoryModal"
-                      onclick="editCategory(${author.getId()}, '${author.getName()}', '${author.getImageURL()}')">
+                      onclick="editCategory('${author.getId()}', '${author.getName()}', '${author.getImageURL()}', '${author.getDescription()}', '${author.getNationality()}')">
                 <i class="fas fa-edit"></i>
               </button>
               <form id="deleteForm" method="post" action="ms_author" class="mb-0">
@@ -76,6 +129,8 @@
             <td>${fn:escapeXml(author.getId())}</td>
             <td>${fn:escapeXml(author.getName())}</td>
             <td><img style="object-fit: cover" width="200px" height="200px" src="${author.getImageURL()}" alt="author_img"></td>
+            <td>${author.getDescription()}</td>
+            <td>${fn:escapeXml(author.getNationality())}</td>
           </tr>
         </c:forEach>
         </tbody>
@@ -104,6 +159,16 @@
             <label for="authorAvatar" class="form-label">Ảnh đại diện</label>
             <input type="text" class="form-control" id="authorAvatar" name="avatar" required>
           </div>
+          <div class="mb-3">
+            <label for="authorDescription" class="form-label">Mô tả</label>
+            <input type="text" class="form-control" id="authorDescription" name="description" required>
+          </div>
+          <div class="mb-3">
+            <label for="authorNationality" class="form-label">Quốc tịch</label>
+            <select class="form-control" id="authorNationality" name="nationality" required>
+              <option value="">Select an option</option>
+            </select>
+          </div>
         </div>
         <div class="modal-footer">
           <button type="button" class="secondary-btn" data-bs-dismiss="modal">Close</button>
@@ -123,7 +188,7 @@
         <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
         <input type="hidden" name="action" value="edit"/>
         <div class="modal-header">
-          <h5 class="modal-title fw-semibold" id="editCategoryModalLabel">Edit Review</h5>
+          <h5 class="modal-title fw-semibold" id="editCategoryModalLabel">Edit Author</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
@@ -136,6 +201,16 @@
             <label for="editAuthorAvatar" class="form-label">Ảnh đại diện</label>
             <input type="text" class="form-control" id="editAuthorAvatar" name="avatar" required>
           </div>
+          <div class="mb-3">
+            <label for="editAuthorDescription" class="form-label">Mô tả</label>
+            <input type="text" class="form-control" id="editAuthorDescription" name="description" required>
+          </div>
+          <div class="mb-3">
+            <label for="editAuthorNationality" class="form-label">Quốc tịch</label>
+            <select class="form-control" id="editAuthorNationality" name="nationality" required>
+              <option value="">Select an option</option>
+            </select>
+          </div>
 
         </div>
         <div class="modal-footer">
@@ -147,11 +222,17 @@
   </div>
 </div>
 
+<script src="${pageContext.request.contextPath}/assets/javascript/management-system/ms-author.js"></script>
+
 <script>
-  function editCategory(id, name, avatar) {
+  function editCategory(id, name, avatar, description, nationality) {
     document.getElementById('editAuthorId').value = id;
     document.getElementById('editAuthorName').value = name;
     document.getElementById('editAuthorAvatar').value = avatar;
+    console.log(encodeURIComponent(description))
+    document.getElementById('editAuthorDescription').value = description;
+    document.getElementById('editAuthorNationality').value = nationality;
+
   }
 
   function deleteCategory() {

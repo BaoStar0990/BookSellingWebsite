@@ -1,36 +1,41 @@
 // Function to load provinces (Tinh Thanh)
 function loadProvinces() {
-    $.getJSON('https://esgoo.net/api-tinhthanh/1/0.htm', function(data_tinh) {
-        if (data_tinh.error === 0) {
-            $("#tinh").empty().append('<option value="0">Tỉnh Thành</option>');
-            $.each(data_tinh.data, function(key_tinh, val_tinh) {
-                $("#tinh").append('<option value="' + val_tinh.id + '">' + val_tinh.full_name + '</option>');
-            });
-        }
+    $.getJSON('https://provinces.open-api.vn/api/p/', function(data_tinh) {
+        $("#tinh").empty().append('<option value="0">Tỉnh Thành</option>');
+        $.each(data_tinh, function(key_tinh, val_tinh) {
+            $("#tinh").append('<option value="' + val_tinh.code + '">' + val_tinh.name + '</option>');
+        });
     });
 }
 
 // Function to load districts (Quan Huyen) based on selected province
 function loadDistricts(provinceId) {
-    $.getJSON('https://esgoo.net/api-tinhthanh/2/' + provinceId + '.htm', function(data_quan) {
-        if (data_quan.error === 0) {
-            $("#quan").empty().append('<option value="0">Quận Huyện</option>');
-            $.each(data_quan.data, function(key_quan, val_quan) {
-                $("#quan").append('<option value="' + val_quan.id + '">' + val_quan.full_name + '</option>');
-            });
-        }
+    if (provinceId === "0") {
+        $("#quan").empty().append('<option value="0">Quận Huyện</option>');
+        $("#phuong").empty().append('<option value="0">Phường Xã</option>');
+        return;
+    }
+
+    $.getJSON(`https://provinces.open-api.vn/api/p/${provinceId}?depth=2`, function(data_quan) {
+        $("#quan").empty().append('<option value="0">Quận Huyện</option>');
+        $.each(data_quan.districts, function(key_quan, val_quan) {
+            $("#quan").append('<option value="' + val_quan.code + '">' + val_quan.name + '</option>');
+        });
     });
 }
 
 // Function to load wards (Phuong Xa) based on selected district
 function loadWards(districtId) {
-    $.getJSON('https://esgoo.net/api-tinhthanh/3/' + districtId + '.htm', function(data_phuong) {
-        if (data_phuong.error === 0) {
-            $("#phuong").empty().append('<option value="0">Phường Xã</option>');
-            $.each(data_phuong.data, function(key_phuong, val_phuong) {
-                $("#phuong").append('<option value="' + val_phuong.id + '">' + val_phuong.full_name + '</option>');
-            });
-        }
+    if (districtId === "0") {
+        $("#phuong").empty().append('<option value="0">Phường Xã</option>');
+        return;
+    }
+
+    $.getJSON(`https://provinces.open-api.vn/api/d/${districtId}?depth=2`, function(data_phuong) {
+        $("#phuong").empty().append('<option value="0">Phường Xã</option>');
+        $.each(data_phuong.wards, function(key_phuong, val_phuong) {
+            $("#phuong").append('<option value="' + val_phuong.code + '">' + val_phuong.name + '</option>');
+        });
     });
 }
 

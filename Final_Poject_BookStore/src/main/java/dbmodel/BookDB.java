@@ -7,6 +7,7 @@ import jakarta.persistence.NoResultException;
 
 import java.util.*;
 
+import jakarta.persistence.Query;
 import model.Author;
 import model.Book;
 import model.Category;
@@ -15,108 +16,101 @@ import org.hibernate.TransientObjectException;
 import jakarta.persistence.EntityTransaction;
 
 public class BookDB extends ModifyDB<Book> implements DBInterface<Book> {
-    public static BookDB getInstance(){
+    public static BookDB getInstance() {
         return new BookDB();
     }
+
     @Override
     public List<Book> selectAll() {
-        try(EntityManager em = DBUtil.getEmFactory().createEntityManager()){
+        try (EntityManager em = DBUtil.getEmFactory().createEntityManager()) {
             List<Book> rs = em.createQuery("from Book", Book.class).getResultList();
             return rs;
-        }
-        catch(NoResultException ex){
+        } catch (NoResultException ex) {
+            return null;
+        } catch (Exception ex) {
             return null;
         }
-        catch(Exception ex){
-            return null;
-        } 
     }
 
     @Override
     public Book selectByID(Object id) {
-        try(EntityManager em = DBUtil.getEmFactory().createEntityManager()) {
+        try (EntityManager em = DBUtil.getEmFactory().createEntityManager()) {
             return em.createQuery("from Book b where b.id =: id ", Book.class)
-                    .setParameter("id", id).getSingleResult();    
-        }
-        catch(NoResultException ex){
+                    .setParameter("id", id).getSingleResult();
+        } catch (NoResultException ex) {
             return null;
-        }
-        catch(Exception ex){
+        } catch (Exception ex) {
             return null;
         }
     }
-    
-    public Set<Review> getReviews(Book b){
-        try(EntityManager em = DBUtil.getEmFactory().createEntityManager()){
-            List<Review> reviewList =  em.createQuery("from Review r where r.book = :book", 
-                        Review.class).setParameter("book", b).getResultList();
-            if(reviewList == null)
+
+    public Set<Review> getReviews(Book b) {
+        try (EntityManager em = DBUtil.getEmFactory().createEntityManager()) {
+            List<Review> reviewList = em.createQuery("from Review r where r.book = :book",
+                    Review.class).setParameter("book", b).getResultList();
+            if (reviewList == null)
                 return null;
             else
                 return new HashSet<>(reviewList);
-        }
-        catch (NullPointerException e) {
+        } catch (NullPointerException e) {
             return null;
         }
         // lỗi truy vấn đối tượng transient
         catch (TransientObjectException | NoResultException ex) {
             return null;
-        }
-        catch(Exception ex){
+        } catch (Exception ex) {
             return null;
-        } 
+        }
     }
-    
-    public Set<Author> getAuthors(Book b){
-        try(EntityManager em = DBUtil.getEmFactory().createEntityManager()){
+
+    public Set<Author> getAuthors(Book b) {
+        try (EntityManager em = DBUtil.getEmFactory().createEntityManager()) {
             // find Book
             Book bookFind = em.find(Book.class, b.getId());
             // find Books
             List<Author> authors = em.createQuery("SELECT a FROM Book b JOIN b.authors a "
-                    + "WHERE b.id = :bookId", Author.class)
-                     .setParameter("bookId", bookFind.getId())
-                     .getResultList();
-            if(authors == null)
+                            + "WHERE b.id = :bookId", Author.class)
+                    .setParameter("bookId", bookFind.getId())
+                    .getResultList();
+            if (authors == null)
                 return null;
             else
                 return new HashSet<>(authors);
-        }
-        catch (NullPointerException e) {
+        } catch (NullPointerException e) {
             return null;
         }
         // lỗi truy vấn đối tượng transient
         catch (TransientObjectException | NoResultException ex) {
             return null;
-        }
-        catch(Exception ex){
+        } catch (Exception ex) {
             return null;
-        } 
+        }
     }
-    public Set<Category> getCategories(Book b){
-        try(EntityManager em = DBUtil.getEmFactory().createEntityManager()){
+
+    public Set<Category> getCategories(Book b) {
+        try (EntityManager em = DBUtil.getEmFactory().createEntityManager()) {
             // find Book
             Book bookFind = em.find(Book.class, b.getId());
             // find Books
             List<Category> categories = em.createQuery("SELECT a FROM Book b JOIN b.categories a "
-                    + "WHERE b.id = :bookId", Category.class)
-                     .setParameter("bookId", bookFind.getId())
-                     .getResultList();
-            if(categories == null)
+                            + "WHERE b.id = :bookId", Category.class)
+                    .setParameter("bookId", bookFind.getId())
+                    .getResultList();
+            if (categories == null)
                 return null;
             else
                 return new HashSet<>(categories);
-        }
-        catch (NullPointerException e) {
+        } catch (NullPointerException e) {
             return null;
         }
         // lỗi truy vấn đối tượng transient
         catch (TransientObjectException | NoResultException ex) {
             return null;
-        }
-        catch(Exception ex){
+        } catch (Exception ex) {
             return null;
-        } 
+        }
     }
+
     @Override
     public boolean insert(Book book) {
         EntityManager em = null;
@@ -169,9 +163,9 @@ public class BookDB extends ModifyDB<Book> implements DBInterface<Book> {
                 em.close();
         }
     }
-    
-    public boolean insertBookAuthorsCategories(Book book, 
-            Set<Author> authors, Set<Category> categories) {
+
+    public boolean insertBookAuthorsCategories(Book book,
+                                               Set<Author> authors, Set<Category> categories) {
         EntityManager em = null;
         EntityTransaction tr = null;
         try {
@@ -181,7 +175,7 @@ public class BookDB extends ModifyDB<Book> implements DBInterface<Book> {
 
             // chèn sách
             em.persist(book);
-            
+
             // Manage authors
             for (Author author : authors) {
                 Author managedAuthor = em.find(Author.class, author.getId());
@@ -194,10 +188,10 @@ public class BookDB extends ModifyDB<Book> implements DBInterface<Book> {
             for (Category category : categories) {
                 Category managedCategory = em.find(Category.class, category.getId());
                 if (managedCategory != null) {
-                   book.addCategory(managedCategory);
+                    book.addCategory(managedCategory);
                 }
             }
-            
+
             // cập nhật sách
             em.merge(book);
 
@@ -216,6 +210,8 @@ public class BookDB extends ModifyDB<Book> implements DBInterface<Book> {
 
 
     public boolean updateBookAuthorsCategories(Book book, Set<Author> authors, Set<Category> categories) {
+        System.out.println("----------------------------------------");
+        System.out.println("Call update book in model");
         EntityManager em = null;
         EntityTransaction tr = null;
         try {
@@ -224,35 +220,43 @@ public class BookDB extends ModifyDB<Book> implements DBInterface<Book> {
             tr.begin();
 
             // Xóa tất cả các liên kết giữa Book và Author
-            em.createQuery("DELETE FROM AuthorDetail ba WHERE ba.bookID = :bookID")
+            System.out.println("----------------------------------------");
+            System.out.println("Delete all link between book and author");
+            em.createNativeQuery("DELETE FROM AuthorDetail ba WHERE bookID = :bookID")
                     .setParameter("bookID", book.getId())
                     .executeUpdate();
 
             // Xóa tất cả các liên kết giữa Book và Category
-            em.createQuery("DELETE FROM CategoryDetail bc WHERE bc.bookID = :bookID")
+            System.out.println("----------------------------------------");
+            System.out.println("Delete all link between book and category");
+            em.createNativeQuery("DELETE FROM CategoryDetail bc WHERE bookID = :bookID")
                     .setParameter("bookID", book.getId())
                     .executeUpdate();
 
             // Thêm các liên kết mới giữa Book và Author
+            System.out.println("----------------------------------------");
+            System.out.println("add link between book and author");
             for (Author author : authors) {
                 Author authorFind = em.find(Author.class, author.getId());
-                em.createQuery("INSERT INTO AuthorDetail (bookID, authorID) VALUES (:bookID, :authorID)")
+                em.createNativeQuery("INSERT INTO AuthorDetail (bookID, authorID) VALUES (:bookID, :authorID)")
                         .setParameter("bookID", book.getId())
                         .setParameter("authorID", authorFind.getAuthorID())
                         .executeUpdate();
             }
 
             // Thêm các liên kết mới giữa Book và Category
+            System.out.println("----------------------------------------");
+            System.out.println("add link between book and category");
             for (Category category : categories) {
                 Category categoryFind = em.find(Category.class, category.getId());
-                em.createQuery("INSERT INTO CategoryDetail (bookID, categoryID) VALUES (:bookID, :categoryID)")
+                em.createNativeQuery("INSERT INTO CategoryDetail (bookID, categoryID) VALUES (:bookID, :categoryID)")
                         .setParameter("bookID", book.getId())
                         .setParameter("categoryID", categoryFind.getId())
                         .executeUpdate();
             }
 
             em.merge(book);
-            
+
             // Commit transaction
             tr.commit();
             return true;
@@ -266,6 +270,33 @@ public class BookDB extends ModifyDB<Book> implements DBInterface<Book> {
                 em.close();
         }
     }
+//    public boolean updateBookAuthorsCategories(Book book, Set<Author> authors, Set<Category> categories) {
+//        System.out.println("----------------------------------------");
+//        System.out.println("Call update book in model");
+//        EntityManager em = null;
+//        EntityTransaction tr = null;
+//        try {
+//            em = DBUtil.getEmFactory().createEntityManager();
+//            tr = em.getTransaction();
+//            tr.begin();
+//
+//            // JPQL query to delete all authors linked to the book
+//            String jpql = "DELETE FROM AuthorDetail ad WHERE bookID = :bookID";
+//            em.createNativeQuery(jpql).setParameter("bookID", book.getId()).executeUpdate();
+//            // Execute the delete query
+//            // Commit transaction
+//            tr.commit();
+//            return true;
+//        } catch (Exception ex) {
+//            if (tr != null && tr.isActive())
+//                tr.rollback();
+//            ex.printStackTrace();
+//            return false;
+//        } finally {
+//            if (em != null)
+//                em.close();
+//        }
+//    }
 
 
     public boolean update(Book book) {
@@ -338,16 +369,16 @@ public class BookDB extends ModifyDB<Book> implements DBInterface<Book> {
     }
 
     @Override
-    public boolean delete(Object id, Class<Book> entityClass){
+    public boolean delete(Object id, Class<Book> entityClass) {
         EntityManager em = null;
         EntityTransaction tr = null;
-        try{
+        try {
             em = DBUtil.getEmFactory().createEntityManager();
             tr = em.getTransaction();
             tr.begin();
             // chuyển thực thể sang trạng thái persistent
             Book entity = em.find(entityClass, id);
-            if(entity == null){
+            if (entity == null) {
                 tr.rollback();
                 return false;
             }
@@ -370,43 +401,44 @@ public class BookDB extends ModifyDB<Book> implements DBInterface<Book> {
             em.remove(entity);
             tr.commit();
             return true;
-        }
-         catch(Exception ex){
-            if(tr != null && tr.isActive())
+        } catch (Exception ex) {
+            if (tr != null && tr.isActive())
                 tr.rollback();
             return false;
-        }
-        finally{
-            if(em != null)
+        } finally {
+            if (em != null)
                 em.close();
         }
     }
-    public  Set<Author> findAuthorByBook(Map<Author, Set<Book>> authorBooks, Book book) {
+
+    public Set<Author> findAuthorByBook(Map<Author, Set<Book>> authorBooks, Book book) {
         Set<Author> authors = new HashSet<Author>();
         for (Map.Entry<Author, Set<Book>> entry : authorBooks.entrySet()) {
             if (entry.getValue().contains(book)) {
                 authors.add(entry.getKey());
             }
         }
-        if(authors.size() == 0) {
+        if (authors.size() == 0) {
             return null; // Không tìm thấy
-        }else{
+        } else {
             return authors;
         }
     }
 
-    public boolean checkSearchRequestRelatedWithBook(Book book, String searchRequest)
-    {
+    public boolean checkSearchRequestRelatedWithBook(Book book, String searchRequest) {
         //Remove character vietnamese and space
         String titleOfBook = Regex.normalizeVietnamese(book.getTitle()).trim();
         searchRequest = Regex.normalizeVietnamese(searchRequest).trim();
 
+        System.out.println("Title of book: " + titleOfBook + " search request: " + searchRequest);
+
+
         //Trường hợp đeẹp nhất: Người dùng nhập đúng chính xác tên cuủa cốn sách, không quan tâm hoa thường, dấu cách, các ksi tự đặc biệt
-        if(titleOfBook.equalsIgnoreCase(searchRequest)){
+        if (titleOfBook.equalsIgnoreCase(searchRequest)) {
             return true;
         }
         //Title chỉ cần bao gồm những gì người dùng nhập
-        else if(titleOfBook.contains(searchRequest)){
+        else if (titleOfBook.contains(searchRequest)) {
             return true;
         }
         return false;

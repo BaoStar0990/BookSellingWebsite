@@ -12,6 +12,7 @@ import model.Publisher;
 import model.Staff;
 
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.List;
 
 @WebServlet("/ms_staff")
@@ -45,7 +46,8 @@ public class MSStaffController extends HttpServlet {
                             Integer.parseInt(req.getParameter("age")),
                             req.getParameter("phone"),
                             req.getParameter("email"),
-                            Double.parseDouble(req.getParameter("salary")));
+                            Double.parseDouble(req.getParameter("salary")),
+                            LocalDate.parse(req.getParameter("dob")));
                     StaffDB.getInstance().update(staff);
                     break;
                 }
@@ -62,7 +64,8 @@ public class MSStaffController extends HttpServlet {
                             Integer.parseInt(req.getParameter("age")),
                             req.getParameter("phone"),
                             req.getParameter("email"),
-                            Double.parseDouble(req.getParameter("salary")));
+                            Double.parseDouble(req.getParameter("salary")),
+                            LocalDate.parse(req.getParameter("dob")));
                     StaffDB.getInstance().insert(staff);
                     break;
                 }

@@ -188,8 +188,7 @@
 <%-- Footer --%>
 <jsp:include page="WEB-INF/views/footer.jsp" />
 <%-- end Footer --%>
-
-<script src="https://esgoo.net/scripts/jquery.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="${pageContext.request.contextPath}/assets/javascript/GetAddress.js"></script>
 <script>
     window.onload = function() {

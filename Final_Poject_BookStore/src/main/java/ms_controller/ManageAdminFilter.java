@@ -41,7 +41,7 @@ public class ManageAdminFilter implements Filter {
             if (session.getAttribute("admin") != null) {
                 return true;
             } else {
-                httpRequest.getServletContext().getRequestDispatcher(String.format("/404error.jsp", httpRequest.getServletContext().getContextPath())).forward(httpRequest, httpResponse);
+                httpResponse.sendError(HttpServletResponse.SC_NOT_FOUND,"Không tìm thấy trang");
                 return false;
             }
 
@@ -52,7 +52,7 @@ public class ManageAdminFilter implements Filter {
                 return true;
             }
             else{
-                 httpRequest.getServletContext().getRequestDispatcher(String.format("/404error.jsp",httpRequest.getServletContext().getContextPath())).forward(httpRequest, httpResponse);
+                httpResponse.sendError(HttpServletResponse.SC_NOT_FOUND,"Không tìm thấy trang");
                  return false;
             }
         }

@@ -44,7 +44,7 @@ public class MSBookController extends HttpServlet {
         request.setAttribute("categories", session.getAttribute("categories"));
         request.setAttribute("publishers", session.getAttribute("publishers"));
         request.setAttribute("discountCampaigns", session.getAttribute("discountCampaigns"));
-        String url = "\\Management-System\\ms-book.jsp";
+        String url = "/Management-System/ms-book.jsp";
         request.getRequestDispatcher(url).forward(request, response);
     }
 

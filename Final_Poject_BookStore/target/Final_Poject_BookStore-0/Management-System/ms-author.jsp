@@ -1,24 +1,20 @@
 <%--&lt;%&ndash;--%>
 <%--  Created by IntelliJ IDEA.--%>
 <%--  User: vuxua--%>
-  Date: 07/11/2024
-  Time: 9:57 CH
-  To change this template use File | Settings | File Templates.git pull origin main
---%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <html>
-<%--<head>--%>
-<%--  <title>Naoki - Management System</title>--%>
-<%--  <meta charset="UTF-8">--%>
-<%--  <meta name="viewport" content="width=device-width, initial-scale=1.0">--%>
-      Poppins
-<%--  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script>--%>
-      Swiper
-<%--  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/css/splide.min.css" integrity="sha256-5uKiXEwbaQh9cgd2/5Vp6WmMnsUr3VZZw0a8rKnOKNU=" crossorigin="anonymous">--%>
-<%--  <script src="https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/js/splide.min.js" integrity="sha256-FZsW7H2V5X9TGinSjjwYJ419Xka27I8XPDmWryGlWtw=" crossorigin="anonymous"></script>--%>
+<head>
+  <title>Naoki - Management System</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<%--      Poppins--%>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script>
+<%--      Swiper--%>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/css/splide.min.css" integrity="sha256-5uKiXEwbaQh9cgd2/5Vp6WmMnsUr3VZZw0a8rKnOKNU=" crossorigin="anonymous">
+  <script src="https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/js/splide.min.js" integrity="sha256-FZsW7H2V5X9TGinSjjwYJ419Xka27I8XPDmWryGlWtw=" crossorigin="anonymous"></script>
 <%--      Bootstrap--%>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
@@ -30,37 +26,37 @@
 <%--  Custom CSS--%>
   <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/assets/styles/main.css">
 </head>
-<%--<body>--%>
-<%--<!-- Header -->--%>
-<%--<jsp:include page="sidebar.jsp">--%>
-<%--  <jsp:param name="currentTab" value="author" />--%>
-<%--</jsp:include>--%>
-<%--<!-- end Header -->--%>
-<%----%>
-<%--<main class="content" style="margin-left: 250px; padding: 20px;">--%>
-<%--  <div class="container fw-medium">--%>
-<%--    <div class="row mb-3">--%>
-<%--      <div class="col-md-4 d-flex flex-colum">--%>
-<%--        <input type="text" class="form-control fw-medium" id="searchBox" placeholder="Search author...">--%>
-<%--      </div>--%>
-<%--      <div class="col-md-8 d-flex justify-content-end">--%>
-<%--        <button class="primary-btn" data-bs-toggle="modal" data-bs-target="#addCategoryModal">Add Author</button>--%>
-<%--      </div>--%>
-<%--        <!-- Title and Filter Button -->--%>
-<%--        <div class="pb-2 my-3 border-bottom">--%>
-<%--            <div class="d-flex justify-content-between align-items-center">--%>
+<body>
+<!-- Header -->
+<jsp:include page="sidebar.jsp">
+  <jsp:param name="currentTab" value="author" />
+</jsp:include>
+<!-- end Header -->
+
+<main class="content" style="margin-left: 250px; padding: 20px;">
+  <div class="container fw-medium">
+    <div class="row mb-3">
+      <div class="col-md-4 d-flex flex-colum">
+        <input type="text" class="form-control fw-medium" id="searchBox" placeholder="Search author...">
+      </div>
+      <div class="col-md-8 d-flex justify-content-end">
+        <button class="primary-btn" data-bs-toggle="modal" data-bs-target="#addCategoryModal">Add Author</button>
+      </div>
+        <!-- Title and Filter Button -->
+        <div class="pb-2 my-3 border-bottom">
+            <div class="d-flex justify-content-between align-items-center">
                 <h2 class="fw-bolder">${nameOfCategory}</h2>
-<%--                <button class="btn secondary-btn" type="button" data-bs-toggle="collapse" data-bs-target="#filterOptions">--%>
-<%--                    <i class="fas fa-filter"></i>--%>
-<%--                    <span id="filterButtonText">Bộ Lọc</span>--%>
-<%--                </button>--%>
-<%--            </div>--%>
-<%----%>
-<%--            <!-- Filters -->--%>
-<%--            <div class="collapse mt-3 " id="filterOptions">--%>
-<%--                <div class="p-3 border rounded bg-light">--%>
-<%--                    <h2 class="fw-semibold">Bộ Lọc</h2>--%>
-<%--                    <form method="get">--%>
+                <button class="btn secondary-btn" type="button" data-bs-toggle="collapse" data-bs-target="#filterOptions">
+                    <i class="fas fa-filter"></i>
+                    <span id="filterButtonText">Bộ Lọc</span>
+                </button>
+            </div>
+
+            <!-- Filters -->
+            <div class="collapse mt-3 " id="filterOptions">
+                <div class="p-3 border rounded bg-light">
+                    <h2 class="fw-semibold">Bộ Lọc</h2>
+                    <form method="get">
                         <div class="row">
                             <div class="col-md-3">
                                 <b class="text-danger">Quốc tịch</b>
@@ -68,11 +64,11 @@
                                     <input onclick="filterNationality(this)" type="checkbox" id="asia" name="nationality" class="form-check-input" value="Châu Á" >
                                     <label for="asia" class="form-check-label">Châu Á</label>
                                 </div>
-<%--                                <div class="form-check">--%>
-<%--                                    <input onclick="filterNationality(this)" type="checkbox" id="europe" name="nationality" class="form-check-input" value="Châu Âu" >--%>
-<%--                                    <label for="europe" class="form-check-label">Châu Âu</label>--%>
-<%--                                </div>--%>
-<%--                                <div class="form-check">--%>
+                                <div class="form-check">
+                                    <input onclick="filterNationality(this)" type="checkbox" id="europe" name="nationality" class="form-check-input" value="Châu Âu" >
+                                    <label for="europe" class="form-check-label">Châu Âu</label>
+                                </div>
+                                <div class="form-check">
                                     <input onclick="filterNationality(this)" type="checkbox" id="americas" name="nationality" class="form-check-input" value="Châu Mỹ" >
                                     <label for="americas" class="form-check-label">Châu Mỹ</label>
                                 </div>

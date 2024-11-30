@@ -2,10 +2,10 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
-package controller;
+package StaffController;
 
 import java.io.IOException;
-import java.io.PrintWriter;
+
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -16,18 +16,17 @@ import jakarta.servlet.http.HttpServletResponse;
  *
  * @author hadan
  */
-@WebServlet(name = "SigninAdminController", urlPatterns = {"/signin/manage/admin"})
-public class SigninAdminController extends HttpServlet {
+@WebServlet(name = "SigninStaffController", urlPatterns = {"/signin/manage/staff"})
+public class SigninStaffController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         System.out.println("------------------------------------");
-        System.out.println("Call servlet login admin with post method");
+        System.out.println("Call servlet login staff with post method");
         request.setCharacterEncoding("UTF-8");
         response.setCharacterEncoding("UTF-8");
-        response.sendRedirect("/ms/msdashboard");
+        response.sendRedirect("/staff/staff_author");
     }
-
     @Override
     public String getServletInfo() {
         return "Short description";

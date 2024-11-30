@@ -2,12 +2,9 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Filter.java to edit this template
  */
-package controller;
+package ms_controller;
 
 import java.io.*;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.time.LocalDate;
 
 import dbmodel.AdminDB;
 import dbmodel.LogSigninAdminDB;
@@ -19,7 +16,6 @@ import jakarta.servlet.ServletRequest;
 import jakarta.servlet.ServletResponse;
 import jakarta.servlet.annotation.WebFilter;
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import java.time.LocalDateTime;
 import model.Admin;
@@ -41,20 +37,17 @@ public class SigninAdminFilter implements Filter {
             throws IOException, ServletException {
         HttpServletRequest httpRequest = (HttpServletRequest) request;
         HttpSession session = httpRequest.getSession();
-
-
-
-
         String method = httpRequest.getMethod();
 
         // Xử lý request GET
         if ("GET".equalsIgnoreCase(method)) {
-            System.out.println("GET request to login page.");
+            System.out.println("Call filter admin with get method");
             request.getServletContext().getRequestDispatcher("/signinadmin.jsp").forward(request, response);
             return false;
         }
         // Xử lý request POST
         if ("POST".equalsIgnoreCase(method)) {
+            System.out.println("Call filter admin with post method");
             String username = request.getParameter("email");
             String password = request.getParameter("password");
             System.out.println("POST request from " + request.getRemoteAddr() + " for username: " + username);
@@ -94,7 +87,7 @@ public class SigninAdminFilter implements Filter {
                                 session.setAttribute("log",log);
 
                                 //Set mỗi phiên lam việc của admin là 30p, test 10s
-                                session.setMaxInactiveInterval(10);
+                                session.setMaxInactiveInterval(30*60);
                                 System.out.println("Login successful. Latitude: " + latitude + ", Longitude: " + longitude);
                                 return true;
                             } else {

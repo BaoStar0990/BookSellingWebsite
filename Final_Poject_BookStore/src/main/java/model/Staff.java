@@ -10,6 +10,7 @@ import java.time.LocalDate;
 @Table(name="Staff")
 public class Staff extends User implements Serializable {
     private Double salary;
+    private boolean status;
     
     public Staff() {
     }
@@ -28,10 +29,16 @@ public class Staff extends User implements Serializable {
         super(username, password, fullName, age, numberPhone, email);
         this.salary = salary;
     }
+    public Staff(int id, String username, String password, String fullName, int age, String numberPhone, String email, Double salary, LocalDate dob,boolean status) {
+        super(id, username, password, fullName, age, numberPhone, email, dob);
+        this.salary = salary;
+        this.status = status;
+    }
 
     public Staff(Double salary, String username, String password) {
         super(username, password);
         this.salary = salary;
+
     }
     
     public Double getSalary() {
@@ -39,5 +46,11 @@ public class Staff extends User implements Serializable {
     }
     public void setSalary(Double salary) {
         this.salary = salary;
+    }
+    public boolean getStatus() {
+        return status;
+    }
+    public void setStatus(boolean status) {
+        this.status = status;
     }
 }

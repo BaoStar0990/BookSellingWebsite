@@ -16,7 +16,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@WebServlet("/staff_order")
+@WebServlet("/staff/staff_order")
 public class StaffOrderController extends HttpServlet {
 
     @Override

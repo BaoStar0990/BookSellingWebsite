@@ -14,7 +14,7 @@
   tabs.put("author", new String[]{"Tác giả", "fa-square-pen", String.format("%s/ms_author", pageContext.getServletContext().getContextPath())});
   tabs.put("publisher", new String[]{"Nhà xuất bản", "fa-print", String.format("%s/ms_publisher", pageContext.getServletContext().getContextPath())});
   tabs.put("staff", new String[]{"Nhân viên", "fa-clipboard-user", String.format("%s/ms_staff", pageContext.getServletContext().getContextPath())});
-  tabs.put("signout", new String[]{"Đăng xuất", "fa-right-from-bracket", String.format("%s/signoutadmin", pageContext.getServletContext().getContextPath())});
+  tabs.put("signout", new String[]{"Đăng xuất", "fa-right-from-bracket", String.format("%s/signout/manage/admin", pageContext.getServletContext().getContextPath())});
 
   String currentTab = request.getParameter("currentTab") != null ? request.getParameter("currentTab") : "dashboard";
   String tabTitle = tabs.containsKey(currentTab) ? tabs.get(currentTab)[0] : "Tổng quan";

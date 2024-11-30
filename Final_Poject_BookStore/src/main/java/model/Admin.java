@@ -13,10 +13,12 @@ public class Admin implements Serializable {
     private int id;
     private String username;
     private String password;
+    private boolean status;
 
-    public Admin(String username, String password) {
+    public Admin(String username, String password, boolean status) {
         this.username = username;
         this.password = password;
+        this.status = status;
     }
 
     public Admin() {
@@ -45,5 +47,11 @@ public class Admin implements Serializable {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+    public boolean getStatus() {
+        return status;
+    }
+    public void setStatus(boolean status) {
+        this.status = status;
     }
 }

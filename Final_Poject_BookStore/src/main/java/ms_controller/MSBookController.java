@@ -26,7 +26,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-@WebServlet(name = "MSBookController", urlPatterns = {"/msbook"})
+@WebServlet(name = "MSBookController", urlPatterns = {"/ms/msbook"})
 @MultipartConfig
 public class MSBookController extends HttpServlet {
 

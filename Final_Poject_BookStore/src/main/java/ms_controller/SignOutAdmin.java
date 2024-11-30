@@ -5,7 +5,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.*;
 
 import java.io.IOException;
-@WebServlet(name = "SignOutAdmin",urlPatterns ="/signoutadmin")
+@WebServlet(name = "SignOutAdmin",urlPatterns ="/ms/signoutadmin")
 public class SignOutAdmin extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {

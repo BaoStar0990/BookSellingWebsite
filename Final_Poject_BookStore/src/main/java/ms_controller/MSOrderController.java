@@ -25,7 +25,7 @@ import java.util.stream.Collectors;
 import model.Book;
 import model.OrderDetail;
 
-@WebServlet(name = "MSOrderController", urlPatterns = {"/msorder"})
+@WebServlet(name = "MSOrderController", urlPatterns = {"/ms/msorder"})
 public class MSOrderController extends HttpServlet {
 
     @Override

@@ -102,8 +102,9 @@ public class PaymentController extends HttpServlet {
             else{
                 // lấy danh sách các địa chỉ của khách hàng
                 List<Address> addresses = c.getAddresses().stream()
-                        .sorted(Comparator.comparingInt(Address::getId))
-                        .collect(Collectors.toList());
+                    .sorted(Comparator.comparing(Address::isDefaultAddress).reversed() 
+                    .thenComparingInt(Address::getId)) //sắp xếp theo id
+                    .collect(Collectors.toList());
 
                 if(cart != null){
                     request.setAttribute("cartId", cart.getId());

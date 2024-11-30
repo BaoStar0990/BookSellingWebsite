@@ -46,13 +46,14 @@
                 <button class="form-control text-bg-success rounded-3 ">Xác nhận</button>
             </form>
         </c:if>
-        <c:if test="${(order.getStatusOrder() == 'Processing') || (order.getStatusOrder() == 'Packing') }">
+        <%-- <c:if test="${(order.getStatusOrder() == 'Processing') || (order.getStatusOrder() == 'Packing') }">
          <form action="/confirmcancelorder">
                 <input type ="hidden" name ="action" value="cancel">
                 <input type="hidden" name="orderId" value="${order.getId()}">
                 <button class="form-control primary-btn rounded-3" >Hủy</button>
         </form>
-        </c:if>
+        </c:if> --%>
+        
       </td>
     </tr>
   </c:forEach>

@@ -71,20 +71,16 @@ public class ModifyItemCartController extends HttpServlet {
                     }
                     else{
                         if(action.equals("increate")){
-                            if(order.getBook().getStocks() - order.getQuantity() >= 1){
-                                order.setQuantity(order.getQuantity() + 1);
-                                if(!OrderDetailDB.getInstance().update(order)){
-                                    System.out.println("Cập nhật không thành công");
-                                }
-                                else
-                                    // tăng trong session lên 1
-                                    orderDetails.stream()
-                                        .filter(o -> o.getId() == orderId) 
-                                        .findFirst()  
-                                        .ifPresent(o -> o.setQuantity(o.getQuantity()));
+                            order.setQuantity(order.getQuantity() + 1);
+                            if(!OrderDetailDB.getInstance().update(order)){
+                                System.out.println("Cập nhật không thành công");
                             }
                             else
-                                System.out.println("Hết hàng");
+                                // tăng trong session lên 1
+                                orderDetails.stream()
+                                    .filter(o -> o.getId() == orderId) 
+                                    .findFirst()  
+                                    .ifPresent(o -> o.setQuantity(o.getQuantity()));
                         }                            
                         else if(action.equals("decreate")){
                             if(order.getQuantity() > 1){

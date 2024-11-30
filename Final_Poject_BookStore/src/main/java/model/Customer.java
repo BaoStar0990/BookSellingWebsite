@@ -97,4 +97,16 @@ public class Customer extends User implements Serializable {
     public boolean setDefaultAddress(Address a){
         return CustomerDB.getInstance().setDefaltAddress(this, a);
     }
+    // lấy list địa chỉ với địa chỉ mặc định để ở đầu, và sau đó sắp theo ID
+    public List<Address> getListAddresses() {
+        Set<Address> setAddress = CustomerDB.getInstance().getAddressCustomer(this);
+    
+        if(setAddress.isEmpty())
+            return null;
+        else
+            return setAddress.stream()
+                    .sorted(Comparator.comparing(Address::isDefaultAddress).reversed() 
+                    .thenComparingInt(Address::getId)) //sắp xếp theo id
+                    .collect(Collectors.toList());
+    }
 }

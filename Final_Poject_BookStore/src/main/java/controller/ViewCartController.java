@@ -39,6 +39,15 @@ public class ViewCartController extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        
+//        String pathInfo = request.getPathInfo();
+//        // Kiểm tra nếu pathInfo có chứa tham số
+//        if (pathInfo != null && pathInfo.contains("?")) {
+//            response.setStatus(HttpServletResponse.SC_BAD_REQUEST); // 400 Bad Request
+//            response.getWriter().write("Invalid path or query parameters are not accepted.");
+//            return;
+//        }
+        
         //set UTF8 - Tiếng việt
         request.setCharacterEncoding("UTF-8");
         request.setCharacterEncoding("UTF-8");

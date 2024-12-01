@@ -62,8 +62,13 @@ public class MSOrderController extends HttpServlet {
                                 else{
                                     String orderDetailID_Str = request.getParameter("orderDetailID");
                                     int orderDetailID = Integer.parseInt(orderDetailID_Str);
-                                    if(!OrderDetailDB.getInstance().delete(orderDetailID, OrderDetail.class))
+                                    if(!OrderDetailDB.getInstance().delete(orderDetailID, OrderDetail.class)){
                                         request.setAttribute("errorMessage", "Xóa sản phẩm không thành công.");
+                                    }
+                                    else {
+                                        handleBillRequest(request, response);
+                                        return;
+                                    }
                                 }
                             } else {
                                 response.sendError(HttpServletResponse.SC_NOT_FOUND, "Bill not found");

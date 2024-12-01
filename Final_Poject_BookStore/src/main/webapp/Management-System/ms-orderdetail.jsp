@@ -184,16 +184,28 @@
                                     <tr>
                                         <c:if test="${bill.getStatusOrder() == 'Processing'}">
                                             <td>
-                                                <form action="${pageContext.request.contextPath}/ms/msorder" method="post" class="mb-0" onsubmit="return confirm('Bạn có chắc chắn muốn xóa sản phẩm này không?');">
-                                                    <input type="hidden" name="action" value="deleteOrderDetail">
-                                                    <input type="hidden" name="orderDetailID" value="${detail.getId()}">
-                                                    <input type="hidden" name="billId" value="${bill.getId()}">
-                                                    <button type="submit" class="btn btn-danger">
-                                                        <i class="fas fa-trash"></i>
-                                                    </button>
-                                                </form>
+                                                <div class ="row">
+                                                    <div class ="col-6">
+                                                        <form action="${pageContext.request.contextPath}/ms/msorder" method="post" class="mb-0" onsubmit="return confirm('Bạn có chắc chắn muốn xóa sản phẩm này không?');">
+                                                           <input type="hidden" name="action" value="deleteOrderDetail">
+                                                           <input type="hidden" name="orderDetailID" value="${detail.getId()}">
+                                                           <input type="hidden" name="billId" value="${bill.getId()}">
+                                                           <button type="submit" class="btn btn-danger">
+                                                               <i class="fas fa-trash"></i>
+                                                           </button>
+                                                       </form>
+                                                    </div>
+                                                   <div class ="col-6">
+                                                        <button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#editOrderModal"
+                                                                onclick="openEditModal('${bill.getId()}', '${detail.getId()}', '${detail.getBook().getTitle()}', '${detail.getQuantity()}')">
+                                                            <i class="fas fa-edit"></i>
+                                                        </button>
+                                                   </div>
+                                                </div>
+                                               
                                             </td>
                                         </c:if>
+                                       
                                         <td>${detail.getBook().getTitle()}</td>
                                         <td>${detail.getQuantity()}</td>
                                         <td>${detail.getUnitPrice()}</td>
@@ -230,6 +242,36 @@
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
                     <button type="button" class="btn btn-primary" id="confirmButton">Xác nhận</button>
                 </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="modal fade" id="editOrderModal" tabindex="-1" aria-labelledby="editOrderModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form action="${pageContext.request.contextPath}/ms/msorder" method="post" class="mb-0" id = "editOrderDetailForm">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="editOrderModalLabel">Cập nhật số lượng sản phẩm</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <input type="hidden" name="action" value="editOrderDetail">
+                        <input type="hidden" name="billIdEdit" id="billIdEdit" value="">
+                        <input type ="hidden" name="orderDetailID" id="orderDetailID" class="orderDetailID" value ="">
+                        <div class="row">
+                            <label for="bookName" class="form-label">Tên sách:</label>
+                            <input type="text" class="form-control" id="bookName" name="bookName" required disabled/>
+                        </div>
+                        <div class="row">
+                            <label for="quantity" class="form-label">Số Lượng:</label>
+                            <input type="number" class="form-control" id="quantity" name="quantity" required min="1"/>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                        <button type="submit" class="btn btn-primary" id="confirmButton">Xác nhận</button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
@@ -323,6 +365,13 @@
             };
             html2pdf().set(opt).from(billContent).save();
         }
+        function openEditModal(billID, orderDetailId, bookName, quantity){ 
+            document.getElementById("billIdEdit").value = billID; 
+            document.getElementById("orderDetailID").value = orderDetailId;
+            document.getElementById("bookName").value = bookName; 
+            document.getElementById("quantity").value = quantity; 
+        }
+            
     </script>
 </body>
 </html>

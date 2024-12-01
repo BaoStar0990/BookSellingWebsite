@@ -75,7 +75,7 @@
                                 <td class="d-flex">
                                     <form action="${pageContext.request.contextPath}/ms/msorder" method="post" style="display:inline;">
                                         <input type="hidden" name="billId" value="${bill.getId()}">
-                                        <button type="submit" class="btn btn-secondary btn-sm me-2">
+                                        <button type="submit" class="btn btn-secondary btn-sm me-2" >
                                             <i class="fas fa-eye "></i>
                                         </button>
                                     </form>

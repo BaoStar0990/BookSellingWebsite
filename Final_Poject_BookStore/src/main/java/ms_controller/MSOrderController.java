@@ -38,24 +38,26 @@ public class MSOrderController extends HttpServlet {
                 || action.equalsIgnoreCase("cancelOrder") 
                     || action.equalsIgnoreCase("deleteOrder")
                         || action.equalsIgnoreCase("checkSoLuong")
-                            || action.equalsIgnoreCase("deleteOrderDetail"))) {
+                            || action.equalsIgnoreCase("deleteOrderDetail")
+                                || action.equalsIgnoreCase("editOrderDetail"))) {
             if(action.equalsIgnoreCase("deleteOrderDetail")){
                 try{
                     String billIdParam = request.getParameter("billId");
                     if (billIdParam != null && !billIdParam.isEmpty()) {
-                        // nếu đơn hàng chỉ có 1 sản phẩm thì xóa đơn hàng đó luôn
+                        // nếu đơn hàng chỉ có 1 sản phẩm thì chuyển đơn hàng sang cancel
                         try {
                             int billId = Integer.parseInt(billIdParam);
                             Bill bill = BillDB.getInstance().selectByID(billId);
                             if (bill != null) {
                                 // kiểm tra số lượng sản phẩm trong Bill
-                                if (bill.getOrderDetails() != null && bill.getOrderDetails().size() == 1) {         
-                                    boolean isDeleted = BillDB.getInstance().delete(bill.getId(), Bill.class);
-                                    if (!isDeleted) {
-                                       response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Failed to delete order");
+                                if (bill.getOrderDetails() != null && bill.getOrderDetails().size() == 1) { 
+                                    bill.setStatusOrder(StatusOrder.Cancelled);
+                                    boolean isUpdate = BillDB.getInstance().update(bill);
+                                    if (!isUpdate) {
+                                       response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Failed to update order");
                                     }
                                     else{
-                                        response.sendRedirect(request.getContextPath() +"/ms/msorder");
+                                        handleBillRequest(request, response);
                                         return;
                                     }
                                 } // chỉ xóa sản phẩm
@@ -89,6 +91,40 @@ public class MSOrderController extends HttpServlet {
                         .getRequestDispatcher("/Management-System/ms-orderdetail.jsp")
                         .forward(request, response);
                 
+            }
+            else if (action.equalsIgnoreCase("editOrderDetail")){
+                try {
+                    // lấy OrderDetailID
+                    String orderDetailID_Str = request.getParameter("orderDetailID");
+                    int orderDetailID = Integer.parseInt(orderDetailID_Str);
+                    // lấy số lượng cần cập nhật
+                    String quantity_Str = request.getParameter("quantity");
+                    int quantity = Integer.parseInt(quantity_Str);
+                    
+                    OrderDetail order = OrderDetailDB.getInstance().selectByID(orderDetailID);
+                    if(order != null){
+                        order.setQuantity(quantity);
+                        if(!OrderDetailDB.getInstance().update(order))
+                            request.setAttribute("errorMessage", "Cập nhật không thành công.");
+                    }
+                    else{
+                        request.setAttribute("errorMessage", "Không tìm thấy chi tiết đơn hàng.");
+                    }
+                    String billIdParam = request.getParameter("billIdEdit");
+                    int billId = Integer.parseInt(billIdParam);
+                    Bill bill = BillDB.getInstance().selectByID(billId);
+                    if (bill != null) {
+                        request.setAttribute("bill", bill);
+                        request.getRequestDispatcher("/Management-System/ms-orderdetail.jsp")
+                                    .forward(request, response);
+                    } else {
+                        processRequest(request, response);
+                    } 
+                } catch (NumberFormatException ex) {
+                     request.setAttribute("errorMessage", "Vui lòng nhập đúng dữ liệu");
+                } catch (NoSuchElementException ex) {
+                    request.setAttribute("errorMessage", "Không tìm thấy sách");
+                }
             }
             else if (action.equalsIgnoreCase("deleteOrder")) {
                 handleDeleteOrder(request, response);
@@ -208,15 +244,16 @@ public class MSOrderController extends HttpServlet {
                         nextStatus = getNextStatus(currentStatus);
                     }
                     if(action.equalsIgnoreCase("checkSoLuong")){
-                        boolean isExceedQuantity = bill.getOrderDetails().stream()
-                                        .anyMatch(o -> o.getBook().getStocks() < o.getQuantity());
-                        if(isExceedQuantity){
-                             // hỏi nhân viên có muốn hủy đơn hàng không
-                            request.setAttribute("errorMessage", "Sản phẩm đã hết hàng.");
-                            System.out.println("aaaaaaaaaaabbbb");
+                        List<String> booksExceedingStocks = bill.getOrderDetails().stream()
+                                .filter(o -> o.getBook().getStocks() < o.getQuantity()) 
+                                .map(o -> '\"' + o.getBook().getTitle() + '\"' + " hiện còn " + o.getBook().getStocks() + " cuốn") 
+                                .collect(Collectors.toList()); 
+
+                        if (!booksExceedingStocks.isEmpty()) {
+                            request.setAttribute("errorMessage", String.join(", ", booksExceedingStocks));
                         }
                         else{
-                            request.setAttribute("successMessage", "Sản phẩm còn hàng.");
+                            request.setAttribute("successMessage", "Các sản phẩm còn hàng.");
                             System.out.println("dddddddd");
                         }
                         handleBillRequest(request, response);
@@ -232,12 +269,13 @@ public class MSOrderController extends HttpServlet {
                             try {
                                 tr.begin();
                                 // kiểm tra số lượng đặt có vượt quá số lượng trong kho
-                                boolean isExceedQuantity = bill.getOrderDetails().stream()
-                                        .anyMatch(o -> o.getBook().getStocks() < o.getQuantity());
-                                if(isExceedQuantity){
-                                     // hỏi nhân viên có muốn hủy đơn hàng không
-                                    request.setAttribute("errorMessage", "Sản phẩm đã hết hàng.");
-                                    System.out.println("aaaaaaaaaaabbbb");
+                                List<String> booksExceedingStocks = bill.getOrderDetails().stream()
+                                        .filter(o -> o.getBook().getStocks() < o.getQuantity()) 
+                                        .map(o -> '\"' + o.getBook().getTitle() + '\"' + " hiện còn " + o.getBook().getStocks() + " cuốn") 
+                                        .collect(Collectors.toList()); 
+
+                                if (!booksExceedingStocks.isEmpty()) {
+                                    request.setAttribute("errorMessage", String.join(", ", booksExceedingStocks));
                                     handleBillRequest(request, response);
                                     return;
                                 }

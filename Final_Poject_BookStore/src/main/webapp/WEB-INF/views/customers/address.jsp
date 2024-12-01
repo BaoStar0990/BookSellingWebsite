@@ -36,14 +36,13 @@
           </div>
           <p class="mb-2"><strong>Địa chỉ: </strong>${address.toString()}</p>
           <p class="mb-1"><strong>Số điện thoại: </strong>${address.getPhonenumber()}</p>
-          <c:if test="${!address.isDefaultAddress()}"> <!-- Check if this is not the default address -->
-            <form action="/modifyaddress" method="post" class="d-inline my-1" id ="defaultAddressForm">
+          <c:if test="${!address.isDefaultAddress()}">
+            <form action="/modifyaddress" method="post" class="d-inline my-1" id="defaultAddressForm-${address.getId()}">
                 <input type="hidden" name="action" value="defaultAddress" />              
                 <input type="hidden" id="idDefault" name="idDefault" value="${address.getId()}"/>
-               <a href="javascript:void(0);" class="text-primary text-decoration-none mb-0 p-0" 
-                  onclick="document.getElementById('defaultAddressForm').submit();">
+                <button type="submit" class="btn btn-link text-primary text-decoration-none mb-0 p-0" >
                     Đặt làm mặc định
-                </a>
+                </button>
             </form>
           </c:if>
         </div>

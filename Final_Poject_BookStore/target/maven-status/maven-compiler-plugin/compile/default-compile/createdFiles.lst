@@ -17,6 +17,7 @@ model\User.class
 dbmodel\StaffDB.class
 PasswordUtil\PasswordUtil.class
 test\TestDiscountCampaign.class
+StaffController\StaffOrderController$1.class
 database\DBUtil.class
 Utils\authentication\CookieUtil.class
 Utils\authentication\CSRFUtil.class

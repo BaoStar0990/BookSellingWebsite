@@ -443,6 +443,7 @@
             function sendDataToAddCart(event) {
                 const bookId = document.getElementById("bookId").value; // Dữ liệu cần gửi
                 const quantity = document.getElementById("quantity").value;
+//                alert(quantity);
                 if (!bookId || !quantity) {
                     alert("Vui lòng điền đủ thông tin.");
                     return; // Dừng hàm nếu giá trị trống
@@ -456,8 +457,6 @@
                     data.append('action', "muaNgay");
                 }
                 else{
-//                    if(<%= (session.getAttribute("user") != null)%>)
-//                        showNotification();
                     data.append('action', "themVaoGio");
                 }
                 document.getElementById('loading-screen').style.display = 'flex';

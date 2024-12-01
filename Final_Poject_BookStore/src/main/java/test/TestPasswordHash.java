@@ -12,7 +12,7 @@ public class TestPasswordHash {
         try {
             // -------- lấy pass -----------
             String salt = getSalt();
-            String hashedPassword = HashPassword("password" + salt);
+            String hashedPassword = HashPassword("8386" + salt);
             System.out.println(salt);
             System.out.println(hashedPassword);
             // ------- Test lấy pass --------

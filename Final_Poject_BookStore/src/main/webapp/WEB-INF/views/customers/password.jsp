@@ -4,7 +4,7 @@
 <div class="container">
   <h4 class="border-bottom pb-2 mb-3 fw-bold">Thay đổi Mật khẩu</h4>
   <div class="card p-4 shadow-sm">
-     <c:choose>
+    <c:choose>
         <c:when test="${requestScope.errorMessage == null}">
             <div id="errorMessage" class="alert alert-danger d-none"></div>
         </c:when>

@@ -15,7 +15,7 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.util.List;
 
-@WebServlet("/ms_staff")
+@WebServlet("/ms/ms_staff")
 public class MSStaffController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -39,6 +39,11 @@ public class MSStaffController extends HttpServlet {
             switch (action) {
                 case "edit":
                 {
+                    String status = req.getParameter("status");
+                    boolean status_1 = false;
+                    if(status.equals("on")){
+                        status_1 = true;
+                    }
                     Staff staff = new Staff(Integer.parseInt(req.getParameter("staffId")),
                             req.getParameter("account"),
                             req.getParameter("password"),
@@ -47,7 +52,9 @@ public class MSStaffController extends HttpServlet {
                             req.getParameter("phone"),
                             req.getParameter("email"),
                             Double.parseDouble(req.getParameter("salary")),
-                            LocalDate.parse(req.getParameter("dob")));
+                            LocalDate.parse(req.getParameter("dob")),
+                            status_1
+                    );
                     StaffDB.getInstance().update(staff);
                     break;
                 }
@@ -76,7 +83,7 @@ public class MSStaffController extends HttpServlet {
             session.setAttribute("staffs", staff);
         }
 
-        resp.sendRedirect(getServletContext().getContextPath() + "/ms_staff");
+        resp.sendRedirect(getServletContext().getContextPath() + "/ms/ms_staff");
 
     }
 }

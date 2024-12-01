@@ -54,13 +54,15 @@ public class BillDB extends ModifyDB<Bill> implements DBInterface<Bill> {
             em = DBUtil.getEmFactory().createEntityManager();
             tr = em.getTransaction();
             tr.begin();
+            // find Bill 
+            Bill cart = em.find(Bill.class, bill.getId());
             // tạo Orderdetail
             OrderDetail order = new OrderDetail(quantity, book);
 //            em.merge(order); // lưu nếu chưa có và cập nhật nếu co
             // Thêm orderdetail vào bill
-            bill.addOrderDetail(order);
+            cart.addOrderDetail(order);
             // lưu cập nhật
-            em.merge(bill);
+            em.merge(cart);
             tr.commit();
             return true;
         }

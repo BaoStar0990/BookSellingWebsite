@@ -99,49 +99,46 @@ public class AddCartController extends HttpServlet {
                 Book book = BookDB.getInstance().selectByID(idBook);
                     
                 if(book != null){
-                    // kiểm tra số lượng thêm vào có vượt quá số lượng trong kho không
-                    if(book.getStocks() >= quantity){
-                        // check lỗi khách hàng ko có giỏ hàng
-                        if(cart != null){
+                    // check lỗi khách hàng ko có giỏ hàng
+                    if(cart != null){
 
-                            // sửa lại lấy trong session
-                            // kiểm tra cuốn sách đó có trong cart chưa, nếu có thì tăng số lượng lên 
-                            OrderDetail orderDetail = null;
-                            if(orderDetails != null){
-                                orderDetail = orderDetails.stream()
-                                    .filter(o -> o.getBook().equals(book))
-                                    .findFirst()
-                                    .orElse(null);
+                        // sửa lại lấy trong session
+                        // kiểm tra cuốn sách đó có trong cart chưa, nếu có thì tăng số lượng lên 
+                        OrderDetail orderDetail = null;
+                        if(orderDetails != null){
+                            orderDetail = orderDetails.stream()
+                                .filter(o -> o.getBook().equals(book))
+                                .findFirst()
+                                .orElse(null);
 
-                                // 
+                            // 
 
-                                if(orderDetail == null){
-                                   if(BillDB.getInstance().addBookBill(book, quantity, cart) == false){
-                                        errorMessage = "Lỗi thêm vào giỏ hàng";
-                                   } 
-                                   else{
-                                       // thêm OrderDetail vào session
-                                       // tìm OrderDetail vừa thêm vào
-                                       OrderDetail findOrder = BillDB.getInstance().FindOrderDetailFromBill(book, cart);
-                                       if(findOrder != null)
-                                           orderDetails.add(findOrder);
-                                       else
-                                           errorMessage = "Lỗi cập nhật session";
-                                   }
-                                }
-                                else{
-                                    orderDetail.setQuantity(orderDetail.getQuantity()+quantity);
-                                    OrderDetailDB.getInstance().update(orderDetail);
-                                    // cập nhật OrderDetail vào session
-                                    int orderId = orderDetail.getId();
-                                    orderDetails.stream()
-                                        .filter(o -> o.getId() == orderId) 
-                                        .findFirst()  
-                                        .ifPresent(o -> o.setQuantity(o.getQuantity()));
-                                }
+                            if(orderDetail == null){
+                               if(BillDB.getInstance().addBookBill(book, quantity, cart) == false){
+                                    errorMessage = "Lỗi thêm vào giỏ hàng";
+                               } 
+                               else{
+                                   // thêm OrderDetail vào session
+                                   // tìm OrderDetail vừa thêm vào
+                                   OrderDetail findOrder = BillDB.getInstance().FindOrderDetailFromBill(book, cart);
+                                   if(findOrder != null)
+                                       orderDetails.add(findOrder);
+                                   else
+                                       errorMessage = "Lỗi cập nhật session";
+                               }
                             }
-
+                            else{
+                                orderDetail.setQuantity(orderDetail.getQuantity()+quantity);
+                                OrderDetailDB.getInstance().update(orderDetail);
+                                // cập nhật OrderDetail vào session
+                                int orderId = orderDetail.getId();
+                                orderDetails.stream()
+                                    .filter(o -> o.getId() == orderId) 
+                                    .findFirst()  
+                                    .ifPresent(o -> o.setQuantity(o.getQuantity()));
+                            }
                         }
+
                     }
                     
                 }
@@ -181,7 +178,7 @@ public class AddCartController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+//        processRequest(request, response);
     }
 
     /**

@@ -53,12 +53,23 @@
                     
                 </div>
                 <div class="d-flex justify-content-end">
+                    <c:if test="${bill.getStatusOrder() == 'Processing'}">
+                        <form id="checkSLForm" action="${pageContext.request.contextPath}/msorder" method="post" class="mb-0">
+                            <input type="hidden" name="action" value="checkSoLuong">
+                            <input type="hidden" name="billId" value="${bill.getId()}">
+                            <input type="hidden" name="redirectUrl" value="${pageContext.request.requestURL}">
+                                <button type="submit" class="btn btn-primary me-2" id="checkSLButton"
+                                        <i class="fas fa-box"></i>
+                                        Kiểm tra số lượng
+                                </button> 
+                        </form>
+                    </c:if> 
                     <form id="statusForm" action="${pageContext.request.contextPath}/msorder" method="post" class="mb-0">
                         <input type="hidden" name="action" value="updateStatus">
                         <input type="hidden" name="billId" value="${bill.getId()}">
                         <input type="hidden" name="redirectUrl" value="${pageContext.request.requestURL}">
                         <button type="button" class="btn btn-primary me-2" id="statusButton"
-                            <c:if test="${bill.getStatusOrder() == 'Completed'}">style="display:none;" disabled</c:if>>
+                            <c:if test="${bill.getStatusOrder() == 'Completed'}">style="display:none;" disabled</c:if>
                             <c:choose>
                                 <c:when test="${bill.getStatusOrder() == 'Processing'}">
                                     <i class="fas fa-box"></i>
@@ -81,7 +92,7 @@
                                     Xử lý đơn hàng
                                 </c:when>
                             </c:choose>
-                        </button>
+                        </button>           
                     </form>
                     <c:if test="${(bill.getStatusOrder() == 'Processing' || bill.getStatusOrder() == 'Packing' || bill.getStatusOrder() == 'Delivering') && bill.getStatusPayment() == 'Unpaid'}">
                         <form id="cancelForm" action="${pageContext.request.contextPath}/msorder" method="post" class="mb-0">
@@ -108,6 +119,24 @@
             </div>
             <hr>
             <div class="row">
+                <!-- hiện thông báo lỗi -->
+                <c:choose>
+                    <c:when test="${requestScope.errorMessage == null}">
+                        <div id="errorMessage" class="alert alert-danger d-none"></div>
+                    </c:when>
+                    <c:otherwise>
+                        <div id="errorMessage" class="alert alert-danger">${requestScope.errorMessage}</div>
+                    </c:otherwise>
+                </c:choose>
+                <c:choose>
+                    <c:when test="${requestScope.successMessage == null}">
+                        <div id="successMessage" class="alert alert-success d-none"></div>
+                    </c:when>
+                    <c:otherwise>
+                        <div id="successMessage" class="alert alert-success">${requestScope.successMessage}</div>
+                    </c:otherwise>
+                </c:choose>
+                        
                 <div class="col-md-6">
                     <h5>Chi tiết đơn hàng</h5>
                     <div class="card mb-3">
@@ -143,6 +172,7 @@
                         <table class="table table-bordered">
                             <thead>
                                 <tr>
+                                    <th>Action</th>
                                     <th>Tên sách</th>
                                     <th>Số lượng</th>
                                     <th>Đơn giá</th>
@@ -152,6 +182,16 @@
                             <tbody>
                                 <c:forEach var="detail" items="${bill.getOrderDetails()}">
                                     <tr>
+                                        <td>
+                                            <form action="${pageContext.request.contextPath}/msorder" method="post" class="mb-0" onsubmit="return confirm('Bạn có chắc chắn muốn xóa sản phẩm này không?');">
+                                                <input type="hidden" name="action" value="deleteOrderDetail">
+                                                <input type="hidden" name="orderDetailID" value="${detail.getId()}">
+                                                <input type="hidden" name="billId" value="${bill.getId()}">
+                                                <button type="submit" class="btn btn-danger">
+                                                    <i class="fas fa-trash"></i>
+                                                </button>
+                                            </form>
+                                        </td>
                                         <td>${detail.getBook().getTitle()}</td>
                                         <td>${detail.getQuantity()}</td>
                                         <td>${detail.getUnitPrice()}</td>

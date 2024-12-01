@@ -55,6 +55,7 @@ public class ModifyAddressController extends HttpServlet {
                     String idStr = request.getParameter("idDefault");
                     try{                      
                         // find Address
+                        System.out.println("---------------" + idStr);
                         int id = Integer.parseInt(idStr); 
                         Address a = AddressDB.getInstance().selectByID(id);
                         if(a != null){                           
@@ -72,10 +73,11 @@ public class ModifyAddressController extends HttpServlet {
                     }
                 }
                 if(action.equals("delete")){
-                    String idStr = request.getParameter("id");
+                    String idStr = request.getParameter("idDelete");
                     try{                      
                         // find Address
                         int id = Integer.parseInt(idStr); 
+                        System.out.println("---------------" + idStr);
                         Address a = AddressDB.getInstance().selectByID(id);
                         if(a != null){                           
                             if(AddressDB.getInstance().delete(id, Address.class))
@@ -149,20 +151,6 @@ public class ModifyAddressController extends HttpServlet {
             response.sendRedirect(url);
     }
 
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
-    /**
-     * Handles the HTTP <code>GET</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
-    @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        processRequest(request, response);
-    }
 
     /**
      * Handles the HTTP <code>POST</code> method.

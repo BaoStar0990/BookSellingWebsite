@@ -12,7 +12,7 @@ import model.Customer;
 import java.io.IOException;
 import java.util.List;
 
-@WebServlet("/staff_customer")
+@WebServlet("/staff/staff_customer")
 public class StaffCustomerController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {

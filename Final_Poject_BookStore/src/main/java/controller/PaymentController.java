@@ -46,7 +46,7 @@ public class PaymentController extends HttpServlet {
         request.setCharacterEncoding("UTF-8");
         
         String url = "/deliveryinfo.jsp";
-        
+        String errorMessage = null;
         
         // Lấy session
         HttpSession session = request.getSession();
@@ -67,11 +67,14 @@ public class PaymentController extends HttpServlet {
                         .orElse(null);
                 session.setAttribute("cart", cart);
                 // lấy các orderDetail trong cart
-                if(cart != null){
-                    session.setAttribute("orderDetails", cart.getOrderDetails());
-                    sortedOrderDetails = cart.getOrderDetails().stream()
+                if(cart != null){               
+                    Set<OrderDetail> orderDetails = cart.getOrderDetails();
+                    session.setAttribute("orderDetails", orderDetails);
+                    if(orderDetails != null){
+                        sortedOrderDetails = cart.getOrderDetails().stream()
                                                .sorted(Comparator.comparingInt(OrderDetail::getId))
                                                .collect(Collectors.toList());
+                    }
                 }
             }
             else {
@@ -84,37 +87,43 @@ public class PaymentController extends HttpServlet {
                 }
             }
             
-            // lấy danh sách các địa chỉ của khách hàng
-            List<Address> addresses = c.getAddresses().stream()
-                    .sorted(Comparator.comparingInt(Address::getId))
+            if(sortedOrderDetails == null){
+                url = "/viewcart";
+                errorMessage = "Vui lòng thêm sản phẩm vào giỏ hàng trước khi thanh toán.";
+                request.setAttribute("errorMessage", errorMessage);
+                System.out.println("aaaaaaaaaaaaaaaa");
+            }
+            else if(sortedOrderDetails.isEmpty()){
+                url = "/viewcart";
+                errorMessage = "Vui lòng thêm sản phẩm vào giỏ hàng trước khi thanh toán.";
+                request.setAttribute("errorMessage", errorMessage);
+                System.out.println("aaaaaaaaaaaaaaaa");
+            }
+            else{
+                // lấy danh sách các địa chỉ của khách hàng
+                List<Address> addresses = c.getAddresses().stream()
+                    .sorted(Comparator.comparing(Address::isDefaultAddress).reversed() 
+                    .thenComparingInt(Address::getId)) //sắp xếp theo id
                     .collect(Collectors.toList());
-                    
-            if(cart != null){
-                request.setAttribute("cartId", cart.getId());
-                request.setAttribute("listOrderDetails", sortedOrderDetails);
-            } 
-            request.setAttribute("addresses", addresses);
+
+                if(cart != null){
+                    request.setAttribute("cartId", cart.getId());
+                    request.setAttribute("listOrderDetails", sortedOrderDetails);
+                } 
+                request.setAttribute("addresses", addresses);
+            }
         }
         // chuyển trang
         request.getServletContext().getRequestDispatcher(url).forward(request, response);
         
     }
 
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
-    /**
-     * Handles the HTTP <code>GET</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         processRequest(request, response);
     }
-
+    
     /**
      * Handles the HTTP <code>POST</code> method.
      *

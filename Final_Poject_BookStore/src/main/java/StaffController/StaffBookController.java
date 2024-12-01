@@ -13,7 +13,7 @@ import java.io.InputStream;
 import java.util.HashSet;
 import java.util.Set;
 
-@WebServlet("/staff_book")
+@WebServlet("/staff/staff_book")
 @MultipartConfig
 public class StaffBookController extends HttpServlet {
 
@@ -31,7 +31,7 @@ public class StaffBookController extends HttpServlet {
         request.setAttribute("categories", session.getAttribute("categories"));
         request.setAttribute("publishers", session.getAttribute("publishers"));
         request.setAttribute("discountCampaigns", session.getAttribute("discountCampaigns"));
-        String url = "\\Staff\\staff-book.jsp";
+        String url = "/Staff/staff-book.jsp";
         request.getRequestDispatcher(url).forward(request, response);
     }
 

@@ -12,7 +12,7 @@ import model.Author;
 import java.io.IOException;
 import java.util.List;
 
-@WebServlet("/staff_author")
+@WebServlet("/staff/staff_author")
 public class StaffAuthorController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -22,7 +22,6 @@ public class StaffAuthorController extends HttpServlet {
             List<Author> authors = AuthorDB.getInstance().selectAll();
             session.setAttribute("authors", authors);
         }
-
         req.getServletContext().getRequestDispatcher("/Staff/staff-author.jsp").forward(req,resp);
     }
 

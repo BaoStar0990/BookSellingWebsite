@@ -182,13 +182,13 @@ public class CustomerDB  extends ModifyDB<Customer> implements DBInterface<Custo
                em.close();
            }
     }
-    private static final ReentrantLock lock = new ReentrantLock();
+    //private static final ReentrantLock lock = new ReentrantLock();
     public boolean makeAnOrder(Bill cart, Customer customer){
-        lock.lock(); // Khóa trước khi truy cập logic
+       // lock.lock(); // Khóa trước khi truy cập logic
         EntityManager em = null;
         EntityTransaction tr = null;
         try{
-            System.out.println("Mot tien trinh sang vao");
+//            System.out.println("Mot tien trinh sang vao");
             em = DBUtil.getEmFactory().createEntityManager();
             tr = em.getTransaction();
             tr.begin();
@@ -196,10 +196,10 @@ public class CustomerDB  extends ModifyDB<Customer> implements DBInterface<Custo
             if(cart.getOrderDetails().isEmpty() || !("Storing".equals(cart.getStatusOrder().toString())))
                 return false;
             // kiểm tra số lượng đặt có vượt quá số lượng trong kho
-            boolean isExceedQuantity = cart.getOrderDetails().stream()
-                    .anyMatch(o -> o.getBook().getStocks() < o.getQuantity());
-            if(isExceedQuantity)
-                return false;
+//            boolean isExceedQuantity = cart.getOrderDetails().stream()
+//                    .anyMatch(o -> o.getBook().getStocks() < o.getQuantity());
+//            if(isExceedQuantity)
+//                return false;
             // chuyển trạng thái từ "storing" sang "Processing"
             cart.setStatusOrder(StatusOrder.Processing);
             // sleep ở đây, nó mà sleep lại là bấm bên kia xem nó có chạy ko
@@ -207,41 +207,41 @@ public class CustomerDB  extends ModifyDB<Customer> implements DBInterface<Custo
 //            Thread.sleep(20000);
             
             // trừ số lượng sách trong kho khi đặt
-            final EntityManager emFinal = em;           
-            cart.getOrderDetails().forEach(o ->{
-                        // lấy cuốn sách cập nhật số lượng trong kho
-                        var book = emFinal.find(Book.class, o.getBook().getId());
-                        book.setStocks(book.getStocks() - o.getQuantity());
-                        emFinal.merge(book);
-                    });
+//            final EntityManager emFinal = em;           
+//            cart.getOrderDetails().forEach(o ->{
+//                        // lấy cuốn sách cập nhật số lượng trong kho
+//                        var book = emFinal.find(Book.class, o.getBook().getId());
+//                        book.setStocks(book.getStocks() - o.getQuantity());
+//                        emFinal.merge(book);
+//                    });
             // cập nhật cart thành đơn hàng
             em.merge(cart);  
 
             // cập nhật lại số lượng các OrderDetail trong các cart của khách hàng khác có
             // còn hợp lệ không
-            List<Bill> allCart = em.createQuery(
-            "SELECT b FROM Bill b WHERE b.statusOrder = :status AND b.id != :cartId", Bill.class)
-            .setParameter("status", StatusOrder.Storing)
-            .setParameter("cartId", cart.getId())
-            .getResultList();
+//            List<Bill> allCart = em.createQuery(
+//            "SELECT b FROM Bill b WHERE b.statusOrder = :status AND b.id != :cartId", Bill.class)
+//            .setParameter("status", StatusOrder.Storing)
+//            .setParameter("cartId", cart.getId())
+//            .getResultList();
 
-            for (Bill c : allCart) {
-                Iterator<OrderDetail> iterator = c.getOrderDetails().iterator();
-                while (iterator.hasNext()) {
-                    OrderDetail o = iterator.next();
-
-                    // Nếu số lượng = 0, xóa OrderDetail này
-                    if (o.getBook().getStocks() == 0) {
-                        iterator.remove();
-                        em.remove(o); // Xóa khỏi cơ sở dữ liệu
-                    } 
-                    // Nếu số lượng > số lượng trong kho, thì set về số lượng trong kho
-                    else if (o.getQuantity() > o.getBook().getStocks()) {
-                        o.setQuantity(o.getBook().getStocks());
-                        em.merge(o); // Cập nhật OrderDetail
-                    }
-                }
-            }
+//            for (Bill c : allCart) {
+//                Iterator<OrderDetail> iterator = c.getOrderDetails().iterator();
+//                while (iterator.hasNext()) {
+//                    OrderDetail o = iterator.next();
+//
+//                    // Nếu số lượng = 0, xóa OrderDetail này
+//                    if (o.getBook().getStocks() == 0) {
+//                        iterator.remove();
+//                        em.remove(o); // Xóa khỏi cơ sở dữ liệu
+//                    } 
+//                    // Nếu số lượng > số lượng trong kho, thì set về số lượng trong kho
+//                    else if (o.getQuantity() > o.getBook().getStocks()) {
+//                        o.setQuantity(o.getBook().getStocks());
+//                        em.merge(o); // Cập nhật OrderDetail
+//                    }
+//                }
+//            }
             // tạo cart mới cho khách hàng         
             Bill newCart = new Bill();
             newCart.setCustomer(customer);
@@ -261,7 +261,7 @@ public class CustomerDB  extends ModifyDB<Customer> implements DBInterface<Custo
             System.out.println("Tien trinh hoan thanh");
             if(em != null)
                 em.close();
-            //lock.unlock(); // Mở khóa sau khi xử lý xong
+          //  lock.unlock(); // Mở khóa sau khi xử lý xong
         }
             
     }

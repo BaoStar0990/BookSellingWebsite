@@ -13,7 +13,7 @@ import model.Category;
 import java.io.IOException;
 import java.util.List;
 
-@WebServlet("/staff_category")
+@WebServlet("/staff/staff_category")
 public class StaffCategoryController extends HttpServlet {
 
     @Override

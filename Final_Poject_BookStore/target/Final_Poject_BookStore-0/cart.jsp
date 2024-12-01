@@ -58,8 +58,17 @@
     </p>
 </div>
 <!-- end Link -->
-
 <div class="container mt-4">
+    <!-- Thông báo lỗi -->
+    <c:choose>
+        <c:when test="${requestScope.errorMessage == null}">
+            <div id="errorMessage" class="alert alert-danger d-none"></div>
+        </c:when>
+        <c:otherwise>
+            <div id="errorMessage" class="alert alert-danger">${requestScope.errorMessage}</div>
+        </c:otherwise>
+    </c:choose>
+        
     <h3 class="fw-bold mb-4">Giỏ hàng của bạn</h3>
     <div class="table-responsive" style="height:500px;overflow:auto;">
         <table class="table align-middle text-center">

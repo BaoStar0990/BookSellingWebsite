@@ -57,7 +57,7 @@
                     <a class="list-group-item border-0 ${param.setting == 'address' ? 'active' : ''}" href="usersetting.jsp?setting=address">Thông tin địa chỉ</a>
                     <a class="list-group-item border-0 ${param.setting == 'change-password' ? 'active' : ''}" href="usersetting.jsp?setting=change-password">Đổi mật khẩu</a>
 
-                    <form class="m-0" action="signin" method="post">
+                    <form class="m-0" action="/signout" method="post">
                         <input type="hidden" name="action" value="logout">
                         <a href="javascript:" class="list-group-item border-0" onclick="parentNode.submit()">Đăng xuất</a>
                     </form>

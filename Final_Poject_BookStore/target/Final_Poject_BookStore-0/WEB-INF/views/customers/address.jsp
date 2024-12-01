@@ -5,7 +5,7 @@
 
   <!-- Address List -->
   <div class="row">
-    <c:forEach var="address" items="${sessionScope.user.getAddresses()}">
+    <c:forEach var="address" items="${sessionScope.user.getListAddresses()}">
       <div class="col-12 mb-3">
         <div class="card p-3 shadow-sm h-100">
           <div class="d-flex justify-content-between align-items-center mb-2">
@@ -25,27 +25,31 @@
               </a>
                 <form action ="/modifyaddress" method="post" class="d-inline my-1" id ="deleteAdderessForm">
                     <input type="hidden" name="action" value="delete" />
-                    <input type="hidden" id="id" name="id" value="${address.getId()}"/>
-                    <a href="javascript:void(0);" class="text-primary text-decoration-none mb-0 p-0" 
-                  onclick="document.getElementById('deleteAdderessForm').submit();">
+                    <input type="hidden" id="idDelete" name="idDelete" value="${address.getId()}"/>
+                    <button class=" btn no-border text-primary text-decoration-none mb-0 p-0" type="submit">
                         <i class="fas fa-trash mb-1"></i>
-                  </a>
+                    </button>
+          
+                  <!--</a>-->
                 </form>
               
             </div>
           </div>
+                    
           <p class="mb-2"><strong>Địa chỉ: </strong>${address.toString()}</p>
           <p class="mb-1"><strong>Số điện thoại: </strong>${address.getPhonenumber()}</p>
+          
           <c:if test="${!address.isDefaultAddress()}"> <!-- Check if this is not the default address -->
             <form action="/modifyaddress" method="post" class="d-inline my-1" id ="defaultAddressForm">
                 <input type="hidden" name="action" value="defaultAddress" />              
                 <input type="hidden" id="idDefault" name="idDefault" value="${address.getId()}"/>
-               <a href="javascript:void(0);" class="text-primary text-decoration-none mb-0 p-0" 
+               <button class="btn no-border text-primary text-decoration-none mb-0 p-0" 
                   onclick="document.getElementById('defaultAddressForm').submit();">
                     Đặt làm mặc định
-                </a>
+                </button>
             </form>
           </c:if>
+               
         </div>
       </div>
     </c:forEach>
@@ -111,7 +115,7 @@
             <input type="hidden" id="addressId" name="addressId" />
           </div>
           <div class="modal-footer">
-              <button type="submit" class="primary-btn" onclick="onclickSave()">Lưu</button>
+            <button type="submit" class="primary-btn" onclick="onclickSave()">Lưu</button>
             <button type="button" class="secondary-btn" data-bs-dismiss="modal" onclick="resetAddress()">Hủy</button>
           </div>
         </form>
@@ -120,7 +124,8 @@
   </div>
 </div>
 
-<script src="https://esgoo.net/scripts/jquery.js"></script>
+<!-- Ensure jQuery is loaded before using it -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="${pageContext.request.contextPath}/assets/javascript/GetAddress.js"></script>
 <script>
     function resetAddress(){
@@ -158,7 +163,7 @@
     document.getElementById("tinhText").value = $("#tinh option:selected").text();
     document.getElementById("quanText").value = $("#quan option:selected").text();
     document.getElementById("phuongText").value = $("#phuong option:selected").text();
-    alert($("#tinh option:selected").text());
+//    alert($("#tinh option:selected").text());
 //    alert(address.id);
 //    loadProvinces(); // Load province data for edit
   }

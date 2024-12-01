@@ -4,6 +4,9 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <html>
 <head>
+    <script>
+        window.alert("Phiên làm việc của admin chỉ tồn tại sau 30 phút");
+    </script>
     <title>Naoki - Management System</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">

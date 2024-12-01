@@ -16,7 +16,7 @@ import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 
-@WebServlet("/ms_campaign")
+@WebServlet("/ms/ms_campaign")
 public class MSCampaignController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {

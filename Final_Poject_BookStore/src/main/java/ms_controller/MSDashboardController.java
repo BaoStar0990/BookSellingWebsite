@@ -9,7 +9,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import model.StatusOrder;
 import java.io.IOException;
 
-@WebServlet(name = "MSDashboardController", urlPatterns ="/msdashboard")
+@WebServlet(name = "MSDashboardController", urlPatterns ="/ms/msdashboard")
 public class MSDashboardController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

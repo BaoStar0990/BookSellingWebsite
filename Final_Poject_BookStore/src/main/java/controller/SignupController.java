@@ -91,7 +91,7 @@ public class SignupController extends HttpServlet {
         request.setAttribute("dateStr", dateStr);
 
 
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         LocalDate dateOfBirth = LocalDate.parse(dateStr, formatter);
         //Check input invalid
         if (dateOfBirth.isAfter(LocalDate.now())) {

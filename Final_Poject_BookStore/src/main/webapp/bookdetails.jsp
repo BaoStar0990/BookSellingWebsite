@@ -457,8 +457,6 @@
                     data.append('action', "muaNgay");
                 }
                 else{
-//                    if(<%= (session.getAttribute("user") != null)%>)
-//                        showNotification();
                     data.append('action', "themVaoGio");
                 }
                 document.getElementById('loading-screen').style.display = 'flex';

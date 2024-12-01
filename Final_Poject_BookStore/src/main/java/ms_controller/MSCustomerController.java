@@ -12,7 +12,7 @@ import model.Customer;
 import java.io.IOException;
 import java.util.List;
 
-@WebServlet("/ms_customer")
+@WebServlet("/ms/ms_customer")
 public class MSCustomerController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {

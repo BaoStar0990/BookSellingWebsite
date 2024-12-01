@@ -13,7 +13,7 @@ import model.Book;
 import java.io.IOException;
 import java.util.List;
 
-@WebServlet(name = "MSCategoryController", urlPatterns = {"/mscategory"})
+@WebServlet(name = "MSCategoryController", urlPatterns = {"/ms/mscategory"})
 public class MSCategoryController extends HttpServlet {
 
     @Override

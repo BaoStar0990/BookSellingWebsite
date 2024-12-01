@@ -60,6 +60,7 @@
           <th>Tài khoản</th>
           <th>Lương</th>
           <th>Ngày sinh</th>
+          <th>Hoạt động</th>
         </tr>
         </thead>
         <tbody>
@@ -67,7 +68,7 @@
           <tr class="fw-medium">
             <td class="d-flex">
               <button class="btn btn-warning btn-sm me-2" data-bs-toggle="modal" data-bs-target="#editCategoryModal"
-                      onclick="editCategory('${staff.getId()}','${staff.getAge()}','${staff.getEmail()}','${staff.getFullName()}','${staff.getNumberPhone()}','${staff.getUsername()}','${staff.getPassword()}','${staff.getSalary()}', '${staff.getBirthday()}')">
+                      onclick="editCategory('${staff.getId()}','${staff.getAge()}','${staff.getEmail()}','${staff.getFullName()}','${staff.getNumberPhone()}','${staff.getUsername()}','${staff.getPassword()}','${staff.getSalary()}', '${staff.getBirthday()}', '${staff.getStatus()}')">
                 <i class="fas fa-edit"></i>
               </button>
               <form id="deleteForm" method="post" action="ms_staff" class="mb-0">
@@ -86,6 +87,15 @@
             <td>${fn:escapeXml(staff.getUsername())}</td>
             <td>${fn:escapeXml(staff.getSalary())}</td>
             <td>${fn:escapeXml(staff.getBirthday())}</td>
+            <c:choose>
+              <c:when test="${fn:escapeXml(staff.getStatus()) == false}">
+                <td>offline</td>
+              </c:when>
+              <c:otherwise>
+                <td>online</td>
+              </c:otherwise>
+            </c:choose>
+
           </tr>
         </c:forEach>
         </tbody>
@@ -93,7 +103,6 @@
     </div>
   </div>
 </main>
-
 <!-- Add Category Modal -->
 <div class="modal fade fw-medium" id="addCategoryModal" tabindex="-1" aria-labelledby="addCategoryModalLabel" aria-hidden="true">
   <div class="modal-dialog">
@@ -139,7 +148,6 @@
             <label for="staffDateOfBirth" class="form-label">Ngày sinh</label>
             <input type="date" class="form-control" id="staffDateOfBirth" name="dob" required onchange="AgeCalculate(this.value)">
           </div>
-
         </div>
         <div class="modal-footer">
           <button type="button" class="secondary-btn" data-bs-dismiss="modal">Close</button>
@@ -154,7 +162,7 @@
 <div class="modal fade fw-medium" id="editCategoryModal" tabindex="-1" aria-labelledby="editCategoryModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
-      <form action="ms_staff" method="post">
+      <form action="/ms/ms_staff" method="post">
         <%-- Validate CSRF token --%>
         <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
         <input type="hidden" name="action" value="edit"/>
@@ -196,8 +204,14 @@
             <label for="editStaffDoB" class="form-label">Ngày sinh</label>
             <input type="date" class="form-control" id="editStaffDoB" name="dob" required onchange="EditAgeCalculate(this.value)">
           </div>
-
         </div>
+          <div class="mb-3">
+            <label for="staffStatus" class="form-label">Trạng thái</label>
+            <select class="form-control" id="staffStatus" name="status" required>
+              <option value="on">On</option>
+              <option value="of">Off</option>
+            </select>
+          </div>
         <div class="modal-footer">
           <button type="button" class="secondary-btn" data-bs-dismiss="modal">Close</button>
           <button type="submit" class="primary-btn">Save</button>

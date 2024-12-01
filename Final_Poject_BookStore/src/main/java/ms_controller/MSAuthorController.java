@@ -1,9 +1,6 @@
 package ms_controller;
 
 import dbmodel.AuthorDB;
-import dbmodel.BookDB;
-import dbmodel.CustomerDB;
-import dbmodel.ReviewDB;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -11,9 +8,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import model.Author;
-import model.Book;
-import model.Customer;
-import model.Review;
 
 import java.io.IOException;
 import java.util.List;
@@ -29,7 +23,7 @@ public class MSAuthorController extends HttpServlet {
             }
             req.getServletContext().getRequestDispatcher("/Management-System/ms-author.jsp").forward(req, resp);
     }
-//
+
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         req.setCharacterEncoding("UTF-8");
@@ -56,6 +50,6 @@ public class MSAuthorController extends HttpServlet {
                 session.setAttribute("authors", authors);
             }
 //
-            resp.sendRedirect(getServletContext().getContextPath() + "/ms_author");
+            resp.sendRedirect(getServletContext().getContextPath() + "/ms/ms_author");
     }
 }

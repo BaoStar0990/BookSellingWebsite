@@ -16,7 +16,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
     <%-- Favicon --%>
-    <link rel="icon" href="assets/images/logos/square-logo.png" type="image/x-icon">
+    <link rel="icon" href="${pageContext.request.contextPath}/assets/images/logos/square-logo.png" type="image/x-icon">
     <%-- Fontawesome --%>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
@@ -33,7 +33,7 @@
     <main class="content" style="margin-left: 250px; padding: 20px;">
         <div class="container fw-medium">
             <div class="d-flex justify-content-between mb-3">
-                <a class="btn btn-secondary" href="${pageContext.request.contextPath}/msorder">
+                <a class="btn btn-secondary" href="${pageContext.request.contextPath}/ms/msorder">
                     <i class="fas fa-arrow-left"></i>
                     Quay lại
                 </a>
@@ -54,7 +54,7 @@
                 </div>
                 <div class="d-flex justify-content-end">
                     <c:if test="${bill.getStatusOrder() == 'Processing'}">
-                        <form id="checkSLForm" action="${pageContext.request.contextPath}/msorder" method="post" class="mb-0">
+                        <form id="checkSLForm" action="${pageContext.request.contextPath}/ms/msorder" method="post" class="mb-0">
                             <input type="hidden" name="action" value="checkSoLuong">
                             <input type="hidden" name="billId" value="${bill.getId()}">
                             <input type="hidden" name="redirectUrl" value="${pageContext.request.requestURL}">
@@ -64,7 +64,7 @@
                                 </button> 
                         </form>
                     </c:if> 
-                    <form id="statusForm" action="${pageContext.request.contextPath}/msorder" method="post" class="mb-0">
+                    <form id="statusForm" action="${pageContext.request.contextPath}/ms/msorder" method="post" class="mb-0">
                         <input type="hidden" name="action" value="updateStatus">
                         <input type="hidden" name="billId" value="${bill.getId()}">
                         <input type="hidden" name="redirectUrl" value="${pageContext.request.requestURL}">
@@ -95,7 +95,7 @@
                         </button>           
                     </form>
                     <c:if test="${(bill.getStatusOrder() == 'Processing' || bill.getStatusOrder() == 'Packing' || bill.getStatusOrder() == 'Delivering') && bill.getStatusPayment() == 'Unpaid'}">
-                        <form id="cancelForm" action="${pageContext.request.contextPath}/msorder" method="post" class="mb-0">
+                        <form id="cancelForm" action="${pageContext.request.contextPath}/ms/msorder" method="post" class="mb-0">
                             <input type="hidden" name="action" value="cancelOrder">
                             <input type="hidden" name="billId" value="${bill.getId()}">
                             <input type="hidden" name="redirectUrl" value="${pageContext.request.requestURL}">
@@ -106,7 +106,7 @@
                         </form>
                     </c:if>
                     <c:if test="${bill.getStatusOrder() == 'Cancelled'}">
-                        <form action="${pageContext.request.contextPath}/msorder" method="post" class="mb-0" onsubmit="return confirm('Bạn có chắc chắn muốn xóa đơn hàng này không?');">
+                        <form action="${pageContext.request.contextPath}/ms/msorder" method="post" class="mb-0" onsubmit="return confirm('Bạn có chắc chắn muốn xóa đơn hàng này không?');">
                             <input type="hidden" name="action" value="deleteOrder">
                             <input type="hidden" name="billId" value="${bill.getId()}">
                             <button type="submit" class="btn btn-danger">
@@ -182,16 +182,18 @@
                             <tbody>
                                 <c:forEach var="detail" items="${bill.getOrderDetails()}">
                                     <tr>
-                                        <td>
-                                            <form action="${pageContext.request.contextPath}/msorder" method="post" class="mb-0" onsubmit="return confirm('Bạn có chắc chắn muốn xóa sản phẩm này không?');">
-                                                <input type="hidden" name="action" value="deleteOrderDetail">
-                                                <input type="hidden" name="orderDetailID" value="${detail.getId()}">
-                                                <input type="hidden" name="billId" value="${bill.getId()}">
-                                                <button type="submit" class="btn btn-danger">
-                                                    <i class="fas fa-trash"></i>
-                                                </button>
-                                            </form>
-                                        </td>
+                                        <c:if test="${bill.getStatusOrder() == 'Processing'}">
+                                            <td>
+                                                <form action="${pageContext.request.contextPath}/ms/msorder" method="post" class="mb-0" onsubmit="return confirm('Bạn có chắc chắn muốn xóa sản phẩm này không?');">
+                                                    <input type="hidden" name="action" value="deleteOrderDetail">
+                                                    <input type="hidden" name="orderDetailID" value="${detail.getId()}">
+                                                    <input type="hidden" name="billId" value="${bill.getId()}">
+                                                    <button type="submit" class="btn btn-danger">
+                                                        <i class="fas fa-trash"></i>
+                                                    </button>
+                                                </form>
+                                            </td>
+                                        </c:if>
                                         <td>${detail.getBook().getTitle()}</td>
                                         <td>${detail.getQuantity()}</td>
                                         <td>${detail.getUnitPrice()}</td>

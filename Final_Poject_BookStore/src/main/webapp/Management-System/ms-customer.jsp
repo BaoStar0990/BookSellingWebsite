@@ -23,7 +23,7 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
   <%-- Favicon --%>
-  <link rel="icon" href="assets/images/logos/square-logo.png" type="image/x-icon">
+  <link rel="icon" href="${pageContext.request.contextPath}/assets/images/logos/square-logo.png" type="image/x-icon">
   <%-- Fontawesome --%>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
@@ -70,7 +70,7 @@
 <%--              <button class="btn btn-danger btn-sm" onclick="deleteCategory(${customer.getId()})">--%>
 <%--                <i class="fas fa-trash"></i>--%>
 <%--              </button>--%>
-              <form id="deleteForm" method="post" action="ms_customer" class="mb-0">
+              <form id="deleteForm" method="post" action="/ms/ms_customer" class="mb-0">
                 <input type="hidden" name="action" value="delete"/>
                 <input type="hidden" name="id" value="${customer.getId()}"/>
                 <button type="submit" class="btn btn-danger btn-sm">
@@ -96,7 +96,7 @@
 <div class="modal fade fw-medium" id="addCategoryModal" tabindex="-1" aria-labelledby="addCategoryModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
-      <form action="ms_customer" method="post">
+      <form action="/ms/ms_customer" method="post">
         <input type="hidden" name="csrf" value="${_csrf.token}"/>
         <input type="hidden" name="action" value="add"/>
         <div class="modal-header">
@@ -143,7 +143,7 @@
 <div class="modal fade fw-medium" id="editCategoryModal" tabindex="-1" aria-labelledby="editCategoryModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
-      <form action="ms_customer" method="post">
+      <form action="/ms/ms_customer" method="post">
         <%-- Validate CSRF token --%>
         <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
         <input type="hidden" name="action" value="edit"/>

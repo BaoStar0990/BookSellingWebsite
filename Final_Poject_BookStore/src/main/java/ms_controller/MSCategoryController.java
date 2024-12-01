@@ -54,7 +54,7 @@ public class MSCategoryController extends HttpServlet {
             updateCategoriesInSession(req);
         }
 
-        resp.sendRedirect(getServletContext().getContextPath() + "/mscategory");
+        resp.sendRedirect(getServletContext().getContextPath() + "/ms/mscategory");
     }
 
     protected void updateCategoriesInSession(HttpServletRequest req) {

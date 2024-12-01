@@ -101,7 +101,7 @@ document.getElementById('addEditBookModal').addEventListener('hidden.bs.modal', 
     });
     document.getElementById('imagePreview').style.display = 'none';
     document.getElementById('urlImage').required = true;
-    document.getElementById('addEditBookForm').action = 'msbook?action=add';
+    document.getElementById('addEditBookForm').action = '/ms/msbook?action=add';
     document.getElementById('addEditBookModalLabel').textContent = 'Thêm Sách';
 });
 
@@ -140,7 +140,7 @@ document.getElementById('addEditBookModal').addEventListener('hidden.bs.modal', 
     });
     document.getElementById('imagePreview').style.display = 'none';
     document.getElementById('urlImage').required = true;
-    document.getElementById('addEditBookForm').action = 'msbook?action=add';
+    document.getElementById('addEditBookForm').action = '/ms/msbook?action=add';
     document.getElementById('addEditBookModalLabel').textContent = 'Thêm Sách';
 });
 
@@ -204,6 +204,6 @@ function editBook(button) {
         document.getElementById('urlImage').required = true;
     }
 
-    document.getElementById('addEditBookForm').action = 'msbook?action=edit';
+    document.getElementById('addEditBookForm').action = '/ms/msbook?action=edit';
     document.getElementById('addEditBookModalLabel').textContent = 'Chỉnh sửa Sách';
 }

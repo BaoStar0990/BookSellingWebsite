@@ -10,7 +10,6 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.transaction.Transaction;
 import model.Bill;
 import model.StatusOrder;
 import model.StatusPayment;
@@ -18,7 +17,6 @@ import model.StatusPayment;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.Arrays;
-import java.util.Iterator;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
@@ -57,7 +55,7 @@ public class MSOrderController extends HttpServlet {
                                        response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Failed to delete order");
                                     }
                                     else{
-                                        response.sendRedirect("/msorder");
+                                        response.sendRedirect(request.getContextPath() +"/ms/msorder");
                                         return;
                                     }
                                 } // chỉ xóa sản phẩm
@@ -313,7 +311,7 @@ public class MSOrderController extends HttpServlet {
                     if (bill.getStatusOrder() == StatusOrder.Cancelled) {
                         boolean isDeleted = BillDB.getInstance().delete(bill.getId(), Bill.class);
                         if (isDeleted) {
-                            response.sendRedirect(request.getContextPath() + "/msorder");
+                            response.sendRedirect(request.getContextPath() + "/ms/msorder");
                         } else {
                             response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Failed to delete order");
                         }

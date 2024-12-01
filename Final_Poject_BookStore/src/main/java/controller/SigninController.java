@@ -61,7 +61,7 @@ public class SigninController extends HttpServlet {
         HttpSession session = request.getSession();
         //Lấy email
         String email = request.getParameter("email");
-        if (Regex.isEmailByRegex(email) == false) { // nếu email không đúng format
+        if (!Regex.isEmailByRegex(email)) { // nếu email không đúng format
             alertMessage = "Vui lòng nhập lại email của bạn";
             request.setAttribute("alertMessage", alertMessage);
 
@@ -104,9 +104,9 @@ public class SigninController extends HttpServlet {
                         }
                     }
                     //Chuyen trang
-                    response.sendRedirect(String.format("%s/home", getServletContext().getContextPath()));
+                    response.sendRedirect(String.format("%s/", getServletContext().getContextPath()));
                 } else { //Nếu login không thành công
-                    alertMessage = "Sai tài khoảng hoặc mật khẩu";
+                    alertMessage = "Sai tài khoản hoặc mật khẩu";
                     request.setAttribute("alertMessage", alertMessage);
                     request.getServletContext().getRequestDispatcher("/signin.jsp").forward(request, response);
                 }

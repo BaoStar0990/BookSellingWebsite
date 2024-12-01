@@ -69,7 +69,7 @@ public class SigninAdminFilter implements Filter {
             if(status_login){
                 Admin admin = AdminDB.getInstance().checkLogin(username, password);
                 if (admin != null) {
-                    if(admin.getStatus() == false) {
+                    if(!admin.getStatus()) {
                         try {
                             Double latitude = Double.parseDouble(request.getParameter("latitude"));
                             Double longitude = Double.parseDouble(request.getParameter("longitude"));

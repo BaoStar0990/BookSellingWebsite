@@ -191,9 +191,7 @@ public class Book implements Serializable {
     }
 
 
-
-
-    public int getAverageRatingStart() {
+    public double getAverageRatingStar() {
         int numberOfReview = this.getReviews().size();
         if (numberOfReview == 0) {
             return 0;
@@ -202,7 +200,7 @@ public class Book implements Serializable {
         for (Review review : this.getReviews()) {
             totalRating += review.getRate();
         }
-        return (totalRating / numberOfReview);
+        return (double) totalRating / numberOfReview;
     }
 
     public Set<Author> getAuthors() {

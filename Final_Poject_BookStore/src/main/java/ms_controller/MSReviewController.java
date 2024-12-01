@@ -13,7 +13,9 @@ import model.Book;
 import model.Customer;
 import model.Review;
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.List;
+import java.sql.Date;
 
 @WebServlet("/ms/ms_review")
 public class MSReviewController extends HttpServlet {
@@ -40,7 +42,7 @@ public class MSReviewController extends HttpServlet {
                 {
                     Book book = BookDB.getInstance().selectByID(Integer.parseInt(req.getParameter("bookId")));
                     Customer customer = CustomerDB.getInstance().selectByID(Integer.parseInt(req.getParameter("customerId")));
-                    ReviewDB.getInstance().update(new Review(Integer.parseInt(req.getParameter("reviewId")), Integer.parseInt(req.getParameter("rate")), req.getParameter("description"), customer, book));
+                    ReviewDB.getInstance().update(new Review(Integer.parseInt(req.getParameter("reviewId")), Integer.parseInt(req.getParameter("rate")), req.getParameter("description"), Date.valueOf(LocalDate.now()), customer, book));
                     break;
                 }
                 case "delete":

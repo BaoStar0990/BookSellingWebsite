@@ -16,7 +16,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
     <%-- Favicon --%>
-    <link rel="icon" href="assets/images/logos/square-logo.png" type="image/x-icon">
+    <link rel="icon" href="${pageContext.request.contextPath}/assets/images/logos/square-logo.png" type="image/x-icon">
     <%-- Fontawesome --%>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
@@ -138,7 +138,7 @@
                   <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
               </div>
               <div class="modal-body">
-                  <form id="addEditBookForm" method="post" action="msbook?action=add" enctype="multipart/form-data">
+                  <form id="addEditBookForm" method="post" action="/ms/msbook?action=add" enctype="multipart/form-data">
                       <input type="hidden" id="bookId" name="bookId">
                       <input type="hidden" id="selectedAuthorsInput" name="selectedAuthors">
                       <input type="hidden" id="selectedCategoriesInput" name="selectedCategories">
@@ -261,7 +261,7 @@
   <!-- End Add/Edit Book Modal -->
 
     <!-- Hidden form for delete action -->
-    <form id="deleteBookForm" method="post" action="msbook?action=delete" style="display: none;">
+    <form id="deleteBookForm" method="post" action="/ms/msbook?action=delete" style="display: none;">
         <input type="hidden" name="bookId" id="deleteBookId">
     </form>
 

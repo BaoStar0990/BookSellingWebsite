@@ -1,6 +1,5 @@
 package ms_controller;
 
-import dbmodel.CustomerDB;
 import dbmodel.DiscountCampaignDB;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -8,12 +7,10 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
-import model.Customer;
 import model.DiscountCampaign;
 
 import java.io.IOException;
 import java.time.LocalDate;
-import java.util.Date;
 import java.util.List;
 
 @WebServlet("/ms/ms_campaign")
@@ -62,7 +59,7 @@ public class MSCampaignController extends HttpServlet {
             session.setAttribute("campaigns", discountCampaigns);
         }
 
-        resp.sendRedirect(getServletContext().getContextPath() + "/ms_campaign");
+        resp.sendRedirect(getServletContext().getContextPath() + "/ms/ms_campaign");
 
     }
 }

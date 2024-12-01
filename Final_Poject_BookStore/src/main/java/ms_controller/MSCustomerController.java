@@ -54,6 +54,6 @@ public class MSCustomerController extends HttpServlet {
             session.setAttribute("customers", allCustomers);
         }
 
-        resp.sendRedirect(getServletContext().getContextPath() + "/ms_customer");
+        resp.sendRedirect(getServletContext().getContextPath() + "/ms/ms_customer");
     }
 }

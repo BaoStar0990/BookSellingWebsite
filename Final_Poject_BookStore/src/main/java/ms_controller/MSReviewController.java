@@ -2,7 +2,6 @@ package ms_controller;
 
 import dbmodel.BookDB;
 import dbmodel.CustomerDB;
-import dbmodel.DiscountCampaignDB;
 import dbmodel.ReviewDB;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -12,11 +11,8 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import model.Book;
 import model.Customer;
-import model.DiscountCampaign;
 import model.Review;
-
 import java.io.IOException;
-import java.time.LocalDate;
 import java.util.List;
 
 @WebServlet("/ms/ms_review")
@@ -60,7 +56,7 @@ public class MSReviewController extends HttpServlet {
             session.setAttribute("reviews", reviews);
         }
 
-        resp.sendRedirect(getServletContext().getContextPath() + "/ms_review");
+        resp.sendRedirect(getServletContext().getContextPath() + "/ms/ms_review");
 
     }
 }

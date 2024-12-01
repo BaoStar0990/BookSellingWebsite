@@ -220,7 +220,7 @@ public class MSBookController extends HttpServlet {
         if (isSuccess) {
             HttpSession session = request.getSession();
             session.setAttribute("books", BookDB.getInstance().selectAll());
-            response.sendRedirect(request.getContextPath() + "/msbook");
+            response.sendRedirect(request.getContextPath() + "/ms/msbook");
         } else {
             request.setAttribute("errorMessage", isAdd ? "Failed to add book." : "Failed to update book.");
             processRequest(request, response);
@@ -237,7 +237,7 @@ public class MSBookController extends HttpServlet {
         if (isDeleted) {
             HttpSession session = request.getSession();
             session.setAttribute("books", BookDB.getInstance().selectAll());
-            response.sendRedirect(request.getContextPath() + "/msbook");
+            response.sendRedirect(request.getContextPath() + "/ms/msbook");
         } else {
             request.setAttribute("errorMessage", "Failed to delete book.");
             processRequest(request, response);

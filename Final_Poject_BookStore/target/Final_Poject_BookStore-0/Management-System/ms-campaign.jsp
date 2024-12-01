@@ -23,7 +23,7 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
   <%-- Favicon --%>
-  <link rel="icon" href="assets/images/logos/square-logo.png" type="image/x-icon">
+  <link rel="icon" href="${pageContext.request.contextPath}/assets/images/logos/square-logo.png" type="image/x-icon">
   <%-- Fontawesome --%>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
@@ -56,7 +56,7 @@
           <th>Chiến dịch</th>
           <th>Ngày bắt đầu</th>
           <th>Ngày kết thúc</th>
-          <th>Giảm giá</th>
+          <th>Giảm giá (%)</th>
         </tr>
         </thead>
         <tbody>
@@ -66,7 +66,7 @@
               <button class="btn btn-warning btn-sm me-2" data-bs-toggle="modal" data-bs-target="#editCategoryModal" onclick="editCategory(${campaign.getCampaignId()}, '${campaign.getCampaignName()}', '${campaign.getStartDate()}', '${campaign.getEndDate()}', '${campaign.getPercentDiscount()}')">
                 <i class="fas fa-edit"></i>
               </button>
-              <form id="deleteForm" method="post" action="ms_campaign" class="mb-0">
+              <form id="deleteForm" method="post" action="/ms/ms_campaign" class="mb-0">
                 <input type="hidden" name="action" value="delete"/>
                 <input type="hidden" name="id" value="${campaign.getCampaignId()}"/>
                 <button type="submit" class="btn btn-danger btn-sm">
@@ -78,7 +78,7 @@
             <td>${fn:escapeXml(campaign.getCampaignName())}</td>
             <td>${campaign.getStartDate()}</td>
             <td>${campaign.getEndDate()}</td>
-            <td>${campaign.getPercentDiscount()}</td>
+            <td>${campaign.getPercentDiscount()*100}</td>
           </tr>
         </c:forEach>
         </tbody>
@@ -91,7 +91,7 @@
 <div class="modal fade fw-medium" id="addCategoryModal" tabindex="-1" aria-labelledby="addCategoryModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
-      <form action="ms_campaign" method="post">
+      <form action="/ms/ms_campaign" method="post">
         <input type="hidden" name="csrf" value="${_csrf.token}"/>
         <input type="hidden" name="action" value="add"/>
         <div class="modal-header">
@@ -112,7 +112,7 @@
             <input type="date" class="form-control" id="customerFullName" name="end" required>
           </div>
           <div class="mb-3">
-            <label for="customerAge" class="form-label">Giảm giá</label>
+            <label for="customerAge" class="form-label">Giảm giá (%)</label>
             <input type="number" class="form-control" id="customerAge" name="discount" required>
           </div>
         </div>
@@ -129,7 +129,7 @@
 <div class="modal fade fw-medium" id="editCategoryModal" tabindex="-1" aria-labelledby="editCategoryModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
-      <form action="ms_campaign" method="post">
+      <form action="/ms/ms_campaign" method="post">
         <%-- Validate CSRF token --%>
         <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
         <input type="hidden" name="action" value="edit"/>
@@ -152,7 +152,7 @@
             <input type="date" class="form-control" id="editCampaignEnd" name="end" required rows="5"/>
           </div>
           <div class="mb-3">
-            <label for="editCampaignDiscount" class="form-label">Giảm giá</label>
+            <label for="editCampaignDiscount" class="form-label">Giảm giá (%)</label>
             <input type="number" class="form-control" id="editCampaignDiscount" name="discount" required rows="5"/>
           </div>
 
@@ -172,7 +172,7 @@
     document.getElementById('editCampaignName').value = name;
     document.getElementById('editCampaignStart').value = start_date;
     document.getElementById('editCampaignEnd').value = end_date;
-    document.getElementById('editCampaignDiscount').value = discount;
+    document.getElementById('editCampaignDiscount').value = discount * 100;
   }
 
   function deleteCategory() {
@@ -194,6 +194,15 @@
         rows[i].style.display = "none";
       }
     }
+  });
+
+  document.querySelectorAll('form').forEach(form => {
+    form.addEventListener('submit', function(event) {
+      let discountInput = form.querySelector('input[name="discount"]');
+      if (discountInput) {
+        discountInput.value = discountInput.value / 100;
+      }
+    });
   });
 </script>
 </body>

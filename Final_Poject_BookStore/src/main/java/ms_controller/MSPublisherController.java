@@ -10,7 +10,6 @@ import jakarta.servlet.http.HttpSession;
 import model.*;
 
 import java.io.IOException;
-import java.time.LocalDate;
 import java.util.List;
 
 @WebServlet("/ms/ms_publisher")
@@ -62,7 +61,7 @@ public class MSPublisherController extends HttpServlet {
             session.setAttribute("publishers", publisher);
         }
 
-        resp.sendRedirect(getServletContext().getContextPath() + "/ms_publisher");
+        resp.sendRedirect(getServletContext().getContextPath() + "/ms/ms_publisher");
 
     }
 }

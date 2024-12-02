@@ -350,7 +350,8 @@
                                         <i class="fas fa-star fs-4 me-2 user-rating-star text-muted" style="cursor: pointer;" onclick="setUserRating(${i})"></i>
                                     </c:forEach>
                                 </div>
-                                <textarea class="form-control my-3" rows="3" placeholder="Viết đánh giá của bạn..." id="reviewContent"></textarea>
+                                <textarea class="form-control mt-3 mb-1" rows="3" placeholder="Viết đánh giá của bạn..." id="reviewContent" oninput="updateCharacterCount()"></textarea>
+                                <small id="charCount" class="text-end d-block">0/255</small>
                                 <button type="button" class="btn primary-btn" onclick="submitReview()">Gửi đánh giá</button>
                             </form>
                         </c:otherwise>
@@ -484,7 +485,8 @@
                                     <i class="fas fa-star fs-4 me-2 user-rating-star text-muted" style="cursor: pointer;" onclick="setUpdateUserRating(${i})"></i>
                                 </c:forEach>
                             </div>
-                            <textarea class="form-control my-3" rows="3" placeholder="Cập nhật đánh giá của bạn..." id="updateReviewContent"></textarea>
+                            <textarea class="form-control mt-3 mb-1" rows="3" placeholder="Cập nhật đánh giá của bạn..." id="updateReviewContent" oninput="updateUpdateCharacterCount()"></textarea>
+                            <small id="updateCharCount" class="text-end d-block">0/255</small>
                             <input type="hidden" id="updateReviewId">
                         </form>
                     </div>

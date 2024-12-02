@@ -70,7 +70,7 @@
 <%--              <button class="btn btn-danger btn-sm" onclick="deleteCategory(${customer.getId()})">--%>
 <%--                <i class="fas fa-trash"></i>--%>
 <%--              </button>--%>
-              <form id="deleteForm" method="post" action="/ms/ms_customer" class="mb-0">
+              <form id="deleteForm" method="post" action="${pageContext.request.contextPath}/ms/mscustomer" class="mb-0">
                 <input type="hidden" name="action" value="delete"/>
                 <input type="hidden" name="id" value="${customer.getId()}"/>
                 <button type="submit" class="btn btn-danger btn-sm">
@@ -96,7 +96,7 @@
 <div class="modal fade fw-medium" id="addCategoryModal" tabindex="-1" aria-labelledby="addCategoryModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
-      <form action="/ms/ms_customer" method="post">
+      <form action="${pageContext.request.contextPath}/ms/mscustomer" method="post">
         <input type="hidden" name="csrf" value="${_csrf.token}"/>
         <input type="hidden" name="action" value="add"/>
         <div class="modal-header">
@@ -143,7 +143,7 @@
 <div class="modal fade fw-medium" id="editCategoryModal" tabindex="-1" aria-labelledby="editCategoryModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
-      <form action="/ms/ms_customer" method="post">
+      <form action="${pageContext.request.contextPath}/ms/mscustomer" method="post">
         <%-- Validate CSRF token --%>
         <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
         <input type="hidden" name="action" value="edit"/>

@@ -17,7 +17,7 @@ import java.time.LocalDate;
 import java.util.List;
 import java.sql.Date;
 
-@WebServlet("/ms/ms_review")
+@WebServlet("/ms/msreview")
 public class MSReviewController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -25,6 +25,7 @@ public class MSReviewController extends HttpServlet {
 
         if(session.getAttribute("reviews") == null){
             List<Review> reviews = ReviewDB.getInstance().selectAll();
+            reviews.sort((p1, p2) -> Integer.compare(p2.getReviewID(), p1.getReviewID()));
             session.setAttribute("reviews", reviews);
         }
 
@@ -54,11 +55,12 @@ public class MSReviewController extends HttpServlet {
             }
             HttpSession session = req.getSession();
             List<Review> reviews = ReviewDB.getInstance().selectAll();
+            reviews.sort((p1, p2) -> Integer.compare(p2.getReviewID(), p1.getReviewID()));
             session.removeAttribute("reviews");
             session.setAttribute("reviews", reviews);
         }
 
-        resp.sendRedirect(getServletContext().getContextPath() + "/ms/ms_review");
+        resp.sendRedirect(getServletContext().getContextPath() + "/ms/msreview");
 
     }
 }

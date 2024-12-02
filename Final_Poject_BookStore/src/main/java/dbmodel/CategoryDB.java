@@ -33,7 +33,7 @@ public class CategoryDB extends ModifyDB<Category> implements DBInterface<Catego
     @Override
     public Category selectByID(Object id) {
         try(EntityManager em = DBUtil.getEmFactory().createEntityManager()) {
-            return em.createQuery("from Category c where c.id =: id ", Category.class)
+            return em.createQuery("from Category c where c.id = :id ", Category.class)
                     .setParameter("id", id).getSingleResult();    
         }
         catch(NoResultException ex){
@@ -43,6 +43,32 @@ public class CategoryDB extends ModifyDB<Category> implements DBInterface<Catego
             return null;
         }
     }
+
+    public Set<Book> getBooksbyName(String name){
+        try(EntityManager em = DBUtil.getEmFactory().createEntityManager()){
+            // find Books
+            List<Book> books = em.createQuery("SELECT b FROM Category c JOIN c.books b "
+                            + "WHERE c.name = :name", Book.class)
+                    .setParameter("name", name)
+                    .getResultList();
+            if(books == null)
+                return null;
+            else
+                return new HashSet<>(books);
+//                return books;
+        }
+        catch (NullPointerException e) {
+            return null;
+        }
+        // lỗi truy vấn đối tượng transient
+        catch (TransientObjectException | NoResultException ex) {
+            return null;
+        }
+        catch(Exception ex){
+            return null;
+        }
+    }
+
     
     public boolean addBook(Category c, Book b){
         EntityManager em = null;

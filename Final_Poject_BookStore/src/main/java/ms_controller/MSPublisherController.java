@@ -10,9 +10,10 @@ import jakarta.servlet.http.HttpSession;
 import model.*;
 
 import java.io.IOException;
+import java.util.Collections;
 import java.util.List;
 
-@WebServlet("/ms/ms_publisher")
+@WebServlet("/ms/mspublisher")
 public class MSPublisherController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -20,6 +21,8 @@ public class MSPublisherController extends HttpServlet {
 
         if(session.getAttribute("publishers") == null){
             List<Publisher> publisher = PublisherDB.getInstance().selectAll();
+            publisher.sort((p1, p2) -> Integer.compare(p2.getId(), p1.getId()));
+            System.out.println(publisher.get(0).getId());
             session.setAttribute("publishers", publisher);
         }
 
@@ -57,11 +60,12 @@ public class MSPublisherController extends HttpServlet {
             }
             HttpSession session = req.getSession();
             List<Publisher> publisher = PublisherDB.getInstance().selectAll();
+            publisher.sort((p1, p2) -> Integer.compare(p2.getId(), p1.getId()));
             session.removeAttribute("publishers");
             session.setAttribute("publishers", publisher);
         }
 
-        resp.sendRedirect(getServletContext().getContextPath() + "/ms/ms_publisher");
+        resp.sendRedirect(getServletContext().getContextPath() + "/ms/mspublisher");
 
     }
 }

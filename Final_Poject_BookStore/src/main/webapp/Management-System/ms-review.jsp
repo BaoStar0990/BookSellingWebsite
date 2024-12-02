@@ -67,7 +67,7 @@
                       onclick="editCategory(${review.getReviewID()},${review.getCustomer().getId()},${review.getBook().getId()}, '${review.getDescription()}', '${review.getRate()}')">
                 <i class="fas fa-edit"></i>
               </button>
-              <form id="deleteForm" method="post" action="/ms/ms_review" class="mb-0">
+              <form id="deleteForm" method="post" action="${pageContext.request.contextPath}/ms/msreview" class="mb-0">
                 <input type="hidden" name="action" value="delete"/>
                 <input type="hidden" name="deleteId" value="${review.getReviewID()}"/>
                 <button type="submit" class="btn btn-danger btn-sm">
@@ -130,7 +130,7 @@
 <div class="modal fade fw-medium" id="editCategoryModal" tabindex="-1" aria-labelledby="editCategoryModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
-      <form action="/ms/ms_review" method="post">
+      <form action="${pageContext.request.contextPath}/ms/msreview" method="post">
         <%-- Validate CSRF token --%>
         <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
         <input type="hidden" name="action" value="edit"/>

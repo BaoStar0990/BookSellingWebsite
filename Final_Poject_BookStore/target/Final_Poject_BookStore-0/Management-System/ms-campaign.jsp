@@ -66,7 +66,7 @@
               <button class="btn btn-warning btn-sm me-2" data-bs-toggle="modal" data-bs-target="#editCategoryModal" onclick="editCategory(${campaign.getCampaignId()}, '${campaign.getCampaignName()}', '${campaign.getStartDate()}', '${campaign.getEndDate()}', '${campaign.getPercentDiscount()}')">
                 <i class="fas fa-edit"></i>
               </button>
-              <form id="deleteForm" method="post" action="/ms/ms_campaign" class="mb-0">
+              <form id="deleteForm" method="post" action="${pageContext.request.contextPath}/ms/mscampaign" class="mb-0">
                 <input type="hidden" name="action" value="delete"/>
                 <input type="hidden" name="id" value="${campaign.getCampaignId()}"/>
                 <button type="submit" class="btn btn-danger btn-sm">
@@ -91,7 +91,7 @@
 <div class="modal fade fw-medium" id="addCategoryModal" tabindex="-1" aria-labelledby="addCategoryModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
-      <form action="/ms/ms_campaign" method="post">
+      <form action="${pageContext.request.contextPath}/ms/mscampaign" method="post">
         <input type="hidden" name="csrf" value="${_csrf.token}"/>
         <input type="hidden" name="action" value="add"/>
         <div class="modal-header">
@@ -115,7 +115,20 @@
             <label for="customerAge" class="form-label">Giảm giá (%)</label>
             <input type="number" class="form-control" id="customerAge" name="discount" required>
           </div>
+          <div class="mb-3">
+            <p class="form-label">Thể loại</p>
+            <c:forEach var="category" items="${sessionScope.categories}">
+              <div class="form-check">
+                <input class="form-check-input" name="categories" type="checkbox" value="${category.getName()}" id="${category.getName()}">
+                <label class="form-check-label" for="${category.getName()}">
+                    ${category.getName()}
+                </label>
+              </div>
+            </c:forEach>
+          </div>
+
         </div>
+
         <div class="modal-footer">
           <button type="button" class="secondary-btn" data-bs-dismiss="modal">Close</button>
           <button type="submit" class="primary-btn">Save</button>
@@ -129,7 +142,7 @@
 <div class="modal fade fw-medium" id="editCategoryModal" tabindex="-1" aria-labelledby="editCategoryModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
-      <form action="/ms/ms_campaign" method="post">
+      <form action="${pageContext.request.contextPath}/ms/mscampaign" method="post">
         <%-- Validate CSRF token --%>
         <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
         <input type="hidden" name="action" value="edit"/>

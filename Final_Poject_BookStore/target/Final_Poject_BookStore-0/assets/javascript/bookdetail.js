@@ -116,7 +116,8 @@ function showReviewFailToast() {
 
 function submitReview() {
     const bookId = document.getElementById("bookId").value;
-    const reviewContent = document.getElementById("reviewContent").value;
+    // Lấy nội dung đánh giá, loại bỏ các thẻ HTML
+    const reviewContent = document.getElementById("reviewContent").value.replace(/<\/?[^>]+(>|$)/g, "");
     const rating = userRating;
 
     if (!bookId || !rating) {
@@ -177,7 +178,10 @@ function openUpdateReviewModal(reviewId, description, rating) {
 
 function submitUpdateReview() {
     const reviewId = document.getElementById('updateReviewId').value;
-    const reviewContent = document.getElementById('updateReviewContent').value;
+    
+    // Lấy nội dung đánh giá, loại bỏ các thẻ HTML
+    const reviewContent = document.getElementById('updateReviewContent').value.replace(/<\/?[^>]+(>|$)/g, "");
+
     const rating = updateUserRating;
 
     if (!reviewId || !rating) {
@@ -238,6 +242,32 @@ function deleteReview(reviewId) {
         console.error('Error:', error);
         showReviewFailToast();
     });
+}
+
+function updateCharacterCount() {
+    const textarea = document.getElementById("reviewContent");
+    const charCount = document.getElementById("charCount");
+    const maxLength = 255;
+
+    if (textarea.value.length > maxLength) {
+        textarea.value = textarea.value.substring(0, maxLength);
+    }
+    charCount.textContent = `${textarea.value.length}/${maxLength}`;
+}
+
+function updateUpdateCharacterCount() {
+    const textarea = document.getElementById("updateReviewContent");
+    const charCount = document.getElementById("updateCharCount");
+    const maxLength = 255;
+
+    if (textarea.value.length > maxLength) {
+        textarea.value = textarea.value.substring(0, maxLength);
+    }
+    charCount.textContent = `${textarea.value.length}/${maxLength}`;
+}
+
+function sanitizeInput(textarea) {
+    textarea.value = textarea.value.replace(/<\/?[^>]+(>|$)/g, "");
 }
 
 //        window.onload = function() {

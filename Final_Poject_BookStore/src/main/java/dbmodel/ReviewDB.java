@@ -73,6 +73,16 @@ public class ReviewDB extends ModifyDB<Review> implements DBInterface<Review> {
         }
     }
 
+    @Override
+    public boolean insert(Review review) {
+        // Check if the review of the book by the customer already exists
+        if (!selectReviewByBookIDOfACustomer(review.getBook().getId(), review.getCustomer().getId()).isEmpty()) {
+            return false;
+        }
+
+        return super.insert(review);
+    }
+
     public boolean deleteReview(int reviewID) {
         EntityManager em = null;
         EntityTransaction tr = null;

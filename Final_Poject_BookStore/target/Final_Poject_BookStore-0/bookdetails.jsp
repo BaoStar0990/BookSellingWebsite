@@ -198,19 +198,18 @@
 
                     <%--Action Buttons --%>
                     <div  style = "display: flex;  align-items: center;" class="mt-4">
-
+                        <%-- token cho id của sách --%>
+                        <input type="hidden" name="csrfToken" id ="csrfToken" value="${csrfToken}">
                         <input type="hidden" value="${book.getId()}" name="bookId" id ="bookId">
                         <button id = "themVaoGio" class="btn secondary-btn me-3 d-inline-block"
                                onclick="sendDataToAddCart(event)">
                             <i class="fas fa-shopping-cart me-2"></i> Thêm vào giỏ hàng
                         </button>           
-         
                         <button onclick="sendDataToAddCart(event)" id = "muaNgay" class="btn primary-btn d-inline-block">
                             Mua ngay
                         </button>
-                       
+                        
                     </div>
-
                 </div>
             </div>
             <%--         end Short Intro --%>

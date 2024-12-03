@@ -107,7 +107,6 @@ public class PaymentController extends HttpServlet {
                     .collect(Collectors.toList());
 
                 if(cart != null){
-                    request.setAttribute("cartId", cart.getId());
                     request.setAttribute("listOrderDetails", sortedOrderDetails);
                 } 
                 request.setAttribute("addresses", addresses);

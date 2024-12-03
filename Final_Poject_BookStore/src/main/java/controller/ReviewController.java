@@ -1,5 +1,6 @@
 package controller;
 
+import Utils.authentication.TokenService;
 import java.io.IOException;
 import java.sql.Date;
 import java.time.LocalDate;
@@ -75,13 +76,28 @@ public class ReviewController extends HttpServlet {
         int userID = user.getId();
         String reviewContent = request.getParameter("reviewContent");
         int rate = Integer.parseInt(request.getParameter("rate"));
+        String csrfToken = request.getParameter("csrfToken");
+         
+        // kiểm tra token
+        TokenService tokenService = (TokenService) session.getAttribute("tokenService");
 
+        if (tokenService == null || !tokenService.validateToken(csrfToken, bookID)) {
+            response.getWriter().write("{\"errorMessage\":\"Đừng có ngịch.\"}");
+            // xóa token 
+            if(tokenService != null)
+                tokenService.deleteToken(bookID);
+            return;
+        }
+        // xóa token 
+        if(tokenService != null)
+            tokenService.deleteToken(bookID);
+                
         // Create review object
         ReviewDB reviewDB = ReviewDB.getInstance();
         Book book = BookDB.getInstance().selectByID(bookID);
         Customer customer = CustomerDB.getInstance().selectByID(userID);
         Review review = new Review(rate, reviewContent, Date.valueOf(LocalDate.now()), customer, book);
-
+        
         // Insert review to database
         boolean success = reviewDB.insert(review);
         if (success) {

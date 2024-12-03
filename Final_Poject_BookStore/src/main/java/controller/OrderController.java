@@ -63,33 +63,46 @@ public class OrderController extends HttpServlet {
             String name = request.getParameter("name");
             String phone = request.getParameter("phonenumber");
             // Lấy giỏ hàng của khách hàng           
-            String cartIdStr = request.getParameter("cartId");
+//            String cartIdStr = request.getParameter("cartId");
+            
+            Bill cart = null;
+            List<OrderDetail> sortedOrderDetails = null;
+            Set<OrderDetail> orderDetails = null;
+            // kiểm tra trong session có giỏ hàng chưa, nếu chưa thì lấy dưới database
+            if(session.getAttribute("cart") == null){
+                // Lấy giỏ hàng của khách hàng
+                Customer c = (Customer) session.getAttribute("user");
+                Set<Bill> bills = c.getBills();
+                cart = bills.stream()
+                        .filter(b -> "Storing".equals(b.getStatusOrder().toString()))
+                        .findFirst()
+                        .orElse(null);
+                session.setAttribute("cart", cart);
+                // lấy các orderDetail trong cart
+                if(cart != null){
+                    orderDetails = cart.getOrderDetails();
+                    session.setAttribute("orderDetails", orderDetails);         
+                    sortedOrderDetails = orderDetails.stream()
+                                               .sorted(Comparator.comparingInt(OrderDetail::getId))
+                                               .collect(Collectors.toList());
+                }
+            }
+            else {
+                cart = (Bill) session.getAttribute("cart");
+                orderDetails = (Set<OrderDetail>) session.getAttribute("orderDetails");
+                if(orderDetails != null){
+                    sortedOrderDetails = orderDetails.stream()
+                                               .sorted(Comparator.comparingInt(OrderDetail::getId))
+                                               .collect(Collectors.toList());
+                }
+            }
+    
             request.setAttribute("address", address);
             request.setAttribute("fullName", name);
             request.setAttribute("phonenumber", phone);
             try {
-                // find cart
-                int cartId = Integer.parseInt(cartIdStr);
-                Bill cart = (Bill) BillDB.getInstance().selectByID(cartId);
-                List<OrderDetail> sortedOrderDetails = null;
                 if (cart != null) {
-                    // lấy ds các orderdetail của đơn hàng
-                    // kiểm tra trong session
-                    if(session.getAttribute("orderDetails") != null){
-                        Set<OrderDetail> orderDetails = (Set<OrderDetail>) session.getAttribute("orderDetails");
-                        if(orderDetails != null){
-                            sortedOrderDetails = orderDetails.stream()
-                                                   .sorted(Comparator.comparingInt(OrderDetail::getId))
-                                                   .collect(Collectors.toList());
-                        }
-                    }
-                    else{
-                        sortedOrderDetails = cart.getOrderDetails().stream()
-                            .sorted(Comparator.comparingInt(OrderDetail::getId))
-                            .collect(Collectors.toList());
-                    }
-   
-                    request.setAttribute("cartId", cartId);
+                    request.setAttribute("cartId", cart.getId());
                     request.setAttribute("listOrderDetails", sortedOrderDetails);
 
                     // cập nhật các thuộc tính

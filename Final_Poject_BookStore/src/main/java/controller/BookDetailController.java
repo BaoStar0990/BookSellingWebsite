@@ -4,6 +4,8 @@
  */
 package controller;
 
+import Utils.authentication.CSRFUtil;
+import Utils.authentication.TokenService;
 import dbmodel.BookDB;
 import dbmodel.ReviewDB;
 import java.io.IOException;
@@ -79,7 +81,17 @@ public class BookDetailController extends HttpServlet {
         if (book != null) {
             List<Review> reviews = ReviewDB.getInstance().selectReviewsByBookID(book.getId());
             reviews.sort(Comparator.comparingInt(Review::getReviewID).reversed());
-
+            
+            TokenService tokenService = (TokenService) session.getAttribute("tokenService");
+            if(tokenService == null){
+                tokenService = new TokenService();
+                session.setAttribute("tokenService", tokenService);
+            }
+            
+            String csrfToken = CSRFUtil.getCSRFToken();
+            tokenService.storeToken(csrfToken, book.getId());
+            
+            request.setAttribute("csrfToken", csrfToken);
             session.setAttribute("reviews", reviews);
             request.setAttribute("book", book);
             request.setAttribute("reviews", reviews);

@@ -15,6 +15,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import java.util.NoSuchElementException;
 import model.Bill;
+import model.Customer;
 import model.StatusOrder;
 
 /**
@@ -47,24 +48,27 @@ public class ConfirmCancelOrderController extends HttpServlet {
             url = "/signin.jsp";
         }
         else{         
+            // lấy khách hàng
+            Customer customer = (Customer) session.getAttribute("user");
             String action = request.getParameter("action");
             String idStr = request.getParameter("orderId");
             try{
                 int id = Integer.parseInt(idStr);
                 Bill order = BillDB.getInstance().selectByID(id);
                 if(order != null){
-                    
-                    if(action.equals("confirm"))
-                        order.setStatusOrder(StatusOrder.Completed);
-                    else if(action.equals("cancel"))
-                        order.setStatusOrder(StatusOrder.Cancelled);
-                    
-                    if(!BillDB.getInstance().update(order)){
-                        request.setAttribute("errorMessage", "Lỗi cập nhật đơn hàng!");
-                        // chuyển trang
-                        request.getServletContext()
-                                .getRequestDispatcher(url).forward(request, response);
+                    if(order.getCustomer().getId() == customer.getId()){
+                        if(action.equals("confirm") && order.getStatusOrder().equals(StatusOrder.Delivered))
+                            order.setStatusOrder(StatusOrder.Completed);
+
+                        if(!BillDB.getInstance().update(order)){
+                            request.setAttribute("errorMessage", "Lỗi cập nhật đơn hàng!");
+                            // chuyển trang
+                            request.getServletContext()
+                                    .getRequestDispatcher(url).forward(request, response);
+                        }
                     }
+                    else
+                        errorMessage = "Sao nỡ làm vậy trời ơi!!!!";
                 }
                 else{
                         errorMessage = "Lỗi tìm đơn hàng!";

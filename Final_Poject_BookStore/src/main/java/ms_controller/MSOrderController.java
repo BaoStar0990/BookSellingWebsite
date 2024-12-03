@@ -283,7 +283,8 @@ public class MSOrderController extends HttpServlet {
                                     bill.getOrderDetails().forEach(o -> {
                                         // lấy cuốn sách cập nhật số lượng trong kho
                                         var book = emFinal.find(Book.class, o.getBook().getId());
-                                        book.setStocks(book.getStocks() - o.getQuantity());
+//                                        book.setStocks(book.getStocks() - o.getQuantity());
+                                        book.increaseStocks(o.getQuantity());
                                         emFinal.merge(book);
                                     });                                  
                                 }
@@ -308,7 +309,8 @@ public class MSOrderController extends HttpServlet {
                                 bill.getOrderDetails().forEach(o -> {
                                     // lấy cuốn sách cập nhật số lượng trong kho
                                     var book = emFinal.find(Book.class, o.getBook().getId());
-                                    book.setStocks(book.getStocks() + o.getQuantity());
+//                                    book.setStocks(book.getStocks() + o.getQuantity());
+                                    book.decreaseStocks(o.getQuantity());
                                     emFinal.merge(book);
                                 });
                                 tr.commit();

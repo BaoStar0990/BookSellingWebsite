@@ -78,6 +78,7 @@ model\Customer.class
 ms_controller\MSStaffController.class
 dbmodel\LogSigninAdminDB.class
 ms_controller\MSCustomerController.class
+test\TestDongBo.class
 dbmodel\LogSigninStaffDB.class
 model\DiscountCampaign.class
 model\Author.class
@@ -98,6 +99,7 @@ controller\BookListController.class
 controller\ChangePasswordController.class
 StaffController\StaffOrderController.class
 model\LogSinginAdmin.class
+Utils\authentication\TokenService.class
 controller\UploadImageController.class
 dbmodel\ModifyDB.class
 controller\SigninController.class

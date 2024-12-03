@@ -12,6 +12,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import java.util.List;
 import java.util.NoSuchElementException;
 import model.Address;
 import model.Customer;
@@ -49,6 +50,8 @@ public class ModifyAddressController extends HttpServlet {
             // lấy khách hàng
             Customer customer = (Customer) session.getAttribute("user");
             if(customer != null){
+                // lấy địa chỉ của khách hàng
+                List<Address> addresses = customer.getListAddresses();
                 // lấy action
                 String action = request.getParameter("action");
                 if(action.equals("defaultAddress")){
@@ -58,9 +61,11 @@ public class ModifyAddressController extends HttpServlet {
                         System.out.println("---------------" + idStr);
                         int id = Integer.parseInt(idStr); 
                         Address a = AddressDB.getInstance().selectByID(id);
-                        if(a != null){                           
-                            if(!customer.setDefaultAddress(a))
-                                System.out.println("Lỗi đặt địa chỉ mặc định");
+                        if(a != null){
+                            if(isUserAddress(id, addresses)){
+                                if(!customer.setDefaultAddress(a))
+                                    System.out.println("Lỗi đặt địa chỉ mặc định");
+                            }
                         }
                         else
                             System.out.println("Lỗi tìm địa chỉ");
@@ -79,9 +84,11 @@ public class ModifyAddressController extends HttpServlet {
                         int id = Integer.parseInt(idStr); 
                         System.out.println("---------------" + idStr);
                         Address a = AddressDB.getInstance().selectByID(id);
-                        if(a != null){                           
-                            if(AddressDB.getInstance().delete(id, Address.class))
-                                System.out.println("Xóa địa chỉ không thành công");
+                        if(a != null){   
+                            if(isUserAddress(id, addresses)){
+                                if(AddressDB.getInstance().delete(id, Address.class))
+                                    System.out.println("Xóa địa chỉ không thành công");
+                            }
                         }
                         else
                             System.out.println("Lỗi tìm địa chỉ");
@@ -116,15 +123,17 @@ public class ModifyAddressController extends HttpServlet {
                             int id = Integer.parseInt(idStr);   
                             Address a = AddressDB.getInstance().selectByID(id);
                             if(a != null){
-                                a.setFullName(fullName);
-                                a.setPhonenumber(phonenumber);
-                                a.setDistrict(quan);
-                                a.setProvince(tinh);
-                                a.setWard(phuong);
-                                a.setStreet(street);
-                                // lưu cập nhật
-                                if(!AddressDB.getInstance().update(a)){
-                                    errorMessage = "Cập nhật không thành công!";                                    
+                                if(isUserAddress(id, addresses)){
+                                    a.setFullName(fullName);
+                                    a.setPhonenumber(phonenumber);
+                                    a.setDistrict(quan);
+                                    a.setProvince(tinh);
+                                    a.setWard(phuong);
+                                    a.setStreet(street);
+                                    // lưu cập nhật
+                                    if(!AddressDB.getInstance().update(a)){
+                                        errorMessage = "Cập nhật không thành công!";                                    
+                                    }
                                 }
                             }
                             else{
@@ -175,5 +184,9 @@ public class ModifyAddressController extends HttpServlet {
     public String getServletInfo() {
         return "Short description";
     }// </editor-fold>
-
+    
+    private boolean isUserAddress(int id, List<Address> addresses){
+        return addresses.stream()
+                .anyMatch(a -> a.getId() == id);
+    }
 }

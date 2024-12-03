@@ -438,7 +438,7 @@ public class BookDB extends ModifyDB<Book> implements DBInterface<Book> {
             return true;
         }
         //Title chỉ cần bao gồm những gì người dùng nhập
-        else if (titleOfBook.contains(searchRequest)) {
+        else if (titleOfBook.toLowerCase().contains(searchRequest.toLowerCase())) {
             return true;
         }
         return false;

@@ -72,7 +72,16 @@ public class HomeControllerServlet extends HttpServlet {
             System.out.println("Book exist on session");
             allBook = (List<Book>)session.getAttribute("allBook");
         }
-        bookIsBeingDiscounted = allBook.stream().filter(b -> DiscountCampaignDB.getInstance().isNotExpired(b.getDiscountCampaign())).collect(Collectors.toList());
+        bookIsBeingDiscounted = allBook.stream().filter(b ->
+                {
+                    if(b.getDiscountCampaign() != null) {
+                        System.out.println(b.getDiscountCampaign().getCampaignName());
+                        if(DiscountCampaignDB.getInstance().isNotExpired(b.getDiscountCampaign()))
+                            return true;
+                    }
+                    return false;
+                }
+        ).collect(Collectors.toList());
         session.setAttribute("bookIsBeingDiscounted", bookIsBeingDiscounted);
 
         bookBestSelling = allBook.stream().filter(b -> DiscountCampaignDB.getInstance().isNotExpired(b.getDiscountCampaign())).collect(Collectors.toList());

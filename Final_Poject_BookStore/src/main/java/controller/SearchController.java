@@ -41,7 +41,8 @@ public class SearchController extends HttpServlet {
         List<Book> allBook = null;
         if(request.getSession().getAttribute("allBook") != null) {
             allBook = (List<Book>)request.getSession().getAttribute("allBook");
-        }else {
+        }else
+        {
             allBook = BookDB.getInstance().selectAll();
             request.getSession().setAttribute("allBook", allBook);
         }
@@ -54,10 +55,6 @@ public class SearchController extends HttpServlet {
                 bookFoundByRequest.add(book);
             }
         }
-
-
-
-
         request.setAttribute("books", bookFoundByRequest);
         request.setAttribute("nameOfCategory","Tìm kiếm của bạn: "+searchRequest);
 

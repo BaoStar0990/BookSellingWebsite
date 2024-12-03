@@ -50,8 +50,10 @@ public class BookListController extends HttpServlet {
         {
             List<Book> bookDiscount = null;
             if(session.getAttribute("bookIsBeingDiscounted") != null) {
+                System.out.println("Book discounted exist in session");
                 bookDiscount   = (List<Book>)session.getAttribute("bookIsBeingDiscounted");
             }else{
+                System.out.println("Book discounted doesn't exist in session");
                 List<Book> allBook = null;
                 if(session.getAttribute("allBook") == null) {
                     System.out.println("--------------------------------------------");
@@ -63,7 +65,17 @@ public class BookListController extends HttpServlet {
                     System.out.println("Book exist on session");
                     allBook = (List<Book>)session.getAttribute("allBook");
                 }
-                bookDiscount = allBook.stream().filter(b -> DiscountCampaignDB.getInstance().isNotExpired(b.getDiscountCampaign())).collect(Collectors.toList());
+                bookDiscount = allBook.stream().filter(b ->
+                        {
+                            if(b.getDiscountCampaign() != null) {
+                                System.out.println(b.getDiscountCampaign().getCampaignName());
+                                if (DiscountCampaignDB.getInstance().isNotExpired(b.getDiscountCampaign()))
+                                    return true;
+                            }
+                            return false;
+
+                        }
+                        ).collect(Collectors.toList());
                 session.setAttribute("bookIsBeingDiscounted", bookDiscount);
             }
             request.setAttribute("books", bookDiscount);

@@ -76,7 +76,7 @@
 <div class="container d-flex justify-content-center align-items-center mt-5">
     <div class="signin-container my-3 p-4 rounded" >
         <div class="d-flex flex-column align-items-center">
-            <h2 class="text-center fw-bold mb-4">Đăng Nhập</h2>
+            <h2 class="text-center fw-bold mb-4">Xác thực code</h2>
             <div class="container-fluid">
                 <form action="forgotpassword" method="post">
                     <input type="hidden" name="action" value="EnteredCodeResetPassword" >
@@ -89,12 +89,12 @@
                             <span id="countdown"></span>
                         </div>
                     </div>
-                    <form action="forgotpassword" method="post" id="resendForm" >
-                        <input type="hidden" name="action" value="ResendCodeResetPassword">
-                        <button type="submit" class="btn btn-link p-0" id="resendButton" style="display: none;">Gửi lại mã</button>
-                    </form>
                     <!-- Login button -->
                     <input type="submit" class="primary-btn w-100 mb-4" value="Submit"/>
+                </form>
+                <form action="forgotpassword" method="post" id="resendForm" >
+                    <input type="hidden" name="action" value="ResendCodeResetPassword">
+                    <button type="submit" class="btn btn-link p-0" id="resendButton" style="display: none;">Gửi lại mã</button>
                 </form>
             </div>
         </div>

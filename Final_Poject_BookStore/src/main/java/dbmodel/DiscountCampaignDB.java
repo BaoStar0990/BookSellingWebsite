@@ -44,6 +44,17 @@ public class DiscountCampaignDB extends ModifyDB<DiscountCampaign> implements DB
         }
     }
 
+    public DiscountCampaign selectByName(String name) {
+        try (EntityManager em = DBUtil.getEmFactory().createEntityManager()) {
+            return em.createQuery("from DiscountCampaign d where d.campaignName =: name ", DiscountCampaign.class)
+                    .setParameter("name", name).getSingleResult();
+        } catch (NoResultException ex) {
+            return null;
+        } catch (Exception ex) {
+            return null;
+        }
+    }
+
     @Override
     public boolean delete(Object id, Class<DiscountCampaign> entityClass) {
         EntityManager em = null;

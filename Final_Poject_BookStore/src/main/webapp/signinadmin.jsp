@@ -48,33 +48,36 @@
 </head>
 <body>
 <script>
-    if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(function(position) {
-            var latitude = position.coords.latitude;
-            var longitude = position.coords.longitude;
+    window.onload = () => {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(function(position) {
+                var latitude = position.coords.latitude;
+                var longitude = position.coords.longitude;
 
-            // Gửi thông tin vị trí này đến server để lưu trữ
-            var loginForm = document.getElementById("loginForm");
-            var latitudeInput = document.createElement("input");
-            var longitudeInput = document.createElement("input");
+                // Gửi thông tin vị trí này đến server để lưu trữ
+                var loginForm = document.getElementById("loginForm");
+                var latitudeInput = document.createElement("input");
+                var longitudeInput = document.createElement("input");
 
-            latitudeInput.type = "hidden";
-            longitudeInput.type = "hidden";
-            latitudeInput.name = "latitude";
-            longitudeInput.name = "longitude";
-            latitudeInput.value = latitude;
-            longitudeInput.value = longitude;
+                latitudeInput.type = "hidden";
+                longitudeInput.type = "hidden";
+                latitudeInput.name = "latitude";
+                longitudeInput.name = "longitude";
+                latitudeInput.value = latitude;
+                longitudeInput.value = longitude;
 
-            loginForm.appendChild(latitudeInput);
-            loginForm.appendChild(longitudeInput);
+                loginForm.appendChild(latitudeInput);
+                loginForm.appendChild(longitudeInput);
 
-            // Submit form hoặc xử lý khác nếu cần
-        }, function(error) {
-            console.error("Không thể lấy vị trí người dùng: " + error.message);
-        });
-    } else {
-        console.log("Trình duyệt không hỗ trợ geolocation.");
+                // Submit form hoặc xử lý khác nếu cần
+            }, function(error) {
+                console.error("Không thể lấy vị trí người dùng: " + error.message);
+            });
+        } else {
+            console.log("Trình duyệt không hỗ trợ geolocation.");
+        }
     }
+
 </script>
 <!-- Sign In -->
 <div class="container d-flex justify-content-center align-items-center mt-5">

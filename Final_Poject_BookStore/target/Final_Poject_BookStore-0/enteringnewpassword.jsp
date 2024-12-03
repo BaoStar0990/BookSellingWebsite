@@ -59,7 +59,7 @@
 <div class="container d-flex justify-content-center align-items-center mt-5">
     <div class="signin-container my-3 p-4 rounded" >
         <div class="d-flex flex-column align-items-center">
-            <h2 class="text-center fw-bold mb-4">Đăng Nhập</h2>
+            <h2 class="text-center fw-bold mb-4">Nhập mật khẩu mới</h2>
             <div class="container-fluid">
                 <form action="forgotpassword" method="post">
                     <input type="hidden" name="action" value="EnteredCodeNewPassword" >

@@ -69,9 +69,7 @@ public class ForgotPasswordController extends HttpServlet {
                     String email = request.getParameter("email");
                     Customer customer = CustomerDB.getInstance().checkExistCustomerHaveEmail(email);
                     if (customer != null) { // neu ton tai email
-
                         session.setAttribute("customer", customer);
-
                         code = Mail.generatedCode();
                         if (Mail.sendCodeToCustomer(email, code) == true) {
                             ExpiringToken codeInSession = new ExpiringToken(code, 30, "code");
@@ -83,9 +81,21 @@ public class ForgotPasswordController extends HttpServlet {
                     } else { // neu khong ton tai
                         out.println("Email not exist");
                     }
-                } else if (action.equalsIgnoreCase("EnteredCodeResetPassword")) { // Khi da nhap code gui ve email
+                } else if(action.equalsIgnoreCase("ResendCodeResetPassword")) {
+                    Customer customer = (Customer) session.getAttribute("customer");
+                    if (customer != null) { // neu ton tai email
+                        code = Mail.generatedCode();
+                        if (Mail.sendCodeToCustomer(customer.getEmail(), code) == true) {
+                            ExpiringToken codeInSession = new ExpiringToken(code, 30, "code");
+                            session.setAttribute("code", codeInSession);
+                        }
+                        //Chuyen trang
+                        url = "/enteringcoderesetpassword.jsp";
+                        request.getServletContext().getRequestDispatcher(url).forward(request, response);
+                    }
+                }
+                else if (action.equalsIgnoreCase("EnteredCodeResetPassword")) { // Khi da nhap code gui ve email
                     String codeEntered = request.getParameter("code");
-
                     //Lay code luu trong session
                     //neu session time out
                     if (session.getAttribute("code") != null) {
@@ -107,9 +117,8 @@ public class ForgotPasswordController extends HttpServlet {
                         url = "/enteremailtoresetpassword.jsp";
                         request.getServletContext().getRequestDispatcher(url).forward(request, response);
                     }
-
-
-                } else if (action.equalsIgnoreCase("EnteredCodeNewPassword")) { // khi da nhap mat khau moi
+                }
+                else if (action.equalsIgnoreCase("EnteredCodeNewPassword")) { // khi da nhap mat khau moi
                     String newPassword = request.getParameter("password");
                     String confirmNewPassword = request.getParameter("confirmpassword");
                     if (newPassword.equals(confirmNewPassword)) {

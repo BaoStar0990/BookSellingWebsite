@@ -8,11 +8,11 @@
   tabs.put("book", new String[]{"Sách", "fa-book", String.format("%s/ms/msbook", pageContext.getServletContext().getContextPath())});
   tabs.put("category", new String[]{"Danh mục sách", "fa-layer-group", String.format("%s/ms/mscategory", pageContext.getServletContext().getContextPath())});
   tabs.put("order", new String[]{"Đơn hàng", "fa-box",  String.format("%s/ms/msorder", pageContext.getServletContext().getContextPath())});
-  tabs.put("customer", new String[]{"Khách hàng", "fa-user", String.format("%s/ms/ms_customer", pageContext.getServletContext().getContextPath())});
-  tabs.put("campaign", new String[]{"Chiến dịch", "fa-tags", String.format("%s/ms/ms_campaign", pageContext.getServletContext().getContextPath())});
-  tabs.put("review", new String[]{"Đánh giá", "fa-message", String.format("%s/ms/ms_review", pageContext.getServletContext().getContextPath())});
-  tabs.put("author", new String[]{"Tác giả", "fa-square-pen", String.format("%s/ms/ms_author", pageContext.getServletContext().getContextPath())});
-  tabs.put("publisher", new String[]{"Nhà xuất bản", "fa-print", String.format("%s/ms/ms_publisher", pageContext.getServletContext().getContextPath())});
+  tabs.put("customer", new String[]{"Khách hàng", "fa-user", String.format("%s/ms/mscustomer", pageContext.getServletContext().getContextPath())});
+  tabs.put("campaign", new String[]{"Chiến dịch", "fa-tags", String.format("%s/ms/mscampaign", pageContext.getServletContext().getContextPath())});
+  tabs.put("review", new String[]{"Đánh giá", "fa-message", String.format("%s/ms/msreview", pageContext.getServletContext().getContextPath())});
+  tabs.put("author", new String[]{"Tác giả", "fa-square-pen", String.format("%s/ms/msauthor", pageContext.getServletContext().getContextPath())});
+  tabs.put("publisher", new String[]{"Nhà xuất bản", "fa-print", String.format("%s/ms/mspublisher", pageContext.getServletContext().getContextPath())});
   tabs.put("staff", new String[]{"Nhân viên", "fa-clipboard-user", String.format("%s/ms/ms_staff", pageContext.getServletContext().getContextPath())});
   tabs.put("signout", new String[]{"Đăng xuất", "fa-right-from-bracket", String.format("%s/signout/manage/admin", pageContext.getServletContext().getContextPath())});
 

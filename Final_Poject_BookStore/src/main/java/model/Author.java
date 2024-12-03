@@ -102,4 +102,5 @@ public class Author implements Serializable {
     public void setNationality(String nationality){
         this.nationality = nationality;
     }
+
 }

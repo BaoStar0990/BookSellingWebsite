@@ -114,7 +114,7 @@
                       onclick="editCategory('${author.getId()}', '${author.getName()}', '${author.getImageURL()}', '${author.getDescription()}', '${author.getNationality()}')">
                 <i class="fas fa-edit"></i>
               </button>
-              <form id="deleteForm" method="post" action="/ms/ms_author" class="mb-0">
+              <form id="deleteForm" method="post" action="${pageContext.request.contextPath}/ms/msauthor" class="mb-0">
                 <input type="hidden" name="action" value="delete"/>
                 <input type="hidden" name="deleteId" value="${author.getId()}"/>
                 <button type="submit" class="btn btn-danger btn-sm">
@@ -139,7 +139,7 @@
 <div class="modal fade fw-medium" id="addCategoryModal" tabindex="-1" aria-labelledby="addCategoryModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
-      <form action="/ms/ms_author" method="post">
+      <form action="${pageContext.request.contextPath}/ms/msauthor" method="post">
         <input type="hidden" name="csrf" value="${_csrf.token}"/>
         <input type="hidden" name="action" value="add"/>
         <div class="modal-header">
@@ -179,7 +179,7 @@
 <div class="modal fade fw-medium" id="editCategoryModal" tabindex="-1" aria-labelledby="editCategoryModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
-      <form action="/ms/ms_author" method="post">
+      <form action="${pageContext.request.contextPath}/ms/msauthor" method="post">
         <%-- Validate CSRF token --%>
         <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
         <input type="hidden" name="action" value="edit"/>

@@ -38,7 +38,7 @@ public class DiscountCampaign implements Serializable {
         this.startDate = startDate;
         this.endDate = endDate;
         this.percentDiscount = percentDiscount;
-        books = new HashSet<>();
+        this.books = new HashSet<>();
     }
 
     public DiscountCampaign(String campaignName, LocalDate startDate, LocalDate endDate, Double percentDiscount) {
@@ -46,7 +46,7 @@ public class DiscountCampaign implements Serializable {
         this.startDate = startDate;
         this.endDate = endDate;
         this.percentDiscount = percentDiscount;
-        books = new HashSet<>();
+        this.books = new HashSet<>();
     }
 
     public int getCampaignId() {

@@ -12,13 +12,14 @@ import model.Customer;
 import java.io.IOException;
 import java.util.List;
 
-@WebServlet("/ms/ms_customer")
+@WebServlet("/ms/mscustomer")
 public class MSCustomerController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         HttpSession session = req.getSession();
         if(session.getAttribute("customers") == null){
             List<Customer> allCustomers = CustomerDB.getInstance().selectAll();
+            allCustomers.sort((p1, p2) -> Integer.compare(p2.getId(), p1.getId()));
             session.setAttribute("customers", allCustomers);
         }
         req.getServletContext().getRequestDispatcher("/Management-System/ms-customer.jsp").forward(req,resp);
@@ -50,10 +51,11 @@ public class MSCustomerController extends HttpServlet {
             }
             HttpSession session = req.getSession();
             List<Customer> allCustomers = CustomerDB.getInstance().selectAll();
+            allCustomers.sort((p1, p2) -> Integer.compare(p2.getId(), p1.getId()));
             session.removeAttribute("customers");
             session.setAttribute("customers", allCustomers);
         }
 
-        resp.sendRedirect(getServletContext().getContextPath() + "/ms/ms_customer");
+        resp.sendRedirect(getServletContext().getContextPath() + "/ms/mscustomer");
     }
 }

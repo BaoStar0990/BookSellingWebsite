@@ -106,7 +106,7 @@
                 </div>
                 <ul class="navbar-nav d-flex justify-content-center fw-semibold mt-3 mb-0">
                     <li class="nav-item">
-                        <a href="/home" class="nav-link ${param.currentTab eq 'home' ? 'active' : ''}">Trang chủ</a>
+                        <a href="${pageContext.request.contextPath}/home" class="nav-link ${param.currentTab eq 'home' ? 'active' : ''}">Trang chủ</a>
                     </li>
 
                     <li id="danhmuc" class="nav-item dropdown">
@@ -121,7 +121,7 @@
                                 </c:if>
                                 <c:if test="${count <= 3}">
                                     <div class="col-md-4">
-                                        <li><a href="/category/${category.id}" class="dropdown-item btn btn-outline-danger">${category.name}</a></li>
+                                        <li><a href="${pageContext.request.contextPath}/category/${category.id}" class="dropdown-item btn btn-outline-danger">${category.name}</a></li>
                                     </div>
                                     <c:set var = "count" scope = "request" value = "${count + 1}"/>
                                 </c:if>

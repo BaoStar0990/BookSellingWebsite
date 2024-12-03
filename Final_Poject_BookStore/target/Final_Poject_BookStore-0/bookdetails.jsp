@@ -10,6 +10,9 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
+<%@ page import="model.Customer" %>
+<%@ page import="model.Review" %>
+<%@ page import="java.util.List" %>
 
 <html>
     <head>
@@ -62,6 +65,7 @@
         <!--Lấy tên thể loại đầu tiên của sách -->
         <%
             Book b = (Book) request.getAttribute("book");
+            List<Review> reviews = (List<Review>) request.getAttribute("reviews");
             // kiểm tra sách có thể loại không, nếu có lấy thể loại đầu tiên
             String firstCategoryName = b == null || b.getCategories() == null
                     || b.getCategories().isEmpty() ? " "
@@ -69,7 +73,7 @@
         %>
         
         <%-- Hiển thị thông báo thêm vào giỏ hàng --%>
-        <div class ="position-relative">
+        <div class ="position-relative mt-2">
             <div class="d-none position-absolute top-0 end-0 w-25 alert alert-success 
                  alert-dismissible fade show d-flex align-items-center" role="alert">
                 <i class="bi bi-check-circle-fill me-2"></i> <!-- Icon -->
@@ -80,7 +84,7 @@
                 <button type="button" class="btn-close ms-3" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
         </div>
-        
+
         <div class="container mt-2">
             <p class="fw-semibold">
                 <a href="${pageContext.request.contextPath}" class="text-decoration-none text-dark">Trang chủ</a>
@@ -143,7 +147,7 @@
                                 <%--                                 Render filled stars for the rounded average rating--%>
                                 <c:choose>
                                     <c:when test = "${not empty book.getReviews()}">
-                                        <c:set var="roundedRating" value="${book.getAverageRatingStart()}" />
+                                        <c:set var="roundedRating" value="${book.getAverageRatingStar()}" /> 
                                     </c:when>
                                     <c:otherwise>
                                         <c:set var="roundedRating" value="0" />
@@ -165,11 +169,11 @@
 
                         <%-- Round the rating to 1 decimal place and display --%>
                         <span class="text-muted fs-6">
-                            (${book.getReviews().size()} Đánh giá)
+                            <fmt:formatNumber value="${book.getAverageRatingStar()}" type="number" pattern="#.#" ></fmt:formatNumber> (${book.getReviews().size()} Đánh giá)
                         </span>
                     </div>
 
-                    <%--                 Price and Discount --%>
+                    <%--Price and Discount --%>
                     <div class="mt-3 d-flex align-items-center">
                         <span class="text-primary fw-semibold fs-3">
                             <fmt:formatNumber value="${book.sellingPrice*(1 - book.getDiscountCampaign().getPercentDiscount())}" type="number" pattern="#,##0" />đ
@@ -280,29 +284,24 @@
         <%--     end Related Books  --%>
 
         <%--     User Review --%>
+        <%
+            Customer user = (Customer) session.getAttribute("user");
+            Boolean hasReviewed = (Boolean) request.getAttribute("hasReviewed");
+        %>
         <div class="container mt-4 p-0">
             <h2 class="font-semibold">Đánh giá sản phẩm</h2>
             <hr>
 
             <div class="row">
                 <div class="col-2 d-flex flex-column justify-content-center align-items-center">
-                    <%--                &lt;%&ndash; Calculate Average Rating &ndash;%&gt;--%>
-                    <%--                <c:set var="totalRating" value="0" />--%>
-                    <%--                <c:forEach var="review" items="${book.getReviews()}">--%>
-                    <%--                    <c:set var="totalRating" value="${totalRating + review.rating}" />--%>
-                    <%--                </c:forEach>--%>
-
-                    <%-- Round the rating to 1 decimal place and display --%>
-                    <%--                    <h1 class="fw-bold mt-2">--%>
-                    <%--                        <fmt:formatNumber value="${book.getAverageRatingStart()}" type="number" maxFractionDigits="1" />/5--%>
-                    <%--                    </h1>--%>
-
-                    <%--                    <c:set var="averageRating" value="${book.getAverageRatingStart()}" />--%>
-                    <%--                 Display the stars based on average rating--%>
+                    <%-- Calculate Average Rating --%>
+                    <span class="text-muted fs-1 mb-2 fw-bold">
+                        <fmt:formatNumber value="${book.getAverageRatingStar()}" type="number" pattern="#.#" />/5
+                    </span>
                     <div class="d-flex align-items-center fs-4">
                         <c:forEach var="i" begin="1" end="5">
                             <c:choose>
-                                <c:when test="${i <= book.getAverageRatingStart()}">
+                                <c:when test="${i <= roundedRating}">
                                     <i class="fas fa-star text-warning"></i>
                                 </c:when>
                                 <c:otherwise>
@@ -311,68 +310,122 @@
                             </c:choose>
                         </c:forEach>
                     </div>
-                    <%--                    <span class="m-2 fs-5">(${book.getReviews().size()} Đánh giá)</span>--%>
                 </div>
 
-                <%--             Rating Breakdown--%>
+                <%-- Rating Breakdown --%>
                 <div class="col-3 mt-2 d-flex flex-column justify-content-center align-items-center">
-                    <c:forEach var="rating" items="${[5, 4, 3, 2, 1]}">
+                    <c:forEach var="entry" items="${ratingBreakdown.entrySet()}">
                         <div class="d-flex align-items-center py-1">
-                            <span style="width:16px">${rating}</span>
+                            <span style="width:16px">${entry.key}</span>
                             <i class="fas fa-star text-warning"></i>
                             <div class="progress mx-2" style="width: 150px; height: 8px;">
-                                <%--                             You will need to calculate the percentage of reviews for each rating in your backend logic--%>
+                                <%-- Calculate the percentage of reviews for each rating --%>
+                                <c:set var="ratingCount" value="${entry.value}" />
+                                <c:set var="totalReviews" value="${book.getReviews().size()}" />
+                                <c:set var="percentage" value="${totalReviews > 0 ? (ratingCount * 100 / totalReviews) : 0}" />
                                 <div class="progress-bar bg-warning" role="progressbar"
-                                     style="width: ${rating * 20}%;"
-                                     aria-valuenow="${rating}" aria-valuemin="0" aria-valuemax="100">
+                                     style="width: ${percentage}%;"
+                                     aria-valuenow="${percentage}" aria-valuemin="0" aria-valuemax="100">
                                 </div>
                             </div>
-                            <%--                        Example percentage, adjust based on logic--%>
-                            <span>${rating * 10}%</span>
+                            <span>${ratingCount}</span>
                         </div>
                     </c:forEach>
                 </div>
 
-                <%--             Add a Review Section--%>
+                <%-- Add a Review Section --%>
                 <div class="col-7 ps-4">
                     <h5 class="fw-bold mb-3">Thêm đánh giá của bạn</h5>
-                    <div class="mb-3">
-                        <div class="d-flex align-items-center">
-                            <%--                         Render stars that the user can click to add a review--%>
-                            <c:forEach var="i" begin="1" end="5">
-                                <i class="fas fa-star fs-4 me-2 user-rating-star text-muted" style="cursor: pointer;" onclick="setUserRating(${i})"></i>
-                            </c:forEach>
-                        </div>
-                        <textarea class="form-control mt-3" rows="3" placeholder="Viết đánh giá của bạn..."></textarea>
-                    </div>
-                    <button class="btn primary-btn">Gửi đánh giá</button>
-                </div>
-            </div>
-            <c:if test="${book.getReviews() != null}">
-                <div class="row mt-5">
-                    <c:forEach var="review" items="${book.getReviews()}">
-                        <div class="row border-top py-3">
-                            <%--                     User and Date Section--%>
-                            <div class="col-2 d-flex flex-column mb-2">
-                                <h6 class="fw-bold me-3">${review.getCustomer().getFullName()}</h6>
-                                <%--                        <span class="text-muted">${review.reviewDate}</span>--%>
-                            </div>
-                            <div class="col-10">
+                    <c:choose>
+                        <c:when test="${user == null}">
+                            <p class="text-muted">Vui lòng <a href="${pageContext.request.contextPath}/signin">đăng nhập</a> để viết đánh giá.</p>
+                        </c:when>
+                        <c:when test="${hasReviewed != null && hasReviewed}">
+                            <p class="text-muted">Cảm ơn bạn đã đánh giá sản phẩm này.</p>
+                        </c:when>
+                        <c:otherwise>
+                            <form id="reviewForm">
                                 <div class="d-flex align-items-center">
                                     <c:forEach var="i" begin="1" end="5">
-                                        <c:choose>
-                                            <c:when test="${i <= review.rate}">
-                                                <i class="fas fa-star text-warning"></i>
-                                            </c:when>
-                                            <c:otherwise>
-                                                <i class="far fa-star text-muted"></i>
-                                            </c:otherwise>
-                                        </c:choose>
+                                        <i class="fas fa-star fs-4 me-2 user-rating-star text-muted" style="cursor: pointer;" onclick="setUserRating(${i})"></i>
                                     </c:forEach>
                                 </div>
-                                <p class="mt-2">${review.description}</p>
-                            </div>
-                        </div>
+                                <textarea class="form-control mt-3 mb-1" rows="3" placeholder="Viết đánh giá của bạn..." id="reviewContent" oninput="updateCharacterCount()"></textarea>
+                                <small id="charCount" class="text-end d-block">0/255</small>
+                                <button type="button" class="btn primary-btn" onclick="submitReview()">Gửi đánh giá</button>
+                            </form>
+                        </c:otherwise>
+                    </c:choose>
+                </div>
+            </div>
+            <%-- Ưu tiên hiển thị review của tài khoản đang đăng nhập hiện tại lên đầu tiên --%>
+            <c:if test="${reviews != null}">
+                <div class="row mt-5">
+                    <c:forEach var="review" items="${reviews}">
+                        <c:choose>
+                            <c:when test="${review.customer.id == user.id}">
+                                <div class="row border-top py-3">
+                                    <%-- User and Date Section --%>
+                                    <div class="col-2 d-flex flex-column mb-2">
+                                        <h6 class="fw-bold me-3 text-primary">${review.getCustomer().getFullName()} (Bạn)</h6>
+                                        <span class="text-muted"></span>
+                                        <fmt:formatDate value="${review.getReviewDate()}" pattern="dd-MM-yyyy" />
+                                    </div>
+                                    <div class="col-10">
+                                        <div class="d-flex align-items-center">
+                                            <c:forEach var="i" begin="1" end="5">
+                                                <c:choose>
+                                                    <c:when test="${i <= review.rate}">
+                                                        <i class="fas fa-star text-warning"></i>
+                                                    </c:when>
+                                                    <c:otherwise>
+                                                        <i class="far fa-star text-muted"></i>
+                                                    </c:otherwise>
+                                                </c:choose>
+                                            </c:forEach>
+                                        </div>
+                                        <p class="mt-2">${review.description}</p>
+                                        <div class="d-flex justify-content-end">
+                                            <button class="btn btn-sm btn-outline-primary me-2" onclick="openUpdateReviewModal(${review.reviewID}, '${review.description}', ${review.rate})">
+                                                <i class="fas fa-edit"></i> Sửa
+                                            </button>
+                                            <button class="btn btn-sm btn-outline-danger" onclick="deleteReview(${review.reviewID})">
+                                                <i class="fas fa-trash-alt"></i> Xóa
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </c:when>
+                        </c:choose>
+                    </c:forEach>
+                    <c:forEach var="review" items="${reviews}">
+                        <c:choose>
+                            <c:when test="${review.customer.id != user.id}">
+                                <div class="row border-top py-3">
+                                    <%-- User and Date Section --%>
+                                    <div class="col-2 d-flex flex-column mb-2">
+                                        <h6 class="fw-bold me-3">${review.getCustomer().getFullName()}</h6>
+                                        <span class="text-muted"></span>
+                                        <fmt:formatDate value="${review.getReviewDate()}" pattern="dd-MM-yyyy" />
+                                    </div>
+                                    <div class="col-10">
+                                        <div class="d-flex align-items-center">
+                                            <c:forEach var="i" begin="1" end="5">
+                                                <c:choose>
+                                                    <c:when test="${i <= review.rate}">
+                                                        <i class="fas fa-star text-warning"></i>
+                                                    </c:when>
+                                                    <c:otherwise>
+                                                        <i class="far fa-star text-muted"></i>
+                                                    </c:otherwise>
+                                                </c:choose>
+                                            </c:forEach>
+                                        </div>
+                                        <p class="mt-2">${review.description}</p>
+                                    </div>
+                                </div>
+                            </c:when>
+                        </c:choose>
                     </c:forEach>
                 </div>
             </c:if>
@@ -413,115 +466,37 @@
 
 <!--        <script src="<%--${pageContext}--%>/assets/javascript/quantity.js"></script>-->
         <!--<script src="./assets/javascript/loading.js"></script>-->
-        <!--Add script increase and decrease --> 
-        <script>
-            function increaseQuantity() {
-                let quantity = document.getElementById("quantity");
-                quantity.value = parseInt(quantity.value) + 1;
-            }
-            function decreaseQuantity() {
-                let quantity = document.getElementById("quantity");
-                if (parseInt(quantity.value) > 1)
-                    quantity.value = parseInt(quantity.value) - 1;
-            }
-            
-            // hiển thị thông báo thêm vào giỏ hàng
-            function showNotification(){
-                const alertBox = document.querySelector('.alert');
-                 // Hiển thị thông báo
-                alertBox.classList.remove('d-none');
-                alertBox.classList.add('fade');
 
-                // Ẩn thông báo sau 3 giây
-                setTimeout(() => {
-                    alertBox.classList.remove('fade');
-                    alertBox.classList.add('d-none');
-                }, 3000); // Đóng sau 3 giây
-            }
-            
-            // gửi dữ liệu cho add cart
-            function sendDataToAddCart(event) {
-                const bookId = document.getElementById("bookId").value; // Dữ liệu cần gửi
-                const quantity = document.getElementById("quantity").value;
-//                alert(quantity);
-                if (!bookId || !quantity) {
-                    alert("Vui lòng điền đủ thông tin.");
-                    return; // Dừng hàm nếu giá trị trống
-                }
-                // URLSearchParams() dùng để tạo đối tượng
-                const data = new URLSearchParams();
-                data.append('bookId', bookId);
-                data.append('quantity', quantity);
-                const buttonId = event.target.id; // Lấy ID của nút
-                if (buttonId === "muaNgay"){
-                    data.append('action', "muaNgay");
-                }
-                else{
-                    data.append('action', "themVaoGio");
-                }
-                document.getElementById('loading-screen').style.display = 'flex';
-                
-                fetch('/addcart', {
-                    method: 'POST',
-                    headers: {
-                      'Content-Type': 'application/x-www-form-urlencoded',
-                    },
-                    body: data.toString() // chuyển chuỗi URLSearchParams thành chuỗi URL-encoded
-                  })
-                  .then(response => response.json())
-                  .then(result => {
-                    if(result.errorMessage !== "null"){
-                        // Xử lý hiện lỗi
-                        alert(result.errorMessage);
-                        document.getElementById('loading-screen').style.display = 'none';
-//                        document.getElementById("errorMessage").innerText = result.message;
-                    }
-                    else{
-                        if(buttonId === "themVaoGio"){
-                            document.getElementById('loading-screen').style.display = 'none';
-                            showNotification();
-                        }
-                    }
-                    if (result.redirect) {
-                        // Chuyển hướng
-//                        alert(result.redirect);
-                        window.location.href = result.redirect;
-                    }
-                    
-                  })
-                  .catch(error => console.error('Error:', error));
-                
-            }
-            
-            // Handle user rating stars
-            let userRating = 0;
-            function setUserRating(rating) {
-                userRating = rating;
-                const stars = document.querySelectorAll('.user-rating-star');
-                stars.forEach((star, index) => {
-                    if (index < rating) {
-                        star.classList.add('text-warning');
-                        star.classList.remove('text-muted');
-                    } else {
-                        star.classList.add('text-muted');
-                        star.classList.remove('text-warning');
-                    }
-                });
+        <!-- Handle Javascript -->
+        <script src="${pageContext.request.contextPath}/assets/javascript/bookdetail.js"></script>
 
-                console.log(userRating);
-            }
-            
-//        window.onload = function() {
-//            // Giả lập thời gian tải nội dung (nếu muốn)
-//            setTimeout(() => {
-//                // Ẩn màn hình loading
-//                document.getElementById('loading-screen').style.display = 'none';
-//                // Hiển thị nội dung chính
-//                document.getElementById('container').style.display = 'block';
-//            }, 0); // Không cần delay trong trường hợp tải trang hoàn tất
-//        };
-        
-        </script>
+        <!-- Modal for updating review -->
+        <div class="modal fade" id="updateReviewModal" tabindex="-1" aria-labelledby="updateReviewModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="updateReviewModalLabel">Cập nhật đánh giá</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="updateReviewForm">
+                            <div class="d-flex align-items-center">
+                                <c:forEach var="i" begin="1" end="5">
+                                    <i class="fas fa-star fs-4 me-2 user-rating-star text-muted" style="cursor: pointer;" onclick="setUpdateUserRating(${i})"></i>
+                                </c:forEach>
+                            </div>
+                            <textarea class="form-control mt-3 mb-1" rows="3" placeholder="Cập nhật đánh giá của bạn..." id="updateReviewContent" oninput="updateUpdateCharacterCount()"></textarea>
+                            <small id="updateCharCount" class="text-end d-block">0/255</small>
+                            <input type="hidden" id="updateReviewId">
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn secondary-btn" data-bs-dismiss="modal">Đóng</button>
+                        <button type="button" class="btn primary-btn" onclick="submitUpdateReview()">Cập nhật</button>
+                    </div>
+                </div>
+            </div>
+        </div>
     </body>
     
 </html>

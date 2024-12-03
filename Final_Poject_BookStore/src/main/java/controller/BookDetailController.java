@@ -5,12 +5,13 @@
 package controller;
 
 import dbmodel.BookDB;
+import dbmodel.ReviewDB;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Comparator;
+import java.util.Map;
 
-import dbmodel.CategoryDB;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -18,8 +19,8 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import model.Book;
-import model.Category;
-
+import model.Review;
+import model.Customer;
 /**
  *
  * @author PC
@@ -76,7 +77,25 @@ public class BookDetailController extends HttpServlet {
 
         // Lấy cuốn sách
         if (book != null) {
+            List<Review> reviews = ReviewDB.getInstance().selectReviewsByBookID(book.getId());
+            reviews.sort(Comparator.comparingInt(Review::getReviewID).reversed());
+
+            session.setAttribute("reviews", reviews);
             request.setAttribute("book", book);
+            request.setAttribute("reviews", reviews);
+
+            // Kiểm tra xem người dùng đã review cuốn sách này chưa
+            Customer user = (Customer) session.getAttribute("user");
+            boolean hasReviewed = false;
+            if (user != null) {
+                hasReviewed = !ReviewDB.getInstance().selectReviewByBookIDOfACustomer(book.getId(), user.getId()).isEmpty();
+            }
+            request.setAttribute("hasReviewed", hasReviewed);
+
+            // Get rating breakdown
+            Map<Integer, Long> ratingBreakdown = ReviewDB.getInstance().getRatingStatistics(book.getId());
+            request.setAttribute("ratingBreakdown", ratingBreakdown);
+
             String url = "/bookdetails.jsp";
             System.out.println("Called Bookdetail");
             request.getRequestDispatcher(url).forward(request, response);

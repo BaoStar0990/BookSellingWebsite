@@ -3,6 +3,7 @@ package model;
 import jakarta.persistence.*;
 
 import java.io.Serializable;
+import java.sql.Date;
 
 @Entity
 public class Review implements Serializable {
@@ -11,7 +12,8 @@ public class Review implements Serializable {
     private int reviewID;
     private int rate;
     private String description;
-    
+    private Date reviewDate;
+
     // xóa review không xóa customer
     @ManyToOne()
     @JoinColumn(name="customerID")
@@ -27,22 +29,24 @@ public class Review implements Serializable {
     public Review() {
 
     }
-    public Review(int reviewID,  int rate, String description, Customer customer, Book book) {
+
+    public Review(int reviewID,  int rate, String description, Date reviewDate , Customer customer, Book book) {
         this.reviewID = reviewID;
         this.rate = rate;
         this.description = description;
         this.customer = customer;
         this.book = book;
+        this.reviewDate = reviewDate;
     }
-    public Review(int rate, String description, Customer customer, Book book) {
+    public Review(int rate, String description, Date reviewDate , Customer customer, Book book) {
         this.rate = rate;
         this.description = description;
         this.customer = customer;
         this.book = book;
+        this.reviewDate = reviewDate;
     }
     
     //get & set
-    
     public int getReviewID() {
         return reviewID;
     }
@@ -72,5 +76,12 @@ public class Review implements Serializable {
     }
     public void setRate(int rate) {
         this.rate = rate;
+    }
+
+    public Date getReviewDate() {
+        return reviewDate;
+    }
+    public void setReviewDate(Date reviewDate) {
+        this.reviewDate = reviewDate;
     }
 }

@@ -61,7 +61,7 @@ public class StaffPublisherController extends HttpServlet {
             session.setAttribute("publishers", publisher);
         }
 
-        resp.sendRedirect(getServletContext().getContextPath() + "/ms_publisher");
+        resp.sendRedirect(getServletContext().getContextPath() + "/ms/mspublisher");
 
     }
 }

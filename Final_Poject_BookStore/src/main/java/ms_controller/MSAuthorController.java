@@ -8,17 +8,24 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import model.Author;
+import model.Book;
 
 import java.io.IOException;
 import java.util.List;
 
-@WebServlet("/ms/ms_author")
+@WebServlet("/ms/msauthor")
 public class MSAuthorController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         HttpSession session = req.getSession();
             if (session.getAttribute("authors") == null) {
                 List<Author> authors = AuthorDB.getInstance().selectAll();
+                authors.sort((p1, p2) -> Integer.compare(p2.getId(), p1.getId()));
+                for(Author author : authors){
+
+                    for(Book book : author.getBooks())
+                        System.out.println(book.getTitle());
+                }
                 session.setAttribute("authors", authors);
             }
             req.getServletContext().getRequestDispatcher("/Management-System/ms-author.jsp").forward(req, resp);
@@ -46,10 +53,11 @@ public class MSAuthorController extends HttpServlet {
                     }
                 }
                 List<Author> authors = AuthorDB.getInstance().selectAll();
+                authors.sort((p1, p2) -> Integer.compare(p2.getId(), p1.getId()));
                 session.removeAttribute("authors");
                 session.setAttribute("authors", authors);
             }
 //
-            resp.sendRedirect(getServletContext().getContextPath() + "/ms/ms_author");
+            resp.sendRedirect(getServletContext().getContextPath() + "/ms/msauthor");
     }
 }

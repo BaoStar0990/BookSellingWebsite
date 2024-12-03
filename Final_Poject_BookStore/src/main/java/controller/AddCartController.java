@@ -1,5 +1,6 @@
 package controller;
 
+import Utils.authentication.TokenService;
 import dbmodel.BillDB;
 import dbmodel.BookDB;
 import dbmodel.OrderDetailDB;
@@ -51,11 +52,11 @@ public class AddCartController extends HttpServlet {
         if(session.getAttribute("user") == null){
             System.out.println("oooooooooo");
                 // Tạo một đối tượng JSON với cả thông tin chuyển hướng và thông báo lỗi
-            String jsonResponse = "{\"redirect\":\"/signin.jsp\", \"errorMessage\":\"chưa đăng nhập\"}";
+            String jsonResponse = "{\"redirect\":\"/signin.jsp\"}";
             response.getWriter().write(jsonResponse);
         }
         else{
-             Bill cart = null;
+            Bill cart = null;
             List<OrderDetail> sortedOrderDetails = null;
             Set<OrderDetail> orderDetails = null;
             // kiểm tra trong session có giỏ hàng chưa, nếu chưa thì lấy dưới database
@@ -88,6 +89,7 @@ public class AddCartController extends HttpServlet {
             }
             
             String quantityStr = request.getParameter("quantity");
+            String csrfToken = request.getParameter("csrfToken");
             String idBookStr = request.getParameter("bookId");
             String action = request.getParameter("action");
             
@@ -95,6 +97,20 @@ public class AddCartController extends HttpServlet {
                 // find sách
                 int idBook = Integer.parseInt(idBookStr);
                 int quantity = Integer.parseInt(quantityStr);
+                // kiểm tra token
+                TokenService tokenService = (TokenService) session.getAttribute("tokenService");
+                
+                if (tokenService == null || !tokenService.validateToken(csrfToken, idBook)) {
+                    response.getWriter().write("{\"errorMessage\":\"Đừng có ngịch.\"}");
+                    // xóa token 
+                    if(tokenService != null)
+                        tokenService.deleteToken(idBook);
+                    return;
+                }
+                // xóa token 
+                if(tokenService != null)
+                    tokenService.deleteToken(idBook);
+                    
                 // lấy sách trong database
                 Book book = BookDB.getInstance().selectByID(idBook);
                     
@@ -158,7 +174,6 @@ public class AddCartController extends HttpServlet {
             }
             else{
                 response.getWriter().write("{\"errorMessage\":\"" + errorMessage + "\"}"); 
-
             }
                     
         }

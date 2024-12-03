@@ -26,6 +26,7 @@ function showNotification(){
 function sendDataToAddCart(event) {
     const bookId = document.getElementById("bookId").value; // Dữ liệu cần gửi
     const quantity = document.getElementById("quantity").value;
+    const csrfToken = document.getElementById("csrfToken").value;
 //                alert(quantity);
     if (!bookId || !quantity) {
         alert("Vui lòng điền đủ thông tin.");
@@ -35,6 +36,7 @@ function sendDataToAddCart(event) {
     const data = new URLSearchParams();
     data.append('bookId', bookId);
     data.append('quantity', quantity);
+    data.append('csrfToken', csrfToken);
     const buttonId = event.target.id; // Lấy ID của nút
     if (buttonId === "muaNgay"){
         data.append('action', "muaNgay");
@@ -72,7 +74,11 @@ function sendDataToAddCart(event) {
         }
         
       })
-      .catch(error => console.error('Error:', error));
+      .catch(error => {
+          // hiện lỗi bắt được
+          alert(error.message);
+          document.getElementById('loading-screen').style.display = 'none';
+      });
     
 }
 
@@ -106,7 +112,7 @@ function showReviewSuccessToast() {
 
 function showReviewFailToast() {
     const alertBox = document.getElementById('review-fail-toast');
-    alertBox.classList.remove('d-none');
+//    alertBox.classList.remove('d-none');
     alertBox.classList.add('fade');
     setTimeout(() => {
         alertBox.classList.remove('fade');
@@ -119,6 +125,7 @@ function submitReview() {
     // Lấy nội dung đánh giá, loại bỏ các thẻ HTML
     const reviewContent = document.getElementById("reviewContent").value.replace(/<\/?[^>]+(>|$)/g, "");
     const rating = userRating;
+    const csrfToken = document.getElementById("csrfToken").value;
 
     if (!bookId || !rating) {
         alert("Vui lòng Rating trước khi gửi đánh giá.");
@@ -129,7 +136,8 @@ function submitReview() {
     data.append('bookID', bookId);
     data.append('reviewContent', reviewContent);
     data.append('rate', rating);
-
+    data.append('csrfToken', csrfToken);
+    
     fetch('/submitReview', {
         method: 'POST',
         headers: {
@@ -146,7 +154,8 @@ function submitReview() {
         }
     })
     .catch(error => {
-        console.error('Error:', error);
+        // hiện lỗi bắt được
+        alert(error.message);
         showReviewFailToast();
     });
 }

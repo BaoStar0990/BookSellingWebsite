@@ -1,11 +1,14 @@
+<%@page import="model.Customer"%>
+<%@page import="model.Address"%>
+<%@page import="Utils.authentication.CSRFUtil"%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-
 <div class="container address-setting fw-medium">
   <h4 class="pb-2 mb-3 fw-bold">Thông tin Địa chỉ</h4>
-
+  
   <!-- Address List -->
   <div class="row">
     <c:forEach var="address" items="${sessionScope.user.getListAddresses()}">
+    <%-- Lấy token --%>
       <div class="col-12 mb-3">
         <div class="card p-3 shadow-sm h-100">
           <div class="d-flex justify-content-between align-items-center mb-2">
@@ -23,16 +26,14 @@
                  onclick="setModalForEdit('<c:out value="${address.createJson()}" />')">
                 <i class="fas fa-edit mb-1"></i>
               </a>
-                <form action ="/modifyaddress" method="post" class="d-inline my-1" id ="deleteAdderessForm">
+                <form action ="/modifyaddress" method="post" class="d-inline my-1" id ="deleteAdderessForm">                    
                     <input type="hidden" name="action" value="delete" />
                     <input type="hidden" id="idDelete" name="idDelete" value="${address.getId()}"/>
                     <button class=" btn no-border text-primary text-decoration-none mb-0 p-0" type="submit">
                         <i class="fas fa-trash mb-1"></i>
                     </button>
-          
                   <!--</a>-->
-                </form>
-              
+                </form>        
             </div>
           </div>
                     
@@ -43,13 +44,12 @@
             <form action="/modifyaddress" method="post" class="d-inline my-1" id ="defaultAddressForm">
                 <input type="hidden" name="action" value="defaultAddress" />              
                 <input type="hidden" id="idDefault" name="idDefault" value="${address.getId()}"/>
-               <button class="btn no-border text-primary text-decoration-none mb-0 p-0" 
+                <button class="btn no-border text-primary text-decoration-none mb-0 p-0" 
                   onclick="document.getElementById('defaultAddressForm').submit();">
                     Đặt làm mặc định
                 </button>
             </form>
-          </c:if>
-               
+          </c:if>       
         </div>
       </div>
     </c:forEach>
@@ -135,7 +135,6 @@
   // JavaScript to handle Add/Edit modal functionality
   function setModalForAdd() {
     document.getElementById("action").value = "add";
-    alert("bbbbb");
     document.getElementById("addressModalLabel").innerText = "Thêm địa chỉ giao hàng";
     document.getElementById("name").value = "";
     document.getElementById("phone").value = "";
@@ -173,6 +172,10 @@
         document.getElementById("tinhText").value = $("#tinh option:selected").text();
         document.getElementById("quanText").value = $("#quan option:selected").text();
         document.getElementById("phuongText").value = $("#phuong option:selected").text();
+        // Lấy nội dung địa chỉ, loại bỏ các thẻ HTML
+        document.getElementById("phone").value = document.getElementById("phone").value.replace(/<\/?[^>]+(>|$)/g, "");
+        document.getElementById("name").value = document.getElementById("name").value.replace(/<\/?[^>]+(>|$)/g, "");
+        document.getElementById("addressDetail").value = document.getElementById("addressDetail").value.replace(/<\/?[^>]+(>|$)/g, "");
   }
 </script>
 

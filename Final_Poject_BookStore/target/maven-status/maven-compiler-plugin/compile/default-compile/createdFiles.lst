@@ -97,6 +97,7 @@ controller\BookListController.class
 controller\ChangePasswordController.class
 StaffController\StaffOrderController.class
 model\LogSinginAdmin.class
+Utils\authentication\TokenService.class
 controller\UploadImageController.class
 dbmodel\ModifyDB.class
 controller\SigninController.class

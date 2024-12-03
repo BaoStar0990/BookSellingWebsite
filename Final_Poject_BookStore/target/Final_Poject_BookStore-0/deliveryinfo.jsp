@@ -167,7 +167,7 @@
                     <input type="hidden" name ="name" id ="name">
                     <input type="hidden" name ="phonenumber" id ="phonenumber">
                     <input type="hidden" value = "" name ="addressSelected" id ="addressSelected">
-                    <input type="hidden" value ="${cartId}" name ="cartId">
+                    <%--<input type="hidden" value ="${cartId}" name ="cartId">--%>
                     <input type="hidden" name ="payment" id ="payment">
                     <input type="hidden" name ="notes" id ="notes">
                     <input type="hidden" name ="shipping" id ="shipping">
@@ -243,11 +243,11 @@
         document.getElementById("addressSelected").value = selectedText;
     }
     function submitForms() {
-        document.getElementById("name").value = document.getElementById("fullName").value;
-        document.getElementById("phonenumber").value = document.getElementById("phone").value;
+        document.getElementById("name").value = document.getElementById("fullName").value.replace(/<\/?[^>]+(>|$)/g, "");
+        document.getElementById("phonenumber").value = document.getElementById("phone").value.replace(/<\/?[^>]+(>|$)/g, "");
         document.getElementById("shipping").value = document.querySelector('input[name="shippingMethod"]:checked').value;
         document.getElementById("payment").value = document.querySelector('input[name="paymentMethod"]:checked').value;
-        document.getElementById("notes").value = document.getElementById("note").value;
+        document.getElementById("notes").value = document.getElementById("note").value.replace(/<\/?[^>]+(>|$)/g, "");
         // Submit formDatHang
         document.getElementById('formDatHang').submit();
     }

@@ -164,8 +164,7 @@
     <!-- Checkout Button -->
     <form action ="/payment" method ="post">
         <div class="mt-4 d-flex justify-content-end">
-            <!--<input type="action" value="thanhtoan">-->
-            <input type="hidden" name ="cartId" value="${cartId}">
+            <%----<input type="hidden" name ="cartId" value="${cartId}">--%>
             <input type ="submit" value ="Thanh toán" class="primary-btn d-inline-block">
         </div>
     </form>

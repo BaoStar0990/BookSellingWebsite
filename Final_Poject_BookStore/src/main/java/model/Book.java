@@ -5,6 +5,10 @@ import jakarta.persistence.*;
 
 import java.io.Serializable;
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.locks.ReentrantLock;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 @Entity
 @Table(name = "Book")
@@ -22,7 +26,8 @@ public class Book implements Serializable {
     private String urlImage;
     private int publishYear;
     private String language;
-
+    private static final ConcurrentHashMap<Integer, ReentrantLock> locks = new ConcurrentHashMap<>();
+    
     @OneToMany(mappedBy = "book", cascade = CascadeType.REMOVE)
     private Set<Review> reviews;
 
@@ -163,7 +168,63 @@ public class Book implements Serializable {
     }
 
     public void setStocks(int stocks) {
-        this.stocks = stocks;
+        ReentrantLock lock = locks.computeIfAbsent(this.getId(), k -> new ReentrantLock());
+
+        // khóa sp
+        lock.lock();
+        try {
+            System.out.println(Thread.currentThread().getName() + " dang set stock cho san pham " + this.getId());
+            System.out.println(Thread.currentThread().getName() + " dang sleep .....");
+            this.stocks = stocks;
+            Thread.sleep(10000);
+            System.out.println("So luong sp " + this.getId() + " da set stock thanh cong: " + this.stocks);
+            System.out.println("------------------------------");
+        } catch (InterruptedException ex) {
+            Logger.getLogger(Book.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            // mở khóa
+            lock.unlock(); 
+        }  
+    }
+    public void decreaseStocks(int quantity) {
+        ReentrantLock lock = locks.computeIfAbsent(this.getId(), k -> new ReentrantLock());
+
+        // khóa sp
+        lock.lock();
+        try {
+            System.out.println(Thread.currentThread().getName() + " dang decrease stock cho san pham " 
+                    + this.getId() + " sp hiện có SL: " + this.getStocks());
+            System.out.println(Thread.currentThread().getName() + " dang sleep .....");
+            this.stocks = this.stocks - quantity;
+            Thread.sleep(10000);
+            System.out.println("So luong sp " + this.getId() + " da decrease stock thanh cong: " + this.stocks);
+            System.out.println("------------------------------");
+        } catch (InterruptedException ex) {
+            Logger.getLogger(Book.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            // mở khóa
+            lock.unlock(); 
+        }  
+    }
+    public void increaseStocks(int quantity) {
+        ReentrantLock lock = locks.computeIfAbsent(this.getId(), k -> new ReentrantLock());
+
+        // khóa sp
+        lock.lock();
+        try {
+            System.out.println(Thread.currentThread().getName() + " dang increase stock cho san pham " 
+                    + this.getId() + " sp hiện có SL: " + this.getStocks());
+            System.out.println(Thread.currentThread().getName() + " dang sleep .....");
+            this.stocks = this.stocks + quantity;
+            Thread.sleep(10000);
+            System.out.println("So luong sp " + this.getId() + " da increase stock thanh cong: " + this.stocks);
+            System.out.println("------------------------------");
+        } catch (InterruptedException ex) {
+            Logger.getLogger(Book.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            // mở khóa
+            lock.unlock(); 
+        }  
     }
 
     public void setUrlImage(String urlImage) {

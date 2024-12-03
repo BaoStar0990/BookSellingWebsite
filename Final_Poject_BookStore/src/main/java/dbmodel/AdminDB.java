@@ -12,9 +12,9 @@ import java.util.List;
 public class AdminDB extends ModifyDB<Admin> implements DBInterface<Admin>
 {
     public static AdminDB getInstance() {return new AdminDB();}
-    public  Admin selectAdmin() {
+    public  List<Admin> selectAdmin() {
         try(EntityManager em = DBUtil.getEmFactory().createEntityManager()){
-            Admin admin = em.createQuery("from Admin", Admin.class).getResultList().get(0);
+            List<Admin> admin = em.createQuery("from Admin", Admin.class).getResultList();
             return admin;
         }
         catch(NoResultException ex){
@@ -26,10 +26,18 @@ public class AdminDB extends ModifyDB<Admin> implements DBInterface<Admin>
     }
     public  Admin checkLogin(String username, String password) {
         try(EntityManager em = DBUtil.getEmFactory().createEntityManager()){
-            Admin admin = selectAdmin();
-            if(admin.getUsername().equals(username) && admin.getPassword().equals(password)){
-                return admin;
+            List<Admin> admin = selectAdmin();
+            for(Admin a : admin){
+                if(a.getUsername().equals(username) && a.getPassword().equals(password)){
+                    return a;
+                }
             }
+            return null;
+        }
+        catch(NoResultException ex){
+            return null;
+        }
+        catch(Exception ex){
             return null;
         }
     }

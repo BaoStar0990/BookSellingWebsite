@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <module version="4">
   <component name="FacetManager">
+    <facet type="azure" name="Azure">
+      <configuration>
+        <option name="dotAzurePath" value="D:\University\HK5\Web\FinalProject\FinalProject_BookStore\Final_Poject_BookStore\.azure" />
+      </configuration>
+    </facet>
     <facet type="web" name="Web2">
       <configuration>
         <descriptors>
@@ -9,6 +14,11 @@
         <webroots>
           <root url="file://$MODULE_DIR$/.smarttomcat/Final_Poject_BookStore/conf" relative="/WEB-INF" />
         </webroots>
+        <sourceRoots>
+          <root url="file://$MODULE_DIR$/src/main/java" />
+          <root url="file://$MODULE_DIR$/src/main/resources" />
+          <root url="file://$MODULE_DIR$/target/generated-sources/annotations" />
+        </sourceRoots>
       </configuration>
     </facet>
   </component>

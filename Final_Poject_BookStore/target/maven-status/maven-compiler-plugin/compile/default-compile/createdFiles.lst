@@ -44,6 +44,8 @@ Utils\authentication\ExpiringToken$1.class
 controller\HomeControllerServlet.class
 controller\ViewCartController.class
 dbmodel\DBInterface.class
+test\TestReview.class
+controller\ReviewController.class
 dbmodel\ReviewDB.class
 controller\SignupController.class
 ms_controller\MSOrderController$1.class

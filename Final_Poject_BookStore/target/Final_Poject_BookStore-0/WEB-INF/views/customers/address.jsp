@@ -23,16 +23,13 @@
                  onclick="setModalForEdit('<c:out value="${address.createJson()}" />')">
                 <i class="fas fa-edit mb-1"></i>
               </a>
-                <form action ="/modifyaddress" method="post" class="d-inline my-1" id ="deleteAdderessForm">
+                <form action="/modifyaddress" method="post" class="d-inline my-1" id="deleteAdderessForm" onsubmit="return confirmDelete()">
                     <input type="hidden" name="action" value="delete" />
                     <input type="hidden" id="idDelete" name="idDelete" value="${address.getId()}"/>
                     <button class=" btn no-border text-primary text-decoration-none mb-0 p-0" type="submit">
                         <i class="fas fa-trash mb-1"></i>
                     </button>
-          
-                  <!--</a>-->
                 </form>
-              
             </div>
           </div>
                     
@@ -173,6 +170,10 @@
         document.getElementById("tinhText").value = $("#tinh option:selected").text();
         document.getElementById("quanText").value = $("#quan option:selected").text();
         document.getElementById("phuongText").value = $("#phuong option:selected").text();
+  }
+
+  function confirmDelete() {
+    return confirm("Bạn có chắc chắn muốn xóa địa chỉ này không?");
   }
 </script>
 

@@ -52,7 +52,7 @@
 
                             <div class="mt-2">
                                 <span class="text-danger font-semibold">
-                                    <fmt:formatNumber value="${book.getSellingPrice()}" type="number" pattern="#,##0" />đ
+                                    <fmt:formatNumber value="${book.getSellingPrice() * (1-book.getDiscountCampaign().getPercentDiscount())}" type="number" pattern="#,##0" />đ
                                 </span>
                                 <c:if test="${not empty book.getDiscountCampaign()}">
                                     <span class="badge bg-danger ms-2">

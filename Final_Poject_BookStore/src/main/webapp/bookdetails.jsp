@@ -469,7 +469,7 @@
 
         <!-- Handle Javascript -->
         <script src="${pageContext.request.contextPath}/assets/javascript/bookdetail.js"></script>
-
+        
         <!-- Modal for updating review -->
         <div class="modal fade" id="updateReviewModal" tabindex="-1" aria-labelledby="updateReviewModalLabel" aria-hidden="true">
             <div class="modal-dialog">

@@ -83,33 +83,34 @@ public class BookListController extends HttpServlet {
             request.setAttribute("currentTab", "bookdiscount"); // set current tab
             request.getServletContext().getRequestDispatcher("/bookdisplay.jsp").forward(request, response);
             System.out.println("--------------------Book discount in session-------------------------------");
-        }else if(action.equals("bestsellingbook")) {
-            List<Book> bookBestSelling = null;
-            if(session.getAttribute("bookIsBeingDiscounted") != null) {
-                bookBestSelling   = (List<Book>)session.getAttribute("bookBestSelling");
-            }else{
-                List<Book> allBook = null;
-                if(session.getAttribute("allBook") == null) {
-                    System.out.println("--------------------------------------------");
-                    System.out.println("Book doesn't exist on session");
-                    allBook = BookDB.getInstance().selectAll();
-                    session.setAttribute("allBook", allBook);
-                }else{ // lan truy cap sau,  lay book trong session
-                    System.out.println("--------------------------------------------");
-                    System.out.println("Book exist on session");
-                    allBook = (List<Book>)session.getAttribute("allBook");
-                }
-                bookBestSelling = allBook.stream().filter(b -> DiscountCampaignDB.getInstance().isNotExpired(b.getDiscountCampaign())).collect(Collectors.toList());
-                session.setAttribute("bookBestSelling", bookBestSelling);
-            }
-            request.setAttribute("books", bookBestSelling);
-            request.setAttribute("nameOfCategory","Sách bán chạy");
-            request.setAttribute("currentTab", "bestsellingbook"); // set current tab
-            request.getServletContext().getRequestDispatcher("/bookdisplay.jsp").forward(request, response);
-            System.out.println("--------------------Book discount in session-------------------------------");
-        }else{
-            
         }
+//        else if(action.equals("bestsellingbook")) {
+//            List<Book> bookBestSelling = null;
+//            if(session.getAttribute("bookIsBeingDiscounted") != null) {
+//                bookBestSelling   = (List<Book>)session.getAttribute("bookBestSelling");
+//            }else{
+//                List<Book> allBook = null;
+//                if(session.getAttribute("allBook") == null) {
+//                    System.out.println("--------------------------------------------");
+//                    System.out.println("Book doesn't exist on session");
+//                    allBook = BookDB.getInstance().selectAll();
+//                    session.setAttribute("allBook", allBook);
+//                }else{ // lan truy cap sau,  lay book trong session
+//                    System.out.println("--------------------------------------------");
+//                    System.out.println("Book exist on session");
+//                    allBook = (List<Book>)session.getAttribute("allBook");
+//                }
+//                bookBestSelling = allBook.stream().filter(b -> DiscountCampaignDB.getInstance().isNotExpired(b.getDiscountCampaign())).collect(Collectors.toList());
+//                session.setAttribute("bookBestSelling", bookBestSelling);
+//            }
+//            request.setAttribute("books", bookBestSelling);
+//            request.setAttribute("nameOfCategory","Sách bán chạy");
+//            request.setAttribute("currentTab", "bestsellingbook"); // set current tab
+//            request.getServletContext().getRequestDispatcher("/bookdisplay.jsp").forward(request, response);
+//            System.out.println("--------------------Book discount in session-------------------------------");
+//        }else{
+//
+//        }
 
     }
     @Override

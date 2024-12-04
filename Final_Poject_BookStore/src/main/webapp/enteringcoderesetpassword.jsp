@@ -89,6 +89,7 @@
                             <span id="countdown"></span>
                         </div>
                     </div>
+
                     <!-- Login button -->
                     <input type="submit" class="primary-btn w-100 mb-4" value="Submit"/>
                 </form>

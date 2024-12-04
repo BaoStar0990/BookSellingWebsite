@@ -8,10 +8,7 @@ import jakarta.persistence.NoResultException;
 import java.util.*;
 
 import jakarta.persistence.Query;
-import model.Author;
-import model.Book;
-import model.Category;
-import model.Review;
+import model.*;
 import org.hibernate.TransientObjectException;
 import jakarta.persistence.EntityTransaction;
 
@@ -443,4 +440,28 @@ public class BookDB extends ModifyDB<Book> implements DBInterface<Book> {
         }
         return false;
     }
+//    public List<Book> getListBestSellingBook(){
+//        List<Book> bestSellingBook = null;
+//        EntityManager em = null;
+//        EntityTransaction tr = null;
+//        try {
+//            em = DBUtil.getEmFactory().createEntityManager();
+//            tr = em.getTransaction();
+//            tr.begin();
+//
+//            List<OrderDetail> allOrderDetail = OrderDetailDB.getInstance().selectAll();
+//            bestSellingBook = allOrderDetail.stream().filter()
+//
+//
+//            tr.commit();
+//            return true;
+//        } catch (Exception ex) {
+//            if (tr != null && tr.isActive())
+//                tr.rollback();
+//            return false;
+//        } finally {
+//            if (em != null)
+//                em.close();
+//        }
+//    }
 }

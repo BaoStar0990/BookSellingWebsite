@@ -53,15 +53,13 @@
 <!-- Header -->
 <jsp:include page="WEB-INF/views/header.jsp"/>
 <!-- end Header -->
-
-
 <!-- Sign In -->
 <div class="container d-flex justify-content-center align-items-center mt-5">
     <div class="signin-container my-3 p-4 rounded" >
         <div class="d-flex flex-column align-items-center">
             <h2 class="text-center fw-bold mb-4">Nhập mật khẩu mới</h2>
             <div class="container-fluid">
-                <form action="forgotpassword" method="post">
+                <form action="forgotpassword" method="post" id="myForm">
                     <input type="hidden" name="action" value="EnteredCodeNewPassword" >
                     <div class="mb-3">
                         <input type="text" class="form-control input-field" name="password" id="password" placeholder="Enter password" required>
@@ -75,9 +73,30 @@
             </div>
         </div>
     </div>
-
 </div>
+<script>
+    function handleChangePassword(newPassword) {
+        const pattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_,.<>?])\S{8,}$/;
+        if (!pattern.test(newPassword)) {
+            window.alert("Mật khẩu phải có độ dài lớn hơn 8, phải chứa ít nhất 1 chữ cái thường, chữ in hoa, chữ số, ít nhất 1 ký tự " +
+                "đặt biệt !@#$%^&*()_  và không chứa khoảng trống.");
+            return false;
+        }
+        return true;
+    }
+    document.getElementById('myForm').addEventListener('submit', function(event) {
 
+        const newPassword = document.getElementById('password').value;
+        const confirmPassword = document.getElementById('confirmpassword').value;
+        console.log(newPassword);
+        if(handleChangePassword(newPassword) == false){
+            event.preventDefault();
+        }else if(newPassword != confirmPassword){
+            event.preventDefault();
+            window.alert('Mật khẩu không khớp với nhau');
+        }
+    });
+</script>
 <%--    Footer--%>
 <jsp:include page="WEB-INF/views/footer.jsp"/>
 <%-- end    Footer--%>

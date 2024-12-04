@@ -23,6 +23,7 @@ controller\SessionListener.class
 StaffController\ManageStaffFilter.class
 StaffController\StaffCategoryController.class
 test\TestDiscountCampaign.class
+controller\AdditionalBookController.class
 controller\SignoutController.class
 StaffController\StaffBookController.class
 StaffController\StaffOrderController$1.class

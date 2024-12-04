@@ -233,19 +233,19 @@
                     <h4 class="fw-semibold mb-3">Thông tin chi tiết</h4>
 
                     <p class="text-muted mt-3">Tác giả:
-                        <c:choose>
-                            <c:when test="${BookDB.getInstance().findAuthorByBook(authorBooks,book) != null}">
-                                <c:forEach var="author" items="${BookDB.getInstance().findAuthorByBook(authorBooks,book)}" varStatus="status">
-                                    <span class="fw-semibold">${author.getName()}</span><c:if test="${!status.last}">, </c:if>
-                                </c:forEach>
-                            </c:when>
-                            <c:otherwise>
-                                <span class="fw-semibold">Đang cập nhật</span>
-                            </c:otherwise>
-                        </c:choose>
-<%--                        <c:forEach var="author" items="${book.getAuthors()}" varStatus="status">--%>
-<%--                            <span class="fw-semibold">${author.getName()}</span><c:if test="${!status.last}">, </c:if>--%>
-<%--                        </c:forEach>--%>
+<%--                        <c:choose>--%>
+<%--                            <c:when test="${BookDB.getInstance().findAuthorByBook(authorBooks,book) != null}">--%>
+<%--                                <c:forEach var="author" items="${BookDB.getInstance().findAuthorByBook(authorBooks,book)}" varStatus="status">--%>
+<%--                                    <span class="fw-semibold">${author.getName()}</span><c:if test="${!status.last}">, </c:if>--%>
+<%--                                </c:forEach>--%>
+<%--                            </c:when>--%>
+<%--                            <c:otherwise>--%>
+<%--                                <span class="fw-semibold">Đang cập nhật</span>--%>
+<%--                            </c:otherwise>--%>
+<%--                        </c:choose>--%>
+                        <c:forEach var="author" items="${book.getAuthors()}" varStatus="status">
+                            <span class="fw-semibold">${author.getName()}</span><c:if test="${!status.last}">, </c:if>
+                        </c:forEach>
                     </p>
 
                     <%--                 Publishers (multiple) --%>

@@ -87,6 +87,46 @@
         <button class="primary-btn" data-bs-toggle="modal" data-bs-target="#addCategoryModal">Add Customer</button>
       </div>
     </div>
+
+    <!-- Title and Filter Button -->
+    <div class="pb-2 my-3 border-bottom">
+      <div class="d-flex justify-content-between align-items-center">
+        <h2 class="fw-bolder">${nameOfCategory}</h2>
+        <button class="btn secondary-btn" type="button" data-bs-toggle="collapse" data-bs-target="#filterOptions">
+          <i class="fas fa-filter"></i>
+          <span id="filterButtonText">Bộ Lọc</span>
+        </button>
+      </div>
+
+      <!-- Filters -->
+      <div class="collapse mt-3 " id="filterOptions">
+        <div class="p-3 border rounded bg-light">
+          <h2 class="fw-semibold">Bộ Lọc</h2>
+          <form method="get">
+            <div class="row">
+              <div class="col-md-6 ">
+                <b class="text-danger">Tuổi</b>
+                <div class="d-flex">
+                  <div class="form-check">
+                    <label for="minAge" class="form-label">Tuổi tối thiểu</label>
+                    <input onchange="filterAge()" type="number" id="minAge" name="age" class="form-control" value="0" placeholder="Any">
+                  </div>
+                  <div class="form-check">
+                    <label for="maxAge" class="form-label">Tuổi tối đa</label>
+                    <input onchange="filterAge()" type="number" id="maxAge" name="age" class="form-control" placeholder="Any" value="110" >
+                  </div>
+                </div>
+
+
+              </div>
+              <div class="col-md-6"></div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+    <!-- End Filter -->
+
     <div class="table-responsive border border-2 p-2" style="max-height: 75%; overflow: auto;">
       <table class="table table-bordered" style="min-width: 1000px;">
         <thead>
@@ -229,6 +269,19 @@
 </div>
 
 <script>
+  function filterAge() {
+    const tableRows = document.querySelectorAll('tbody tr');
+
+    tableRows.forEach(row => {
+        if(parseInt(row.children[4].innerHTML) >= document.getElementById("minAge").value && parseInt(row.children[4].innerHTML) <= document.getElementById("maxAge").value){
+          row.classList.remove("d-none")
+        }
+        else{
+          row.classList.add("d-none")
+      }
+    });
+  }
+
   function editCategory(id, account, password, fullname, age, phone, email) {
     document.getElementById('editCustomerId').value = id;
     document.getElementById('editCustomerUsername').value = account;

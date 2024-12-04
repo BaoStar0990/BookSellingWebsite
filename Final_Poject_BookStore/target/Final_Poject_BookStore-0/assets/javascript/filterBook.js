@@ -16,7 +16,8 @@ function filterBooks() {
             }
         }
         else{
-            if(document.getElementById("minPrice").value === ""  || document.getElementById("maxPrice").value === ""){
+            if((document.getElementById("minPrice").value === ""  || document.getElementById("maxPrice").value === "")
+            || (document.getElementById("minPrice").value === "0"  && document.getElementById("maxPrice").value === "0")){
                 x.parentNode.parentNode.parentNode.parentNode.style.display = "block";
                 if (parseInt(x.children[1].innerHTML.trim()) >= document.getElementById("discountFilter").value){
                     x.parentNode.parentNode.parentNode.parentNode.style.display = "block";

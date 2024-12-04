@@ -6,6 +6,7 @@
 
         <!-- Cấu hình kết nối cơ sở dữ liệu -->
         <properties>
+            <property name="hibernate.connection.provider_class" value="org.hibernate.hikaricp.internal.HikariCPConnectionProvider"/>
             <!-- Driver JDBC -->
             <property name="jakarta.persistence.jdbc.driver" value="com.mysql.cj.jdbc.Driver"/>
             <!-- URL kết nối cơ sở dữ liệu -->
@@ -21,7 +22,7 @@
             <property name="hibernate.format_sql" value="true"/>
 
             <!-- Cấu hình HikariCP -->
-            <property name="hibernate.hikari.minimumPoolSize" value="10"/>
+            <property name="hibernate.hikari.minimumIdle" value="10"/>
             <property name="hibernate.hikari.maximumPoolSize" value="50"/>
             <property name="hibernate.hikari.idleTimeout" value="30000"/>
             <property name="hibernate.hikari.maxLifetime" value="1800000"/>

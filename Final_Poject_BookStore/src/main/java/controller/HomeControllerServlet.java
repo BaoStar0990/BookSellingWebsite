@@ -96,9 +96,11 @@ public class HomeControllerServlet extends HttpServlet {
 
 
         if(allBook != null) {
-            if(allBook.size() > 6)
+            if(allBook.size() >= 12)
             {
-                homeBooks = allBook.stream().limit(6).collect(Collectors.toList());
+                homeBooks = allBook.stream().limit(12).collect(Collectors.toList());
+            }else{
+                homeBooks = allBook;
             }
         }
 
@@ -172,10 +174,7 @@ public class HomeControllerServlet extends HttpServlet {
                 session.setAttribute("csrfToken",csrfToken);
             }
         }
-
-        //req.setAttribute("categories", categories);
-        req.setAttribute("bookIsBeingDiscounted", bookIsBeingDiscounted);
-        req.setAttribute("bestsellerBooks",homeBooks);
+        req.setAttribute("homeBooks",homeBooks);
         req.setAttribute("authors", authors);
 
         String url = "/home.jsp";

@@ -71,49 +71,54 @@
 <%--    Author's book list--%>
     <!-- Book List -->
     <%--    Thay bằng book-list.jsp trên trang động--%>
-    <div class="row book-list">
-      <div class="d-flex border-bottom mb-2">
-        <h2 class="font-semibold">Sách Liên Quan</h2>
-        <a href="${pageContext.request.contextPath}/bookdisplay.jsp" class="ms-auto font-medium align-self-end mb-1 text-decoration-none">
-          Xem thêm <i class="fas fa-chevron-right"></i>
-        </a>
-      </div>
-      <c:forEach items="${books}" var="book">
-        <div class="col-6 col-md-4 col-lg-2 p-2">
-          <a href="/bookdetails/${book.bookID}" class="d-block text-decoration-none card-shadow" style="color: inherit;">
-            <div class="card">
-              <!-- book image -->
-              <img src="${book.urlImage}" class="card-img-top" alt="Sample Book Title">
-              <div class="card-body">
-                <!-- book title -->
-                <h6 class="card-title mb-1">${book.title}</h6>
-                <!-- author name -->
-                <c:choose>
-                  <c:when test = "${not empty book.getAuthors()}">
-                      <span class="fw-semibold card-text">
-                      <c:forEach var="author" items="${book.getAuthors()}" varStatus="status">
-                          ${author.getName()}<c:if test="${!status.last}">, </c:if>
-                      </c:forEach>        
-                              </span>
-                  </c:when>
-                  <c:otherwise>
-                    <span class="fw-semibold">Chưa có tác giả</span>
-                  </c:otherwise>
-                </c:choose>
-                <div class="mt-2">
-                  <!--  price -->
-                  <span class="text-danger font-semibold">
-                      <fmt:formatNumber value="100000" type="number" pattern="#,##0" />đ
-                  </span>
-                  <!--  discount -->
-                  <span class="badge bg-danger ms-2">-10%</span>
-                </div>
-              </div>
-            </div>
-          </a>
-        </div>
-      </c:forEach>
-    </div>
+    <jsp:include page="WEB-INF/views/book/book-list.jsp">
+      <jsp:param name="bookListName" value="Sách liên quan" />
+      <jsp:param name="booksAttribute" value="books" />
+      <jsp:param name="seeMoreLink" value="/additionalbook/author/${author.authorID}" />
+    </jsp:include>
+<%--    <div class="row book-list">--%>
+<%--      <div class="d-flex border-bottom mb-2">--%>
+<%--        <h2 class="font-semibold">Sách Liên Quan</h2>--%>
+<%--        <a href="${pageContext.request.contextPath}/bookdisplay.jsp" class="ms-auto font-medium align-self-end mb-1 text-decoration-none">--%>
+<%--          Xem thêm <i class="fas fa-chevron-right"></i>--%>
+<%--        </a>--%>
+<%--      </div>--%>
+<%--      <c:forEach items="${books}" var="book">--%>
+<%--        <div class="col-6 col-md-4 col-lg-2 p-2">--%>
+<%--          <a href="/bookdetails/${book.bookID}" class="d-block text-decoration-none card-shadow" style="color: inherit;">--%>
+<%--            <div class="card">--%>
+<%--              <!-- book image -->--%>
+<%--              <img src="${book.urlImage}" class="card-img-top" alt="Sample Book Title">--%>
+<%--              <div class="card-body">--%>
+<%--                <!-- book title -->--%>
+<%--                <h6 class="card-title mb-1">${book.title}</h6>--%>
+<%--                <!-- author name -->--%>
+<%--                <c:choose>--%>
+<%--                  <c:when test = "${not empty book.getAuthors()}">--%>
+<%--                      <span class="fw-semibold card-text">--%>
+<%--                      <c:forEach var="author" items="${book.getAuthors()}" varStatus="status">--%>
+<%--                          ${author.getName()}<c:if test="${!status.last}">, </c:if>--%>
+<%--                      </c:forEach>        --%>
+<%--                              </span>--%>
+<%--                  </c:when>--%>
+<%--                  <c:otherwise>--%>
+<%--                    <span class="fw-semibold">Chưa có tác giả</span>--%>
+<%--                  </c:otherwise>--%>
+<%--                </c:choose>--%>
+<%--                <div class="mt-2">--%>
+<%--                  <!--  price -->--%>
+<%--                  <span class="text-danger font-semibold">--%>
+<%--                      <fmt:formatNumber value="100000" type="number" pattern="#,##0" />đ--%>
+<%--                  </span>--%>
+<%--                  <!--  discount -->--%>
+<%--                  <span class="badge bg-danger ms-2">-10%</span>--%>
+<%--                </div>--%>
+<%--              </div>--%>
+<%--            </div>--%>
+<%--          </a>--%>
+<%--        </div>--%>
+<%--      </c:forEach>--%>
+<%--    </div>--%>
     <!--end Book List -->
   </div>
 

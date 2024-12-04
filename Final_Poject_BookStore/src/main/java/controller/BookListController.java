@@ -78,6 +78,7 @@ public class BookListController extends HttpServlet {
                         ).collect(Collectors.toList());
                 session.setAttribute("bookIsBeingDiscounted", bookDiscount);
             }
+            
             request.setAttribute("books", bookDiscount);
             request.setAttribute("nameOfCategory","Sách đang giảm giá");
             request.setAttribute("currentTab", "bookdiscount"); // set current tab

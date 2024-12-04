@@ -449,6 +449,9 @@ public class BookDB extends ModifyDB<Book> implements DBInterface<Book> {
 //            tr = em.getTransaction();
 //            tr.begin();
 //
+//            //ListBook in order detail
+//            List<Integer> listIDbookBestSelling =
+//
 //            List<OrderDetail> allOrderDetail = OrderDetailDB.getInstance().selectAll();
 //            bestSellingBook = allOrderDetail.stream().filter()
 //

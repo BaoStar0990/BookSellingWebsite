@@ -50,30 +50,6 @@
 
         <div class="container p-0 mt-4">
             <div class="row">
-<%--                <div class="col-md-3">--%>
-<%--                    <label for="authorFilter" class="form-label">Tác giả</label>--%>
-<%--                    <input  type="text" id="authorFilter" name="authorFilter" class="form-control" value="" placeholder="Enter author name">--%>
-<%--                </div>--%>
-
-<%--                <div class="col-md-2">--%>
-<%--                    <label for="minPrice" class="form-label">Giá thấp nhất</label>--%>
-<%--                    <input type="number" id="minPrice" name="minPrice" class="form-control" value="0" placeholder="Any">--%>
-<%--                </div>--%>
-
-<%--                <div class="col-md-2">--%>
-<%--                    <label for="maxPrice" class="form-label">Giá cao nhất</label>--%>
-<%--                    <input type="number" id="maxPrice" name="maxPrice" class="form-control" value="0" placeholder="Any">--%>
-<%--                </div>--%>
-
-<%--                <div class="col-md-2">--%>
-<%--                    <label for="discountFilter" class="form-label">Giảm giá tối thiểu (%)</label>--%>
-<%--                    <input type="number" id="discountFilter" name="discountFilter" class="form-control" value="" placeholder="0">--%>
-<%--                </div>--%>
-
-<%--                <div class="col-md-3 d-flex align-items-end">--%>
-<%--                    <button onclick="filterBooks()" type="button" class="btn primary-btn">Apply Filters</button>--%>
-<%--                </div>--%>
-<%--            </div>--%>
             <!-- Title and Filter Button -->
             <div class="pb-2 mb-2 border-bottom">
                 <div class="d-flex justify-content-between align-items-center">
@@ -180,13 +156,14 @@
             <!-- Pagination -->
             <jsp:include page="WEB-INF/views/pagination.jsp" />
             <!--end Pagination -->
-
-        </div>
-
-        <%--Footer--%>
-        <jsp:include page="WEB-INF/views/footer.jsp"/>
-        <%-- end   Footer--%>
+        </div> <!-- Close the container div -->
 
         <script src="${pageContext.request.contextPath}/assets/javascript/filterBook.js"></script>
-    </body>
+
+    </div> <!-- Close the outer container div -->
+
+    <%--    Footer--%>
+    <jsp:include page="WEB-INF/views/footer.jsp" />
+    <%--end Footer--%>
+</body>
 </html>

@@ -134,7 +134,7 @@ public class ForgotPasswordController extends HttpServlet {
                                 customer.setSalt(salt);
                                 
                                 if (CustomerDB.getInstance().updateCustomer(customer) == true) {
-                                    System.out.println("Hết phiên reset mật khẩu của bạn");
+                                    //System.out.println("Hết phiên reset mật khẩu của bạn");
                                     request.setAttribute("alertMessage", "Reset mật khẩu thành công, vui lòng đăng nhập lại");
                                     url = "/signin.jsp";
                                     request.getServletContext().getRequestDispatcher(url).forward(request, response);

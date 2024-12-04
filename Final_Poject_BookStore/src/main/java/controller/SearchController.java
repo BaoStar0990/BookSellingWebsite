@@ -56,7 +56,7 @@ public class SearchController extends HttpServlet {
             }
         }
         request.setAttribute("books", bookFoundByRequest);
-        request.setAttribute("nameOfCategory","Tìm kiếm của bạn: "+searchRequest);
+        request.setAttribute("nameOfCategory","Trang tìm kiếm");
 
 
         request.getServletContext().getRequestDispatcher("/bookdisplay.jsp").forward(request, response);

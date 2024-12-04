@@ -50,7 +50,7 @@
         <div class="d-flex flex-column align-items-center">
             <h2 class="text-center fw-bold mb-4">Đăng Ký</h2>
             <div class="container-fluid">
-                <form action="signup" method="post">
+                <form action="signup" method="post" id="myForm">
                     <div class="mb-3">
                         <input type="text" value="${fullName}"  class="form-control input-field" id="fullName" name="fullName" placeholder="Họ và tên" required>
                     </div>
@@ -94,6 +94,41 @@
         </div>
     </div>
 </div>
+<script>
+    function handleChangePassword(newPassword) {
+        const pattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_,.<>?])\S{8,}$/;
+        if (!pattern.test(newPassword)) {
+            window.alert("Mật khẩu phải có độ dài lớn hơn 8, phải chứa ít nhất 1 chữ cái thường, chữ in hoa, chữ số, ít nhất 1 ký tự " +
+                "đặt biệt !@#$%^&*()_  và không chứa khoảng trống.");
+            return false;
+        }
+        return true;
+    }
+    function validateInputUsername(input) {
+        const regex = /^[a-zA-ZÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠàáâãèéêìíòóôõùúăđĩũơƯăâêôờỳỵỷỹ\s]+$/;
+        if (!regex.test(input)) {
+            return false;
+        }
+        return true;
+    }
+
+    document.getElementById('myForm').addEventListener('submit', function(event) {
+        const newPassword = document.getElementById('password').value;
+        const confirmPassword = document.getElementById('confirmPassword').value;
+        const fullName = document.getElementById('fullName').value;
+        console.log(newPassword);
+        if(handleChangePassword(newPassword) == false){
+            event.preventDefault();
+        }else if(newPassword != confirmPassword){
+            event.preventDefault();
+            window.alert('Mật khẩu không khớp với nhau');
+        }else if(validateInputUsername(fullName) == false)
+        {
+            event.preventDefault();
+            alert("Họ và tên không hợp lệ, vui lòng nhập lại ");
+        }
+    });
+</script>
 <!-- end Sign In -->
 
 <%--    Footer--%>

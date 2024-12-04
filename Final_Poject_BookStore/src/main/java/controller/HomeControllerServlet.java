@@ -86,6 +86,13 @@ public class HomeControllerServlet extends HttpServlet {
 
         bookBestSelling = allBook.stream().filter(b -> DiscountCampaignDB.getInstance().isNotExpired(b.getDiscountCampaign())).collect(Collectors.toList());
         session.setAttribute("bookBestSelling", bookBestSelling);
+        //Select bestselling book
+        //Select book being discounted
+        if(bookIsBeingDiscounted != null) {
+            if(bookIsBeingDiscounted.size() > 6){
+                bookIsBeingDiscounted = bookIsBeingDiscounted.stream().limit(6).collect(Collectors.toList());
+            }
+        }
 
 
         if(allBook != null) {
@@ -167,7 +174,8 @@ public class HomeControllerServlet extends HttpServlet {
         }
 
         //req.setAttribute("categories", categories);
-        req.setAttribute("bestsellerBooks", homeBooks);
+        req.setAttribute("bookIsBeingDiscounted", bookIsBeingDiscounted);
+        req.setAttribute("bestsellerBooks",homeBooks);
         req.setAttribute("authors", authors);
 
         String url = "/home.jsp";

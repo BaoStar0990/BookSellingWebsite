@@ -135,9 +135,9 @@
                     <li class="nav-item">
                         <a href="${pageContext.request.contextPath}/filterbook/bookdiscount" class="nav-link ${param.currentTab eq 'bookdiscount' ? 'active' : ''}">Sách đang giảm giá</a>
                     </li>
-                    <li class="nav-item">
-                        <a href="${pageContext.request.contextPath}/filterbook/bestsellingbook" class="nav-link ${param.currentTab eq 'bestsellingbook' ? 'active' : ''}">Sách bán chạy</a>
-                    </li>
+<%--                    <li class="nav-item">--%>
+<%--                        <a href="${pageContext.request.contextPath}/filterbook/bestsellingbook" class="nav-link ${param.currentTab eq 'bestsellingbook' ? 'active' : ''}">Sách bán chạy</a>--%>
+<%--                    </li>--%>
                     <li class="nav-item">
                         <a href="${pageContext.request.contextPath}/authors" class="nav-link ${param.currentTab eq 'authors' ? 'active' : ''}">Tác giả</a>
                     </li>

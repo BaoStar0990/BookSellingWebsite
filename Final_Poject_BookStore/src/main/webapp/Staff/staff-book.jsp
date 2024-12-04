@@ -135,7 +135,7 @@
                   <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
               </div>
               <div class="modal-body">
-                  <form id="addEditBookForm" method="post" action="msbook?action=add" enctype="multipart/form-data">
+                  <form id="addEditBookForm" method="post" action="/staff/staffbook?action=add" enctype="multipart/form-data">
                       <input type="hidden" id="bookId" name="bookId">
                       <input type="hidden" id="selectedAuthorsInput" name="selectedAuthors">
                       <input type="hidden" id="selectedCategoriesInput" name="selectedCategories">

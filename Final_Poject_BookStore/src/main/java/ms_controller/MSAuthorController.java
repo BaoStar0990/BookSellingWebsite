@@ -21,11 +21,6 @@ public class MSAuthorController extends HttpServlet {
             if (session.getAttribute("authors") == null) {
                 List<Author> authors = AuthorDB.getInstance().selectAll();
                 authors.sort((p1, p2) -> Integer.compare(p2.getId(), p1.getId()));
-                for(Author author : authors){
-
-                    for(Book book : author.getBooks())
-                        System.out.println(book.getTitle());
-                }
                 session.setAttribute("authors", authors);
             }
             req.getServletContext().getRequestDispatcher("/Management-System/ms-author.jsp").forward(req, resp);

@@ -19,7 +19,9 @@ import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Set;
 import java.util.stream.Collectors;
+import mail.Mail;
 import model.Book;
 import model.OrderDetail;
 
@@ -33,6 +35,8 @@ public class MSOrderController extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        request.setCharacterEncoding("UTF-8");
+        response.setCharacterEncoding("UTF-8");
         String action = request.getParameter("action");
         if (action != null && (action.equalsIgnoreCase("updateStatus") 
                 || action.equalsIgnoreCase("cancelOrder") 
@@ -144,6 +148,9 @@ public class MSOrderController extends HttpServlet {
      * - If the bill ID is empty, process the request
      */
     private void handleBillRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        request.setCharacterEncoding("UTF-8");
+        response.setCharacterEncoding("UTF-8");
+        
         String billIdParam = request.getParameter("billId");
         if (billIdParam != null && !billIdParam.isEmpty()) {
             try {
@@ -171,6 +178,9 @@ public class MSOrderController extends HttpServlet {
     private void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         // Get all bills except storing status
         // Sort by status order and bill ID (descending)
+        request.setCharacterEncoding("UTF-8");
+        response.setCharacterEncoding("UTF-8");
+        
         List<Bill> allBill = BillDB.getInstance().selectAll()
                 .stream()
                 .filter(b -> !("Storing".equals(b.getStatusOrder().toString())))
@@ -221,6 +231,9 @@ public class MSOrderController extends HttpServlet {
         - If the update is failed, return an internal server error
      */
     private void handleOrderStatusUpdate(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        request.setCharacterEncoding("UTF-8");
+        response.setCharacterEncoding("UTF-8");
+        
         String billIdParam = request.getParameter("billId");
         if (billIdParam != null && !billIdParam.isEmpty()) {
             try {
@@ -268,8 +281,9 @@ public class MSOrderController extends HttpServlet {
 
                             try {
                                 tr.begin();
+                                Set<OrderDetail> orderDetails = bill.getOrderDetails();
                                 // kiểm tra số lượng đặt có vượt quá số lượng trong kho
-                                List<String> booksExceedingStocks = bill.getOrderDetails().stream()
+                                List<String> booksExceedingStocks = orderDetails.stream()
                                         .filter(o -> o.getBook().getStocks() < o.getQuantity()) 
                                         .map(o -> '\"' + o.getBook().getTitle() + '\"' + " hiện còn " + o.getBook().getStocks() + " cuốn") 
                                         .collect(Collectors.toList()); 
@@ -280,7 +294,7 @@ public class MSOrderController extends HttpServlet {
                                     return;
                                 }
                                 else {
-                                    bill.getOrderDetails().forEach(o -> {
+                                    orderDetails.forEach(o -> {
                                         // lấy cuốn sách cập nhật số lượng trong kho
                                         var book = emFinal.find(Book.class, o.getBook().getId());
 //                                        book.setStocks(book.getStocks() - o.getQuantity());
@@ -289,6 +303,13 @@ public class MSOrderController extends HttpServlet {
                                     });                                  
                                 }
                                 tr.commit();
+                                // gửi mail cho khách hàng
+                                String email = bill.getCustomer().getEmail();
+                                if(Mail.sendOrderToCustomer(email, bill, orderDetails))
+                                    request.setAttribute("successMessage", "Gửi mail thành công");
+                                else
+                                    request.setAttribute("errorMessage", "Lỗi gửi mail.");
+                                
                             } catch (Exception ex) {
                                 ex.printStackTrace();
                                 tr.rollback();
@@ -347,6 +368,9 @@ public class MSOrderController extends HttpServlet {
 
     // Handle delete order request
     private void handleDeleteOrder(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        request.setCharacterEncoding("UTF-8");
+        response.setCharacterEncoding("UTF-8");
+        
         String billIdParam = request.getParameter("billId");
         if (billIdParam != null && !billIdParam.isEmpty()) {
             try {

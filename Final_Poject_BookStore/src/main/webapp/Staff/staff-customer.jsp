@@ -53,7 +53,7 @@
         <tr>
           <th></th>
           <th>ID</th>
-          <th>Tài khoản</th>
+<%--          <th>Tài khoản</th>--%>
           <th>Họ tên</th>
           <th>Tuổi</th>
           <th>SĐT</th>
@@ -69,7 +69,7 @@
               </button>
             </td>
             <td>${fn:escapeXml(customer.getId())}</td>
-            <td>${fn:escapeXml(customer.getUsername())}</td>
+<%--            <td>${fn:escapeXml(customer.getUsername())}</td>--%>
             <td>${customer.getFullName()}</td>
             <td>${customer.getAge()}</td>
             <td>${customer.getNumberPhone()}</td>
@@ -86,7 +86,7 @@
 <div class="modal fade fw-medium" id="addCategoryModal" tabindex="-1" aria-labelledby="addCategoryModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
-      <form action="ms_customer" method="post">
+      <form action="${pageContext.request.contextPath}/staff/staffcustomer" method="post">
         <input type="hidden" name="csrf" value="${_csrf.token}"/>
         <input type="hidden" name="action" value="add"/>
         <div class="modal-header">
@@ -133,7 +133,7 @@
 <div class="modal fade fw-medium" id="editCategoryModal" tabindex="-1" aria-labelledby="editCategoryModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
-      <form action="ms_customer" method="post">
+      <form action="${pageContext.request.contextPath}/staff/staffcustomer" method="post">
         <%-- Validate CSRF token --%>
         <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
         <input type="hidden" name="action" value="edit"/>

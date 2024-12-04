@@ -13,7 +13,7 @@ import model.Category;
 import java.io.IOException;
 import java.util.List;
 
-@WebServlet("/staff/staff_category")
+@WebServlet("/staff/staffcategory")
 public class StaffCategoryController extends HttpServlet {
 
     @Override
@@ -54,7 +54,7 @@ public class StaffCategoryController extends HttpServlet {
             updateCategoriesInSession(req);
         }
 
-        resp.sendRedirect(getServletContext().getContextPath() + "/mscategory");
+        resp.sendRedirect(getServletContext().getContextPath() + "/staff/staffcategory");
     }
 
     protected void updateCategoriesInSession(HttpServletRequest req) {

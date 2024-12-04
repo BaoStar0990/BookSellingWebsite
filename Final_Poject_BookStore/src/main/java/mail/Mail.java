@@ -2,6 +2,7 @@ package mail;
 
 import java.security.SecureRandom;
 import java.util.Properties;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.mail.Address;
@@ -14,6 +15,8 @@ import javax.mail.Transport;
 import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
+import model.Bill;
+import model.OrderDetail;
 
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
@@ -59,7 +62,7 @@ public class Mail {
 
             message.setSubject(subject);
             if (bodyIsHTML) {
-                message.setContent(body, "text/html");
+                message.setContent(body, "text/html; charset=UTF-8");
             } else {
                 message.setText(body);
             }
@@ -101,5 +104,67 @@ public class Mail {
         checkSendFinish =  Mail.sendMail(toEmail,"Your code: ",code.toString(),false);
         return checkSendFinish;
     }
+    
+    public static boolean sendOrderToCustomer(String toEmail, Bill order, Set<OrderDetail> orderDeatails){
+        if(order != null){
+            String subject = "Hóa đơn mua hàng từ Naoki";
+            // tính tổng tiền
+            double totalCost = order.getOrderDetails().stream()
+                            .mapToDouble(o -> o.getTotalPrice())
+                            .sum();
+            StringBuilder dsSanPham = new StringBuilder();
+            orderDeatails.stream()
+                    .forEach(o ->{
+                        String chiTietSP = """
+                                           <tr>
+                                                <td style="padding: 8px;">""" + o.getBook().getTitle()+ """
+                                                                                  </td>
+                                                <td style="padding: 8px; text-align: center;">""" + o.getQuantity()+ """
+                                                                                                      </td>
+                                                <td style="padding: 8px; text-align: right;">""" + o.getUnitPrice()+ """
+                                                                                                     VND</td>
+                                                <td style="padding: 8px; text-align: right;">""" + o.getTotalPrice()+ """
+                                                                                                     VND</td>
+                                            </tr>
+                                           """;
+                        dsSanPham.append(chiTietSP);
+                    });
 
+            // Nội dung HTML của hóa đơn
+            String body = """
+                <h2 style="text-align: center;">Hóa đơn mua hàng</h2>
+                <div style="text-align: center;">
+                    <img src="https://firebasestorage.googleapis.com/v0/b/imageofbookandauthor.appspot.com/o/logo-1.png?alt=media" alt="Logo Naoki" style="width: 150px; margin-bottom: 20px;">
+                </div>
+                <p>Cảm ơn bạn đã mua sắm tại Naoki. Dưới đây là thông tin hóa đơn của bạn:</p>
+                <p><strong>Mã hóa đơn: </strong>""" + order.getId() + 
+                """
+                </p>
+                <p><strong>Tổng tiền: </strong>""" + totalCost + """
+                                                       VND</p>
+                <p><strong>Phí vận chuyển: </strong>""" + order.getShippingFee() + """
+                                                           VND</p>
+                <p><strong>Trạng thái: </strong>""" + order.getStatusOrder()+ """
+                                                       </p>
+                <h3>Danh sách sản phẩm: </h3>
+                <table border="1" style="border-collapse: collapse; width: 100%;">
+                    <tr>
+                        <th style="padding: 8px;">Tên sản phẩm</th>
+                        <th style="padding: 8px;">Số lượng</th>
+                        <th style="padding: 8px;">Đơn giá</th>
+                        <th style="padding: 8px;">Tổng</th>
+                    </tr>
+            """ 
+                + dsSanPham + 
+            """
+                </table>
+                <p>Nếu bạn có bất kỳ câu hỏi nào, vui lòng liên hệ với chúng tôi qua email hoặc hotline.</p>
+                <p>Trân trọng,</p>
+                <p>Đội ngũ hỗ trợ khách hàng</p>
+            """;
+            return sendMail(toEmail, subject, body, true);
+        }
+        else
+            return false;
+    }
 }

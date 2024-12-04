@@ -48,6 +48,11 @@ public class SignoutAdminController extends HttpServlet {
             ex.printStackTrace();
         }
     }
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        doGet(request, response);
+    }
 
     /**
      * Handles the HTTP <code>POST</code> method.

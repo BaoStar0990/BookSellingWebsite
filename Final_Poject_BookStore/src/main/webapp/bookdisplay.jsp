@@ -43,12 +43,37 @@
             <p class="fw-semibold">
                 <a href="${pageContext.request.contextPath}" class="text-decoration-none text-dark">Trang chủ</a>
                 <i class="fa-solid fa-chevron-right"></i>
-                <a href="#" class="text-decoration-none text-dark">Sách đang giảm giá</a>
+                <a href="#" class="text-decoration-none text-dark">${currentTab}</a>
             </p>
         </div>
         <!-- end Link -->
 
         <div class="container p-0 mt-4">
+            <div class="row">
+<%--                <div class="col-md-3">--%>
+<%--                    <label for="authorFilter" class="form-label">Tác giả</label>--%>
+<%--                    <input  type="text" id="authorFilter" name="authorFilter" class="form-control" value="" placeholder="Enter author name">--%>
+<%--                </div>--%>
+
+<%--                <div class="col-md-2">--%>
+<%--                    <label for="minPrice" class="form-label">Giá thấp nhất</label>--%>
+<%--                    <input type="number" id="minPrice" name="minPrice" class="form-control" value="0" placeholder="Any">--%>
+<%--                </div>--%>
+
+<%--                <div class="col-md-2">--%>
+<%--                    <label for="maxPrice" class="form-label">Giá cao nhất</label>--%>
+<%--                    <input type="number" id="maxPrice" name="maxPrice" class="form-control" value="0" placeholder="Any">--%>
+<%--                </div>--%>
+
+<%--                <div class="col-md-2">--%>
+<%--                    <label for="discountFilter" class="form-label">Giảm giá tối thiểu (%)</label>--%>
+<%--                    <input type="number" id="discountFilter" name="discountFilter" class="form-control" value="" placeholder="0">--%>
+<%--                </div>--%>
+
+<%--                <div class="col-md-3 d-flex align-items-end">--%>
+<%--                    <button onclick="filterBooks()" type="button" class="btn primary-btn">Apply Filters</button>--%>
+<%--                </div>--%>
+<%--            </div>--%>
             <!-- Title and Filter Button -->
             <div class="pb-2 mb-2 border-bottom">
                 <div class="d-flex justify-content-between align-items-center">
@@ -63,33 +88,33 @@
                 <div class="collapse mt-3 " id="filterOptions">
                     <div class="p-3 border rounded bg-light">
                         <h5 class="fw-semibold">Bộ Lọc</h5>
-                        <form method="get">
+<%--                        <form method="get">--%>
                             <div class="row">
-                                <div class="col-md-3">
-                                    <label for="authorFilter" class="form-label">Tác giả</label>
-                                    <input type="text" id="authorFilter" name="authorFilter" class="form-control" value="" placeholder="Enter author name">
-                                </div>
+<%--                                <div class="col-md-3">--%>
+<%--                                    <label for="authorFilter" class="form-label">Tác giả</label>--%>
+<%--                                    <input onchange="filterBooks()" type="text" id="authorFilter" name="authorFilter" class="form-control" value="" placeholder="Enter author name">--%>
+<%--                                </div>--%>
 
                                 <div class="col-md-2">
                                     <label for="minPrice" class="form-label">Giá thấp nhất</label>
-                                    <input type="number" id="minPrice" name="minPrice" class="form-control" value="" placeholder="0">
+                                    <input type="number" id="minPrice" name="minPrice" class="form-control" value="0" placeholder="Any">
                                 </div>
 
                                 <div class="col-md-2">
                                     <label for="maxPrice" class="form-label">Giá cao nhất</label>
-                                    <input type="number" id="maxPrice" name="maxPrice" class="form-control" value="" placeholder="Any">
+                                    <input type="number" id="maxPrice" name="maxPrice" class="form-control" value="0" placeholder="Any">
                                 </div>
 
                                 <div class="col-md-2">
                                     <label for="discountFilter" class="form-label">Giảm giá tối thiểu (%)</label>
-                                    <input type="number" id="discountFilter" name="discountFilter" class="form-control" value="" placeholder="0">
+                                    <input type="number" id="discountFilter" name="discountFilter" class="form-control" value="" placeholder="Any">
                                 </div>
 
                                 <div class="col-md-3 d-flex align-items-end">
-                                    <button type="submit" class="btn primary-btn">Apply Filters</button>
+                                    <button onclick="filterBooks()" type="button" class="btn primary-btn">Apply Filters</button>
                                 </div>
                             </div>
-                        </form>
+<%--                        </form>--%>
                     </div>
                 </div>
             </div>
@@ -98,6 +123,7 @@
             <div class="row book-list">
                 <c:choose>
                     <c:when test="${books.size() > 0}">
+
                         <c:forEach var="book" items = "${books}">
                             <div class="col-6 col-md-4 col-lg-2 p-2 pagination-item">
                                 <a href="/bookdetails/${book.getId()}" class="d-block text-decoration-none card-shadow" style="color: inherit;">
@@ -124,13 +150,14 @@
                                                 </c:choose>
 
                                             </p>
-                                            <div class="mt-2">
+                                            <div class="bookPriceDiscount mt-2">
                                                 <span class="text-danger font-semibold">
                                                     <fmt:formatNumber value="${book.getSellingPrice()}" type="number" pattern="#,##0" />đ
+<%--                                                    ${book.getSellingPrice()}--%>
                                                 </span>
                                                 <c:if test="${not empty book.getDiscountCampaign()}">
                                                     <span class="badge bg-danger ms-2">
-                                                        -<fmt:formatNumber value="${book.getDiscountCampaign().getPercentDiscount()*100}" type="number" pattern="#,##0" />%
+                                                        <fmt:formatNumber value="${book.getDiscountCampaign().getPercentDiscount()*100}" type="number" pattern="#,##0" />%
                                                     </span>
                                                 </c:if>
                                             </div>
@@ -145,7 +172,9 @@
                         <img src="${pageContext.request.contextPath}/assets/images/notfound_image.svg" alt="Không tìm thấy ${nameOfCategory}" height="300" width="300"/>
                     </c:otherwise>
                 </c:choose>
-            </div>
+            </div>  
+
+
             <!--end Book List -->
 
             <!-- Pagination -->
@@ -158,5 +187,6 @@
         <jsp:include page="WEB-INF/views/footer.jsp"/>
         <%-- end   Footer--%>
 
+        <script src="${pageContext.request.contextPath}/assets/javascript/filterBook.js"></script>
     </body>
 </html>

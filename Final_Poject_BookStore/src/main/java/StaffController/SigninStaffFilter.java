@@ -64,7 +64,7 @@ public class SigninStaffFilter implements Filter {
             //Neu dang nhap fail qua 5 lan
             if (loginFailCount >= 5) {
                 session.setAttribute("status",false);
-                request.setAttribute("alertMessage","Quá nhiều lần đăng nhập, tài khoảng đã bị khóa");
+                request.setAttribute("alertMessage","Quá nhiều lần đăng nhập, tài khoản đã bị khóa");
                 System.out.println("Account locked due to too many failed login attempts.");
                 request.getServletContext().getRequestDispatcher("/signinstaff.jsp").forward(request, response);
                 return false;
@@ -111,7 +111,7 @@ public class SigninStaffFilter implements Filter {
                     }else{
                         loginFailCount++;
                         session.setAttribute("loginFailCount", loginFailCount);
-                        request.setAttribute("alertMessage","Tài khoảng này đang được đăng nhập ở một nơi khác");
+                        request.setAttribute("alertMessage","Tài khoản này đang được đăng nhập ở một nơi khác");
                         System.out.println("Invalid login attempt. Total failures: " + loginFailCount);
                         request.getServletContext().getRequestDispatcher("/signinstaff.jsp").forward(request, response);
                         return false;
@@ -119,13 +119,13 @@ public class SigninStaffFilter implements Filter {
                 } else{
                     loginFailCount++;
                     session.setAttribute("loginFailCount", loginFailCount);
-                    request.setAttribute("alertMessage","Nhập sai tài khoảng hoặc mật khẩu");
+                    request.setAttribute("alertMessage","Nhập sai tài khoản hoặc mật khẩu");
                     System.out.println("Invalid login attempt. Total failures: " + loginFailCount);
                     request.getServletContext().getRequestDispatcher("/signinstaff.jsp").forward(request, response);
                     return false;
                 }
             }else{
-                request.setAttribute("alertMessage","Quá nhiều lần đăng nhập, tài khoảng đã bị khóa");
+                request.setAttribute("alertMessage","Quá nhiều lần đăng nhập, tài khoản đã bị khóa");
                 System.out.println("Account locked due to too many failed login attempts.");
                 request.getServletContext().getRequestDispatcher("/signinstaff.jsp").forward(request, response);
                 return false;

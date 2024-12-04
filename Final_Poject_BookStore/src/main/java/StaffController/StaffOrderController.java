@@ -1,22 +1,25 @@
 package StaffController;
 
+import database.DBUtil;
 import dbmodel.BillDB;
+import dbmodel.OrderDetailDB;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityTransaction;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import model.Bill;
-import model.StatusOrder;
-import model.StatusPayment;
+import model.*;
 
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
-@WebServlet("/staff/staff_order")
+@WebServlet("/staff/stafforder")
 public class StaffOrderController extends HttpServlet {
 
     @Override
@@ -27,8 +30,99 @@ public class StaffOrderController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String action = request.getParameter("action");
-        if (action != null && (action.equalsIgnoreCase("updateStatus") || action.equalsIgnoreCase("cancelOrder") || action.equalsIgnoreCase("deleteOrder"))) {
-            if (action.equalsIgnoreCase("deleteOrder")) {
+        if (action != null && (action.equalsIgnoreCase("updateStatus") 
+                || action.equalsIgnoreCase("cancelOrder") 
+                    || action.equalsIgnoreCase("deleteOrder")
+                        || action.equalsIgnoreCase("checkSoLuong")
+                            || action.equalsIgnoreCase("deleteOrderDetail")
+                                || action.equalsIgnoreCase("editOrderDetail"))) {
+            if(action.equalsIgnoreCase("deleteOrderDetail")){
+                try{
+                    String billIdParam = request.getParameter("billId");
+                    if (billIdParam != null && !billIdParam.isEmpty()) {
+                        // nếu đơn hàng chỉ có 1 sản phẩm thì chuyển đơn hàng sang cancel
+                        try {
+                            int billId = Integer.parseInt(billIdParam);
+                            Bill bill = BillDB.getInstance().selectByID(billId);
+                            if (bill != null) {
+                                // kiểm tra số lượng sản phẩm trong Bill
+                                if (bill.getOrderDetails() != null && bill.getOrderDetails().size() == 1) { 
+                                    bill.setStatusOrder(StatusOrder.Cancelled);
+                                    boolean isUpdate = BillDB.getInstance().update(bill);
+                                    if (!isUpdate) {
+                                       response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Failed to update order");
+                                    }
+                                    else{
+                                        handleBillRequest(request, response);
+                                        return;
+                                    }
+                                } // chỉ xóa sản phẩm
+                                else{
+                                    String orderDetailID_Str = request.getParameter("orderDetailID");
+                                    int orderDetailID = Integer.parseInt(orderDetailID_Str);
+                                    if(!OrderDetailDB.getInstance().delete(orderDetailID, OrderDetail.class)){
+                                        request.setAttribute("errorMessage", "Xóa sản phẩm không thành công.");
+                                    }
+                                    else {
+                                        handleBillRequest(request, response);
+                                        return;
+                                    }
+                                }
+                            } else {
+                                response.sendError(HttpServletResponse.SC_NOT_FOUND, "Bill not found");
+                            }
+                        } catch (NumberFormatException e) {
+                            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid bill ID");
+                        }
+                    } else {
+                        response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Bill ID is required");
+                    }                   
+                } catch (NumberFormatException ex) {
+                    request.setAttribute("errorMessage", "Vui lòng nhập đúng dữ liệu");
+                } catch (NoSuchElementException ex) {
+                    request.setAttribute("errorMessage", "Không tìm thấy sách");
+                }
+
+                request.getServletContext()
+                        .getRequestDispatcher("/Staff/staff-orderdetail.jsp")
+                        .forward(request, response);
+                
+            }
+            else if (action.equalsIgnoreCase("editOrderDetail")){
+                try {
+                    // lấy OrderDetailID
+                    String orderDetailID_Str = request.getParameter("orderDetailID");
+                    int orderDetailID = Integer.parseInt(orderDetailID_Str);
+                    // lấy số lượng cần cập nhật
+                    String quantity_Str = request.getParameter("quantity");
+                    int quantity = Integer.parseInt(quantity_Str);
+                    
+                    OrderDetail order = OrderDetailDB.getInstance().selectByID(orderDetailID);
+                    if(order != null){
+                        order.setQuantity(quantity);
+                        if(!OrderDetailDB.getInstance().update(order))
+                            request.setAttribute("errorMessage", "Cập nhật không thành công.");
+                    }
+                    else{
+                        request.setAttribute("errorMessage", "Không tìm thấy chi tiết đơn hàng.");
+                    }
+                    String billIdParam = request.getParameter("billIdEdit");
+                    int billId = Integer.parseInt(billIdParam);
+                    Bill bill = BillDB.getInstance().selectByID(billId);
+                    if (bill != null) {
+                        request.setAttribute("bill", bill);
+                        request.getRequestDispatcher("/Staff/staff-orderdetail.jsp")
+                                    .forward(request, response);
+                    } else {
+                        processRequest(request, response);
+                    } 
+                } catch (NumberFormatException ex) {
+                     request.setAttribute("errorMessage", "Vui lòng nhập đúng dữ liệu");
+                } catch (NoSuchElementException ex) {
+                    request.setAttribute("errorMessage", "Không tìm thấy sách");
+                }
+            }
+            else if (action.equalsIgnoreCase("deleteOrder")) {
                 handleDeleteOrder(request, response);
             } else {
                 handleOrderStatusUpdate(request, response);
@@ -37,7 +131,6 @@ public class StaffOrderController extends HttpServlet {
             handleBillRequest(request, response);
         }
     }
-
     /*
      * Handle bill request
      * - Get bill ID from request
@@ -54,7 +147,8 @@ public class StaffOrderController extends HttpServlet {
                 Bill bill = BillDB.getInstance().selectByID(billId);
                 
                 request.setAttribute("bill", bill);
-                request.getRequestDispatcher("/Staff/staff-orderdetail.jsp").forward(request, response);
+                request.getRequestDispatcher("/Staff/staff-orderdetail.jsp")
+                        .forward(request, response);
             } catch (NumberFormatException e) {
                 response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid bill ID");
             }
@@ -92,7 +186,8 @@ public class StaffOrderController extends HttpServlet {
         request.setAttribute("bills", allBill);
         request.setAttribute("StatusOrder", statusOrders);
         request.setAttribute("StatusPayment", statusPayments);
-        request.getRequestDispatcher("/Staff/staff-order.jsp").forward(request, response);
+        request.getRequestDispatcher("/Staff/staff-order.jsp")
+                .forward(request, response);
     }
 
     // Compare the order of status in the enum
@@ -134,7 +229,7 @@ public class StaffOrderController extends HttpServlet {
 
                     if (action.equalsIgnoreCase("cancelOrder")) {
                         StatusPayment currentPaymentStatus = bill.getStatusPayment();
-                        if ((currentStatus == StatusOrder.Processing || currentStatus == StatusOrder.Packing || currentStatus == StatusOrder.Delivering) 
+                        if ((currentStatus == StatusOrder.Processing || currentStatus == StatusOrder.Packing || currentStatus == StatusOrder.Delivering)
                                 && currentPaymentStatus == StatusPayment.Unpaid) {
                             nextStatus = StatusOrder.Cancelled;
                         } else {
@@ -144,18 +239,93 @@ public class StaffOrderController extends HttpServlet {
                     } else {
                         nextStatus = getNextStatus(currentStatus);
                     }
+                    if(action.equalsIgnoreCase("checkSoLuong")){
+                        List<String> booksExceedingStocks = bill.getOrderDetails().stream()
+                                .filter(o -> o.getBook().getStocks() < o.getQuantity()) 
+                                .map(o -> '\"' + o.getBook().getTitle() + '\"' + " hiện còn " + o.getBook().getStocks() + " cuốn") 
+                                .collect(Collectors.toList()); 
 
+                        if (!booksExceedingStocks.isEmpty()) {
+                            request.setAttribute("errorMessage", String.join(", ", booksExceedingStocks));
+                        }
+                        else{
+                            request.setAttribute("successMessage", "Các sản phẩm còn hàng.");
+                            System.out.println("dddddddd");
+                        }
+                        handleBillRequest(request, response);
+                        return;
+                    }
                     if (nextStatus != null) {
                         bill.setStatusOrder(nextStatus);
-                        if (nextStatus == StatusOrder.Delivered) {
+                        
+                        if(nextStatus == StatusOrder.Packing){
+                            EntityManager emFinal = DBUtil.getEmFactory().createEntityManager();
+                            EntityTransaction tr = emFinal.getTransaction();
+
+                            try {
+                                tr.begin();
+                                // kiểm tra số lượng đặt có vượt quá số lượng trong kho
+                                List<String> booksExceedingStocks = bill.getOrderDetails().stream()
+                                        .filter(o -> o.getBook().getStocks() < o.getQuantity()) 
+                                        .map(o -> '\"' + o.getBook().getTitle() + '\"' + " hiện còn " + o.getBook().getStocks() + " cuốn") 
+                                        .collect(Collectors.toList()); 
+
+                                if (!booksExceedingStocks.isEmpty()) {
+                                    request.setAttribute("errorMessage", String.join(", ", booksExceedingStocks));
+                                    handleBillRequest(request, response);
+                                    return;
+                                }
+                                else {
+                                    bill.getOrderDetails().forEach(o -> {
+                                        // lấy cuốn sách cập nhật số lượng trong kho
+                                        var book = emFinal.find(Book.class, o.getBook().getId());
+//                                        book.setStocks(book.getStocks() - o.getQuantity());
+                                        book.increaseStocks(o.getQuantity());
+                                        emFinal.merge(book);
+                                    });                                  
+                                }
+                                tr.commit();
+                            } catch (Exception ex) {
+                                ex.printStackTrace();
+                                tr.rollback();
+                                request.setAttribute("errorMessage", "Lỗi xác nhận đơn hàng.");
+                                handleBillRequest(request, response);
+                                return;
+                            }
+                        }
+                        // hủy đơn hàng
+                        else if(nextStatus == StatusOrder.Cancelled && 
+                                (currentStatus == StatusOrder.Delivering || currentStatus == StatusOrder.Packing)){
+                            // thay đổi cơ sở dữ liệu
+                            EntityManager emFinal = DBUtil.getEmFactory().createEntityManager();
+                            EntityTransaction tr = emFinal.getTransaction();
+
+                            try {
+                                tr.begin();
+                                bill.getOrderDetails().forEach(o -> {
+                                    // lấy cuốn sách cập nhật số lượng trong kho
+                                    var book = emFinal.find(Book.class, o.getBook().getId());
+//                                    book.setStocks(book.getStocks() + o.getQuantity());
+                                    book.decreaseStocks(o.getQuantity());
+                                    emFinal.merge(book);
+                                });
+                                tr.commit();
+                            } catch (Exception ex) {
+                                ex.printStackTrace();
+                                tr.rollback();
+                                response.sendError(HttpServletResponse.SC_NOT_FOUND, "Hủy đơn hàng không thành công.");
+                                return;
+                            }
+                        }
+                        else if (nextStatus == StatusOrder.Delivered) {
                             bill.setStatusPayment(StatusPayment.Paid);
                             bill.setDeliveryDate(LocalDate.now());
                         }
-                        boolean isUpdated = BillDB.getInstance().update(bill);
-                        if (isUpdated) {
+
+                        if (BillDB.getInstance().update(bill)) {
                             handleBillRequest(request, response);
                         } else {
-                            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Failed to update order status");
+                           response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Failed to update order status");
                         }
                     } else {
                         response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid order status transition");
@@ -168,8 +338,8 @@ public class StaffOrderController extends HttpServlet {
             }
         } else {
             response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Bill ID is required");
+        }
     }
-}
 
     // Handle delete order request
     private void handleDeleteOrder(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -182,7 +352,7 @@ public class StaffOrderController extends HttpServlet {
                     if (bill.getStatusOrder() == StatusOrder.Cancelled) {
                         boolean isDeleted = BillDB.getInstance().delete(bill.getId(), Bill.class);
                         if (isDeleted) {
-                            response.sendRedirect(request.getContextPath() + "/msorder");
+                            response.sendRedirect(request.getContextPath() + "/staff/stafforder");
                         } else {
                             response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Failed to delete order");
                         }

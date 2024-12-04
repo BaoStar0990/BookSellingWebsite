@@ -27,6 +27,15 @@ public class SigninAdminController extends HttpServlet {
         response.setCharacterEncoding("UTF-8");
         response.sendRedirect(String.format("%s/ms/msdashboard", getServletContext().getContextPath()));
     }
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        System.out.println("------------------------------------");
+        System.out.println("Call servlet login admin with post method");
+        request.setCharacterEncoding("UTF-8");
+        response.setCharacterEncoding("UTF-8");
+        response.sendRedirect(String.format("%s/ms/msdashboard", getServletContext().getContextPath()));
+    }
 
     @Override
     public String getServletInfo() {

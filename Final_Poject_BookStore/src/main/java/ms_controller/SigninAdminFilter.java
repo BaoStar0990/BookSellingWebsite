@@ -41,6 +41,9 @@ public class SigninAdminFilter implements Filter {
 
         // Xử lý request GET
         if ("GET".equalsIgnoreCase(method)) {
+            if(session.getAttribute("admin") != null) {
+                return true;
+            }
             System.out.println("Call filter admin with get method");
             request.getServletContext().getRequestDispatcher("/signinadmin.jsp").forward(request, response);
             return false;

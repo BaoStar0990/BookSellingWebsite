@@ -12,7 +12,7 @@ import model.Customer;
 import java.io.IOException;
 import java.util.List;
 
-@WebServlet("/staff/staff_customer")
+@WebServlet("/staff/staffcustomer")
 public class StaffCustomerController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -54,6 +54,6 @@ public class StaffCustomerController extends HttpServlet {
             session.setAttribute("customers", allCustomers);
         }
 
-        resp.sendRedirect(getServletContext().getContextPath() + "/ms_customer");
+        resp.sendRedirect(getServletContext().getContextPath() + "/staff/staffcustomer");
     }
 }

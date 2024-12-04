@@ -80,7 +80,7 @@
   <div class="modal fade fw-medium" id="addCategoryModal" tabindex="-1" aria-labelledby="addCategoryModalLabel" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
-        <form action="mscategory?action=add" method="post">
+        <form action="${pageContext.request.contextPath}/staff/staffcategory" method="post">
           <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
           <div class="modal-header">
             <h5 class="modal-title fw-semibold" id="addCategoryModalLabel">Add Category</h5>

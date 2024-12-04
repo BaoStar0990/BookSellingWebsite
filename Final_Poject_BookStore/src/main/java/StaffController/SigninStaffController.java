@@ -25,7 +25,7 @@ public class SigninStaffController extends HttpServlet {
         System.out.println("Call servlet login staff with post method");
         request.setCharacterEncoding("UTF-8");
         response.setCharacterEncoding("UTF-8");
-        response.sendRedirect("/staff/staff_author");
+        response.sendRedirect(String.format("%s/staff/staffcategory", getServletContext().getContextPath()));
     }
     @Override
     public String getServletInfo() {

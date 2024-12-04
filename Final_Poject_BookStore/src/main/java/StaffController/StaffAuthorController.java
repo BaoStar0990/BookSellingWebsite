@@ -12,7 +12,7 @@ import model.Author;
 import java.io.IOException;
 import java.util.List;
 
-@WebServlet("/staff/staff_author")
+@WebServlet("/staff/staffauthor")
 public class StaffAuthorController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -53,7 +53,7 @@ public class StaffAuthorController extends HttpServlet {
             session.setAttribute("authors", authors);
         }
 
-        resp.sendRedirect(getServletContext().getContextPath() + "/ms_author");
+        resp.sendRedirect(getServletContext().getContextPath() + "/staff/staffauthor");
 
     }
 }

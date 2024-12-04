@@ -63,10 +63,10 @@
         <c:forEach var="review" items="${sessionScope.reviews}">
           <tr class="fw-medium">
             <td class="d-flex">
-              <button class="btn btn-warning btn-sm me-2" data-bs-toggle="modal" data-bs-target="#editCategoryModal"
-                      onclick="editCategory(${review.getReviewID()},${review.getCustomer().getId()},${review.getBook().getId()}, '${review.getDescription()}', '${review.getRate()}')">
-                <i class="fas fa-edit"></i>
-              </button>
+<%--              <button class="btn btn-warning btn-sm me-2" data-bs-toggle="modal" data-bs-target="#editCategoryModal"--%>
+<%--                      onclick="editCategory(${review.getReviewID()},${review.getCustomer().getId()},${review.getBook().getId()}, '${review.getDescription()}', '${review.getRate()}')">--%>
+<%--                <i class="fas fa-edit"></i>--%>
+<%--              </button>--%>
               <form id="deleteForm" method="post" action="${pageContext.request.contextPath}/ms/msreview" class="mb-0">
                 <input type="hidden" name="action" value="delete"/>
                 <input type="hidden" name="deleteId" value="${review.getReviewID()}"/>

@@ -12,7 +12,7 @@ import model.Publisher;
 import java.io.IOException;
 import java.util.List;
 
-@WebServlet("/staff/staff_publisher")
+@WebServlet("/staff/staffpublisher")
 public class StaffPublisherController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -61,7 +61,7 @@ public class StaffPublisherController extends HttpServlet {
             session.setAttribute("publishers", publisher);
         }
 
-        resp.sendRedirect(getServletContext().getContextPath() + "/ms/mspublisher");
+        resp.sendRedirect(getServletContext().getContextPath() + "/staff/staffpublisher");
 
     }
 }

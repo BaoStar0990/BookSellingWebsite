@@ -16,7 +16,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
     <%-- Favicon --%>
-    <link rel="icon" href="assets/images/logos/square-logo.png" type="image/x-icon">
+    <link rel="icon" href="${pageContext.request.contextPath}/assets/images/logos/square-logo.png" type="image/x-icon">
     <%-- Fontawesome --%>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
@@ -33,7 +33,7 @@
     <main class="content" style="margin-left: 250px; padding: 20px;">
         <div class="container fw-medium">
             <div class="d-flex justify-content-between mb-3">
-                <a class="btn btn-secondary" href="${pageContext.request.contextPath}/msorder">
+                <a class="btn btn-secondary" href="${pageContext.request.contextPath}/staff/stafforder">
                     <i class="fas fa-arrow-left"></i>
                     Quay lại
                 </a>
@@ -53,12 +53,23 @@
                     
                 </div>
                 <div class="d-flex justify-content-end">
-                    <form id="statusForm" action="${pageContext.request.contextPath}/staff_order" method="post" class="mb-0">
+                    <c:if test="${bill.getStatusOrder() == 'Processing'}">
+                        <form id="checkSLForm" action="${pageContext.request.contextPath}/staff/stafforder" method="post" class="mb-0">
+                            <input type="hidden" name="action" value="checkSoLuong">
+                            <input type="hidden" name="billId" value="${bill.getId()}">
+                            <input type="hidden" name="redirectUrl" value="${pageContext.request.requestURL}">
+                                <button type="submit" class="btn btn-primary me-2" id="checkSLButton"
+                                        <i class="fas fa-box"></i>
+                                        Kiểm tra số lượng
+                                </button> 
+                        </form>
+                    </c:if> 
+                    <form id="statusForm" action="${pageContext.request.contextPath}/staff/stafforder" method="post" class="mb-0">
                         <input type="hidden" name="action" value="updateStatus">
                         <input type="hidden" name="billId" value="${bill.getId()}">
                         <input type="hidden" name="redirectUrl" value="${pageContext.request.requestURL}">
                         <button type="button" class="btn btn-primary me-2" id="statusButton"
-                            <c:if test="${bill.getStatusOrder() == 'Completed'}">style="display:none;" disabled</c:if>>
+                            <c:if test="${bill.getStatusOrder() == 'Completed'}">style="display:none;" disabled</c:if>
                             <c:choose>
                                 <c:when test="${bill.getStatusOrder() == 'Processing'}">
                                     <i class="fas fa-box"></i>
@@ -81,33 +92,51 @@
                                     Xử lý đơn hàng
                                 </c:when>
                             </c:choose>
-                        </button>
+                        </button>           
                     </form>
-<%--                    <c:if test="${(bill.getStatusOrder() == 'Processing' || bill.getStatusOrder() == 'Packing' || bill.getStatusOrder() == 'Delivering') && bill.getStatusPayment() == 'Unpaid'}">--%>
-<%--                        <form id="cancelForm" action="${pageContext.request.contextPath}/msorder" method="post" class="mb-0">--%>
-<%--                            <input type="hidden" name="action" value="cancelOrder">--%>
-<%--                            <input type="hidden" name="billId" value="${bill.getId()}">--%>
-<%--                            <input type="hidden" name="redirectUrl" value="${pageContext.request.requestURL}">--%>
+                    <c:if test="${(bill.getStatusOrder() == 'Processing' || bill.getStatusOrder() == 'Packing' || bill.getStatusOrder() == 'Delivering') && bill.getStatusPayment() == 'Unpaid'}">
+                        <form id="cancelForm" action="${pageContext.request.contextPath}/staff/stafforder" method="post" class="mb-0">
+                            <input type="hidden" name="action" value="cancelOrder">
+                            <input type="hidden" name="billId" value="${bill.getId()}">
+                            <input type="hidden" name="redirectUrl" value="${pageContext.request.requestURL}">
 <%--                            <button type="button" class="btn btn-danger me-2" id="cancelButton">--%>
 <%--                                <i class="fas fa-times"></i>--%>
 <%--                                Hủy đơn hàng--%>
 <%--                            </button>--%>
-<%--                        </form>--%>
-<%--                    </c:if>--%>
-<%--                    <c:if test="${bill.getStatusOrder() == 'Cancelled'}">--%>
-<%--                        <form action="${pageContext.request.contextPath}/msorder" method="post" class="mb-0" onsubmit="return confirm('Bạn có chắc chắn muốn xóa đơn hàng này không?');">--%>
-<%--                            <input type="hidden" name="action" value="deleteOrder">--%>
-<%--                            <input type="hidden" name="billId" value="${bill.getId()}">--%>
-<%--                            <button type="submit" class="btn btn-danger">--%>
-<%--                                <i class="fas fa-trash"></i>--%>
-<%--                                Xóa đơn hàng--%>
-<%--                            </button>--%>
-<%--                        </form>--%>
-<%--                    </c:if>--%>
+                        </form>
+                    </c:if>
+                    <c:if test="${bill.getStatusOrder() == 'Cancelled'}">
+                        <form action="${pageContext.request.contextPath}/staff/stafforder" method="post" class="mb-0" onsubmit="return confirm('Bạn có chắc chắn muốn xóa đơn hàng này không?');">
+                            <input type="hidden" name="action" value="deleteOrder">
+                            <input type="hidden" name="billId" value="${bill.getId()}">
+                            <button type="submit" class="btn btn-danger">
+                                <i class="fas fa-trash"></i>
+                                Xóa đơn hàng
+                            </button>
+                        </form>
+                    </c:if>
                 </div>
             </div>
             <hr>
             <div class="row">
+                <!-- hiện thông báo lỗi -->
+                <c:choose>
+                    <c:when test="${requestScope.errorMessage == null}">
+                        <div id="errorMessage" class="alert alert-danger d-none"></div>
+                    </c:when>
+                    <c:otherwise>
+                        <div id="errorMessage" class="alert alert-danger">${requestScope.errorMessage}</div>
+                    </c:otherwise>
+                </c:choose>
+                <c:choose>
+                    <c:when test="${requestScope.successMessage == null}">
+                        <div id="successMessage" class="alert alert-success d-none"></div>
+                    </c:when>
+                    <c:otherwise>
+                        <div id="successMessage" class="alert alert-success">${requestScope.successMessage}</div>
+                    </c:otherwise>
+                </c:choose>
+                        
                 <div class="col-md-6">
                     <h5>Chi tiết đơn hàng</h5>
                     <div class="card mb-3">
@@ -143,6 +172,7 @@
                         <table class="table table-bordered">
                             <thead>
                                 <tr>
+                                    <th>Action</th>
                                     <th>Tên sách</th>
                                     <th>Số lượng</th>
                                     <th>Đơn giá</th>
@@ -152,6 +182,30 @@
                             <tbody>
                                 <c:forEach var="detail" items="${bill.getOrderDetails()}">
                                     <tr>
+                                        <c:if test="${bill.getStatusOrder() == 'Processing'}">
+                                            <td>
+                                                <div class ="row">
+                                                    <div class ="col-6">
+                                                        <form action="${pageContext.request.contextPath}/staff/stafforder" method="post" class="mb-0" onsubmit="return confirm('Bạn có chắc chắn muốn xóa sản phẩm này không?');">
+                                                           <input type="hidden" name="action" value="deleteOrderDetail">
+                                                           <input type="hidden" name="orderDetailID" value="${detail.getId()}">
+                                                           <input type="hidden" name="billId" value="${bill.getId()}">
+                                                           <button type="submit" class="btn btn-danger">
+                                                               <i class="fas fa-trash"></i>
+                                                           </button>
+                                                       </form>
+                                                    </div>
+                                                   <div class ="col-6">
+                                                        <button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#editOrderModal"
+                                                                onclick="openEditModal('${bill.getId()}', '${detail.getId()}', '${detail.getBook().getTitle()}', '${detail.getQuantity()}')">
+                                                            <i class="fas fa-edit"></i>
+                                                        </button>
+                                                   </div>
+                                                </div>
+                                               
+                                            </td>
+                                        </c:if>
+                                       
                                         <td>${detail.getBook().getTitle()}</td>
                                         <td>${detail.getQuantity()}</td>
                                         <td>${detail.getUnitPrice()}</td>
@@ -188,6 +242,36 @@
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
                     <button type="button" class="btn btn-primary" id="confirmButton">Xác nhận</button>
                 </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="modal fade" id="editOrderModal" tabindex="-1" aria-labelledby="editOrderModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form action="${pageContext.request.contextPath}/staff/stafforder" method="post" class="mb-0" id = "editOrderDetailForm">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="editOrderModalLabel">Cập nhật số lượng sản phẩm</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <input type="hidden" name="action" value="editOrderDetail">
+                        <input type="hidden" name="billIdEdit" id="billIdEdit" value="">
+                        <input type ="hidden" name="orderDetailID" id="orderDetailID" class="orderDetailID" value ="">
+                        <div class="row">
+                            <label for="bookName" class="form-label">Tên sách:</label>
+                            <input type="text" class="form-control" id="bookName" name="bookName" required disabled/>
+                        </div>
+                        <div class="row">
+                            <label for="quantity" class="form-label">Số Lượng:</label>
+                            <input type="number" class="form-control" id="quantity" name="quantity" required min="1"/>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                        <button type="submit" class="btn btn-primary" id="confirmButton">Xác nhận</button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
@@ -281,6 +365,13 @@
             };
             html2pdf().set(opt).from(billContent).save();
         }
+        function openEditModal(billID, orderDetailId, bookName, quantity){ 
+            document.getElementById("billIdEdit").value = billID; 
+            document.getElementById("orderDetailID").value = orderDetailId;
+            document.getElementById("bookName").value = bookName; 
+            document.getElementById("quantity").value = quantity; 
+        }
+            
     </script>
 </body>
 </html>

@@ -63,10 +63,10 @@
         <c:forEach var="review" items="${sessionScope.reviews}">
           <tr class="fw-medium">
             <td class="d-flex">
-              <button class="btn btn-warning btn-sm me-2" data-bs-toggle="modal" data-bs-target="#editCategoryModal"
-                      onclick="editCategory(${review.getReviewID()},${review.getCustomer().getId()},${review.getBook().getId()}, '${review.getDescription()}', '${review.getRate()}')">
-                <i class="fas fa-edit"></i>
-              </button>
+<%--              <button class="btn btn-warning btn-sm me-2" data-bs-toggle="modal" data-bs-target="#editCategoryModal"--%>
+<%--                      onclick="editCategory(${review.getReviewID()},${review.getCustomer().getId()},${review.getBook().getId()}, '${review.getDescription()}', '${review.getRate()}')">--%>
+<%--                <i class="fas fa-edit"></i>--%>
+<%--              </button>--%>
             </td>
             <td>${fn:escapeXml(review.getReviewID())}</td>
             <td>${fn:escapeXml(review.getCustomer().getFullName())}</td>
@@ -123,7 +123,7 @@
 <div class="modal fade fw-medium" id="editCategoryModal" tabindex="-1" aria-labelledby="editCategoryModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
-      <form action="ms_review" method="post">
+      <form action="${pageContext.request.contextPath}/staff/staffreview" method="post">
         <%-- Validate CSRF token --%>
         <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
         <input type="hidden" name="action" value="edit"/>

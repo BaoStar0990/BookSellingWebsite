@@ -41,11 +41,59 @@
   <div class="container fw-medium">
     <div class="row mb-3">
       <div class="col-md-4 d-flex flex-colum">
-        <input type="text" class="form-control fw-medium" id="searchBox" placeholder="Search review...">
+        <input type="text" class="form-control fw-medium" id="searchBox" placeholder="Search review..."/S>
       </div>
 <%--      <div class="col-md-8 d-flex justify-content-end">--%>
 <%--        <button class="primary-btn" data-bs-toggle="modal" data-bs-target="#addCategoryModal">Add Review</button>--%>
 <%--      </div>--%>
+      <!-- Title and Filter Button -->
+      <div class="pb-2 my-3 border-bottom">
+        <div class="d-flex justify-content-between align-items-center">
+          <%--                <h2 class="fw-bolder">${nameOfCategory}</h2>--%>
+          <button class="btn secondary-btn" type="button" data-bs-toggle="collapse" data-bs-target="#filterOptions">
+            <i class="fas fa-filter"></i>
+            <span id="filterButtonText">Bộ Lọc</span>
+          </button>
+        </div>
+
+        <!-- Filters -->
+        <div class="collapse mt-3 " id="filterOptions">
+          <div class="p-3 border rounded bg-light">
+            <h2 class="fw-semibold">Bộ Lọc</h2>
+            <form method="get">
+              <div class="row">
+                <div class="col-md-3">
+                  <b class="text-danger">Đánh giá</b>
+                  <div class="form-check">
+                    <input onclick="filterStar(this)" type="checkbox" id="5star" name="stars" class="form-check-input" value="5" >
+                    <label for="5star" class="form-check-label">5 sao</label>
+                  </div>
+                  <div class="form-check">
+                    <input onclick="filterStar(this)" type="checkbox" id="4star" name="stars" class="form-check-input" value="4" >
+                    <label for="4star" class="form-check-label">4 sao</label>
+                  </div>
+                  <div class="form-check">
+                    <input onclick="filterStar(this)" type="checkbox" id="3star" name="stars" class="form-check-input" value="3" >
+                    <label for="3star" class="form-check-label">3 sao</label>
+                  </div>
+                  <div class="form-check">
+                    <input onclick="filterStar(this)" type="checkbox" id="2star" name="stars" class="form-check-input" value="2">
+                    <label for="2star" class="form-check-label">2 sao</label>
+                  </div>
+                  <div class="form-check">
+                    <input onclick="filterStar(this)" type="checkbox" id="1star" name="stars" class="form-check-input" value="1" >
+                    <label for="1star" class="form-check-label">1 sao</label>
+                  </div>
+
+                </div>
+                <div class="col-md-8"></div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+<%--      End Filter--%>
+
     </div>
     <div class="table-responsive border border-2 p-2" style="max-height: 75%; overflow: auto;">
       <table class="table table-bordered" style="min-width: 1000px;">
@@ -155,6 +203,35 @@
 </div>
 
 <script>
+  const stars = []
+
+  function filterStar(e) {
+    if(!stars.includes(e.value)){
+      stars.push(e.value)
+    }
+    else {
+      stars.splice(stars.findIndex((item) => {
+        return item === e.value
+      }), 1)
+    }
+    console.log(stars)
+
+    const tableRows = document.querySelectorAll('tbody tr');
+
+    tableRows.forEach(row => {
+      if(stars.length === 0){
+        row.classList.remove("d-none")
+      }else{
+          if(stars.includes(row.lastElementChild.innerHTML)){
+            row.classList.remove("d-none")
+          }
+          else{
+            row.classList.add("d-none")
+          }
+      }
+    });
+  }
+
   function editCategory(id, cus_id, book_id, description, rate) {
     document.getElementById('editReviewId').value = id;
     document.getElementById('editCustomerId').value = cus_id;

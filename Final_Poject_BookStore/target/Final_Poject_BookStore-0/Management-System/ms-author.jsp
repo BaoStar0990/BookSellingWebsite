@@ -148,7 +148,7 @@
                     </form>
                 </div>
             </div>
-        </div>
+            </div>
         <!-- End Filter -->
     </div>
     <div class="table-responsive border border-2 p-2" style="max-height: 75%; overflow: auto;">

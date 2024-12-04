@@ -24,7 +24,7 @@ public class Customer extends User implements Serializable {
     private Set<Review> reviews;
 
     //many bill, xóa khách hàng thì xóa bill
-    @OneToMany(mappedBy = "customer", cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "customer")
     private Set<Bill> bills;
 
     public Customer() {

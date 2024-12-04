@@ -102,14 +102,8 @@ public class AddCartController extends HttpServlet {
                 
                 if (tokenService == null || !tokenService.validateToken(csrfToken, idBook)) {
                     response.getWriter().write("{\"errorMessage\":\"Đừng có ngịch.\"}");
-                    // xóa token 
-                    if(tokenService != null)
-                        tokenService.deleteToken(idBook);
                     return;
                 }
-                // xóa token 
-                if(tokenService != null)
-                    tokenService.deleteToken(idBook);
                     
                 // lấy sách trong database
                 Book book = BookDB.getInstance().selectByID(idBook);

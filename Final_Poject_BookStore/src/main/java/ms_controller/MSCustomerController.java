@@ -40,7 +40,7 @@ public class MSCustomerController extends HttpServlet {
                 }
                 case "delete":
                     int id = Integer.parseInt(req.getParameter("id"));
-                    CustomerDB.getInstance().deleteCustomer(id);
+                    CustomerDB.getInstance().delete(id, Customer.class);
                     break;
                 case "edit": {
                     Customer customer = new Customer(Integer.parseInt(req.getParameter("id")), req.getParameter("username"), req.getParameter("password"), req.getParameter("fullname"), Integer.parseInt(req.getParameter("age")), req.getParameter("phone"), req.getParameter("email"));

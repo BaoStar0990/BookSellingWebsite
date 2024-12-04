@@ -83,14 +83,8 @@ public class ReviewController extends HttpServlet {
 
         if (tokenService == null || !tokenService.validateToken(csrfToken, bookID)) {
             response.getWriter().write("{\"errorMessage\":\"Đừng có ngịch.\"}");
-            // xóa token 
-            if(tokenService != null)
-                tokenService.deleteToken(bookID);
             return;
         }
-        // xóa token 
-        if(tokenService != null)
-            tokenService.deleteToken(bookID);
                 
         // Create review object
         ReviewDB reviewDB = ReviewDB.getInstance();

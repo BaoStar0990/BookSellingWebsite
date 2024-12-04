@@ -26,7 +26,7 @@ public class StaffReviewController extends HttpServlet {
 
         if(session.getAttribute("reviews") == null){
             List<Review> reviews = ReviewDB.getInstance().selectAll();
-            reviews.sort((p1, p2) -> Integer.compare(p2.getReviewID(), p1.getReviewID()));
+            reviews.sort((p1, p2) ->  Integer.compare(p2.getReviewID(), p1.getReviewID()));
             session.setAttribute("reviews", reviews);
         }
 

@@ -106,7 +106,7 @@
                 </div>
                 <ul class="navbar-nav d-flex justify-content-center fw-semibold mt-3 mb-0">
                     <li class="nav-item">
-                        <a href="${pageContext.request.contextPath}/home" class="nav-link ${param.currentTab eq 'home' ? 'active' : ''}">Trang chủ</a>
+                        <a href="${pageContext.request.contextPath}/" class="nav-link ${param.currentTab eq 'home' ? 'active' : ''}">Trang chủ</a>
                     </li>
 
                     <li id="danhmuc" class="nav-item dropdown">

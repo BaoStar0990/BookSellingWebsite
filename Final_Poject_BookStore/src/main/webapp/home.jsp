@@ -40,13 +40,13 @@
                 <!-- First Ad -->
                 <a href="${pageContext.request.contextPath}/filterbook/bookdiscount" class="carousel-item active text-decoration-none d-flex justify-content-center ">
                     <div class="row align-items-center slide-ad ">
-                            <img src="https://cdn0.fahasa.com/media/wysiwyg/Thang-11-2024/DarkFridayManga_mainbanner_1920x500.jpg" alt="Ad 1" class="img-fluid character-image" style="max-width: 100%; height: auto;" />
+                        <img src="${pageContext.request.contextPath}\assets\images\ads\blackfriday.webp" alt="Ad 1" class="img-fluid character-image" style="max-width: 100%; height: auto;" />
                     </div>
                 </a>
                 <!-- Second Ad -->
                 <a href="${pageContext.request.contextPath}/filterbook/bookdiscount" class="carousel-item active text-decoration-none">
                     <div class="row align-items-center slide-ad ">
-                            <img src="https://cdn0.fahasa.com/media/wysiwyg/Thang-12-2024/TanVietT12_1920x500.jpg" alt="Ad 1" class="img-fluid character-image" style="max-width: 100%; height: auto;" />
+                        <img src="${pageContext.request.contextPath}\assets\images\ads\tanviet.webp" alt="Ad 1" class="img-fluid character-image" style="max-width: 100%; height: auto;" />
                     </div>
                 </a>
             </div>

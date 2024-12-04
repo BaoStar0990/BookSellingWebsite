@@ -140,13 +140,13 @@
                             </c:if>
                         </ul>
                     </div>
-                    <div class="mb-3">
-                        <label class="mb-1">Nhập mã giảm giá</label>
-                        <div class="input-group">
-                            <input type="text" name="discountCode" class="form-control" placeholder="Mã giảm giá" />
-                            <button class="primary-btn">Áp dụng</button>
-                        </div>
-                    </div>
+<%--                    <div class="mb-3">--%>
+<%--                        <label class="mb-1">Nhập mã giảm giá</label>--%>
+<%--                        <div class="input-group">--%>
+<%--                            <input type="text" name="discountCode" class="form-control" placeholder="Mã giảm giá" />--%>
+<%--                            <button class="primary-btn">Áp dụng</button>--%>
+<%--                        </div>--%>
+<%--                    </div>--%>
                     <div class="d-flex justify-content-between mb-2">
                         <span>Tạm tính</span>
                         <span><fmt:formatNumber value="${totalCost}" type="number" pattern="#,##0" />đ</span>

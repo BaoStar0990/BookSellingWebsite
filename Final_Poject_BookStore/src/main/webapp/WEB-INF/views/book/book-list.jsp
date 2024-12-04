@@ -12,12 +12,13 @@
 <c:set var="books" value="${requestScope[param.booksAttribute]}" />
 <c:set var="booksCount" value="${fn:length(books)}" />
 
+
 <div class="container p-0 mt-4">
     <!-- Section Header with Title and Optional 'See More' Link -->
     <div class="d-flex border-bottom mb-2">
         <h2 class="font-semibold">${param.bookListName}</h2>
         <c:if test="${not empty param.seeMoreLink}">
-            <a href="${pageContext.request.contextPath}/bookdisplay.jsp" class="ms-auto font-medium align-self-end mb-1 text-decoration-none">
+            <a href="${pageContext.request.contextPath}${param.seeMoreLink}" class="ms-auto font-medium align-self-end mb-1 text-decoration-none">
                 Xem thêm <i class="fas fa-chevron-right"></i>
             </a>
         </c:if>

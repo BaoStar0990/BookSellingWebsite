@@ -65,6 +65,7 @@ public class CategoryController extends HttpServlet {
                         if(category != null){
                             bookDisplay = category.getBooks();
                             request.setAttribute("nameOfCategory",category.getName());
+                            request.setAttribute("currentTab",category.getName());
                         }else{
                             request.setAttribute("nameOfCategory","Không tồn tại danh mục sách này");
                         }
@@ -79,6 +80,7 @@ public class CategoryController extends HttpServlet {
 
         if(bookDisplay != null) {
             request.setAttribute("books", bookDisplay);
+
             request.getRequestDispatcher("/bookdisplay.jsp").forward(request, response);
         }else{
             response.sendRedirect("/404error.jsp");

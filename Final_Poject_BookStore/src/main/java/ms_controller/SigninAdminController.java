@@ -18,9 +18,7 @@ import jakarta.servlet.http.HttpServletResponse;
  */
 @WebServlet(name = "SigninAdminController", urlPatterns = {"/signin/manage/admin"})
 public class SigninAdminController extends HttpServlet {
-    @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+    protected void doProcess(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         System.out.println("------------------------------------");
         System.out.println("Call servlet login admin with post method");
         request.setCharacterEncoding("UTF-8");
@@ -28,13 +26,14 @@ public class SigninAdminController extends HttpServlet {
         response.sendRedirect(String.format("%s/ms/msdashboard", getServletContext().getContextPath()));
     }
     @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+       doProcess(request, response);
+    }
+    @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        System.out.println("------------------------------------");
-        System.out.println("Call servlet login admin with post method");
-        request.setCharacterEncoding("UTF-8");
-        response.setCharacterEncoding("UTF-8");
-        response.sendRedirect(String.format("%s/ms/msdashboard", getServletContext().getContextPath()));
+       doProcess(request, response);
     }
 
     @Override

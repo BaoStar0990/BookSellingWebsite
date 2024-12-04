@@ -107,7 +107,7 @@ public class SigninAdminFilter implements Filter {
                             return false;
                         }
                     }else{
-                        loginFailCount++;
+                        //loginFailCount++;
                         session.setAttribute("loginFailCount", loginFailCount);
                         request.setAttribute("alertMessage","Tài khoảng này đang được đăng nhập ở một nơi khác");
                         System.out.println("Invalid login attempt. Total failures: " + loginFailCount);

@@ -37,14 +37,14 @@
     <div class="container mt-4 p-0 ">
         <div id="adCarousel" class="carousel slide " data-bs-ride="carousel">
             <div class="carousel-inner">
-                <a href="/filterbook/bookdiscount" class="carousel-item active text-decoration-none d-flex justify-content-center">
+                <a href="${pageContext.request.contextPath}/filterbook/bookdiscount" class="carousel-item active text-decoration-none d-flex justify-content-center">
                   <div class="row align-items-center slide-ad">
-                    <img src="/assets/images/ads/blackfriday.webp" alt="Ad 1" class="img-fluid character-image" style="max-width: 100%; height: auto;" />
+                    <img src="${pageContext.request.contextPath}/assets/images/ads/blackfriday.webp" alt="Ad 1" class="img-fluid character-image" style="max-width: 100%; height: auto;" />
                   </div>
                 </a>
-                <a href="/filterbook/bookdiscount" class="carousel-item text-decoration-none">
+                <a href="${pageContext.request.contextPath}/filterbook/bookdiscount" class="carousel-item text-decoration-none">
                   <div class="row align-items-center slide-ad">
-                    <img src="/assets/images/ads/tanviet.webp" alt="Ad 2" class="img-fluid character-image" style="max-width: 100%; height: auto;" />
+                    <img src="${pageContext.request.contextPath}/assets/images/ads/tanviet.webp" alt="Ad 2" class="img-fluid character-image" style="max-width: 100%; height: auto;" />
                   </div>
                 </a>
             </div>

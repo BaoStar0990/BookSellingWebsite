@@ -41,7 +41,8 @@ public class SigninAdminFilter implements Filter {
 
         // Xử lý request GET
         if ("GET".equalsIgnoreCase(method)) {
-            if(session.getAttribute("admin") != null) {
+            if(session.getAttribute("admin") != null) 
+            {
                 return true;
             }
             System.out.println("Call filter admin with get method");

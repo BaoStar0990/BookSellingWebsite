@@ -21,8 +21,8 @@
             <property name="hibernate.format_sql" value="true"/>
 
             <!-- Cấu hình HikariCP -->
-            <property name="hibernate.hikari.minimumPoolSize" value="5"/>
-            <property name="hibernate.hikari.maximumPoolSize" value="20"/>
+            <property name="hibernate.hikari.minimumPoolSize" value="10"/>
+            <property name="hibernate.hikari.maximumPoolSize" value="50"/>
             <property name="hibernate.hikari.idleTimeout" value="30000"/>
             <property name="hibernate.hikari.maxLifetime" value="1800000"/>
             <property name="hibernate.hikari.connectionTimeout" value="30000"/>

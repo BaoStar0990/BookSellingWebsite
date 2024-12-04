@@ -43,7 +43,7 @@
             <p class="fw-semibold">
                 <a href="${pageContext.request.contextPath}" class="text-decoration-none text-dark">Trang chủ</a>
                 <i class="fa-solid fa-chevron-right"></i>
-                <a href="bookdisplay.jsp" class="text-decoration-none text-dark">Sách mới</a>
+                <a href="#" class="text-decoration-none text-dark">${currentTab}</a>
             </p>
         </div>
         <!-- end Link -->

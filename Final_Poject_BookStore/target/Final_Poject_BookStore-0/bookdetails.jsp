@@ -65,7 +65,7 @@
         <!--Lấy tên thể loại đầu tiên của sách -->
         <%
             Book b = (Book) request.getAttribute("book");
-            List<Review> reviews = (List<Review>) request.getAttribute("reviews");
+            List<Review> reviews = (List<Review>) session.getAttribute("reviews");
             // kiểm tra sách có thể loại không, nếu có lấy thể loại đầu tiên
             String firstCategoryName = b == null || b.getCategories() == null
                     || b.getCategories().isEmpty() ? " "
@@ -147,10 +147,13 @@
                                 <%--                                 Render filled stars for the rounded average rating--%>
                                 <c:choose>
                                     <c:when test = "${not empty book.getReviews()}">
-                                        <c:set var="roundedRating" value="${book.getAverageRatingStar()}" /> 
+                                        <c:set var="averageRating" value="${book.getAverageRatingStar()}" />
+                                        <c:set var="roundedRating" value="${Math.floor(averageRating)}" />
+                                        <c:set var="hasHalfStar" value="${(averageRating - roundedRating) >= 0.5}" />
                                     </c:when>
                                     <c:otherwise>
                                         <c:set var="roundedRating" value="0" />
+                                        <c:set var="hasHalfStar" value="false" />
                                     </c:otherwise>
                                 </c:choose>
                                 <c:forEach var="i" begin="1" end="5">
@@ -158,6 +161,9 @@
                                         <%-- Check if current star should be filled based on roundedRating --%>
                                         <c:when test="${i <= roundedRating}">
                                             <i class="fas fa-star text-warning"></i>
+                                        </c:when>
+                                        <c:when test="${i == roundedRating + 1 && hasHalfStar}">
+                                            <i class="fas fa-star-half-alt text-warning"></i>
                                         </c:when>
                                         <c:otherwise>
                                             <i class="far fa-star text-warning"></i>
@@ -303,6 +309,9 @@
                                 <c:when test="${i <= roundedRating}">
                                     <i class="fas fa-star text-warning"></i>
                                 </c:when>
+                                <c:when test="${i == roundedRating + 1 && hasHalfStar}">
+                                    <i class="fas fa-star-half-alt text-warning"></i>
+                                </c:when>
                                 <c:otherwise>
                                     <i class="far fa-star text-warning"></i>
                                 </c:otherwise>
@@ -360,11 +369,10 @@
             <%-- Ưu tiên hiển thị review của tài khoản đang đăng nhập hiện tại lên đầu tiên --%>
             <c:if test="${reviews != null}">
                 <div class="row mt-5">
-                    <c:forEach var="review" items="${reviews}">
-                        <c:choose>
-                            <c:when test="${review.customer.id == user.id}">
-                                <div class="row border-top py-3">
-                                    <%-- User and Date Section --%>
+                    <c:forEach var="review" items="${reviews}" varStatus="status">
+                        <div class="row border-top py-3 pagination-item" style="display: none;">
+                            <c:choose>
+                                <c:when test="${review.getCustomer().getId() == user.getId()}">
                                     <div class="col-2 d-flex flex-column mb-2">
                                         <h6 class="fw-bold me-3 text-primary">${review.getCustomer().getFullName()} (Bạn)</h6>
                                         <span class="text-muted"></span>
@@ -374,7 +382,7 @@
                                         <div class="d-flex align-items-center">
                                             <c:forEach var="i" begin="1" end="5">
                                                 <c:choose>
-                                                    <c:when test="${i <= review.rate}">
+                                                    <c:when test="${i <= review.getRate()}">
                                                         <i class="fas fa-star text-warning"></i>
                                                     </c:when>
                                                     <c:otherwise>
@@ -383,25 +391,18 @@
                                                 </c:choose>
                                             </c:forEach>
                                         </div>
-                                        <p class="mt-2">${review.description}</p>
+                                        <p class="mt-2">${review.getDescription()}</p>
                                         <div class="d-flex justify-content-end">
-                                            <button class="btn btn-sm btn-outline-primary me-2" onclick="openUpdateReviewModal(${review.reviewID}, '${review.description}', ${review.rate})">
+                                            <button class="btn btn-sm btn-outline-primary me-2" onclick="openUpdateReviewModal(${review.getReviewID()}, '${review.getDescription()}', ${review.getRate()})">
                                                 <i class="fas fa-edit"></i> Sửa
                                             </button>
-                                            <button class="btn btn-sm btn-outline-danger" onclick="deleteReview(${review.reviewID})">
+                                            <button class="btn btn-sm btn-outline-danger" onclick="deleteReview(${review.getReviewID()})">
                                                 <i class="fas fa-trash-alt"></i> Xóa
-                                            </button>
+                                            </button> 
                                         </div>
                                     </div>
-                                </div>
-                            </c:when>
-                        </c:choose>
-                    </c:forEach>
-                    <c:forEach var="review" items="${reviews}">
-                        <c:choose>
-                            <c:when test="${review.customer.id != user.id}">
-                                <div class="row border-top py-3">
-                                    <%-- User and Date Section --%>
+                                </c:when>
+                                <c:otherwise>
                                     <div class="col-2 d-flex flex-column mb-2">
                                         <h6 class="fw-bold me-3">${review.getCustomer().getFullName()}</h6>
                                         <span class="text-muted"></span>
@@ -411,7 +412,7 @@
                                         <div class="d-flex align-items-center">
                                             <c:forEach var="i" begin="1" end="5">
                                                 <c:choose>
-                                                    <c:when test="${i <= review.rate}">
+                                                    <c:when test="${i <= review.getRate()}">
                                                         <i class="fas fa-star text-warning"></i>
                                                     </c:when>
                                                     <c:otherwise>
@@ -420,44 +421,53 @@
                                                 </c:choose>
                                             </c:forEach>
                                         </div>
-                                        <p class="mt-2">${review.description}</p>
+                                        <p class="mt-2">${review.getDescription()}</p>
                                     </div>
-                                </div>
-                            </c:when>
-                        </c:choose>
+                                </c:otherwise>
+                            </c:choose>
+                        </div>
                     </c:forEach>
                 </div>
             </c:if>
+            <!-- Pagination Controls -->
+            <div class="d-flex justify-content-center align-items-center mt-4 fs-5">
+                <button
+                    class="btn btn-outline-secondary border-0 d-flex align-items-center"
+                    onclick="handlePreviousPage()"
+                    id="prevPageBtn"
+                    style="padding: 0.5rem 1rem;"
+                >
+                    <i class="fa-solid fa-angle-left me-2"></i>
+                    <span>Trước</span>
+                </button>
+                
+                <span class="mx-3 fw-semibold" id="paginationInfo">
+                    Trang <span id="currentPage">1</span> / <span id="totalPages">1</span>
+                </span>
+                
+                <button
+                    class="btn btn-outline-secondary border-0 d-flex align-items-center"
+                    onclick="handleNextPage()"
+                    id="nextPageBtn"
+                    style="padding: 0.5rem 1rem;"
+                >
+                    <span>Sau</span>
+                    <i class="fa-solid fa-angle-right ms-2"></i>
+                </button>
+            </div>
         </div>
-        <%--     User Review --%>
 
-        <%--     Pagination --%>
-        <%--    <div class="container">--%>
-        <%--        <ul class="pagination justify-content-end pagination-cus font-semibold ">--%>
-        <%--            <li class="page-item ">--%>
-        <%--                <a class="page-link px-3 me-1 " href="#">--%>
-        <%--                    <i class="fa-solid text-muted fa-chevron-left fs-5"></i>--%>
-        <%--                </a>--%>
-        <%--            </li>--%>
-        <%--            <li class="page-item active ">--%>
-        <%--                <a class="page-link text-muted px-3 mx-1" href="#">1</a>--%>
-        <%--            </li>--%>
-        <%--            <li class="page-item">--%>
-        <%--                <a class="page-link text-muted px-3 mx-1" href="#">2</a>--%>
-        <%--            </li>--%>
-        <%--            <li class="page-item">--%>
-        <%--                <a class="page-link text-muted px-3 ms-1" href="#">--%>
-        <%--                    <i class="fa-solid fa-chevron-right fs-5"></i>--%>
-        <%--                </a>--%>
-        <%--            </li>--%>
-        <%--        </ul>--%>
-        <%--    </div>--%>
+       
+        <%--User Review --%>
 
+        <!-- Pagination -->
+
+        <!--end Pagination -->
         <%--Footer--%>
         <jsp:include page="WEB-INF/views/footer.jsp"/>
         <%-- end   Footer--%>
 
-        <%--   Pagination--%>
+
         <script>
             new Splide('#image-carousel').mount();
         </script>

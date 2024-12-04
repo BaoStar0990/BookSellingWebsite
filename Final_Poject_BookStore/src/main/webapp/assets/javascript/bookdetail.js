@@ -279,6 +279,43 @@ function sanitizeInput(textarea) {
     textarea.value = textarea.value.replace(/<\/?[^>]+(>|$)/g, "");
 }
 
+
+// Pagination 
+
+let currentPage = 1;
+const itemsPerPage = 5; 
+const totalItems = document.querySelectorAll('.pagination-item').length;
+const totalPages = Math.ceil(totalItems / itemsPerPage);
+
+function updatePagination() {
+    document.getElementById('currentPage').innerText = currentPage;
+    document.getElementById('totalPages').innerText = totalPages;
+    document.getElementById('prevPageBtn').disabled = currentPage === 1;
+    document.getElementById('nextPageBtn').disabled = currentPage === totalPages;
+
+    const items = document.querySelectorAll('.pagination-item');
+    items.forEach((item, index) => {
+        item.style.display = (index >= (currentPage - 1) * itemsPerPage && index < currentPage * itemsPerPage) ? 'flex' : 'none';
+    });
+}
+
+function handlePreviousPage() {
+    if (currentPage > 1) {
+        currentPage--;
+        updatePagination();
+    }
+}
+
+function handleNextPage() {
+    if (currentPage < totalPages) {
+        currentPage++;
+        updatePagination();
+    }
+}
+
+// Initial pagination setup
+updatePagination();
+
 //        window.onload = function() {
 //            // Giả lập thời gian tải nội dung (nếu muốn)
 //            setTimeout(() => {

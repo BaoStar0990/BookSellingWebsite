@@ -95,12 +95,8 @@ public class ReviewController extends HttpServlet {
         // Insert review to database
         boolean success = reviewDB.insert(review);
         if (success) {
-            // Add review to session
-            List<Review> reviews = (List<Review>) session.getAttribute("reviews");
-            if (reviews != null) {
-                reviews.add(review);
-                session.setAttribute("reviews", reviews);
-            }
+            List<Review> reviews = ReviewDB.getInstance().selectReviewsByBookID(bookID);
+            session.setAttribute("reviews", reviews);
             response.setContentType("application/json");
             response.setCharacterEncoding("UTF-8");
             response.getWriter().write("{\"redirect\": \"/bookdetails/" + bookID + "\"}");
@@ -141,11 +137,8 @@ public class ReviewController extends HttpServlet {
             review.setRate(rate);
             boolean success = reviewDB.update(review);
             if (success) {
-                List<Review> reviews = (List<Review>) session.getAttribute("reviews");
-                if (reviews != null) {
-                    reviews.replaceAll(r -> r.getReviewID() == reviewID ? review : r);
-                    session.setAttribute("reviews", reviews);
-                }
+                List<Review> reviews = ReviewDB.getInstance().selectReviewsByBookID(review.getBook().getId());
+                session.setAttribute("reviews", reviews);
                 response.setContentType("application/json");
                 response.setCharacterEncoding("UTF-8");
                 response.getWriter().write("{\"redirect\": \"/bookdetails/" + review.getBook().getId() + "\"}");
@@ -183,11 +176,8 @@ public class ReviewController extends HttpServlet {
         if (review != null && review.getCustomer().getId() == user.getId()) {
             boolean success = reviewDB.deleteReview(reviewID);
             if (success) {
-                List<Review> reviews = (List<Review>) session.getAttribute("reviews");
-                if (reviews != null) {
-                    reviews.removeIf(r -> r.getReviewID() == reviewID);
-                    session.setAttribute("reviews", reviews);
-                }
+                List<Review> reviews = ReviewDB.getInstance().selectReviewsByBookID(review.getBook().getId());
+                session.setAttribute("reviews", reviews);
                 response.setContentType("application/json");
                 response.setCharacterEncoding("UTF-8");
                 response.getWriter().write("{\"redirect\": \"/bookdetails/" + review.getBook().getId() + "\"}");

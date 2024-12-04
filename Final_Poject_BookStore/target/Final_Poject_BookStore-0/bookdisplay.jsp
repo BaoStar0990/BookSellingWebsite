@@ -43,7 +43,7 @@
             <p class="fw-semibold">
                 <a href="${pageContext.request.contextPath}" class="text-decoration-none text-dark">Trang chủ</a>
                 <i class="fa-solid fa-chevron-right"></i>
-                <a href="#" class="text-decoration-none text-dark">${currentTab}</a>
+                <a href="#" class="text-decoration-none text-dark">Sách đang giảm giá</a>
             </p>
         </div>
         <!-- end Link -->
@@ -98,8 +98,6 @@
             <div class="row book-list">
                 <c:choose>
                     <c:when test="${books.size() > 0}">
-
-
                         <c:forEach var="book" items = "${books}">
                             <div class="col-6 col-md-4 col-lg-2 p-2 pagination-item">
                                 <a href="/bookdetails/${book.getId()}" class="d-block text-decoration-none card-shadow" style="color: inherit;">
@@ -147,9 +145,7 @@
                         <img src="${pageContext.request.contextPath}/assets/images/notfound_image.svg" alt="Không tìm thấy ${nameOfCategory}" height="300" width="300"/>
                     </c:otherwise>
                 </c:choose>
-            </div>  
-
-
+            </div>
             <!--end Book List -->
 
             <!-- Pagination -->

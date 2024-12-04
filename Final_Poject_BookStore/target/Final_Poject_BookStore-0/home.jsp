@@ -33,6 +33,38 @@
     </jsp:include>
     <!-- end Header -->
 
+    <%-- Carousel --%>
+    <div class="container mt-4 p-0 ">
+        <div id="adCarousel" class="carousel slide " data-bs-ride="carousel">
+            <div class="carousel-inner d-flex">
+                <!-- First Ad -->
+                <a href="${pageContext.request.contextPath}/filterbook/bookdiscount" class="carousel-item active text-decoration-none d-flex justify-content-center ">
+                    <div class="row align-items-center slide-ad ">
+                            <img src="https://cdn0.fahasa.com/media/wysiwyg/Thang-11-2024/DarkFridayManga_mainbanner_1920x500.jpg" alt="Ad 1" class="img-fluid character-image" style="max-width: 100%; height: auto;" />
+                    </div>
+                </a>
+                <!-- Second Ad -->
+                <a href="${pageContext.request.contextPath}/filterbook/bookdiscount" class="carousel-item active text-decoration-none">
+                    <div class="row align-items-center slide-ad ">
+                            <img src="https://cdn0.fahasa.com/media/wysiwyg/Thang-12-2024/TanVietT12_1920x500.jpg" alt="Ad 1" class="img-fluid character-image" style="max-width: 100%; height: auto;" />
+                    </div>
+                </a>
+            </div>
+
+            <!-- Carousel Controls -->
+            <button class="carousel-control-prev" type="button" data-bs-target="#adCarousel" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon text-dark" aria-hidden="true"></span>
+                <span class="visually-hidden">Previous</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#adCarousel" data-bs-slide="next">
+                <span class="carousel-control-next-icon text-dark" aria-hidden="true"></span>
+                <span class="visually-hidden">Next</span>
+            </button>
+        </div>
+    </div>
+
+    <%-- end Carousel --%>
+
 <%--    &lt;%&ndash; New book section&ndash;%&gt;--%>
 <%--    --%>
 <%--    &lt;%&ndash; On discount section&ndash;%&gt;--%>
@@ -48,10 +80,79 @@
 <%--        <jsp:param name="seeMoreLink" value="/Naoki/books/upcomming" />--%>
 <%--    </jsp:include>--%>
 
-<%--    Author--%>
+    <%-- ads --%>
+    <a href="${pageContext.request.contextPath}/filterbook/bookdiscount" class="container d-flex justify-content-center mt-4"> 
+        <img src="https://cdn0.fahasa.com/media/wysiwyg/Thang-12-2024/TanVietT12_LDP_tanviet_Tagname_1.jpg" alt="Xmas ads" class="character-image rounded-4" style="max-width: 100%; height: auto;" />
+    </a>
 
+<%-- Info section --%>
+    <div class="container my-5">
+        <div class="row align-items-center">
+            <div class="col-md-6">
+                <h1 class="fw-bold brand">
+                    <span>NA</span><span class="text-primary">OKI</span>
+                </h1>
+                <p class="text-primary">Cuộc đời chúng ta thay đổi qua những con người ta gặp và những cuốn sách ta đọc.</p>
+                <p class="mb-4">
+                    Naoki hướng tới trở thành một nền tảng bán sách trực tuyến hàng đầu tại Việt Nam, nơi kết nối độc giả với những cuốn sách giá trị, đa dạng thể loại, và mang lại nguồn cảm hứng bất tận. Naoki mong muốn xây dựng một cộng đồng yêu sách, nơi mà tri thức được chia sẻ và lan tỏa không ngừng, góp phần xây dựng một xã hội văn minh, giàu tri thức.
+                </p>
+                <a href="/aboutus" class="btn primary-btn d-inline-block px-4 py-2">Xem thêm</a>
+            </div>
+            <div class="col-md-6">
+                <img src="${pageContext.request.contextPath}\assets\images\naoki.jpg" alt="Naoki Bookstore" class="img-fluid rounded" />
+            </div>
+        </div>
+    </div>
+<%-- End Info section --%>
+
+<%--    Author--%>
+    <jsp:include page="WEB-INF/views/authors.jsp"/>
 <%--end    Author--%>
-        <jsp:include page="WEB-INF/views/authors.jsp"/>
+
+    <%-- Partner --%>
+    <div class="container my-5">
+        <h2 class="text-center fw-bold mb-4">Các Đối Tác</h2>
+        <div class="row">
+            <div class="col-xs-6 col-sm-4 col-md-3 col-lg-2 text-center mb-3">
+                <img src="https://cdn0.fahasa.com/media/wysiwyg/Hien_UI/LogoNCC/5_NCC_McBook_115x115.png" alt="Partner 1" class="img-fluid" />
+            </div>
+            <div class="col-xs-6 col-sm-4 col-md-3 col-lg-2 text-center mb-3">
+                <img src="https://cdn0.fahasa.com/media/wysiwyg/Hien_UI/LogoNCC/NCC_AlphaBooks_115x115.png" alt="Partner 2" class="img-fluid" />
+            </div>
+            <div class="col-xs-6 col-sm-4 col-md-3 col-lg-2 text-center mb-3">
+                <img src="https://cdn0.fahasa.com/media/wysiwyg/Hien_UI/LogoNCC/3_NCC_TanViet_115x115.png" alt="Partner 3" class="img-fluid" />
+            </div>
+            <div class="col-xs-6 col-sm-4 col-md-3 col-lg-2 text-center mb-3">
+                <img src="https://cdn0.fahasa.com/media/wysiwyg/Hien_UI/LogoNCC/9_NCC_MinhLong_115x115.png" alt="Partner 4" class="img-fluid" />
+            </div>
+            <div class="col-xs-6 col-sm-4 col-md-3 col-lg-2 text-center mb-3">
+                <img src="https://cdn0.fahasa.com/media/wysiwyg/Hien_UI/LogoNCC/7_NCC_SGBook_115x115.png" alt="Partner 5" class="img-fluid" />
+            </div>
+            <div class="col-xs-6 col-sm-4 col-md-3 col-lg-2 text-center mb-3">
+                <img src="https://cdn0.fahasa.com/media/wysiwyg/Hien_UI/LogoNCC/8_NCC_ZenBooks_115x115.png" alt="Partner 6" class="img-fluid" />
+            </div>
+            <div class="col-xs-6 col-sm-4 col-md-3 col-lg-2 text-center mb-3">
+                <img src="https://cdn0.fahasa.com/media/wysiwyg/Hien_UI/LogoNCC/11_NCC_BachViet_115x115.png" alt="Partner 7" class="img-fluid" />
+            </div>
+            <div class="col-xs-6 col-sm-4 col-md-3 col-lg-2 text-center mb-3">
+                <img src="https://cdn0.fahasa.com/media/wysiwyg/Hien_UI/LogoNCC/NCC_DinhTi_115x115.png" alt="Partner 8" class="img-fluid" />
+            </div>
+            <div class="col-xs-6 col-sm-4 col-md-3 col-lg-2 text-center mb-3">
+                <img src="https://cdn0.fahasa.com/media/wysiwyg/Hien_UI/LogoNCC/16_NCC_MegaBooks_115x115.png" alt="Partner 9" class="img-fluid" />
+            </div>
+            <div class="col-xs-6 col-sm-4 col-md-3 col-lg-2 text-center mb-3">
+                <img src="https://cdn0.fahasa.com/media/wysiwyg/Hien_UI/LogoNCC/NCC_SBooks_115x115.png" alt="Partner 10" class="img-fluid" />
+            </div>
+            <div class="col-xs-6 col-sm-4 col-md-3 col-lg-2 text-center mb-3">
+                <img src="https://cdn0.fahasa.com/media/wysiwyg/Hien_UI/LogoNCC/6_NCC_HuyHoang_115x115.png" alt="Partner 11" class="img-fluid" />
+            </div>
+            <div class="col-xs-6 col-sm-4 col-md-3 col-lg-2 text-center mb-3">
+                <img src="https://cdn0.fahasa.com/media/wysiwyg/Hien_UI/LogoNCC/NCC_HuongTrang_115x115.png" alt="Partner 12" class="img-fluid" />
+            </div>
+        </div>
+    </div>
+    <%-- end Partner --%>
+
 <%--    Footer--%>
     <jsp:include page="WEB-INF/views/footer.jsp"/>
 <%-- end Footer--%>

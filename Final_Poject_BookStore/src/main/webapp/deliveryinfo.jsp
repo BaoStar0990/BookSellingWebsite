@@ -24,7 +24,6 @@
     <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/styles/header.css" />
     <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/styles/footer.css" />
     <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/styles/order.css" />
-
 </head>
 <body>
 <%-- Header --%>

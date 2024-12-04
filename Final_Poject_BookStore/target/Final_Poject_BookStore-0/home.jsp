@@ -36,21 +36,19 @@
     <%-- Carousel --%>
     <div class="container mt-4 p-0 ">
         <div id="adCarousel" class="carousel slide " data-bs-ride="carousel">
-            <div class="carousel-inner d-flex">
-                <!-- First Ad -->
-                <a href="${pageContext.request.contextPath}/filterbook/bookdiscount" class="carousel-item active text-decoration-none d-flex justify-content-center ">
-                    <div class="row align-items-center slide-ad ">
-                        <img src="${pageContext.request.contextPath}\assets\images\ads\blackfriday.webp" alt="Ad 1" class="img-fluid character-image" style="max-width: 100%; height: auto;" />
-                    </div>
+            <div class="carousel-inner">
+                <a href="/filterbook/bookdiscount" class="carousel-item active text-decoration-none d-flex justify-content-center">
+                  <div class="row align-items-center slide-ad">
+                    <img src="/assets/images/ads/blackfriday.webp" alt="Ad 1" class="img-fluid character-image" style="max-width: 100%; height: auto;" />
+                  </div>
                 </a>
-                <!-- Second Ad -->
-                <a href="${pageContext.request.contextPath}/filterbook/bookdiscount" class="carousel-item active text-decoration-none">
-                    <div class="row align-items-center slide-ad ">
-                        <img src="${pageContext.request.contextPath}\assets\images\ads\tanviet.webp" alt="Ad 1" class="img-fluid character-image" style="max-width: 100%; height: auto;" />
-                    </div>
+                <a href="/filterbook/bookdiscount" class="carousel-item text-decoration-none">
+                  <div class="row align-items-center slide-ad">
+                    <img src="/assets/images/ads/tanviet.webp" alt="Ad 2" class="img-fluid character-image" style="max-width: 100%; height: auto;" />
+                  </div>
                 </a>
             </div>
-
+              
             <!-- Carousel Controls -->
             <button class="carousel-control-prev" type="button" data-bs-target="#adCarousel" data-bs-slide="prev">
                 <span class="carousel-control-prev-icon text-dark" aria-hidden="true"></span>

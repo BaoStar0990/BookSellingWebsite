@@ -71,6 +71,7 @@ ms_controller\SignoutAdminController.class
 ms_controller\MSCategoryController.class
 ms_controller\MSAuthorController.class
 test\TestUploadingImage.class
+ms_controller\ListenerActivityOfAdmin.class
 dbmodel\AddressDB.class
 model\Publisher.class
 controller\CategoryController.class

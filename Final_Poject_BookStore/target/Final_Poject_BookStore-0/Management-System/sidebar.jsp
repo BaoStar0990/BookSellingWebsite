@@ -20,45 +20,88 @@
   String tabTitle = tabs.containsKey(currentTab) ? tabs.get(currentTab)[0] : "Tổng quan";
 %>
 <script>
-let isNavigating = false;
+  const socket = new WebSocket(`${window.location.host}/websocket`);
+        // Khi kết nối mở
+        socket.onopen = () => {
+            console.log("WebSocket connection established.");
+            // Gửi heartbeat ping mỗi 5 giây
+            setInterval(() => {
+                if (socket.readyState === WebSocket.OPEN) {
+                    socket.send(JSON.stringify({ type: "heartbeat", timestamp: Date.now() }));
+                }
+            }, 5000); // 5 giây
+        };
 
-// Danh sách các URL cần bỏ qua
-const excludedUrls = [
-'/ms/msbook', // Đường dẫn nội bộ
-'/ms/mscategory',
-'/ms/msdashboard',
-'/ms/msorder',
-'/ms/mscustomer',
-'/ms/mscampaign',
-'/ms/msreview',
-'/ms/msauthor',
-'/ms/mspublisher',
-'/ms/ms_staff'
-];
+        // Khi kết nối đóng
+        socket.onclose = () => {
+            console.log("WebSocket connection closed.");
+        };
+</script>
+<%--<script>--%>
+<%--  let isTabActive = true;--%>
+<%--  function updateTabCount(increment) {--%>
+<%--    const key = "tab-count";--%>
+<%--    let count = parseInt(localStorage.getItem(key)) || 0;--%>
+<%--    count += increment;--%>
+<%--    localStorage.setItem(key,count);--%>
+<%--  }--%>
 
-// Lắng nghe sự kiện chuyển hướng nội bộ
-document.addEventListener('click', (event) => {
-const target = event.target.closest('a'); // Phát hiện thẻ <a> gần nhất
-  if (target && target.href) {
-  const targetUrl = new URL(target.href, window.location.origin);
-  const relativePath = targetUrl.pathname; // Lấy đường dẫn tương đối
+<%--  // Khi tab được mở--%>
+<%--  window.onload = () => {--%>
+<%--    updateTabCount(1); // Tăng số lượng tab--%>
+<%--  };--%>
+<%--  window.onunload = () => {--%>
+<%--    updateTabCount(-1);--%>
+<%--    if (parseInt(localStorage.getItem("tab-count")) === 0) {--%>
+<%--      fetch("/signout/manage/admin", { method: "POST" });--%>
+<%--    }--%>
+<%--  };--%>
+<%--  window.addEventListener("storage", (event) => {--%>
+<%--    if (event.key === "tab-count") {--%>
+<%--      console.log("Tab count updated:", event.newValue);--%>
+<%--    }--%>
+<%--  });--%>
+<%--</script>--%>
+<%--<script>--%>
+<%--let isNavigating = false;--%>
 
-  // Kiểm tra nếu URL thuộc danh sách được loại trừ
-  if (excludedUrls.includes(relativePath) || excludedUrls.includes(target.href)) {
-  isNavigating = true; // Đánh dấu là chuyển hướng hợp lệ
-  }
-  }
-  });
+<%--// Danh sách các URL cần bỏ qua--%>
+<%--const excludedUrls = [--%>
+<%--'/ms/msbook', // Đường dẫn nội bộ--%>
+<%--'/ms/mscategory',--%>
+<%--'/ms/msdashboard',--%>
+<%--'/ms/msorder',--%>
+<%--'/ms/mscustomer',--%>
+<%--'/ms/mscampaign',--%>
+<%--'/ms/msreview',--%>
+<%--'/ms/msauthor',--%>
+<%--'/ms/mspublisher',--%>
+<%--'/ms/ms_staff'--%>
+<%--];--%>
 
-  // Xử lý sự kiện trước khi rời khỏi trang
-  window.addEventListener('beforeunload', (event) => {
-  if (!isNavigating) {
-  // Chỉ xử lý khi không phải các URL được loại trừ
-  navigator.sendBeacon('/signout/manage/admin');
-  console.log('Logout request sent as browser is being closed or navigated away');
-  }
-  });
- </script>
+<%--// Lắng nghe sự kiện chuyển hướng nội bộ--%>
+<%--document.addEventListener('click', (event) => {--%>
+<%--const target = event.target.closest('a'); // Phát hiện thẻ <a> gần nhất--%>
+<%--  if (target && target.href) {--%>
+<%--  const targetUrl = new URL(target.href, window.location.origin);--%>
+<%--  const relativePath = targetUrl.pathname; // Lấy đường dẫn tương đối--%>
+
+<%--  // Kiểm tra nếu URL thuộc danh sách được loại trừ--%>
+<%--  if (excludedUrls.includes(relativePath) || excludedUrls.includes(target.href)) {--%>
+<%--  isNavigating = true; // Đánh dấu là chuyển hướng hợp lệ--%>
+<%--  }--%>
+<%--  }--%>
+<%--  });--%>
+
+<%--  // Xử lý sự kiện trước khi rời khỏi trang--%>
+<%--  window.addEventListener('beforeunload', (event) => {--%>
+<%--  if (!isNavigating) {--%>
+<%--  // Chỉ xử lý khi không phải các URL được loại trừ--%>
+<%--  navigator.sendBeacon('/signout/manage/admin');--%>
+<%--  console.log('Logout request sent as browser is being closed or navigated away');--%>
+<%--  }--%>
+<%--  });--%>
+<%-- </script>--%>
 <aside class="sidebar bg-dark text-light d-flex flex-column p-3" style="width: 250px; height: 100vh; position: fixed;">
   <div class="brand mb-3 text-center">
     <img src="${pageContext.request.contextPath}/assets/images/logos/logo-2.png" alt="logo" style="height: 40px;">

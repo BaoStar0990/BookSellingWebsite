@@ -10,10 +10,10 @@
             <!-- Driver JDBC -->
             <property name="jakarta.persistence.jdbc.driver" value="com.mysql.cj.jdbc.Driver"/>
             <!-- URL kết nối cơ sở dữ liệu -->
-            <property name="jakarta.persistence.jdbc.url" value="jdbc:mysql://xhuongmysql-xhuong.j.aivencloud.com:17773/defaultdb"/>
+            <property name="jakarta.persistence.jdbc.url" value=""/>
             <!-- Tên người dùng và mật khẩu -->
             <property name="jakarta.persistence.jdbc.user" value="avnadmin"/>
-            <property name="jakarta.persistence.jdbc.password" value="AVNS_klAR2WYlGikux4CGwjl"/>
+            <property name="jakarta.persistence.jdbc.password" value=""/>
 
             <!-- Cấu hình Hibernate -->
             <property name="hibernate.dialect" value="org.hibernate.dialect.MySQLDialect"/>
